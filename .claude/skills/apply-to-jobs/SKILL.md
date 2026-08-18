@@ -14,13 +14,22 @@ tracking out of sync with what you actually did.
 ## The one rule that matters more than any other
 
 **If a form asks something factual or personal and the exact answer is not
-already in `profile.json` — you stop and ask the user. Every time. No
-exceptions, no "it's probably fine", no rounding, no inferring from context,
-no reusing an answer from a different country/currency because it "should
-be similar".** Being 90% confident is not the same as knowing. The whole
-point of `profile.json` and `qa[]` is that this agent's answers are always
-either verified facts or fresh answers from the user — never guesses. See
-§ Filling the form for exactly how matching and escalation work.
+already in `profile.json` or `stories.json` — you stop and ask the user. Every
+time. No exceptions, no "it's probably fine", no inferring from context, no
+reusing an answer from a different country because it "should be similar".**
+Being 90% confident is not the same as knowing. The whole point of
+`profile.json`, `qa[]` and `stories.json` is that this agent's answers are
+always either verified facts or fresh answers from the user — never guesses.
+See Phase 3 for exactly how matching and escalation work.
+
+**The one thing you do compute rather than ask: money.** Currency and
+contract-form conversions are arithmetic over a number the user already gave,
+not new facts, and asking again every time a form wants USD instead of PLN is
+noise. Follow `profile.compensation.derivation`: derive from the anchor, fetch
+a live NBP rate, respect the stated ceiling, and show the arithmetic at the
+confirmation pause so the user can catch a bad rate before it is submitted.
+This is the *only* licensed derivation — it does not generalise to years of
+experience, skill levels, or anything else.
 
 ## Constants
 
@@ -37,6 +46,11 @@ RESUME_BLOCKS_SKILL  = $SIBLING_REPO/.claude/skills/resume-blocks/SKILL.md
 RESUME_RENDER        = $SIBLING_REPO/.claude/skills/resume-render/render.mjs
 RESUME_PDF           = $SIBLING_REPO/.claude/skills/resume-pdf/topdf.mjs
 PROFILE_QA           = <this repo>/.claude/skills/apply-to-jobs/scripts/profile-qa.mjs
+RESOLVE_FIELDS       = <this repo>/.claude/skills/apply-to-jobs/scripts/resolve-fields.mjs
+STORIES              = <this repo>/.claude/skills/apply-to-jobs/scripts/stories.mjs
+IMPORT_STORIES       = <this repo>/.claude/skills/apply-to-jobs/scripts/import-stories.mjs
+EXTRACT_FORM         = <this repo>/.claude/skills/apply-to-jobs/browser/extract-form.js
+ATS_REGISTRY         = <this repo>/.claude/skills/apply-to-jobs/ats/
 ```
 
 ## Preconditions
@@ -52,10 +66,9 @@ PROFILE_QA           = <this repo>/.claude/skills/apply-to-jobs/scripts/profile-
 
 Keep a counter of vacancies **confirmed without the user asking for a
 change** in this run. For the **first 2–3 vacancies**, pause before the
-final Submit click (Step 6 below) and wait for explicit go-ahead. Once 2–3
+final Submit click (Phase 4 step 4) and wait for explicit go-ahead. Once 2–3
 have gone through cleanly, stop pausing for the rest of this run — continue
-straight through, except for the unknown-fact escalation in § Filling the
-form, which is **always active regardless of this counter**. It is a
+straight through, except for the unknown-fact escalation in Phase 3, which is **always active regardless of this counter**. It is a
 different kind of stop (missing information) from the confirmation pause
 (review before an irreversible action), and the confirmation counter never
 suppresses it.
@@ -64,106 +77,136 @@ If a confirmed-vacancy pause turns up something wrong (bad field, wrong
 resume, hallucinated narrative text), fix it, and don't count that vacancy
 toward the 2–3 — the point of the trial period is 2–3 *clean* passes.
 
-## Procedure
+## Procedure — four phases
 
-Ask the user which SAVED vacancies to process this run (all of them, a
-number, or specific ones) after listing what's available — this doubles as
-the natural place to do a small dry run first.
+The phases exist to separate *thinking* (parallelisable, cheap to redo) from
+*acting in a real browser* (serial, irreversible), and to collect every
+question the run needs into **one** round instead of interrupting the user per
+vacancy. Do not blur them: typing into a form before Phase 3 has closed is how
+a guessed answer reaches an employer.
 
-1. `get_my_applications({status: "SAVED", limit: 100})` to get the queue,
-   filtered/limited per what the user chose.
-2. For each selected vacancy, **sequentially, one full browser flow at a
-   time** (never parallel — the browser is a single shared session):
+Ask the user which SAVED vacancies to process after listing what's available,
+then run Phase 1.
 
-   1. `get_vacancy({vacancyId})` → `descriptionText`, `link`, `salary`,
-      `expiresAt`. If `expiresAt` has already passed, skip it — don't spend
-      a browser flow on a dead posting. Note the skip in the run summary
-      and leave the OneTap.Work status untouched (it wasn't attempted, so
-      it isn't a failure).
+### Phase 1 — queue and resumes (parallel, no browser)
 
-   2. **Tailor the resume**, all paths absolute:
-      - Read `$RESUME_BLOCKS_SKILL` and follow its procedure against this
-        vacancy's `descriptionText`. Write the resulting blocks to
-        `<this repo>/runs/<run-id>/<Company>_<vacancyId>/blocks.md`.
-      - `node $RESUME_RENDER <abs path to blocks.md> --company="<Company>_<vacancyId>" --force`
-        — the `vacancyId` suffix on `--company` is deliberate, not a typo:
-        two different vacancies sharing a company name (or a repost) would
-        otherwise silently overwrite each other's `out/` folder in the
-        sibling repo before either got applied to. Renders to
-        `$SIBLING_REPO/out/<Company>_<vacancyId>/!Jane_Doe_CV.html`.
-      - `node $RESUME_PDF <abs path to the generated .html> --force` →
-        sibling `.pdf` in the same folder.
-      - Keep the resulting absolute `.pdf` path — you'll upload it in
-        Step 4.
+1. `get_my_applications({status: "SAVED", activityStatus: "active", limit: 100})`,
+   filtered per what the user chose.
+2. `get_vacancy({vacancyId})` for each → `descriptionText`, `link`, `expiresAt`.
+   Skip anything already expired; note the skip and leave its status untouched.
+3. For each remaining vacancy, build the tailored resume. **These are
+   independent and touch nothing shared, so they may run in parallel** — one
+   subagent per vacancy is safe here and nowhere else in this skill.
+   - Follow `$RESUME_BLOCKS_SKILL` against `descriptionText`; write the blocks
+     to `runs/<run-id>/<Company>_<vacancyId>/blocks.md`.
+   - `node $RESUME_RENDER <abs blocks.md> --company="<Company>_<vacancyId>" --force`
+     — the `vacancyId` suffix is deliberate: two vacancies at the same company
+     would otherwise overwrite each other's `out/` folder.
+   - `node $RESUME_PDF <abs generated .html> --force`.
+   - Copy the PDF to `runs/<run-id>/<Company>_<vacancyId>/Jane_Doe_CV.pdf`.
+     **This copy is not optional**: `file_upload` may only read files inside
+     this session's own directories, and the sibling repo's `out/` is not one.
 
-   3. **Navigate the browser to `vacancy.link` — never `vacancy.applyLink`.**
-      `applyLink` is an internal field the OneTap.Work server explicitly
-      says never to use directly; always land on the public posting and
-      find the real Apply button/flow from there, the way a human would.
-      Follow it through to whatever ATS it lands on (Greenhouse, Lever,
-      Workable, Teamtailor, a native company form — all different, all
-      fine, this skill doesn't special-case any of them).
+### Phase 2 — read every form (serial browser, read-only)
 
-   4. **Fill the form, field by field.** Classify each field before
-      touching it:
+For each vacancy, in one managed tab:
 
-      | field type | source |
-      | --- | --- |
-      | File upload (resume/CV) | the PDF generated in step 2 |
-      | Structural fact (name, email, phone, LinkedIn, GitHub) | `profile.json`'s structured sections, directly |
-      | Country-/currency-dependent fact (work authorization, relocation, salary in local currency, sponsorship) | `profile-qa.mjs find` — see matching rules below |
-      | Voluntary EEO/demographic field | `profile.eeo.policy` (default: decline/prefer-not-to-answer option) — no need to ask each time |
-      | Open-ended narrative ("why this company", short cover letter blurb) | Claude may draft one, grounded *only* in facts already present in the tailored resume or `profile.json` — never a new unverifiable claim. Always flag drafted text in the run summary for the user to see, regardless of confirmation mode. |
+1. Navigate to `vacancy.link` — never `vacancy.applyLink`. Follow the posting's
+   own Apply control to the ATS.
+   **Never click a control that opens a new tab.** Tabs a page opens land
+   outside the MCP tab group and cannot be driven. Click once to learn the
+   destination, then `navigate` the managed tab to that URL.
+   **Never close a tab mid-run** — closing the group's tabs dissolves the group
+   and orphans every form already filled.
+2. Decline non-essential cookies.
+3. Run `$EXTRACT_FORM` through `javascript_tool` and save the JSON to
+   `runs/<run-id>/<Company>_<vacancyId>/form.json`.
+4. Read `$ATS_REGISTRY<host>.md` if it exists and follow it in Phase 4.
 
-      **Matching a form question against `qa[]`:**
-      ```
-      node $PROFILE_QA find "<the exact question text from the form>"
-      ```
-      - `exact` (score > 0.8) or `likely` (0.5–0.8) **and** you, reading
-        both questions side by side, are genuinely convinced they ask the
-        same thing for the same country/currency → reuse the answer, then
-        `node $PROFILE_QA touch <id>`.
-      - Anything else (`weak`, `none`, or a `likely` you're not actually
-        convinced by) → **stop. Show the user the exact question text.
-        Get the real answer. Record it:**
-        ```
-        node $PROFILE_QA add --question="<verbatim question>" --answer="<user's answer>" \
-             --tags=<relevant tags> --canonical=<topic>:<country-or-currency-if-relevant> \
-             [--aliases="<other phrasing you've already seen for this>"]
-        ```
-        Then continue. This is the mechanism that makes the "never
-        fabricate" rule actually hold over time instead of just being a
-        good intention — every real gap becomes a permanent, reusable fact.
+Type nothing. Click nothing but navigation and cookie banners. A Phase 2 pass
+over the whole queue must be safe to abandon at any point.
 
-   5. Screenshot the filled form. Check nothing required is blank or still
-      showing placeholder text.
+### Phase 3 — one question round
 
-   6. **Confirmation pause** — only while the run's clean-confirmation
-      counter (see § Confirmation mode) is below 2–3: show the user the
-      screenshot plus a short summary (vacancy, which resume/PDF, the key
-      answers used, any drafted narrative text) and wait for their
-      go-ahead before clicking Submit. Once past the trial threshold, skip
-      straight to Step 7.
+```bash
+node $RESOLVE_FIELDS runs/<run-id>/*/form.json
+```
 
-   7. Click Submit. Wait for a real success indicator (confirmation page,
-      "application received" message, etc. — not just "the button stopped
-      being clickable"). Screenshot the result.
+It sorts every field into `resolved` (structured profile value or an `exact`
+qa[] hit), `narrative`, `runtime`, `skip`, `review` and `unknown`.
 
-   8. `update_application_status({vacancyId, status: "APPLIED", notes: "Applied <date> via <ATS>. Resume: <folder name>. <any caveats>"})`.
-      Keep `notes` at or under 1000 characters — truncate defensively if a
-      caveat list runs long, keeping the date/ATS/resume-folder prefix
-      intact since that's the part worth finding later.
+- **`review`** — a `likely`/`weak` qa[] candidate. *You* read both questions
+  side by side and decide whether they ask the same thing for the same
+  country/currency. If yes, `node $PROFILE_QA alias <id> --add="<this form's
+  wording>"` so it resolves outright next time. If you are not genuinely
+  convinced, treat it as `unknown`.
+- **`unknown`** — goes to the user.
 
-   9. **If you cannot actually apply** (login-gated with no account,
-      CAPTCHA you can't solve, application is email-only, the posting
-      turns out to already be closed despite `expiresAt`) — do **not** set
-      `APPLIED`. Leave the OneTap.Work status as-is, record what happened
-      in the run summary, and move on to the next vacancy. One
-      unreachable posting should never abort the whole run.
+Collect the `unknown` list **across all vacancies** and ask in one batch. Record
+every answer with `node $PROFILE_QA add ...`, then re-run `$RESOLVE_FIELDS`
+until it reports `0 required field(s) still need a human answer`. Only then
+start Phase 4.
 
-3. **End of run**: summarize — applied / skipped (expired) / couldn't apply
-   (with reasons) — and list every new `qa[]` entry learned this run so the
-   user can see exactly what the system now knows that it didn't before.
+If a *new* unknown appears mid-Phase-4 (a form reveals fields only after a
+postback), the escalation rule still applies: stop and ask. Phase 3 shrinks
+that to a rare event; it does not abolish it.
+
+### Phase 4 — fill and submit (serial browser)
+
+Per vacancy, following its ATS file:
+
+1. Fill from the Phase 3 report. Upload the PDF from `runs/`.
+   **Verify writes on hostile forms**: after setting a value, read it back by
+   its real `name`. Anti-autofill honeypots accept writes and drop them.
+2. Draft `narrative` fields — 1–2 sentences, grounded only in the tailored
+   resume, `profile.json` and `stories.json`, no new claims. Flag every drafted
+   sentence in the run summary. A question naming what the user *built* is not
+   narrative: search `stories.json` first (`node $STORIES find "<the question>"`),
+   and only ask if nothing there really fits.
+
+   `stories.json` holds the user's own interview-prep material — 12 STAR
+   stories with their own `Best for:` tags, plus long-form answers — imported
+   from the Recruting `.docx` archive by `$IMPORT_STORIES`. It is what makes
+   "describe the hardest problem you solved" answerable without inventing
+   anything: pick the story that genuinely fits, compress it to the length the
+   field wants, and keep every clause traceable to its Situation/Task/Action/
+   Result. `$STORIES find` ranks by lexical overlap only — a behavioural
+   question shares almost no vocabulary with the story that answers it, so a
+   low score is not a verdict. Read the titles and tags and judge yourself; if
+   nothing fits, that is still an escalation.
+3. Screenshot the filled form; check nothing required is blank.
+4. **Confirmation pause** while the run's clean-confirmation counter is below
+   2–3 (see § Confirmation mode): show the screenshot plus vacancy, PDF, key
+   answers and any drafted text, and wait.
+5. Submit. Wait for a real success indicator — the one named in the ATS file,
+   not "the button stopped being clickable". Screenshot it.
+6. `update_application_status({vacancyId, status: "APPLIED", notes: "Applied
+   <date> via <ATS>. Resume: <folder>. <key answers and caveats>"})`, ≤1000
+   chars, date/ATS/resume prefix kept intact.
+7. **If you cannot actually apply** (login-gated with no account, a CAPTCHA
+   that demands solving, e-mail-only application, posting already closed) — do
+   **not** set `APPLIED`. Record what happened and move to the next vacancy.
+
+### End of run
+
+Summarize applied / skipped / couldn't-apply with reasons, list every new
+`qa[]` entry and alias learned, and add any newly discovered ATS quirk to
+`$ATS_REGISTRY` — a quirk left in a run log gets rediscovered the expensive way.
+
+## On running vacancies in parallel
+
+Phase 1 parallelises. **Phase 2 and Phase 4 do not.** One Chrome is one shared
+session: concurrent agents race for tab focus, and a coordinate click that
+lands after the focus moved goes to the wrong form — under the user's real
+name. Subagents also cannot reach the user, so the escalation rule would have
+to be either violated or bounced back, which ends the parallelism anyway.
+
+Real browser concurrency needs isolated browsers — a Playwright worker per
+vacancy, or one Chrome profile and Claude Code session per worker with
+vacancies claimed through OneTap.Work status so two workers never take the
+same one. Until then the phased pipeline is what buys the wall-clock back:
+resumes generated in parallel, one question round instead of N, and no
+rediscovery of ATS quirks.
 
 ## State tracking
 
