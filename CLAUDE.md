@@ -1,55 +1,56 @@
 # auto-applier
 
-Автоматична подача заявок на збережені (SAVED) вакансії з OneTap.Work:
-тайлорує резюме під кожну вакансію, подається в реальному браузері через
-інтеграцію Claude Code + Chrome, і ніколи не вигадує відповіді на питання
-анкети — лише факти з `profile.json` або питає користувача напряму.
+Automated applications to saved (SAVED) vacancies from OneTap.Work: tailors
+a resume for each vacancy, applies in a real browser via the Claude Code +
+Chrome integration, and never invents an answer to an application-form
+question — only facts from `profile.json`, or it asks the user directly.
 
-## ⚠️ PRIVACY — НІКОЛИ не пушити цей репозиторій на публічний remote
+## ⚠️ PRIVACY — NEVER push this repository to a public remote
 
-`profile.json` містить персональні дані: телефон, email, зарплатні
-очікування, робочу авторизацію/візовий статус, дату народження (якщо буде
-додана) тощо. Це не gitignored навмисно — версійність потрібна, щоб бачити
-історію змін і відкатити помилкову правку. Але сам файл — приватний.
-Якщо колись знадобиться remote — тільки приватний.
+`profile.json` contains personal data: phone, email, salary expectations,
+work authorization/visa status, date of birth (if ever added), etc. It is
+deliberately not gitignored — version history is needed to see how the
+data grew and to revert a bad edit. But the file itself is private. If a
+remote is ever needed — private only.
 
-## Пов'язані репозиторії
+## Related repositories
 
-- `~/Desktop/projects/personal/my-career-profile` — резюме та
-  скіли (`skills.csv`, `CV_Base.html`) і три Claude Code skills для тайлору
-  резюме під вакансію: `resume-blocks` → `resume-render` → `resume-pdf`.
-  Цей репо (`auto-applier`) використовує їх скрипти **завжди з абсолютними
-  шляхами** — `render.mjs`/`topdf.mjs` резолвлять свої дефолти відносно
-  розташування скрипта, а позиційні аргументи відносно `process.cwd()`,
-  тож `cd` в інший репо перед викликом непотрібен і небезпечний.
-- OneTap.Work MCP — джерело SAVED-вакансій і місце, куди пишеться фінальний
-  статус (`update_application_status`). Це єдине джерело правди про те,
-  що вже подано — `auto-applier` не веде окремого журналу заявок.
-  `vacancy.link` — єдине поле для навігації браузера; `vacancy.applyLink`
-  — внутрішнє поле сервера, ніколи не використовується напряму.
+- `~/Desktop/projects/personal/my-career-profile` — resume and
+  skills (`skills.csv`, `CV_Base.html`) and three Claude Code skills for
+  tailoring a resume to a vacancy: `resume-blocks` → `resume-render` →
+  `resume-pdf`. This repo (`auto-applier`) always calls their scripts with
+  **absolute paths** — `render.mjs`/`topdf.mjs` resolve their own defaults
+  relative to the script's own location, but resolve positional arguments
+  relative to `process.cwd()`, so `cd`-ing into that repo before calling
+  them is unnecessary and unsafe.
+- OneTap.Work MCP — the source of SAVED vacancies, and where the final
+  status is written (`update_application_status`). It's the single source
+  of truth for what's already been applied to — `auto-applier` keeps no
+  separate application ledger. `vacancy.link` is the only field used for
+  browser navigation; `vacancy.applyLink` is an internal server field,
+  never used directly.
 
-## Структура
+## Structure
 
-- `profile.json` — структуровані факти користувача + growable `qa[]` банк
-  відповідей на питання анкет заявок (з тегами по країні/валюті, бо
-  однаково сформульоване питання може мати різну правильну відповідь
-  залежно від вакансії).
-- `.claude/skills/profile-interview/` — заповнення/оновлення `profile.json`
-  через структуроване інтерв'ю з користувачем. Запускати перед першим
-  реальним прогоном подачі заявок.
-- `.claude/skills/apply-to-jobs/` — головний оркестратор: SAVED-вакансії →
-  тайлор резюме → браузер → заповнення форми → Submit → статус APPLIED.
-  `scripts/profile-qa.mjs` — детермінований fuzzy-match і atomic-write
-  індекс над `qa[]` (семантичне рішення "чи це те саме питання" лишається
-  за Claude, скрипт лише ранжує кандидатів).
-- `runs/` (gitignored) — ефемерний аудит-трейл (скріншоти, blocks.md,
-  summary) одного прогону. Ніколи не використовується для рішень "що вже
-  подано" — це роль OneTap.Work.
+- `profile.json` — the user's structured facts plus a growable `qa[]` bank
+  of application-form answers (tagged by country/currency, since the same
+  wording can have a different correct answer depending on the vacancy).
+- `.claude/skills/profile-interview/` — fills/updates `profile.json` via a
+  structured interview with the user. Run before the first real
+  apply-to-jobs run.
+- `.claude/skills/apply-to-jobs/` — the main orchestrator: SAVED vacancies
+  → tailored resume → browser → form fill → Submit → APPLIED status.
+  `scripts/profile-qa.mjs` — a deterministic fuzzy-match and atomic-write
+  index over `qa[]` (the semantic judgment of "is this really the same
+  question" stays with Claude — the script only ranks candidates).
+- `runs/` (gitignored) — an ephemeral audit trail (screenshots, blocks.md,
+  summary) for one run. Never used to decide "what's already been applied
+  to" — that's OneTap.Work's job.
 
-## Головне правило системи
+## The system's core rule
 
-Агент, що заповнює форму заявки, **ніколи не вигадує факт**. Якщо точної
-відповіді немає в `profile.json` (ні в структурованих полях, ні в `qa[]`
-з достатньою впевненістю) — зупинитись, спитати користувача, записати
-відповідь через `profile-qa.mjs add`, і лише тоді продовжити. Деталі — в
+The agent filling out an application form **never invents a fact**. If the
+exact answer isn't in `profile.json` (neither in the structured fields nor
+in `qa[]` with enough confidence) — stop, ask the user, record the answer
+via `profile-qa.mjs add`, and only then continue. Details in
 `.claude/skills/apply-to-jobs/SKILL.md`.

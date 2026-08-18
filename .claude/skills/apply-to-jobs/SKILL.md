@@ -1,6 +1,6 @@
 ---
 name: apply-to-jobs
-description: Pull SAVED vacancies from OneTap.Work, generate a tailored resume for each via the my-career-profile skills, apply in a real browser using Claude in Chrome, and mark the vacancy APPLIED. Never invents an answer to a factual/personal application-form question — always matches against profile.json or stops and asks. Use when the user says "apply to my saved jobs" / "run the job applier" / "подай на збережені вакансії".
+description: Pull SAVED vacancies from OneTap.Work, generate a tailored resume for each via the my-career-profile skills, apply in a real browser using Claude in Chrome, and mark the vacancy APPLIED. Never invents an answer to a factual/personal application-form question — always matches against profile.json or stops and asks. Use when the user says "apply to my saved jobs" / "run the job applier", including phrasings in other languages.
 ---
 
 # Apply to jobs
