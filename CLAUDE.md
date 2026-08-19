@@ -24,7 +24,8 @@ are private. If a remote is ever needed — private only.
   **absolute paths** — `render.mjs`/`topdf.mjs` resolve their own defaults
   relative to the script's own location, but resolve positional arguments
   relative to `process.cwd()`, so `cd`-ing into that repo before calling
-  them is unnecessary and unsafe.
+  them is unnecessary and unsafe. Those paths are not written into the
+  skills; they come from `apply-config.json` (below).
 - OneTap.Work MCP — the source of SAVED vacancies, and where the final
   status is written (`update_application_status`). It's the single source
   of truth for what's already been applied to — `auto-applier` keeps no
@@ -34,6 +35,14 @@ are private. If a remote is ever needed — private only.
 
 ## Structure
 
+- `apply-config.json` — the seam between this installation and the generic
+  skills. Everything under `.claude/` is deliberately English-only and
+  carries no absolute paths and no personal data; this file supplies both.
+  It holds the paths into `my-career-profile`, the resume filename, and
+  `formVocabulary` — how the fields of a non-English application form are
+  worded, merged on top of the skills' built-in English vocabulary. Delete
+  it and the skills still run, in English, asking for what they need. Teach
+  the system a new language here, never in `.claude/`.
 - `profile.json` — the user's structured facts plus a growable `qa[]` bank
   of application-form answers (tagged by country, since the same wording can
   have a different correct answer depending on the vacancy). Money is the one
@@ -53,8 +62,10 @@ are private. If a remote is ever needed — private only.
 - `.claude/skills/apply-to-jobs/` — the main orchestrator, run in four
   phases: resumes (parallel) → read every form (serial, read-only) → one
   batched question round → fill and submit (serial).
-  - `scripts/lib/qa-match.mjs` — the one matcher both scripts share, so a
+  - `scripts/lib/qa-match.mjs` — the one matcher every script shares, so a
     question never scores differently depending on who asked.
+  - `scripts/lib/field-labels.mjs` — English form vocabulary, plus the merge
+    of `apply-config.json`'s locale packs on top of it.
   - `scripts/profile-qa.mjs` — deterministic fuzzy-match and atomic-write
     index over `qa[]` (the semantic judgment of "is this really the same
     question" stays with Claude — the script only ranks candidates).
@@ -63,8 +74,11 @@ are private. If a remote is ever needed — private only.
   - `scripts/resolve-fields.mjs` — sorts a form's fields into resolved /
     narrative / review / unknown against `profile.json`. It never guesses:
     only a structured value or an `exact` qa[] hit counts as resolved.
-  - `ats/<host>.md` — quirks paid for by a failed submit. Add to it in the
-    same commit as the fix.
+  - `ats/<host>.md` — quirks paid for by a failed submit, keyed by exact host
+    then by registrable domain (`recruitee.com.md` covers every tenant). Add
+    to it in the same commit as the fix. Written in English and identified by
+    DOM handle rather than by on-screen labels, since the same ATS renders in
+    whatever language the employer hires in.
 - `runs/` (gitignored) — an ephemeral audit trail (screenshots, blocks.md,
   summary) for one run. Never used to decide "what's already been applied
   to" — that's OneTap.Work's job.

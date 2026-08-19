@@ -18,21 +18,25 @@ create it from the schema below with every field `null`.
 
 1. **Read `profile.json`.** Note which structured fields are already filled;
    you'll skip those unless the user is explicitly correcting one.
-2. **Pre-fill from the CV, don't ask from scratch.** Read
-   `~/Desktop/projects/personal/my-career-profile/CV_Base.html`
-   and pull `personal.email`, `personal.phone`, `personal.currentCity`,
+2. **Pre-fill from the CV, don't ask from scratch.** Read the base CV named by
+   `paths.cvBaseHtml` in `apply-config.json` (repo root) and pull
+   `personal.email`, `personal.phone`, `personal.currentCity`,
    `personal.currentCountry`, `links.linkedin`, `links.github` from its
    contact section. Present these to the user as "I found X — confirm or
-   correct?" rather than asking blind.
-3. **Compute years of experience the same way `resume-blocks` does** — do
-   not ask the user for a number, do not hardcode one. Open the same
-   `CV_Base.html`, find the EXPERIENCE section, and take the start year of
-   the *earliest entry that is genuinely commercial software development*
-   (skip pre-career entries — e.g. a Hardware Engineer role predating the
-   dev career does not count, exactly as `resume-blocks/SKILL.md` documents
-   this). `experience.yearsOfCommercialExperience` = current year minus that
-   start year; record `experience.yearsAsOf` as today's date so it can be
-   recomputed later without re-deriving the rule.
+   correct?" rather than asking blind. If `apply-config.json` does not exist
+   yet, ask the user where their CV and resume-rendering repo live and write
+   the file — that config is what keeps every absolute path out of these
+   skills.
+3. **Compute years of experience the same way the resume skill does** — do
+   not ask the user for a number, do not hardcode one. Open the same base CV,
+   find the EXPERIENCE section, and take the start year of the *earliest entry
+   that is genuinely commercial software development*. Pre-career and
+   adjacent-field roles do not count; the resume-blocks skill named by
+   `paths.resumeBlocksSkill` documents where that line falls, so read it rather
+   than deciding independently — the two skills disagreeing about the number is
+   worse than either answer. `experience.yearsOfCommercialExperience` = current
+   year minus that start year; record `experience.yearsAsOf` as today's date so
+   it can be recomputed later without re-deriving the rule.
 4. **Ask the remaining core facts in grouped batches**, not one field per
    message — the user answers a block, you write it, you move to the next
    block:
@@ -74,7 +78,17 @@ create it from the schema below with every field `null`.
    about to add something the `add` command's own dedupe check would
    already catch — but the command refuses near-duplicates itself
    (score > 0.85), so don't over-worry about this.
-7. **Confirm the highest-stakes fields out loud before finishing** — phone,
+7. **Seed the local job market's vocabulary** if the user applies to forms
+   written in a language other than English. `apply-to-jobs` matches field
+   labels against English phrasings built into
+   `.claude/skills/apply-to-jobs/scripts/lib/field-labels.mjs`, plus whatever
+   `apply-config.json`'s `formVocabulary` adds on top. Ask which language(s)
+   the user's applications are usually in and write the field, topic and
+   language-alias phrasings for those into the config. Skipping this only
+   costs escalations — a label the resolver cannot read becomes a question for
+   the user rather than a wrong answer — so it is worth doing but never
+   urgent.
+8. **Confirm the highest-stakes fields out loud before finishing** — phone,
    email, salary numbers, work authorization — read them back to the user.
    These are exactly the fields that must never be wrong on a real
    application.

@@ -1,7 +1,8 @@
 # Greenhouse (job-boards.greenhouse.io)
 
 Reached from a company careers page that embeds the form in a cross-origin
-iframe (`#grnhse_iframe`).
+iframe (`#grnhse_iframe`). Multi-tenant — these quirks are Greenhouse's, not
+any one employer's.
 
 ## Quirks
 

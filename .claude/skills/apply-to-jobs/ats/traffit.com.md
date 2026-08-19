@@ -1,33 +1,26 @@
 # Traffit (*.traffit.com)
 
-Clean, single-page form. The easiest of the three met so far.
+Clean, single-page form — one of the easier ATSes to drive. Multi-tenant: the
+quirks below hold across tenants, with the per-tenant variations noted.
+
+## Reaching the form
+
+**The job link is often not the form.** A job board's Apply may land on
+`/public/an/<hash>`, a job *description* page, with the form behind a further
+"apply / join us" link at `/public/form/a/<hash>`. Other tenants land straight
+on `/public/form/a/<hash>`. Read what you got before hunting for a link.
+
+**It arrives through a page-opened tab**, which has landed both inside and
+outside the MCP tab group on different runs. Call `tabs_context_mcp` after the
+click rather than assuming either way; if the tab fell outside the group, read
+the destination URL and `navigate` the managed tab there instead.
 
 ## Quirks
 
-**Reached only through a page-opened tab.** justjoin.it's `Apply` opens a new
-tab that lands OUTSIDE the MCP tab group, so it cannot be driven. Click it
-once to learn the destination URL, then `navigate` the managed tab there.
-
-**Selectize comboboxes.** `Availability` and the language selects render as a
-text input reading `Click to load the list.` with an empty `<select>` behind
-them. Click the control, type a few characters to filter, then click the
-option row. `form_input` on the underlying select does nothing.
-
-**Consent checkboxes ignore clicks on the label.** Click the input box itself
-(its own rect), not the surrounding text. Verify with `.checked` afterwards.
-The first consent is mandatory; the second (future recruitment) is optional and
-should be left unchecked.
-
-## Success signal
-
-Navigates to `public/form/thankyou/<id>?application_timestamp=...` with a green
-check and `Thank you!`.
-
-## Update 2026-08-18 (cerebre.traffit.com)
-
-**Drive selectize through its own API, not by clicking.** The note above about
-clicking the control and filtering still works, but `sel.selectize` is exposed
-on the native `<select>` and is far more reliable:
+**Drive selectize comboboxes through their own API, not by clicking.** They
+render as a text input with an empty `<select>` behind them, and `form_input` on
+that select does nothing. `sel.selectize` is exposed on the native element and
+is far more reliable than clicking:
 
 ```js
 const sel = document.querySelector('select[name="..."]');
@@ -35,16 +28,27 @@ const hit = Object.values(sel.selectize.options).find(o => o.title === "B2");
 sel.selectize.setValue(hit.id, false);
 ```
 
-Options carry `{title, id}` — match on `title`, set by `id`. Verify with
-`sel.value` and `sel.selectize.$control.text()`.
+**Option ids do not track their labels.** One tenant's option titled `B2` had id
+`b1`. Always match on `o.title` and set by `o.id`; verify with
+`sel.selectize.$control.text()`, never by reading the raw value.
 
-**The page-opened tab did land inside the MCP tab group** this time, contrary to
-the note above. Check `tabs_context_mcp` rather than assuming either way.
+**Multi-select variants take an array.** Availability and language fields are
+often `<select multiple>` — same API, but `setValue([id1, id2], false)`.
 
-**The job link is not the form.** justjoin.it's Apply lands on
-`/public/an/<hash>`, a job description page; the form is behind its
-`Join Cerebre` link at `/public/form/a/<hash>`. Read the anchor's href and
-navigate there.
+**Consent checkboxes are `dynamic_form[provisions][N]`.** The indices are
+per-tenant: the mandatory one has been `[1]`, `[3]` and `[5]` on different
+tenants, and the optional future-recruitment one is a separate index. A plain
+`.click()` on the input works, but clicks on the surrounding label are ignored —
+click the input's own rect and verify with `.checked`.
 
-**Consent checkboxes are `dynamic_form[provisions][N]`** — `[1]` mandatory,
-`[2]` future recruitment, left unchecked. A plain `.click()` on the input works.
+**A mandatory consent can be a hidden input.** On some tenants only the optional
+future-recruitment box renders while the required one is invisible. Set it by
+name and confirm `.checked` rather than trusting the screenshot.
+
+**Never use a "select all" consent control** — it also ticks the optional
+future-recruitment consent.
+
+## Success signal
+
+Navigates to `public/form/thankyou/<id>?application_timestamp=...` with a green
+check. Match on the URL path; the redirect is prompt.

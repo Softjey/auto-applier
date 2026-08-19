@@ -6,7 +6,11 @@
 // a structured profile value by an explicit rule below, or matches a qa[]
 // entry at `exact`. Everything else — including `likely` — lands in `review`
 // or `unknown`, because "same question for the same country/currency" is a
-// semantic call that stays with Claude (see SKILL.md § Filling the form).
+// semantic call that stays with Claude (see SKILL.md).
+//
+// All label vocabulary lives in lib/field-labels.mjs (English) plus the user's
+// own apply-config.json (every other language). Nothing locale-specific
+// belongs in this file.
 //
 // Usage:
 //   resolve-fields.mjs <form.json> [more-form.json ...] [--json]
@@ -17,85 +21,41 @@
 
 import { readFileSync } from "node:fs";
 import { rankAgainstQa, loadProfile } from "./lib/qa-match.mjs";
+import { buildVocabulary, matches } from "./lib/field-labels.mjs";
 
-// Structural facts: fields whose answer is a plain profile lookup, never a
-// country-dependent judgment. Keyed by a regex over the field label.
-// `\b` is ASCII-only in JS, so it does not fire after "imię" or "płeć".
-// Every pattern here is /iu with explicit non-letter edges instead.
-const edge = (body) => new RegExp(`(^|[^\\p{L}])(${body})([^\\p{L}]|$)`, "iu");
-
+// Order is load-bearing. "First and last name" is ONE field asking for both,
+// and it has to be tested before the last-name rule, which would otherwise
+// match its tail and answer a full-name field with the surname alone. `bareName`
+// stays last so every more specific rule gets first refusal.
 const STRUCTURAL = [
-  // "First and last name" is ONE field asking for both. It has to be tested
-  // before the last-name rule, which would otherwise match its tail and answer
-  // a full-name field with the surname alone.
-  {
-    re: edge("full\\s*name|imi[eę] i nazwisko|first\\s*(and|&|\\+|/)\\s*last\\s*name"),
-    get: (p) => p.personal?.fullName,
-  },
-  { re: edge("first\\s*name|imi[eę]|given name"), get: (p) => p.personal?.firstName },
-  { re: edge("last\\s*name|surname|nazwisko|family name"), get: (p) => p.personal?.lastName },
-  { re: edge("e-?mail|adres e-?mail"), get: (p) => p.personal?.email },
-  { re: edge("phone|telefon\\w*|mobile|numer telefonu"), get: (p) => p.personal?.phone },
-  { re: edge("linkedin"), get: (p) => p.links?.linkedin },
-  { re: edge("github|git hub"), get: (p) => p.links?.github },
-  { re: edge("portfolio|website|strona"), get: (p) => p.links?.portfolio },
-  { re: edge("city|miasto|town"), get: (p) => p.personal?.currentCity },
-  { re: edge("country|kraj"), get: (p) => p.personal?.currentCountry },
-  // Bare "Name" (Traffit pairs it with a separate "Surname") means the given
-  // name. Kept last so "Full name" / "Company name" match their own rule first.
-  {
-    re: edge("name|imi[eę]"),
-    guard: /(company|firm|file|user|nick|referr|full)/iu,
-    get: (p) => p.personal?.firstName,
-  },
+  ["fullName", (p) => p.personal?.fullName],
+  ["firstName", (p) => p.personal?.firstName],
+  ["lastName", (p) => p.personal?.lastName],
+  ["email", (p) => p.personal?.email],
+  ["phone", (p) => p.personal?.phone],
+  ["linkedin", (p) => p.links?.linkedin],
+  ["github", (p) => p.links?.github],
+  ["portfolio", (p) => p.links?.portfolio],
+  ["city", (p) => p.personal?.currentCity],
+  ["country", (p) => p.personal?.currentCountry],
+  ["bareName", (p) => p.personal?.firstName],
 ];
 
-// Language-level questions are asked in a dozen phrasings and in the ATS's own
-// language, so match the language NAME rather than the sentence around it, and
-// answer from languages[].cefr. Which option on THIS form's scale that maps to
-// is Claude's call in Phase 4 — the resolver only supplies the fact.
-const LANGUAGES = [
-  { re: edge("english|angielski\\w*"), name: "English" },
-  { re: edge("polish|polski\\w*|polskiego"), name: "Polish" },
-  { re: edge("ukrainian|ukrai[nń]ski\\w*"), name: "Ukrainian" },
-];
-const LEVEL_RE = /(level|proficiency|stopie[nń]|znajomo[sś]ci|proficien)/iu;
-
-// Consent / GDPR checkboxes are a policy decision, not a fact lookup: the
-// mandatory one is inherent to applying, anything broader is declined.
-const CONSENT_RE = /(consent|zgod[aęy]|przetwarzanie danych|gdpr|rodo|processing of my personal data)/iu;
-
-// Open-ended prose Claude may draft (grounded only in the tailored resume and
-// profile.json). The negative half matters more than the positive half: a
-// question naming something the user BUILT, SHIPPED or WORKED ON is a factual
-// question wearing narrative clothes, and drafting it from adjacent CV bullets
-// produces confident nonsense. Those stay `unknown` and get asked.
-const NARRATIVE_RE = /(why (do you want|this|are you)|what (interests|attracts)|describe your|how would you describe|cover letter|motivation|leave us a message|tell us about yourself|about you)/iu;
-const BUILT_RE = /(you'?ve? (built|created|made|developed|shipped|written)|tools you|projects you|have you built|worked on)/iu;
-
-// Voluntary demographic fields: answered from policy, never escalated.
-const EEO_RE = /\b(gender|race|ethnic|veteran|disability|p[lł]e[cć]|sexual orientation)\b/i;
-
-// Fields the agent fills from run state rather than from the profile.
-const RUNTIME = [
-  { re: /\b(cv|resume|curriculum|plik cv|life)\b/i, note: "the tailored PDF generated in Phase 1" },
-];
-
-function classify(field, profile) {
+function classify(field, profile, vocab) {
   const label = field.label || field.key || "";
 
   if (field.kind === "honeypot") {
     return { status: "skip", why: "anti-autofill honeypot — writing here loses the answer" };
   }
-  if (field.kind === "file" || RUNTIME.some((r) => r.re.test(label))) {
-    return { status: "runtime", why: RUNTIME[0].note };
+  if (field.kind === "file" || matches(vocab.topic.cvUpload, label)) {
+    return { status: "runtime", why: "the tailored PDF generated in Phase 1" };
   }
-  if (EEO_RE.test(label)) {
+  if (matches(vocab.topic.eeo, label)) {
     return { status: "resolved", source: "profile.eeo.policy", value: profile.eeo?.policy || "decline" };
   }
 
-  if (CONSENT_RE.test(label)) {
-    const future = /(future|przysz[lł]|kolejnych|marketing|other recruitment)/iu.test(label);
+  if (matches(vocab.topic.consent, label)) {
+    const future = matches(vocab.topic.futureConsent, label);
     return {
       status: "resolved",
       source: "consent policy",
@@ -105,31 +65,32 @@ function classify(field, profile) {
     };
   }
 
-  if (LEVEL_RE.test(label)) {
-    const hit = LANGUAGES.find((l) => l.re.test(label));
+  // Language-level questions are asked in a dozen phrasings and in the form's
+  // own language, so match the language NAME rather than the sentence around
+  // it. Which option on THIS form's scale the level maps to is Claude's call in
+  // Phase 4 — the resolver only supplies the fact.
+  if (matches(vocab.topic.languageLevel, label)) {
+    const hit = vocab.languages.find((l) => matches(l.re, label));
     if (hit) {
-      const entry = (profile.languages || []).find((l) => l.language === hit.name);
-      if (entry) {
-        return {
-          status: "resolved",
-          source: "profile.languages[].cefr",
-          value: `${entry.cefr || entry.level} — pick the closest option on this form's own scale`,
-        };
-      }
+      return {
+        status: "resolved",
+        source: "profile.languages[]",
+        value: `${hit.entry.cefr || hit.entry.level} — pick the closest option on this form's own scale`,
+      };
     }
   }
 
-  if (NARRATIVE_RE.test(label) && !BUILT_RE.test(label)) {
+  if (matches(vocab.topic.narrative, label) && !matches(vocab.topic.built, label)) {
     return {
       status: "narrative",
-      why: "Claude may draft 1-2 sentences, grounded only in the tailored resume and profile.json; flag the text in the run summary",
+      why: "Claude may draft 1-2 sentences, grounded only in the tailored resume, profile.json and stories.json; flag the text in the run summary",
     };
   }
 
-  for (const rule of STRUCTURAL) {
-    if (rule.guard && rule.guard.test(label)) continue;
-    if (rule.re.test(label)) {
-      const value = rule.get(profile);
+  for (const [key, get] of STRUCTURAL) {
+    if (matches(vocab.guard[key], label)) continue;
+    if (matches(vocab.field[key], label)) {
+      const value = get(profile);
       if (value) return { status: "resolved", source: "profile (structured)", value };
     }
   }
@@ -159,6 +120,7 @@ function main() {
     process.exit(1);
   }
   const profile = loadProfile();
+  const vocab = buildVocabulary(profile);
   const report = [];
 
   for (const path of paths) {
@@ -172,7 +134,7 @@ function main() {
         required: !!field.required,
         options: field.options,
         optionsHidden: !!field.optionsHidden,
-        ...classify(field, profile),
+        ...classify(field, profile, vocab),
       });
     }
     report.push(out);

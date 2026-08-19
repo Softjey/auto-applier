@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// One-way import of the interview-prep .docx archive into stories.json.
+// One-way import of a directory of interview-prep .docx files into stories.json.
 //
-// The archive is the user's own prep material for past interview loops
-// (Google, Amazon, Netflix, Asana, Fresha, Sales Patriot). It holds two kinds
-// of thing worth keeping:
+// Point it at any folder of prep documents — typically one subfolder per
+// company the user has interviewed with. Two kinds of content are worth
+// keeping:
 //
 //   * STAR stories — a numbered title, an optional `Best for:` tag line, and
 //     Situation/Task/Action/Result sections. These are the raw material for
@@ -16,8 +16,9 @@
 // whole point: an application-form narrative can be grounded in one of these
 // instead of being invented. Nothing here is generated.
 //
-// The docs overlap heavily (several are literal "Copy of …" duplicates), so
-// identical answers collapse into one entry that remembers every source.
+// Prep archives overlap heavily (the same story retold for a different loop,
+// often as a literal "Copy of …" duplicate), so identical answers collapse
+// into one entry that remembers every source document.
 //
 // Usage:
 //   import-stories.mjs <dir-with-docx> [--out=<path>] [--dry]
@@ -96,7 +97,8 @@ const slug = (s) =>
 
 const norm = (s) => s.toLowerCase().replace(/\s+/g, " ").trim();
 
-// Company + document name come from the archive's own folder layout.
+// Company + document name come from the archive's own folder layout: the
+// containing folder names the company, the filename names the document.
 function provenance(path, root) {
   const rel = relative(root, path);
   const parts = rel.split("/").filter(Boolean);
@@ -263,16 +265,19 @@ for (const file of files) {
   }
 }
 
-// The same event is retold at different lengths across loops — Amazon wants a
-// tight leadership-principle answer, Netflix a deep dive. Exact-text dedup
-// cannot see that those are one story, so cluster on how much of the
-// Situation+Action vocabulary two entries share. The longest retelling wins
-// and the shorter ones ride along as `variants`, because a short form field
-// often wants the short version.
-// 0.22 is measured, not guessed: across this archive every pair scoring 0.23
-// or above is one event retold (the class-merge fix, the cart estimate, the
-// React->Vue rewrite, the Friday hotfix), and the next pair down sits at 0.18.
-// Re-measure before raising it if the archive grows.
+// The same event gets retold at different lengths across interview loops — one
+// company wants a tight two-minute answer, another a deep dive. Exact-text
+// dedup cannot see that those are one story, so cluster on how much of the
+// Situation+Action vocabulary two entries share. The longest retelling wins and
+// the shorter ones ride along as `variants`, because a short form field often
+// wants the short version.
+//
+// 0.22 is a starting point, not a constant of nature: it was measured on one
+// archive, where every pair at 0.23 or above turned out to be one event retold
+// and the next pair down sat at 0.18 — a wide, unambiguous gap. Different
+// writing produces a different gap. Run with --dry, read the clusters, and
+// move the threshold if stories are being merged that should not be (or the
+// reverse).
 const SAME_STORY = 0.22;
 
 function clusterStories(list) {
@@ -331,7 +336,7 @@ answers.forEach(uniqueId);
 const out = {
   $schemaVersion: 1,
   note:
-    "Interview-prep material written by the user, imported from the Recruting .docx archive. " +
+    "Interview-prep material written by the user, imported from a .docx archive. " +
     "Every entry is a verified fact about the user's own work — narrative form fields may be " +
     "grounded in these instead of being invented. Regenerate with import-stories.mjs.",
   importedFrom: basename(root),

@@ -1,12 +1,12 @@
 ---
 name: apply-to-jobs
-description: Pull SAVED vacancies from OneTap.Work, generate a tailored resume for each via the my-career-profile skills, apply in a real browser using Claude in Chrome, and mark the vacancy APPLIED. Never invents an answer to a factual/personal application-form question — always matches against profile.json or stops and asks. Use when the user says "apply to my saved jobs" / "run the job applier", including phrasings in other languages.
+description: Pull SAVED vacancies from OneTap.Work, generate a tailored resume for each via the resume-rendering skills, apply in a real browser using Claude in Chrome, and mark the vacancy APPLIED. Never invents an answer to a factual/personal application-form question — always matches against profile.json or stops and asks. Use when the user says "apply to my saved jobs" / "run the job applier", including phrasings in other languages.
 ---
 
 # Apply to jobs
 
 You are the one actually clicking Submit on real applications to real
-companies under the user's real name. Everything here exists to keep that
+companies under a real person's name. Everything here exists to keep that
 trustworthy: never invent a fact, never submit something you haven't shown
 the user (per the confirmation rule below), never leave OneTap.Work's
 tracking out of sync with what you actually did.
@@ -24,33 +24,46 @@ See Phase 3 for exactly how matching and escalation work.
 
 **The one thing you do compute rather than ask: money.** Currency and
 contract-form conversions are arithmetic over a number the user already gave,
-not new facts, and asking again every time a form wants USD instead of PLN is
-noise. Follow `profile.compensation.derivation`: derive from the anchor, fetch
-a live NBP rate, respect the stated ceiling, and show the arithmetic at the
-confirmation pause so the user can catch a bad rate before it is submitted.
-This is the *only* licensed derivation — it does not generalise to years of
-experience, skill levels, or anything else.
+not new facts, and asking again every time a form wants a different currency is
+noise. Follow `profile.compensation.derivation` — the user's own anchor figure
+plus the rules for converting it. Fetch a live FX rate, respect the stated
+ceiling, and show the arithmetic at the confirmation pause so the user can
+catch a bad rate before it is submitted. This is the *only* licensed
+derivation: it does not generalise to years of experience, skill levels, or
+anything else.
 
-## Constants
+## Configuration
 
-Absolute paths — this skill always invokes the sibling repo's scripts with
-absolute paths for both the script and any file arguments, never `cd` into
-it first. (`render.mjs`/`topdf.mjs` resolve their own defaults — skills.csv,
-CV_Base.html, out/ — relative to the script's own location, but resolve
-positional file arguments relative to `process.cwd()`. Mixing those up
-silently reads or writes the wrong file.)
+Everything installation-specific — absolute paths, the resume filename, and the
+non-English vocabulary of the local job market — lives in **`apply-config.json`
+at the repo root**, never in this skill. Read it at the start of a run.
 
 ```
-SIBLING_REPO         = ~/Desktop/projects/personal/my-career-profile
-RESUME_BLOCKS_SKILL  = $SIBLING_REPO/.claude/skills/resume-blocks/SKILL.md
-RESUME_RENDER        = $SIBLING_REPO/.claude/skills/resume-render/render.mjs
-RESUME_PDF           = $SIBLING_REPO/.claude/skills/resume-pdf/topdf.mjs
-PROFILE_QA           = <this repo>/.claude/skills/apply-to-jobs/scripts/profile-qa.mjs
-RESOLVE_FIELDS       = <this repo>/.claude/skills/apply-to-jobs/scripts/resolve-fields.mjs
-STORIES              = <this repo>/.claude/skills/apply-to-jobs/scripts/stories.mjs
-IMPORT_STORIES       = <this repo>/.claude/skills/apply-to-jobs/scripts/import-stories.mjs
-EXTRACT_FORM         = <this repo>/.claude/skills/apply-to-jobs/browser/extract-form.js
-ATS_REGISTRY         = <this repo>/.claude/skills/apply-to-jobs/ats/
+config.paths.resumeBlocksSkill   the resume-blocks SKILL.md to follow
+config.paths.resumeRender        render.mjs
+config.paths.resumePdf           topdf.mjs
+config.paths.cvBaseHtml          the base CV the resume skills read
+config.paths.skillsCsv           skill ratings, if the resume repo keeps them
+config.resumeFileName            what to name the PDF copied into runs/
+config.formVocabulary            locale phrasings, merged by lib/field-labels.mjs
+```
+
+If the file is missing, ask the user for the paths once and offer to write it —
+do not guess a path and do not hardcode one back into this skill. The resume
+scripts resolve their own defaults relative to their own location but resolve
+positional file arguments relative to `process.cwd()`, so always pass absolute
+paths for both the script and its arguments, and never `cd` into the resume
+repo first.
+
+Paths inside this repo:
+
+```
+PROFILE_QA      = .claude/skills/apply-to-jobs/scripts/profile-qa.mjs
+RESOLVE_FIELDS  = .claude/skills/apply-to-jobs/scripts/resolve-fields.mjs
+STORIES         = .claude/skills/apply-to-jobs/scripts/stories.mjs
+IMPORT_STORIES  = .claude/skills/apply-to-jobs/scripts/import-stories.mjs
+EXTRACT_FORM    = .claude/skills/apply-to-jobs/browser/extract-form.js
+ATS_REGISTRY    = .claude/skills/apply-to-jobs/ats/
 ```
 
 ## Preconditions
@@ -68,10 +81,10 @@ Keep a counter of vacancies **confirmed without the user asking for a
 change** in this run. For the **first 2–3 vacancies**, pause before the
 final Submit click (Phase 4 step 4) and wait for explicit go-ahead. Once 2–3
 have gone through cleanly, stop pausing for the rest of this run — continue
-straight through, except for the unknown-fact escalation in Phase 3, which is **always active regardless of this counter**. It is a
-different kind of stop (missing information) from the confirmation pause
-(review before an irreversible action), and the confirmation counter never
-suppresses it.
+straight through, except for the unknown-fact escalation in Phase 3, which is
+**always active regardless of this counter**. It is a different kind of stop
+(missing information) from the confirmation pause (review before an
+irreversible action), and the confirmation counter never suppresses it.
 
 If a confirmed-vacancy pause turns up something wrong (bad field, wrong
 resume, hallucinated narrative text), fix it, and don't count that vacancy
@@ -94,25 +107,32 @@ then run Phase 1.
    filtered per what the user chose.
 2. `get_vacancy({vacancyId})` for each → `descriptionText`, `link`, `expiresAt`.
    Skip anything already expired; note the skip and leave its status untouched.
+   `expiresAt` is not authoritative — see Phase 2 step 1.
 3. For each remaining vacancy, build the tailored resume. **These are
    independent and touch nothing shared, so they may run in parallel** — one
    subagent per vacancy is safe here and nowhere else in this skill.
-   - Follow `$RESUME_BLOCKS_SKILL` against `descriptionText`; write the blocks
-     to `runs/<run-id>/<Company>_<vacancyId>/blocks.md`.
-   - `node $RESUME_RENDER <abs blocks.md> --company="<Company>_<vacancyId>" --force`
+   - Follow `config.paths.resumeBlocksSkill` against `descriptionText`; write
+     the blocks to `runs/<run-id>/<Company>_<vacancyId>/blocks.md`.
+   - `node <resumeRender> <abs blocks.md> --company="<Company>_<vacancyId>" --force`
      — the `vacancyId` suffix is deliberate: two vacancies at the same company
-     would otherwise overwrite each other's `out/` folder.
-   - `node $RESUME_PDF <abs generated .html> --force`.
-   - Copy the PDF to `runs/<run-id>/<Company>_<vacancyId>/Jane_Doe_CV.pdf`.
+     would otherwise overwrite each other's output folder.
+   - `node <resumePdf> <abs generated .html> --force`.
+   - Copy the PDF to `runs/<run-id>/<Company>_<vacancyId>/<config.resumeFileName>`.
      **This copy is not optional**: `file_upload` may only read files inside
-     this session's own directories, and the sibling repo's `out/` is not one.
+     this session's own directories, and the resume repo's output folder is not
+     one.
 
 ### Phase 2 — read every form (serial browser, read-only)
 
 For each vacancy, in one managed tab:
 
-1. Navigate to `vacancy.link` — never `vacancy.applyLink`. Follow the posting's
-   own Apply control to the ATS.
+1. Navigate to `vacancy.link` — never `vacancy.applyLink`. **Check the posting
+   is still live before spending anything on it**: a job board routinely keeps
+   serving a page whose apply control is already gone, and the board is the
+   authority, not `expiresAt`. One JS call — does the body text say expired in
+   the board's own language, and is there an apply control at all — is cheaper
+   than discovering it after a resume has been generated. Then follow the
+   posting's own Apply control to the ATS.
    **Never click a control that opens a new tab.** Tabs a page opens land
    outside the MCP tab group and cannot be driven. Click once to learn the
    destination, then `navigate` the managed tab to that URL.
@@ -121,7 +141,8 @@ For each vacancy, in one managed tab:
 2. Decline non-essential cookies.
 3. Run `$EXTRACT_FORM` through `javascript_tool` and save the JSON to
    `runs/<run-id>/<Company>_<vacancyId>/form.json`.
-4. Read `$ATS_REGISTRY<host>.md` if it exists and follow it in Phase 4.
+4. Load the ATS file for this host and follow it in Phase 4 — see
+   `$ATS_REGISTRY/README.md` for how a host resolves to a file.
 
 Type nothing. Click nothing but navigation and cookie banners. A Phase 2 pass
 over the whole queue must be safe to abandon at any point.
@@ -134,6 +155,12 @@ node $RESOLVE_FIELDS runs/<run-id>/*/form.json
 
 It sorts every field into `resolved` (structured profile value or an `exact`
 qa[] hit), `narrative`, `runtime`, `skip`, `review` and `unknown`.
+
+Label matching is deliberately split in two: `scripts/lib/field-labels.mjs`
+holds English vocabulary only, and every other language comes from
+`apply-config.json`'s `formVocabulary`, merged on top. When a form escalates a
+field you can see is just a known question in another language, the fix is to
+add the phrasing to the config — not to the skill.
 
 - **`review`** — a `likely`/`weak` qa[] candidate. *You* read both questions
   side by side and decide whether they ask the same thing for the same
@@ -164,16 +191,16 @@ Per vacancy, following its ATS file:
    narrative: search `stories.json` first (`node $STORIES find "<the question>"`),
    and only ask if nothing there really fits.
 
-   `stories.json` holds the user's own interview-prep material — 12 STAR
-   stories with their own `Best for:` tags, plus long-form answers — imported
-   from the Recruting `.docx` archive by `$IMPORT_STORIES`. It is what makes
-   "describe the hardest problem you solved" answerable without inventing
-   anything: pick the story that genuinely fits, compress it to the length the
-   field wants, and keep every clause traceable to its Situation/Task/Action/
-   Result. `$STORIES find` ranks by lexical overlap only — a behavioural
-   question shares almost no vocabulary with the story that answers it, so a
-   low score is not a verdict. Read the titles and tags and judge yourself; if
-   nothing fits, that is still an escalation.
+   `stories.json` holds the user's own interview-prep material — STAR stories
+   with their own `Best for:` tags, plus long-form answers — imported from a
+   .docx archive by `$IMPORT_STORIES`. It is what makes "describe the hardest
+   problem you solved" answerable without inventing anything: pick the story
+   that genuinely fits, compress it to the length the field wants, and keep
+   every clause traceable to its Situation/Task/Action/Result. `$STORIES find`
+   ranks by lexical overlap only — a behavioural question shares almost no
+   vocabulary with the story that answers it, so a low score is not a verdict.
+   Read the titles and tags and judge yourself; if nothing fits, that is still
+   an escalation.
 3. Screenshot the filled form; check nothing required is blank.
 4. **Confirmation pause** while the run's clean-confirmation counter is below
    2–3 (see § Confirmation mode): show the screenshot plus vacancy, PDF, key
@@ -187,6 +214,22 @@ Per vacancy, following its ATS file:
    that demands solving, e-mail-only application, posting already closed) — do
    **not** set `APPLIED`. Record what happened and move to the next vacancy.
 
+### Things you never do on an employer's form
+
+These are hard limits, not preferences. Hitting one means stopping and handing
+the tab to the user, with the vacancy left un-APPLIED:
+
+- Create an account or set a password. A "I'm creating an account, I accept the
+  Terms of Service" checkbox is not a consent to tick — leave it alone.
+- Solve, click or bypass a CAPTCHA or bot-detection challenge, or sign in to a
+  job board to get past one.
+- Tick any consent broader than this single application — future recruitment,
+  marketing, newsletters — even when it is pre-ticked by the page. Verify it is
+  still unticked immediately before submitting; a mis-aimed click on a
+  reflowing page opts the user into something they never asked for.
+- Enter data that is not in `profile.json`, including "obvious" fields like a
+  street address or postal code.
+
 ### End of run
 
 Summarize applied / skipped / couldn't-apply with reasons, list every new
@@ -197,7 +240,7 @@ Summarize applied / skipped / couldn't-apply with reasons, list every new
 
 Phase 1 parallelises. **Phase 2 and Phase 4 do not.** One Chrome is one shared
 session: concurrent agents race for tab focus, and a coordinate click that
-lands after the focus moved goes to the wrong form — under the user's real
+lands after the focus moved goes to the wrong form — under a real person's
 name. Subagents also cannot reach the user, so the escalation rule would have
 to be either violated or bounced back, which ends the parallelism anyway.
 
