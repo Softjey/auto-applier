@@ -17,7 +17,7 @@ are private. If a remote is ever needed — private only.
 
 ## Related repositories
 
-- `~/Desktop/projects/personal/my-career-profile` — resume and
+- `<resume-repo>` — resume and
   skills (`skills.csv`, `CV_Base.html`) and three Claude Code skills for
   tailoring a resume to a vacancy: `resume-blocks` → `resume-render` →
   `resume-pdf`. This repo (`auto-applier`) always calls their scripts with
@@ -48,7 +48,10 @@ are private. If a remote is ever needed — private only.
   have a different correct answer depending on the vacancy). Money is the one
   thing not stored per-currency: `compensation.derivation` holds a single
   anchor plus the rules to compute any other currency or contract form from
-  it, so a new currency is calculated, not escalated.
+  it, so a new currency is calculated, not escalated. Which figure goes on a
+  given form is decided per vacancy by `compensation.strategy` +
+  `salary-quote.mjs`, not by the anchor — the qa[] salary entries are only
+  the no-band baseline.
 - `stories.json` — the user's own interview-prep material (STAR stories and
   long-form answers) imported from the Recruting `.docx` archive. This is what
   free-text "describe a time when…" fields are grounded in, so that a narrative
@@ -74,6 +77,14 @@ are private. If a remote is ever needed — private only.
   - `scripts/resolve-fields.mjs` — sorts a form's fields into resolved /
     narrative / review / unknown against `profile.json`. It never guesses:
     only a structured value or an `exact` qa[] hit counts as resolved.
+  - `scripts/salary-quote.mjs` — the figure for one vacancy's salary field,
+    computed from its published band per `compensation.strategy`, in whatever
+    currency / period / contract form the form asks for. Salary fields are
+    routed to it (`runtime`) instead of to qa[], so a stored baseline can
+    never be submitted to an employer who published a different band. Exit
+    code 3 = under the floor, ask the user before applying at all. Whatever
+    it returns is recorded in the OneTap.Work application note, every time —
+    once the form is submitted that note is the only record of the number.
   - `ats/<host>.md` — quirks paid for by a failed submit, keyed by exact host
     then by registrable domain (`recruitee.com.md` covers every tenant). Add
     to it in the same commit as the fix. Written in English and identified by

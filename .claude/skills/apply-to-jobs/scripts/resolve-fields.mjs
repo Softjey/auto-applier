@@ -80,6 +80,18 @@ function classify(field, profile, vocab) {
     }
   }
 
+  // Money is the one answer that is neither a profile lookup nor a question for
+  // the user: it is a function of the band THIS vacancy published. Catching it
+  // here — before qa[] gets a chance — is deliberate. The qa[] salary entries
+  // are only the no-band baseline, and letting one of them resolve a field
+  // would quietly submit that baseline to an employer who published 45k.
+  if (matches(vocab.topic.salary, label)) {
+    return {
+      status: "runtime",
+      why: "compute for THIS vacancy: node scripts/salary-quote.mjs (profile.compensation.strategy). Never answer from a qa[] baseline",
+    };
+  }
+
   if (matches(vocab.topic.narrative, label) && !matches(vocab.topic.built, label)) {
     return {
       status: "narrative",

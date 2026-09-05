@@ -49,7 +49,11 @@ create it from the schema below with every field `null`.
    - **Location & relocation** — willingness to relocate, remote/hybrid/
      onsite preference.
    - **Compensation** — default currency (base country's), expected
-     min/max, and period (`year` or `month` — ask, don't assume).
+     min/max, and period (`year` or `month` — ask, don't assume). Then the
+     three numbers `apply-to-jobs` quotes from (`compensation.strategy`):
+     the **baseline** when a vacancy publishes no band, the **floor** below
+     which the user must be asked before applying at all, and the **premium**
+     figure for Staff / Lead / Principal or fully US-remote roles.
    - **Availability** — notice period, earliest start date, employment
      types open to.
    - **Languages** — level per language (native / fluent / professional /
@@ -105,7 +109,10 @@ create it from the schema below with every field `null`.
                           "residencePermitType", "note" },
   "location": { "willingToRelocate", "remotePreference", "note" },
   "compensation": { "defaultCurrency", "expectedMin", "expectedMax",
-                     "period", "note" },
+                     "period", "note", "hourlyRate", "alternates": [],
+                     "derivation": { ... },
+                     "strategy": { "baseline", "floor", "premium",
+                                    "rounding" } },
   "availability": { "noticePeriod", "earliestStartDate",
                      "employmentTypesOpenTo": [] },
   "experience": { "yearsOfCommercialExperience", "yearsAsOf",
@@ -120,6 +127,10 @@ create it from the schema below with every field `null`.
 field pointing at where the country-/currency-specific answer actually
 lives (`qa[]`, tagged). Leave those `note` strings as-is — they're
 documentation for `apply-to-jobs`, not something to fill in per-user.
+
+`compensation.derivation` and `compensation.strategy` hold numbers the applier
+computes from, not answers to read out. When a salary changes, it changes in
+two places — the anchor here, and every `qa[]` entry tagged `baseline-only`.
 
 `eeo.policy` defaults to `"decline"` (prefer-not-to-answer on voluntary
 demographic questions). Only change it if the user explicitly asks to

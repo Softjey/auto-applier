@@ -32,6 +32,10 @@ catch a bad rate before it is submitted. This is the *only* licensed
 derivation: it does not generalise to years of experience, skill levels, or
 anything else.
 
+The figure itself is per vacancy, not per user: every salary field is answered
+by `$SALARY_QUOTE` run for that vacancy, never by a qa[] salary entry (those
+are only the no-band baseline). See § Money.
+
 ## Configuration
 
 Everything installation-specific — absolute paths, the resume filename, and the
@@ -62,6 +66,7 @@ PROFILE_QA      = .claude/skills/apply-to-jobs/scripts/profile-qa.mjs
 RESOLVE_FIELDS  = .claude/skills/apply-to-jobs/scripts/resolve-fields.mjs
 STORIES         = .claude/skills/apply-to-jobs/scripts/stories.mjs
 IMPORT_STORIES  = .claude/skills/apply-to-jobs/scripts/import-stories.mjs
+SALARY_QUOTE    = .claude/skills/apply-to-jobs/scripts/salary-quote.mjs
 EXTRACT_FORM    = .claude/skills/apply-to-jobs/browser/extract-form.js
 ATS_REGISTRY    = .claude/skills/apply-to-jobs/ats/
 ```
@@ -79,7 +84,7 @@ ATS_REGISTRY    = .claude/skills/apply-to-jobs/ats/
 
 Keep a counter of vacancies **confirmed without the user asking for a
 change** in this run. For the **first 2–3 vacancies**, pause before the
-final Submit click (Phase 4 step 4) and wait for explicit go-ahead. Once 2–3
+final Submit click (Phase 4 step 6) and wait for explicit go-ahead. Once 2–3
 have gone through cleanly, stop pausing for the rest of this run — continue
 straight through, except for the unknown-fact escalation in Phase 3, which is
 **always active regardless of this counter**. It is a different kind of stop
@@ -108,7 +113,33 @@ then run Phase 1.
 2. `get_vacancy({vacancyId})` for each → `descriptionText`, `link`, `expiresAt`.
    Skip anything already expired; note the skip and leave its status untouched.
    `expiresAt` is not authoritative — see Phase 2 step 1.
-3. For each remaining vacancy, build the tailored resume. **These are
+3. **Establish the salary band for each vacancy** — here, because a band under
+   the floor becomes a Phase 3 question. Stop at the first source that names a
+   figure, and record which one it was:
+
+   | # | source | note |
+   |---|--------|------|
+   | 1 | `vacancy.salary` from `get_vacancy` | `null` is the common case — keep going |
+   | 2 | `descriptionText` | bands are usually in prose, often at the very bottom. Note the contract form and period they are quoted in |
+   | 3 | the company's other live postings — `search_vacancies({keywords: ["<company>"], limit: 20})` | only exact `companyName` matches, nearest seniority. Say it is from another posting |
+   | 4 | web: levels.fyi for the company, then Glassdoor / justjoin.it / No Fluff Jobs for the same role, level and city | prefer this company at this level over a market average; keep the URL |
+
+   Write the result — including "nothing" — to
+   `runs/<run-id>/<Company>_<vacancyId>/salary.json`, then:
+
+   ```bash
+   node $SALARY_QUOTE --min=<n> --max=<n> --period=month|hour|year \
+        --basis=b2b-net|uop-gross --currency=<code> [--rate=<PLN per unit>] \
+        [--tier=premium] --source="<source 1-4 above, with URL>" --json
+   ```
+
+   No band found anywhere → omit `--min`/`--max` (the script has a rule for
+   it). Staff / Lead / Principal or fully US-remote → `--tier=premium`. **Exit
+   code 3** → the vacancy goes into the Phase 3 question round as "do we apply
+   at all?", never straight into Phase 4. A figure from source 3 or 4 is passed
+   as the band but named honestly in `--source`; never present it as the
+   employer's own.
+4. For each remaining vacancy, build the tailored resume. **These are
    independent and touch nothing shared, so they may run in parallel** — one
    subagent per vacancy is safe here and nowhere else in this skill.
    - Follow `config.paths.resumeBlocksSkill` against `descriptionText`; write
@@ -117,10 +148,14 @@ then run Phase 1.
      — the `vacancyId` suffix is deliberate: two vacancies at the same company
      would otherwise overwrite each other's output folder.
    - `node <resumePdf> <abs generated .html> --force`.
+   - The PDF lands in `<resumeRepo>/out/<Company>_<vacancyId>-<Tailored-Title>/`.
+     That folder name is what identifies the resume later (every PDF has the
+     same filename) — it goes into the OneTap note in Phase 4.
    - Copy the PDF to `runs/<run-id>/<Company>_<vacancyId>/<config.resumeFileName>`.
      **This copy is not optional**: `file_upload` may only read files inside
-     this session's own directories, and the resume repo's output folder is not
-     one.
+     this session's own directories, and the resume repo is not one (unless the
+     user has run `/add-dir <resumeRepo>`). Every copy has the same filename,
+     so check the path you copied from before uploading.
 
 ### Phase 2 — read every form (serial browser, read-only)
 
@@ -136,8 +171,10 @@ For each vacancy, in one managed tab:
    **Never click a control that opens a new tab.** Tabs a page opens land
    outside the MCP tab group and cannot be driven. Click once to learn the
    destination, then `navigate` the managed tab to that URL.
-   **Never close a tab mid-run** — closing the group's tabs dissolves the group
-   and orphans every form already filled.
+   **Never close a tab mid-run.** Closing even one tab dissolves the MCP tab
+   group and every other open form becomes undrivable (verified: one close out
+   of nine was enough). Close tabs only as the very last action of the session,
+   or leave them to the user.
 2. Decline non-essential cookies.
 3. Run `$EXTRACT_FORM` through `javascript_tool` and save the JSON to
    `runs/<run-id>/<Company>_<vacancyId>/form.json`.
@@ -169,10 +206,21 @@ add the phrasing to the config — not to the skill.
   convinced, treat it as `unknown`.
 - **`unknown`** — goes to the user.
 
+- **`runtime` salary fields** — already answered by Phase 1's `$SALARY_QUOTE`
+  run. They are not questions for the user and not qa[] lookups; carry the
+  computed figure into Phase 4, converted to the units the field actually asks
+  for (`--as`, `--as-currency`, `--as-basis`).
+
 Collect the `unknown` list **across all vacancies** and ask in one batch. Record
 every answer with `node $PROFILE_QA add ...`, then re-run `$RESOLVE_FIELDS`
 until it reports `0 required field(s) still need a human answer`. Only then
 start Phase 4.
+
+The same batch carries one more question, which is not a form field at all:
+**every vacancy whose `$SALARY_QUOTE` exited 3**. Show the band, where it came
+from, and the floor, and ask whether to apply at that money at all. Silence is
+not consent — an unanswered one is not applied to. If the user says yes, quote
+the floor (the script prints it), not the band.
 
 If a *new* unknown appears mid-Phase-4 (a form reveals fields only after a
 postback), the escalation rule still applies: stop and ask. Phase 3 shrinks
@@ -185,7 +233,57 @@ Per vacancy, following its ATS file:
 1. Fill from the Phase 3 report. Upload the PDF from `runs/`.
    **Verify writes on hostile forms**: after setting a value, read it back by
    its real `name`. Anti-autofill honeypots accept writes and drop them.
-2. Draft `narrative` fields — 1–2 sentences, grounded only in the tailored
+   For a salary field, re-run `$SALARY_QUOTE` with the units the field asks for
+   rather than converting its output by hand — an integer-only "PLN/h netto" box
+   and a free-text "oczekiwania finansowe" box are the same decision expressed
+   twice, and they must not disagree. Read the label for the contract form and
+   period before deciding those units; when the label says nothing, state the
+   basis in the answer itself ("30 000 PLN/month net, B2B").
+
+   **A field's icon is part of its label.** A link input decorated with a
+   service's logo is asking for *that* service's URL, whatever the text beside
+   it says — a "Portfolio" box carrying a GitHub mark wants the GitHub profile,
+   a bare "URL" next to a LinkedIn glyph wants LinkedIn. `extract-form.js`
+   reports text, not iconography, so a link field left blank because its label
+   read generically is a field that was never actually read. Screenshot the
+   input group, or inspect the adornment element next to it, before deciding a
+   link field has nothing to put in it.
+2. **An optional free-text box stays empty.** "Additional message", "Personal
+   note", "Dodatkowa wiadomość", an optional cover letter — if the form does not
+   require it and the posting did not ask for something specific there, write
+   nothing. (`narrative` in `field-labels.mjs` only means "prose is the right
+   shape *if* the field must be answered".)
+
+3. **How a free-text answer must read.** Each rule below is a correction from a
+   real submitted form.
+
+   - **Answer the question asked.** "Describe your most relevant experience"
+     wants what he worked on and what he did, not the stack list. Re-read the
+     question after drafting.
+   - **Relevant = matches the vacancy's stack**, not the biggest or newest job.
+     `profile.json.projects[]` says which project is the example for which
+     stack.
+   - **Full sentences, first person, natural — like telling a friend what you
+     do, at B2 English.** Plain words, concrete detail (what he did, how long).
+     No literary turns ("the backend as my centre of gravity", "from problem to
+     production"), no "commercial" before "experience".
+   - **A project is described by the technologies this employer screens for,
+     plus that he owned it.** Architecture level only ("microservices in NestJS
+     over PostgreSQL") — never the list of services, what a service does, or
+     that the product is his.
+   - **Nothing from the posting comes back as a claim about him.** No echoing
+     its selling points ("used to taking a problem from analysis to delivery"),
+     its framing ("React is the side I support"), or meta-sentences ("which
+     matches this role"). No editorial tail on a factual answer — asked for the
+     stack, list the stack and stop. Draft from `profile.json`, `stories.json`
+     and the tailored resume, then re-read with the posting closed.
+   - **No salary and no links** in a box that did not ask for them; they are in
+     the CV.
+   - **Salary fields get what a person would type**: a number-only input gets
+     `30000`, a short text input gets `30000 netto B2B`. `$SALARY_QUOTE`'s
+     `Note` line is for the OneTap note, never for the form.
+
+4. Draft `narrative` fields — 1–2 sentences, grounded only in the tailored
    resume, `profile.json` and `stories.json`, no new claims. Flag every drafted
    sentence in the run summary. A question naming what the user *built* is not
    narrative: search `stories.json` first (`node $STORIES find "<the question>"`),
@@ -201,16 +299,23 @@ Per vacancy, following its ATS file:
    vocabulary with the story that answers it, so a low score is not a verdict.
    Read the titles and tags and judge yourself; if nothing fits, that is still
    an escalation.
-3. Screenshot the filled form; check nothing required is blank.
-4. **Confirmation pause** while the run's clean-confirmation counter is below
+5. Screenshot the filled form; check nothing required is blank.
+6. **Confirmation pause** while the run's clean-confirmation counter is below
    2–3 (see § Confirmation mode): show the screenshot plus vacancy, PDF, key
    answers and any drafted text, and wait.
-5. Submit. Wait for a real success indicator — the one named in the ATS file,
+7. Submit. Wait for a real success indicator — the one named in the ATS file,
    not "the button stopped being clickable". Screenshot it.
-6. `update_application_status({vacancyId, status: "APPLIED", notes: "Applied
-   <date> via <ATS>. Resume: <folder>. <key answers and caveats>"})`, ≤1000
-   chars, date/ATS/resume prefix kept intact.
-7. **If you cannot actually apply** (login-gated with no account, a CAPTCHA
+8. `update_application_status({vacancyId, status: "APPLIED", notes: "Applied
+   <date> via <ATS>. Resume: <out-folder-name>. <the salary line>. <key answers
+   and caveats>"})`, ≤1000 chars, date/ATS/resume/salary prefix kept intact.
+   The out-folder name (`Acme_cmtgy…-Senior-Full-Stack-Developer`) is the
+   only thing that identifies which CV went where. The salary line is
+   `$SALARY_QUOTE`'s `Note` output, e.g. `Desired salary: 44,000 PLN/month net
+   B2B (band-above-baseline; band: 40,000-45,000 PLN/month net B2B; source:
+   vacancy salary field).` — or `Desired salary: not asked on the form (band:
+   …, source: …)`. Once submitted, this note is the only record of the figure,
+   so cut other caveats before cutting it.
+9. **If you cannot actually apply** (login-gated with no account, a CAPTCHA
    that demands solving, e-mail-only application, posting already closed) — do
    **not** set `APPLIED`. Record what happened and move to the next vacancy.
 
@@ -232,9 +337,30 @@ the tab to the user, with the vacancy left un-APPLIED:
 
 ### End of run
 
-Summarize applied / skipped / couldn't-apply with reasons, list every new
+Summarize applied / skipped / couldn't-apply with reasons, list the figure
+quoted for each application and where its band came from, list every new
 `qa[]` entry and alias learned, and add any newly discovered ATS quirk to
 `$ATS_REGISTRY` — a quirk left in a run log gets rediscovered the expensive way.
+
+## Money — what number goes in the box
+
+The numbers (`baseline`, `floor`, `premium`, rounding) live in
+`profile.compensation.strategy`; the rules are implemented in `$SALARY_QUOTE`.
+This is the shape of the decision:
+
+| what the vacancy published | what is quoted |
+| --- | --- |
+| nothing, anywhere | `baseline` — or `premium` for Staff / Lead / Principal and fully US-remote roles |
+| a band whose top is at or below the baseline | **the top of that band**, exactly |
+| a band whose top is above the baseline | the **upper third**: `min + 5/6 × (max − min)`, rounded, never below the baseline, never above the top |
+| only a lower bound ("from X") | `max(baseline, X)` |
+| anything under `floor` | **nothing.** Ask the user whether to apply at all |
+
+Units: `--currency` / `--period` / `--basis` describe what was found (read the
+vacancy's own wording), `--as-currency` / `--as` / `--as-basis` what the form
+wants (read the field's label). For a non-PLN currency fetch the live NBP rate
+(`compensation.derivation.currency.rateSource`) and pass `--rate`; the fallback
+to the profile's last rate is a warning, not a licence.
 
 ## On running vacancies in parallel
 

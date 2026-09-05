@@ -129,6 +129,19 @@ export const TOPIC_PHRASES = {
   // Voluntary demographic fields: answered from policy, never escalated.
   eeo: ["gender", "sex", "race", "ethnic*", "veteran", "disability", "sexual orientation"],
 
+  // Money. Deliberately NOT resolved from the profile or from qa[]: the figure
+  // depends on the band THIS vacancy published, so it is computed per vacancy
+  // by scripts/salary-quote.mjs (see resolve-fields.mjs). Phrases are narrow on
+  // purpose — bare "rate" and bare "pay" appear in "rate your proficiency" and
+  // "pay attention", which are not salary questions.
+  salary: [
+    "salary", "salaries", "compensation", "remuneration", "earnings", "wage",
+    "expected salary", "desired salary", "salary expectation*", "expected compensation",
+    "desired pay", "expected pay", "pay expectation*", "compensation expectation*",
+    "financial expectation*", "hourly rate", "daily rate", "day rate",
+    "expected rate", "rate expectation*", "your rate", "how much do you expect",
+  ],
+
   // Filled from run state rather than from the profile.
   cvUpload: ["cv", "resume", "curriculum vitae", "curriculum", "cv file", "attach your cv"],
 };
