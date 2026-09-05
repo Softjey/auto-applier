@@ -1,6 +1,6 @@
 ---
 name: apply-to-jobs
-description: Pull SAVED vacancies from OneTap.Work, generate a tailored resume for each via the resume-rendering skills, apply in a real browser using Claude in Chrome, and mark the vacancy APPLIED. Never invents an answer to a factual/personal application-form question — always matches against profile.json or stops and asks. Use when the user says "apply to my saved jobs" / "run the job applier", including phrasings in other languages.
+description: Pull SAVED vacancies from OneTap.Work, generate a tailored resume for each via the resume-rendering skills, apply in a real browser, and mark the vacancy APPLIED. Never invents an answer to a factual/personal application-form question — always matches against profile.json or stops and asks. Use when the user says "apply to my saved jobs" / "run the job applier", including phrasings in other languages.
 ---
 
 # Apply to jobs
@@ -68,8 +68,14 @@ STORIES         = .claude/skills/apply-to-jobs/scripts/stories.mjs
 IMPORT_STORIES  = .claude/skills/apply-to-jobs/scripts/import-stories.mjs
 SALARY_QUOTE    = .claude/skills/apply-to-jobs/scripts/salary-quote.mjs
 EXTRACT_FORM    = .claude/skills/apply-to-jobs/browser/extract-form.js
+BROWSER_GUIDE   = .claude/skills/apply-to-jobs/browser/README.md
 ATS_REGISTRY    = .claude/skills/apply-to-jobs/ats/
 ```
+
+The skill runs under any agent that has the five browser capabilities listed in
+`$BROWSER_GUIDE` — Claude Code with Claude in Chrome, Codex with its bundled
+`browser` plugin. Tool names and their quirks live there, not in the phases
+below.
 
 ## Preconditions
 
@@ -77,8 +83,9 @@ ATS_REGISTRY    = .claude/skills/apply-to-jobs/ats/
   `workAuthorization`, `location`, `compensation`, `availability`) are
   mostly `null`, stop and tell the user to run the `profile-interview`
   skill first — don't try to muddle through with an empty profile.
-- Confirm the Chrome browser integration is available. If unsure, ask the
-  user to run `/chrome`.
+- Read `$BROWSER_GUIDE` and confirm your runtime actually has all five
+  browser capabilities it lists. Missing one is a stop, not something to work
+  around.
 
 ## Confirmation mode
 
@@ -152,10 +159,10 @@ then run Phase 1.
      That folder name is what identifies the resume later (every PDF has the
      same filename) — it goes into the OneTap note in Phase 4.
    - Copy the PDF to `runs/<run-id>/<Company>_<vacancyId>/<config.resumeFileName>`.
-     **This copy is not optional**: `file_upload` may only read files inside
-     this session's own directories, and the resume repo is not one (unless the
-     user has run `/add-dir <resumeRepo>`). Every copy has the same filename,
-     so check the path you copied from before uploading.
+     **This copy is not optional**: it is the run's audit trail, and under
+     Claude in Chrome it is also the only place the upload tool can read from
+     (see `$BROWSER_GUIDE`). Every copy has the same filename, so check the
+     path you copied from before uploading.
 
 ### Phase 2 — read every form (serial browser, read-only)
 
@@ -168,16 +175,12 @@ For each vacancy, in one managed tab:
    the board's own language, and is there an apply control at all — is cheaper
    than discovering it after a resume has been generated. Then follow the
    posting's own Apply control to the ATS.
-   **Never click a control that opens a new tab.** Tabs a page opens land
-   outside the MCP tab group and cannot be driven. Click once to learn the
-   destination, then `navigate` the managed tab to that URL.
-   **Never close a tab mid-run.** Closing even one tab dissolves the MCP tab
-   group and every other open form becomes undrivable (verified: one close out
-   of nine was enough). Close tabs only as the very last action of the session,
-   or leave them to the user.
+   Keep one tab for the whole run and follow your runtime's tab rules in
+   `$BROWSER_GUIDE` — under Claude in Chrome, a control that opens a new tab
+   and a tab closed mid-run both cost you every other open form.
 2. Decline non-essential cookies.
-3. Run `$EXTRACT_FORM` through `javascript_tool` and save the JSON to
-   `runs/<run-id>/<Company>_<vacancyId>/form.json`.
+3. Run `$EXTRACT_FORM` through the run-JS-in-the-page capability and save the
+   returned JSON to `runs/<run-id>/<Company>_<vacancyId>/form.json`.
 4. Load the ATS file for this host and follow it in Phase 4 — see
    `$ATS_REGISTRY/README.md` for how a host resolves to a file.
 
@@ -371,7 +374,7 @@ name. Subagents also cannot reach the user, so the escalation rule would have
 to be either violated or bounced back, which ends the parallelism anyway.
 
 Real browser concurrency needs isolated browsers — a Playwright worker per
-vacancy, or one Chrome profile and Claude Code session per worker with
+vacancy, or one Chrome profile and agent session per worker with
 vacancies claimed through OneTap.Work status so two workers never take the
 same one. Until then the phased pipeline is what buys the wall-clock back:
 resumes generated in parallel, one question round instead of N, and no

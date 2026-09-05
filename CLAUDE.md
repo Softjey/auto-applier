@@ -1,9 +1,11 @@
 # auto-applier
 
 Automated applications to saved (SAVED) vacancies from OneTap.Work: tailors
-a resume for each vacancy, applies in a real browser via the Claude Code +
-Chrome integration, and never invents an answer to an application-form
-question — only facts from `profile.json`, or it asks the user directly.
+a resume for each vacancy, applies in a real browser, and never invents an
+answer to an application-form question — only facts from `profile.json`, or it
+asks the user directly.
+
+It runs under Claude Code and under Codex; see § Running under either agent.
 
 ## ⚠️ PRIVACY — NEVER push this repository to a public remote
 
@@ -32,6 +34,33 @@ are private. If a remote is ever needed — private only.
   separate application ledger. `vacancy.link` is the only field used for
   browser navigation; `vacancy.applyLink` is an internal server field,
   never used directly.
+
+## Running under either agent
+
+The skills, the data and the scripts have one home — `.claude/`, `profile.json`,
+`stories.json`, `apply-config.json`. The rest is wiring so a second agent reads
+the same files instead of a fork of them.
+
+- `AGENTS.md` → symlink to `CLAUDE.md`. Codex reads `AGENTS.md`, Claude Code
+  reads `CLAUDE.md`; this file is both, so keep it free of agent-specific
+  instructions.
+- `.agents/skills/<name>` → symlinks into `.claude/skills/<name>`. Codex
+  discovers project skills from `.agents/skills/` and `.codex/skills/` only —
+  it never looks in `.claude/`, and `[[skills.config]]` in a config file can
+  merely enable or disable a skill that was already discovered, not add a
+  search path. Symlinks are followed, and Node resolves them before computing a
+  script's repo root, so the scripts work through either path. Add a new skill
+  in `.claude/skills/`, then symlink it here in the same commit.
+- `.codex/config.toml` — Codex-only settings, merged on top of
+  `~/.codex/config.toml` **and only for a repository marked trusted**. It
+  declares the OneTap.Work MCP server, which Claude Code gets from the user's
+  own connector settings instead. Per machine, once: `codex mcp login onetap`.
+- `.claude/skills/apply-to-jobs/browser/README.md` — the five browser
+  capabilities the apply run needs, and what each agent calls them. Claude in
+  Chrome and Codex's bundled `browser` plugin differ in tool names and in which
+  quirks bite (tab groups, upload directories), so `SKILL.md` names capabilities
+  and that file names tools. An agent-specific browser detail belongs there,
+  never in the phases.
 
 ## Structure
 
@@ -72,8 +101,10 @@ are private. If a remote is ever needed — private only.
   - `scripts/profile-qa.mjs` — deterministic fuzzy-match and atomic-write
     index over `qa[]` (the semantic judgment of "is this really the same
     question" stays with Claude — the script only ranks candidates).
-  - `browser/extract-form.js` — read-only field-schema dump, pasted into
-    `javascript_tool` during phase 2. Flags anti-autofill honeypots.
+  - `browser/README.md` — the browser capabilities phase 2 and 4 need, and
+    the tool names each agent gives them.
+  - `browser/extract-form.js` — read-only field-schema dump, run in the page
+    during phase 2. Flags anti-autofill honeypots.
   - `scripts/resolve-fields.mjs` — sorts a form's fields into resolved /
     narrative / review / unknown against `profile.json`. It never guesses:
     only a structured value or an `exact` qa[] hit counts as resolved.
