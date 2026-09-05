@@ -41,3 +41,8 @@ Leave the vacancy SAVED with a note; never mark it APPLIED.
 The modal is replaced by a confirmation that the application has been sent to
 the named company. A "create my profile" button appears next to it — do not
 click it.
+
+**The URL does not change.** The offer page keeps its own address while the
+modal turns into "Done! Your application has been sent to …", so a submitted
+application is invisible to a `tabs_context` sweep. Checking whether a modal
+ATS has already been submitted means reading the page, not the address bar.
