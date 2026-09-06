@@ -15,6 +15,9 @@ work authorization/visa status, date of birth (if ever added), etc.
 work at named employers — incidents, security vulnerabilities, systems and
 colleagues. `runs/` now joins them: every tailored CV, every answer sheet with
 the salary asked of each employer, and screen recordings of filled-in forms.
+`credentials.json` is the sharpest of the four: real passwords for real employer-portal
+accounts, in plaintext. It is tracked on purpose — the user asked for the record — which
+makes the no-public-remote rule non-negotiable rather than merely advisable.
 None of these are gitignored — version history is needed to see how the data
 grew and to revert a bad edit. But the files themselves are private. If a
 remote is ever needed — private only.
@@ -83,6 +86,13 @@ the same files instead of a fork of them.
   given form is decided per vacancy by `compensation.strategy` +
   `salary-quote.mjs`, not by the anchor — the qa[] salary entries are only
   the no-band baseline.
+- `credentials.json` — employer-portal accounts, keyed by registrable domain,
+  written by `apply-to-jobs/scripts/credentials.mjs`. Some ATSes (Workday, Avature)
+  refuse an application without a candidate account; the agent will not create one or
+  type a password into a site, so it generates the password, records it here, and hands
+  the user a `Company: login - password` line for the ~15-second sign-up, then finishes
+  the application. Keyed by domain so a second vacancy at the same employer reuses the
+  account instead of minting a second one.
 - `stories.json` — the user's own interview-prep material (STAR stories and
   long-form answers) imported from the Recruting `.docx` archive. This is what
   free-text "describe a time when…" fields are grounded in, so that a narrative

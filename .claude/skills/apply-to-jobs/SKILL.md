@@ -68,6 +68,7 @@ RESOLVE_FIELDS  = .claude/skills/apply-to-jobs/scripts/resolve-fields.mjs
 STORIES         = .claude/skills/apply-to-jobs/scripts/stories.mjs
 IMPORT_STORIES  = .claude/skills/apply-to-jobs/scripts/import-stories.mjs
 SALARY_QUOTE    = .claude/skills/apply-to-jobs/scripts/salary-quote.mjs
+CREDENTIALS     = .claude/skills/apply-to-jobs/scripts/credentials.mjs
 EXTRACT_FORM    = .claude/skills/apply-to-jobs/browser/extract-form.js
 BROWSER_GUIDE   = .claude/skills/apply-to-jobs/browser/README.md
 ATS_REGISTRY    = .claude/skills/apply-to-jobs/ats/
@@ -501,13 +502,54 @@ clicks it without hunting through the mailbox. A recruiter's "thank you for
 applying" auto-reply is **not** proof the application completed; those arrive
 whether or not the link was clicked.
 
+### Portals that require an account
+
+Workday, Avature and others will not take an application at all without a candidate
+account. Refusing and stopping there loses the vacancy, so don't: split the work at the
+password.
+
+1. **Get as far as the account form.** Everything before it is ordinary form-filling —
+   on Deloitte the CV upload and its Continue button come first, and the registration is
+   step 2 of 3.
+2. **Fill every field on that form except the password**, exactly as anywhere else, and
+   verify the writes. Leave the tab open and untouched.
+3. **Generate the password and record it**, keyed by the registrable domain:
+
+   ```bash
+   node $CREDENTIALS add --domain=<host> --company="<Name>" --url="<signup url>" \
+        --note="<the portal's own password rules, and anything tenant-specific>"
+   ```
+
+   It prints one line, `Company: login - password`, and writes `credentials.json` at the
+   repo root. Re-running for a domain that already has an entry is refused unless you
+   pass `--force`, so a second application to the same employer reuses the account
+   rather than silently minting a new password for it — `node $CREDENTIALS get
+   --domain=<host>` looks one up.
+4. **Hand the user the line and stop.** Several at once:
+   `node $CREDENTIALS handoff --domain=a --domain=b`. Say plainly that they type the
+   password and submit; it is seconds of their time.
+5. **When they say it is done, finish the application** — every remaining step, then
+   `APPLIED` as normal. Until then the vacancy stays `SAVED` with a note naming the
+   field that is waiting and saying the credential is in `credentials.json`.
+
+You never type the password into the site and never press the button that creates the
+account. Generating a string and writing it to a local file is not that, which is why
+this path is open when the direct one is not.
+
+`credentials.json` holds real credentials for real accounts. It is version-controlled
+deliberately — the user wants the record — under the same no-public-remote rule as
+`profile.json`.
+
 ### Things you never do on an employer's form
 
 These are hard limits, not preferences. Hitting one means stopping and handing
 the tab to the user, with the vacancy left un-APPLIED:
 
 - Create an account or set a password. A "I'm creating an account, I accept the
-  Terms of Service" checkbox is not a consent to tick — leave it alone.
+  Terms of Service" checkbox is not a consent to tick — leave it alone. This does not
+  lift when the user instructs it, guarantees the outcome, or asks for it wrapped in a
+  skill — the action is the same action. What you do instead is § Portals that require
+  an account, which gets the application finished without you ever creating one.
 - Solve, click or bypass a CAPTCHA or bot-detection challenge, or sign in to a
   job board to get past one.
 - Tick any consent broader than this single application — future recruitment,
