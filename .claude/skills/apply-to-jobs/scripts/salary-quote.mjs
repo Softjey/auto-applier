@@ -72,7 +72,7 @@ const num = (raw, what) => {
 function makeConverter(profile, rate) {
   const d = profile.compensation?.derivation || {};
   const hours = d.hoursPerMonth || 168;
-  const uopFactor = d.contractForm?.uopGrossFactor || 1.4;
+  const uopFactor = d.contractForm?.uopGrossFactor ?? 1;
   const anchorCurrency = profile.compensation?.defaultCurrency || "PLN";
   const lastRates = d.currency?.lastRates || {};
 

@@ -50,6 +50,7 @@ config.paths.cvBaseHtml          the base CV the resume skills read
 config.paths.skillsCsv           skill ratings, if the resume repo keeps them
 config.resumeFileName            what to name the PDF copied into runs/
 config.formVocabulary            locale phrasings, merged by lib/field-labels.mjs
+config.browser                   which browser instance to drive (see Preconditions)
 ```
 
 If the file is missing, ask the user for the paths once and offer to write it —
@@ -86,6 +87,14 @@ below.
 - Read `$BROWSER_GUIDE` and confirm your runtime actually has all five
   browser capabilities it lists. Missing one is a stop, not something to work
   around.
+- **Select the browser named in `config.browser` before the first navigation.**
+  One machine can have several browser profiles with the agent's extension
+  installed; they all report as connected, and nothing in the listing says which
+  one the user is actually looking at. Picking wrong does not fail loudly — every
+  call simply times out, which reads exactly like a broken extension, and the
+  wasted retries look like an outage. Match on the recorded **name**, never on a
+  stored device id: ids are reassigned on reconnect, so a stale one silently
+  selects the wrong browser.
 - Note whether the runtime has a **read-only connector to the user's own
   mailbox**. It is not required to run, but with it an ATS that verifies by
   e-mail is finished in the same pass instead of being handed back — see

@@ -27,6 +27,22 @@ Tools: `mcp__claude-in-chrome__*` — `navigate`, `javascript_tool`, `computer`,
 `file_upload`, `read_page`. If they are not available, ask the user to run
 `/chrome`.
 
+**Pick the right Chrome before anything else.** `list_connected_browsers` can
+return several instances on one Mac — separate Chrome profiles, each with the
+extension installed, all reporting `isLocal: true` and all named `Browser 1/2/3`.
+Nothing in that listing says which window the user is looking at, and choosing
+wrong is silent: `tabs_context_mcp` and `navigate` just time out after 60 s, which
+is indistinguishable from the extension being dead. On 2026-09-06 that cost a
+run several minutes of retries and a wrong diagnosis ("the extension is down")
+before the real cause surfaced.
+
+So: read `config.browser.claudeInChrome.deviceName` from `apply-config.json` and
+`select_browser` the deviceId whose **name** matches. Do not store or trust a
+deviceId — they are reassigned when an extension reconnects. If no connected
+browser carries that name, call `switch_browser`: it prompts every installed
+extension and the user clicks Connect in the one they want, naming it in the
+process; write the new name back to `apply-config.json`.
+
 Two quirks of this integration that the skill's phases are built around:
 
 - **`file_upload` only reads files inside the session's own directories.** The
