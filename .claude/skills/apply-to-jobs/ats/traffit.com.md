@@ -32,6 +32,24 @@ sel.selectize.setValue(hit.id, false);
 `b1`. Always match on `o.title` and set by `o.id`; verify with
 `sel.selectize.$control.text()`, never by reading the raw value.
 
+**The location combobox matches on `locality`, not `title`.** Country and city are
+selectize controls like the rest, but their options are objects
+(`{country, iso, region1, region2, region3, postcode, locality, latitude, longitude, id}`)
+with **no `title` field** — so the usual `o.title === "..."` lookup finds nothing and
+`Object.values(sel.selectize.options).map(o => o.title)` comes back as a list of nulls.
+Match on `o.locality` instead. The list is preloaded with the major cities of the
+selected country, so no typing is needed:
+
+```js
+const s = document.querySelector('#dynamic_form_properties_<n>_<n>');
+const hit = Object.values(s.selectize.options).find(o => /^Warszawa$/i.test(o.locality || ""));
+s.selectize.setValue(hit.id, false);   // renders "Warszawa, Warszawa, Mazowieckie"
+```
+
+The country control's name is id-shaped (`..._country`, no bracket syntax) while every
+other field uses `dynamic_form[properties][N][M]` — query it by id. It may already be
+set to the tenant's country.
+
 **Multi-select variants take an array.** Availability and language fields are
 often `<select multiple>` — same API, but `setValue([id1, id2], false)`.
 

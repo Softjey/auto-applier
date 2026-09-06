@@ -48,6 +48,28 @@ After the component reads it, `target.files` goes back to 0 — that is success,
 not failure. Confirm by the filename chip rendered under "Resume", then remove
 the injected input.
 
+**Uploading the CV runs a parser that OVERWRITES fields you already filled.** On the
+Inetum2 tenant it replaced First name with `Frontend` and Last name with `Software` —
+junk lifted from the CV's header line — and cleared Confirm e-mail and City, then did it
+again on the second upload. It also populates Experience and Education from the CV,
+which is genuinely useful and worth leaving as-is. **Fill the CV first, personal fields
+last**, and re-read every one of them immediately before Submit.
+
+**There are two `spl-dropzone` hosts, both with an inner input `#file-input`**:
+`data-test="apply-with-resume-container"` (the parse-and-prefill one) and
+`data-test="resume-upload"` (the required `CV *` document). Feed both — the DataTransfer
+move works on each — and **verify from the host's `files` attribute, not the light DOM**:
+
+```js
+[...document.querySelectorAll('spl-dropzone')].map(h => h.getAttribute('files'))
+// [{"fileName":"Jane_Doe_CV.pdf","fileId":"..."}]
+```
+
+The filename chip renders inside the shadow root, so `document.body.innerText` never
+mentions it and the dropzone still *looks* empty in a screenshot. That is not a failed
+upload — check the attribute. Likewise `input.files.length` returns to 0 right after
+assignment because the component has taken the file; that is success.
+
 **Phone**: the country code is a separate select already set to the tenant's
 country; type digits only. **City** is an autocomplete — type the city, wait,
 click the suggestion row ("Warsaw, Mazovia, Poland").
