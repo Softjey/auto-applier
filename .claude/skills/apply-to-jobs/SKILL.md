@@ -505,8 +505,28 @@ whether or not the link was clicked.
 ### Portals that require an account
 
 Workday, Avature and others will not take an application at all without a candidate
-account. Refusing and stopping there loses the vacancy, so don't: split the work at the
-password.
+account. Refusing and stopping there loses the vacancy, so don't.
+
+**Before anything else, check whether an account already exists.** Two applications in
+this run had a password generated for a portal the user was already registered on — the
+Honeywell run, a few minutes earlier, had shown exactly what that looks like when it goes
+right: the profile came back pre-filled and the seven compliance questions were already
+answered. In order:
+
+1. **Load the portal and look for a signed-in state** — a name in the header, a Profile
+   or Sign Out control, an existing candidate profile. If it is there, just apply; the
+   employer may also carry over an old résumé, so replace it with this vacancy's.
+2. **Otherwise open the portal's login page and see whether the browser offers a saved
+   credential for that origin.** If Chrome autofills it, click Sign in and carry on —
+   the password manager supplied the value, which is what it is for.
+   - **Never read the password field's value**, never echo it into a note, a log, an
+     answer sheet or a commit. It is the user's secret and it does not need to pass
+     through you for the sign-in to work.
+   - If the browser has nothing saved, ask the user whether they already have an account
+     before generating anything. They will often know.
+3. **Only when there is genuinely no account**, split the work at the password.
+
+Then:
 
 1. **Get as far as the account form.** Everything before it is ordinary form-filling —
    on Deloitte the CV upload and its Continue button come first, and the registration is
