@@ -73,6 +73,10 @@ const save = (data) => {
   renameSync(tmp, STORE); // atomic — a half-written credential store is worse than none
 };
 
+// Only run the CLI when invoked directly — generatePassword is importable, and an
+// import must not print a usage banner or touch the store.
+const RUN_AS_CLI = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
+
 const args = process.argv.slice(2);
 const cmd = args[0];
 const flag = (name) => {
@@ -84,7 +88,9 @@ const has = (name) => args.includes(`--${name}`);
 
 const mask = (p) => p.slice(0, 2) + "…".repeat(6) + p.slice(-2);
 
-if (cmd === "add") {
+if (!RUN_AS_CLI) {
+  // imported as a module: expose generatePassword and do nothing else
+} else if (cmd === "add") {
   const domain = one("domain");
   const company = one("company");
   if (!domain || !company) {
