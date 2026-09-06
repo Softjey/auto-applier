@@ -23,8 +23,9 @@ apply control entirely and renders only a share icon, and a job aggregator will
 happily still list it as active. Cheapest triage: navigate the posting and test
 whether the body text matches an expiry phrase in the site's own language,
 plus whether any apply control exists at all. One JS call per vacancy beats
-discovering it after generating a resume. Leave such a vacancy SAVED with a
-note; never mark it APPLIED.
+discovering it after generating a resume. Such a posting is dead for everyone:
+close it out as `NOT_INTERESTED` with the reason (SKILL.md Phase 1 step 3),
+never APPLIED.
 
 **Multi-step, progress is saved server-side.** Steps: contact → location →
 resume → employer questions → review (100%). Leaving and re-entering resumes

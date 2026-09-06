@@ -17,3 +17,6 @@
 #     codex mcp login onetap
 [mcp_servers.onetap]
 url = "https://mcp.onetap.work/mcp"
+# A hung search_vacancies used to sit for the 300 s default and return nothing.
+# Claude Code gets the same 60 s cap from .claude/settings.json (MCP_TOOL_TIMEOUT).
+tool_timeout_sec = 60

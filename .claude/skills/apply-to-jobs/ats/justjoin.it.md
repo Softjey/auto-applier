@@ -34,7 +34,9 @@ button entirely** — there is nothing to click and no ATS to reach. An
 aggregator can still list such a vacancy as active well past that point (one
 was listed active for another two weeks on the day its justjoin.it page was
 already dead), so the board is the authority, not the aggregator's `expiresAt`.
-Leave the vacancy SAVED with a note; never mark it APPLIED.
+The posting is dead for everyone, so close it out rather than leaving it in the
+queue: `NOT_INTERESTED` with the reason and this URL in the note (SKILL.md
+Phase 1 step 3). Never mark it APPLIED.
 
 ## Success signal
 

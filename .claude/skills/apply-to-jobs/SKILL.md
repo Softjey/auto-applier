@@ -118,9 +118,28 @@ then run Phase 1.
 1. `get_my_applications({status: "SAVED", activityStatus: "active", limit: 100})`,
    filtered per what the user chose.
 2. `get_vacancy({vacancyId})` for each → `descriptionText`, `link`, `expiresAt`.
-   Skip anything already expired; note the skip and leave its status untouched.
-   `expiresAt` is not authoritative — see Phase 2 step 1.
-3. **Establish the salary band for each vacancy** — here, because a band under
+   Anything already expired is closed out, not silently skipped:
+   `update_application_status({vacancyId, status: "NOT_INTERESTED", notes:
+   "<date>: expired (expiresAt <date>) — not applied."})`, and it goes in the
+   end-of-run report. `expiresAt` is not authoritative on its own — the board
+   is, which is what step 3 checks.
+3. **Probe every posting for liveness before spending anything on it** — one
+   browser tab, `navigate` + one JS call per vacancy, no clicking. A job board
+   routinely keeps serving a page whose apply control is already gone, and a
+   dead posting costs a band hunt and a tailored resume if it is discovered
+   later:
+
+   ```js
+   const t = document.body.innerText;
+   const dead = /oferta wygas|offer expired|no longer active|nieaktualn|position (has been )?filled|has expired/i;
+   const apply = [...document.querySelectorAll("button,a")].filter((b) => /^\s*(apply|aplikuj)/i.test(b.innerText));
+   JSON.stringify({ expired: dead.test(t), applyControls: apply.length, title: document.title });
+   ```
+
+   Expired, or no apply control anywhere → `NOT_INTERESTED` with the reason and
+   the URL that said so, exactly as in step 2. Drop it from the queue **before**
+   steps 4 and 5. Only the survivors get a band and a resume.
+4. **Establish the salary band for each vacancy** — here, because a band under
    the floor becomes a Phase 3 question. Stop at the first source that names a
    figure, and record which one it was:
 
@@ -128,7 +147,7 @@ then run Phase 1.
    |---|--------|------|
    | 1 | `vacancy.salary` from `get_vacancy` | `null` is the common case — keep going |
    | 2 | `descriptionText` | bands are usually in prose, often at the very bottom. Note the contract form and period they are quoted in |
-   | 3 | the company's other live postings — `search_vacancies({keywords: ["<company>"], limit: 20})` | only exact `companyName` matches, nearest seniority. Say it is from another posting |
+   | 3 | the company's other live postings — `search_vacancies({keywords: ["<company>"], limit: 20})` | only exact `companyName` matches, nearest seniority. Say it is from another posting. **Best effort, one shot**: issue every company's search in a single message so they run in parallel, and never retry one — this server has hung until the MCP timeout and returned nothing (see § MCP timeouts). If it does not come back, go straight to source 4 |
    | 4 | web: levels.fyi for the company, then Glassdoor / justjoin.it / No Fluff Jobs for the same role, level and city | prefer this company at this level over a market average; keep the URL |
 
    Write the result — including "nothing" — to
@@ -146,7 +165,7 @@ then run Phase 1.
    at all?", never straight into Phase 4. A figure from source 3 or 4 is passed
    as the band but named honestly in `--source`; never present it as the
    employer's own.
-4. For each remaining vacancy, build the tailored resume. **These are
+5. For each surviving vacancy, build the tailored resume. **These are
    independent and touch nothing shared, so they may run in parallel** — one
    subagent per vacancy is safe here and nowhere else in this skill.
    - Follow `config.paths.resumeBlocksSkill` against `descriptionText`; write
@@ -168,19 +187,29 @@ then run Phase 1.
 
 For each vacancy, in one managed tab:
 
-1. Navigate to `vacancy.link` — never `vacancy.applyLink`. **Check the posting
-   is still live before spending anything on it**: a job board routinely keeps
-   serving a page whose apply control is already gone, and the board is the
-   authority, not `expiresAt`. One JS call — does the body text say expired in
-   the board's own language, and is there an apply control at all — is cheaper
-   than discovering it after a resume has been generated. Then follow the
-   posting's own Apply control to the ATS.
+1. Navigate to `vacancy.link` — never `vacancy.applyLink` — and follow the
+   posting's own Apply control to the ATS. Liveness was already settled in
+   Phase 1 step 3; if a posting turns out to be dead here after all (the board
+   said nothing, the ATS says the role is filled), close it out the same way —
+   `NOT_INTERESTED` with the reason — and move on.
    Keep one tab for the whole run and follow your runtime's tab rules in
    `$BROWSER_GUIDE` — under Claude in Chrome, a control that opens a new tab
    and a tab closed mid-run both cost you every other open form.
 2. Decline non-essential cookies.
-3. Run `$EXTRACT_FORM` through the run-JS-in-the-page capability and save the
-   returned JSON to `runs/<run-id>/<Company>_<vacancyId>/form.json`.
+3. Run `$EXTRACT_FORM` through the run-JS-in-the-page capability and save what
+   it returns to `runs/<run-id>/<Company>_<vacancyId>/form.json`. It returns a
+   **compact digest**: one entry per real field, honeypots counted rather than
+   listed, labels and options clipped. A long form comes back **paged** — each
+   chunk ends on a field boundary and carries `next`; call `window.__digest(next)`
+   until `next` is null and concatenate the `fields` arrays. Typical forms take
+   one or two calls.
+
+   Two habits from an earlier run to avoid: stashing the JSON on `window` and
+   then reading it back in fixed character slices (most of those calls came back
+   empty), and screenshotting after every navigation. Phase 2 is read-only —
+   a JS probe answers everything; save screenshots for Phase 4, where you need
+   coordinates. The full uncut record is on `window.__form` when a clipped label
+   or option list actually matters.
 4. Load the ATS file for this host and follow it in Phase 4 — see
    `$ATS_REGISTRY/README.md` for how a host resolves to a file.
 
@@ -209,6 +238,16 @@ add the phrasing to the config — not to the skill.
   convinced, treat it as `unknown`.
 - **`unknown`** — goes to the user.
 
+**Ask only for what is genuinely missing.** A `review` candidate that plainly
+asks the same thing (another wording of start date, contract form, language
+fluency) is resolved by aliasing, not by asking. Standing policies the user has
+already given live in `qa[]` too — consent checkboxes that are mandatory but
+broader than one application, availability lists with no exact option,
+multiple-choice self-assessments (ownership, startup pace, AI, distributed
+systems), 1–5 stack ratings computed from `skills.csv` — so a question of one of
+those kinds is answered from its policy entry and never re-asked. The question
+round is for new facts.
+
 - **`runtime` salary fields** — already answered by Phase 1's `$SALARY_QUOTE`
   run. They are not questions for the user and not qa[] lookups; carry the
   computed figure into Phase 4, converted to the units the field actually asks
@@ -236,6 +275,13 @@ Per vacancy, following its ATS file:
 1. Fill from the Phase 3 report. Upload the PDF from `runs/`.
    **Verify writes on hostile forms**: after setting a value, read it back by
    its real `name`. Anti-autofill honeypots accept writes and drop them.
+   **Verify what the page shows, not what the DOM holds.** A framework widget
+   (React/Angular/Stimulus) can accept a JS-assigned `value` and still submit
+   its own state: a range slider read `4` while displaying `1`, and JS-typed
+   name/email never reached the request body. Prefer real input — click, type,
+   drag, keys — and read back the rendered text (chip, selected option, the
+   displayed number) or the outgoing payload before moving on. Screenshot every
+   answered control before Submit.
    For a salary field, re-run `$SALARY_QUOTE` with the units the field asks for
    rather than converting its output by hand — an integer-only "PLN/h netto" box
    and a free-text "oczekiwania finansowe" box are the same decision expressed
@@ -318,9 +364,18 @@ Per vacancy, following its ATS file:
    vacancy salary field).` — or `Desired salary: not asked on the form (band:
    …, source: …)`. Once submitted, this note is the only record of the figure,
    so cut other caveats before cutting it.
-9. **If you cannot actually apply** (login-gated with no account, a CAPTCHA
-   that demands solving, e-mail-only application, posting already closed) — do
-   **not** set `APPLIED`. Record what happened and move to the next vacancy.
+9. **If you cannot actually apply**, never set `APPLIED`, and split the two
+   cases by whether the vacancy could still be applied to by hand:
+   - **The posting is gone** (expired, filled, withdrawn, the ATS 404s) — it is
+     dead for everyone: `update_application_status({vacancyId, status:
+     "NOT_INTERESTED", notes: "<date>: <what the page said, verbatim> — not
+     applied."})`.
+   - **The posting is alive but blocked for you** (login-gated with no account,
+     a CAPTCHA that demands solving, e-mail-only application, a verification
+     link only the user can click) — leave it `SAVED` with a note saying what
+     is needed, so the user can finish it themselves.
+
+   Either way, say which happened in the end-of-run report.
 
 ### Things you never do on an employer's form
 
@@ -340,10 +395,24 @@ the tab to the user, with the vacancy left un-APPLIED:
 
 ### End of run
 
-Summarize applied / skipped / couldn't-apply with reasons, list the figure
-quoted for each application and where its band came from, list every new
-`qa[]` entry and alias learned, and add any newly discovered ATS quirk to
-`$ATS_REGISTRY` — a quirk left in a run log gets rediscovered the expensive way.
+Summarize, with reasons: applied; still `SAVED` because something blocks them
+and what the user has to do; and closed as `NOT_INTERESTED` because the posting
+was gone — name those explicitly, they are the ones the user never sees again.
+List the figure quoted for each application and where its band came from, list
+every new `qa[]` entry and alias learned, and add any newly discovered ATS
+quirk to `$ATS_REGISTRY` — a quirk left in a run log gets rediscovered the
+expensive way.
+
+## MCP timeouts
+
+`.claude/settings.json` sets `MCP_TOOL_TIMEOUT=60000`, and `.codex/config.toml`
+sets `tool_timeout_sec = 60` for the same reason: a hung OneTap call used to sit
+for the full 300 s default and come back with nothing. Five of them in one run
+burned nine minutes of a thirteen-minute phase.
+
+So: assume any MCP call can fail by timing out, issue independent calls in one
+message so they wait in parallel rather than in series, and treat a timeout as
+"this source has nothing" — move to the next source instead of retrying.
 
 ## Money — what number goes in the box
 
