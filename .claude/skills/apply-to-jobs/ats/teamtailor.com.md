@@ -45,14 +45,49 @@ URL becomes `/jobs/<id>-<slug>/applications/<uuid>/thanks/<hash>` and the
 title "Applied to <job title>", page text "Thanks for applying". A second
 "Connect" step offers profile creation — leave it.
 
-**Some tenants gate on e-mail verification** (CodiLime): the submit lands on
-`/jobs/<id>-<slug>/applications/email_verification_needed` with "Verify your
-email — click the verification link to complete your application". The
-application is not complete until the candidate clicks the link in his own
-mailbox, so leave the vacancy SAVED with a note and tell the user; never mark
-APPLIED on that page.
+**Some tenants gate on e-mail verification** (CodiLime, SOFTSWISS): the submit
+lands on `/jobs/<id>-<slug>/applications/email_verification_needed` with "Verify
+your email — click the verification link to complete your application". Nothing
+reaches the employer until that link is clicked, so never mark APPLIED on that
+page.
+
+**The verification link cannot be completed by the agent** (tested 2026-09-06 on
+both the SOFTSWISS and CodiLime tenants): opening
+`/jobs/<id>-<slug>/applications/verify_email/<uuid>?candidate_uuid=<uuid>` in the
+same Chrome profile that submitted the form redirects to `/connect/login` — a
+Teamtailor Connect sign-in wall — instead of showing a confirmation. Signing in
+is out of scope, so the vacancy stays SAVED and the user clicks the link
+himself. Fetching the link out of the mailbox is still worth doing: put the URL
+into the OneTap note so he does not have to hunt for the message.
+
+Note that the recruiter's own "thank you for applying" auto-reply arrives
+**without** the link being clicked (one minute later on CodiLime, an hour later
+on SOFTSWISS), so it is not evidence that the application completed.
 
 **Typing right after the modal opens can be lost** — on CodiLime the first
 pass of ref clicks + typing left every field empty (the form re-mounts once
 after "Loading application form"). `scroll_to` the first ref, type, and read
 `input.value` back before continuing; the second pass stuck.
+
+## Tenants met
+
+- **flyps** — the tenant this file was first written against.
+- **CodiLime** — e-mail verification gate (below).
+- **SOFTSWISS** (2026-09-06) — same e-mail verification gate: submit lands on
+  `/applications/email_verification_needed`. Also carries a **required
+  `candidate[location_ids][]` checkbox group** ("Locations *") that the platform
+  renders as styled chips: `input.click()` is unnecessary, click the chip by
+  coordinate and confirm with `zoom` that the box is ticked.
+
+## The modal takes ~10 s to mount
+
+"Apply for this job" leaves the page on "Loading application form" for several
+seconds and `querySelectorAll('input')` returns nothing meanwhile. Wait and
+re-probe rather than concluding the click failed; a second click just toggles
+the modal shut.
+
+## Submit is at the very bottom and the page reflows as you fill it
+
+A coordinate read before the file upload was ~40 px off by the time the CV chip
+had rendered, and the click landed on nothing. Re-`find` the submit button
+immediately before clicking it.

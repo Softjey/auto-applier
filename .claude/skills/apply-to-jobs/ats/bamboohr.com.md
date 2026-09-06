@@ -30,3 +30,34 @@ option text; the question text lives several parent levels up.
 ## Success signal
 
 Not yet observed.
+
+## The Apply button silently dies on a stale page (seen 2026-09-06, miquido)
+
+Clicking "Apply for This Job" did nothing at all — no navigation, no modal, no
+`window.open` — and the console showed
+`Uncaught (in promise) TypeError: Cannot read properties of null (reading 'hasPasskey')`.
+`/careers/<id>/apply` is a 404, and `/jobs/view.php?id=<id>` redirects back.
+
+What worked: reach the posting through the **job board's** Apply control, which
+opens BambooHR in a fresh tab inside the MCP group, and click Apply there. On a
+freshly opened tab the form renders in place.
+
+## Date format follows the tenant's locale
+
+The note above says `mm/dd/yyyy`; the Polish tenant's placeholder read
+`dd/mm/yyyy`. Read the placeholder, do not assume US order.
+
+## reCAPTCHA gates the submit
+
+A reCAPTCHA v2 checkbox sits directly above "Submit Application". Clicking it
+is a hard limit, so a BambooHR posting that shows one ends as **SAVED** with
+the filled values written into the note, never `APPLIED`.
+
+## Custom questions
+
+`customQuestionAnswers.yes_no_<id>` radio pairs. The question text lives
+several parent levels up; walk up until the ancestor's `innerText` is long
+enough to be the question. Seen on this tenant: a mandatory
+"consent for this recruitment" (answer Yes), an optional "future recruitment
+processes" (answer No), and a screening question
+"Do you currently live in Poland and speak Polish fluently?".

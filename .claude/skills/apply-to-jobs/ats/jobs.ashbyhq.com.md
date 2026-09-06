@@ -33,3 +33,24 @@ the user, and tell them the narratives need rewriting in their own voice.
 ## Success signal
 
 Not yet observed.
+
+## The Location autocomplete is US-first
+
+Typing "Warsaw" returns only Warsaw, Indiana / Missouri / Illinois / New York.
+Type `Warsaw, Pol` and the Polish row appears first; then **Down + Return**
+rather than clicking the popup, whose rows render on top of the form and are
+hard to hit by coordinate.
+
+## A required question is not the same as a required consent
+
+LeoVegas ends with two starred blocks: a privacy-policy acknowledgement (a
+single "Yes" checkbox — tick it, it is this application's own consent) and
+"retain your details in our talent pool for up to three years", a Yes/No pair
+that is *required to answer* but where **No** is a valid answer. Answer No —
+consenting is optional even when answering is not.
+
+## Success signal (observed 2026-09-06)
+
+The Application tab is replaced in place, same URL, with a "Success" heading:
+"Your application was successfully submitted. We'll contact you if there are
+next steps."

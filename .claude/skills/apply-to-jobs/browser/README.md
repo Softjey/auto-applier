@@ -68,3 +68,51 @@ where it means **run JS in the page**. Read it as the capability. A note that
 "`javascript_tool` gets blocked on this host" is about the *host's* CSP or
 bot-detection reacting to injected script, so expect it to bite any runtime,
 and follow the fallback the file gives.
+
+## Getting text into a field that is far below the fold
+
+Scrolling, screenshotting and clicking by coordinate is the slow path, and the
+coordinates go stale whenever the page reflows (a file chip changing the page
+height was enough). On most forms this is faster and does not drift:
+
+```js
+document.querySelector('[name=firstName]').focus()
+```
+
+then use the runtime's **type** capability, and read the value back by name.
+The keystrokes are real, so React/Angular controlled inputs see them.
+
+Two hosts refused it and needed a real coordinate click to take focus first —
+Recruitify and Comeet. If the value reads back empty, fall back to click+type
+rather than assuming the write landed.
+
+## When a CAPTCHA appears
+
+Ticking a reCAPTCHA is a hard limit (see `SKILL.md` § Things you never do). The
+vacancy stays `SAVED`, and the OneTap note carries every value that was
+prepared so the user can finish it in one pass. Filling the form first and
+discovering the CAPTCHA at Submit is fine — nothing was sent.
+
+## Keeping the screenshots (Phase 4 step 5)
+
+The evidence rule needs image **files**, not images in the transcript, and under
+Claude in Chrome `computer`'s `save_to_disk` writes nothing this session can
+reach. What does work is the recorder:
+
+1. `gif_creator {action: "start_recording", tabId}`
+2. scroll through the filled form, taking a `computer` screenshot at each
+   section — every screenshot becomes a frame
+3. `gif_creator {action: "stop_recording", tabId}`
+4. `gif_creator {action: "export", tabId, download: true, filename:
+   "<Company>_<vacancyId>-filled-form.gif", options: {showWatermark: false,
+   showProgressBar: false, showClickIndicators: false, quality: 5}}`
+5. `mv ~/Downloads/<filename> runs/<run-id>/<Company>_<vacancyId>/filled-form.gif`
+
+The export downloads through the browser, so the file lands in the user's
+Downloads folder and is moved from there. Only about half the screenshots
+become frames (the recorder samples them), so take one per section rather than
+one per form.
+
+Codex's `browser` plugin has `tab.screenshot()`, which returns the image
+directly — write it straight to the run folder as `filled-01.png`, `filled-02.png`
+and skip the GIF entirely.

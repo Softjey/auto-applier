@@ -48,3 +48,31 @@ click it.
 modal turns into "Done! Your application has been sent to …", so a submitted
 application is invisible to a `tabs_context` sweep. Checking whether a modal
 ATS has already been submitted means reading the page, not the address bar.
+
+## The board widget outranks the description text on money
+
+Acme's description said "Rate: 160–200 PLN/h/B2B" while the offer's own
+salary widget said **200 – 270 PLN Net per hour - B2B** — and OneTap's
+normalised 33,600–45,360 PLN/month matches the widget (×168 h), not the prose.
+Read the widget, and note that it also states the period and contract form,
+which OneTap flattens to `period: MONTH` regardless.
+
+## The first click on Apply is often swallowed
+
+The sidebar and sticky-footer Apply buttons frequently do nothing on the first
+click after a page load, then open the modal on the second. Two clicks in a row
+can also open and immediately close it. Click once, probe for
+`input[name=name]`, and only click again if it is absent.
+
+## Some offers' Apply opens the external ATS in a new tab
+
+Miquido's Apply opened `miquido.bamboohr.com` as a **new tab inside the MCP
+group** rather than the in-page modal — as the section above says, always call
+`tabs_context_mcp` after the click instead of assuming which of the two
+happened.
+
+## Per-employer consents appear inside the modal
+
+Besides the two Just Join IT boxes, an employer may add its own
+`future_consent_accepted` ("przyszłe rekrutacje", or "affiliated entities").
+Every one seen so far is optional — check `required` and leave it unticked.

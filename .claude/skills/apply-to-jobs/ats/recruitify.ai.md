@@ -35,3 +35,30 @@ checkbox is the optional future-recruitment one and stays unchecked.
 ## Success signal
 
 URL becomes `/job/<uuid>/thanks`.
+
+## A visible reCAPTCHA now gates the form (seen 2026-09-06, linkgroup tenant)
+
+Below the consents sits a reCAPTCHA v2 "I'm not a robot" checkbox. Pressing
+Apply without it re-renders the page with "Field is required" under the widget
+and submits nothing. Clicking a CAPTCHA is a hard limit for this agent, so the
+vacancy stays **SAVED** with a note telling the user what was prepared — never
+`APPLIED`.
+
+## Field order seen on the linkgroup tenant
+
+Different from the order recorded above — read it per tenant:
+
+| # | type | asks for |
+| --- | --- | --- |
+| 1 | text | Name and surname * |
+| 2 | email | E-mail address * |
+| 3 | file | Send your CV * |
+| 4 | text | Profil Linkedin (optional) |
+| 5 | checkbox | "* I am applying for recruitment process!" — required |
+| 6 | checkbox | "You can keep my data for future recruitment processes!" — optional |
+| 7 | checkbox | "I want to know what's going on marketing-wise!" — optional |
+
+There is no phone field and no salary field here.
+
+**`el.focus()` + typing does NOT work** on these inputs — the value stays
+empty. Click the input by coordinate first, then type.

@@ -21,3 +21,22 @@ OneTap note.
 ## Success signal
 
 Not yet observed.
+
+## The first click + type after load lands nowhere
+
+A batch of click/type pairs issued right after the form rendered left every
+field empty, with no error. A single click on the first field, verified with
+`document.activeElement.name`, then the same batch, worked. Verify focus once
+before typing on this host.
+
+## Success signal (observed 2026-09-06)
+
+The form is replaced in place, same URL, by "Thank you <First name>! Your
+application has been submitted. Good luck!"
+
+## Employers add their own screening questions below the personal block
+
+Named by the full question text rather than a short key, e.g.
+`name="This role is strictly a B2B Contractor position (freelance contract)…"`
+(radio) and `name="What is your expected monthly net rate (in USD) for this B2B
+contract?"` (text). Match on the prefix; do not expect an id.
