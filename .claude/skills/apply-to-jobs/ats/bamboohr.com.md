@@ -49,9 +49,13 @@ The note above says `mm/dd/yyyy`; the Polish tenant's placeholder read
 
 ## reCAPTCHA gates the submit
 
-A reCAPTCHA v2 checkbox sits directly above "Submit Application". Clicking it
-is a hard limit, so a BambooHR posting that shows one ends as **SAVED** with
-the filled values written into the note, never `APPLIED`.
+A reCAPTCHA v2 checkbox sits directly above "Submit Application". Clicking it is
+a hard limit, so leave the filled form in its tab and the prepared values in the
+note; the user ticks and submits from there (done on 2026-09-06 — "Thank You.
+Your application was submitted successfully"). The token expires after about two
+minutes, so a tick and a Submit have to happen in the same breath: do not ask
+the user to tick and then go away to do something else. Until the confirmation
+page is on screen the vacancy is **SAVED**, never `APPLIED`.
 
 ## Custom questions
 

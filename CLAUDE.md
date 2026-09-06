@@ -13,9 +13,11 @@ It runs under Claude Code and under Codex; see § Running under either agent.
 work authorization/visa status, date of birth (if ever added), etc.
 `stories.json` is worse: it is the user's unpublished account of internal
 work at named employers — incidents, security vulnerabilities, systems and
-colleagues. Both are deliberately not gitignored — version history is needed
-to see how the data grew and to revert a bad edit. But the files themselves
-are private. If a remote is ever needed — private only.
+colleagues. `runs/` now joins them: every tailored CV, every answer sheet with
+the salary asked of each employer, and screen recordings of filled-in forms.
+None of these are gitignored — version history is needed to see how the data
+grew and to revert a bad edit. But the files themselves are private. If a
+remote is ever needed — private only.
 
 ## Related repositories
 
@@ -121,9 +123,15 @@ the same files instead of a fork of them.
     to it in the same commit as the fix. Written in English and identified by
     DOM handle rather than by on-screen labels, since the same ATS renders in
     whatever language the employer hires in.
-- `runs/` (gitignored) — an ephemeral audit trail (screenshots, blocks.md,
-  summary) for one run. Never used to decide "what's already been applied
-  to" — that's OneTap.Work's job.
+- `runs/` — the audit trail of every apply run, **tracked in git since
+  2026-09-06** (it used to be gitignored and treated as disposable). One folder
+  per vacancy holding `answers.md` (every question the form asked and every
+  answer given), `blocks.md`, `salary.json`, the tailored CV, and the
+  `filled-form.gif` / `submitted.gif` recordings, plus a `summary.md` per run.
+  It is version-controlled for the same reason `profile.json` is: to be able to
+  see afterwards exactly what an employer was told, and when.
+  It is still **never** used to decide "what's already been applied to" — that
+  is OneTap.Work's job, and a second copy of that state would only drift.
 
 ## The system's core rule
 

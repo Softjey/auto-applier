@@ -403,16 +403,41 @@ Per vacancy, following its ATS file:
    not "the button stopped being clickable". Record it the same way, as
    `runs/<run-id>/<Company>_<vacancyId>/submitted.gif`, so the run holds both
    what was sent and the page that confirmed it.
-9. `update_application_status({vacancyId, status: "APPLIED", notes: "Applied
-   <date> via <ATS>. Resume: <out-folder-name>. <the salary line>. <key answers
-   and caveats>"})`, ≤1000 chars, date/ATS/resume/salary prefix kept intact.
-   The out-folder name (`Acme_cmtgy…-Senior-Full-Stack-Developer`) is the
-   only thing that identifies which CV went where. The salary line is
-   `$SALARY_QUOTE`'s `Note` output, e.g. `Desired salary: 44,000 PLN/month net
-   B2B (band-above-baseline; band: 40,000-45,000 PLN/month net B2B; source:
-   vacancy salary field).` — or `Desired salary: not asked on the form (band:
-   …, source: …)`. Once submitted, this note is the only record of the figure,
-   so cut other caveats before cutting it.
+9. `update_application_status({vacancyId, status: "APPLIED", notes: …})` — a
+   **short note that points at the run folder**, not a transcript of the form.
+   Five things and no more:
+
+   ```
+   Applied <date> via <ATS> — "<the success signal, verbatim>".
+   Resume: <out-folder-name>.
+   <the salary line>.
+   Details: runs/<run-id>/<Company>_<vacancyId>/ — answers.md (every question
+   and answer), filled-form.gif, submitted.gif.
+   ```
+
+   Everything else — the per-field answers, the consents, the gaps against the
+   posting — lives in `answers.md`, which has no length limit. The note used to
+   carry all of it and ran into the 1000-character cap; it no longer should.
+
+   The four things that must survive in the note itself, because they are the
+   only copy that is not on this laptop:
+   - **the date and the ATS**, so the application can be found again;
+   - **the success signal**, quoted, so "applied" is a fact rather than a claim;
+   - **the out-folder name** (`Acme_cmtgy…-Senior-Full-Stack-Developer`) —
+     the only thing identifying which CV went where, since every PDF has the
+     same filename;
+   - **the salary line**, `$SALARY_QUOTE`'s own `Note` output, e.g.
+     `Desired salary: 44,000 PLN/month net B2B (band-above-baseline; band:
+     40,000-45,000 PLN/month net B2B; source: vacancy salary field).` — or
+     `Desired salary: not asked on the form (band: …, source: …)`.
+
+   Add one short caveat line only when the application carries a real risk the
+   user would want to see without opening a file (a hard requirement the profile
+   does not meet). Anything longer belongs in the sheet.
+
+   `runs/` is tracked in git as of 2026-09-06, so the sheet is as durable as the
+   note — but the note is the only copy that lives off this laptop, which is why
+   the five fields above still stay in it.
 10. **If you cannot actually apply**, never set `APPLIED`, and split the two
    cases by whether the vacancy could still be applied to by hand:
    - **The posting is gone** (expired, filled, withdrawn, the ATS 404s) — it is
