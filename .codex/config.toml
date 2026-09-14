@@ -1,22 +1,9 @@
-# Project-level Codex settings, merged on top of ~/.codex/config.toml.
-#
-# Codex only reads this file for a TRUSTED repository. It asks once when you
-# first open the folder; you can also add this to ~/.codex/config.toml:
-#
-#     [projects."/absolute/path/to/auto-applier"]
-#     trust_level = "trusted"
-#
-# Skills are deliberately NOT listed here. Codex discovers them by itself from
-# .agents/skills/, which symlinks into .claude/skills/ so both agents read the
-# same files. `[[skills.config]]` only enables or disables an already-discovered
-# skill — it cannot add a directory to the search path.
-
-# OneTap.Work — the source of SAVED vacancies and the single source of truth
-# for what has already been applied to. Authenticate once, per machine:
-#
-#     codex mcp login onetap
 [mcp_servers.onetap]
 url = "https://mcp.onetap.work/mcp"
-# A hung search_vacancies used to sit for the 300 s default and return nothing.
-# Claude Code gets the same 60 s cap from .claude/settings.json (MCP_TOOL_TIMEOUT).
 tool_timeout_sec = 60
+
+[shell_environment_policy]
+inherit = "core"
+
+[shell_environment_policy.set]
+MCP_TOOL_TIMEOUT = "60000"
