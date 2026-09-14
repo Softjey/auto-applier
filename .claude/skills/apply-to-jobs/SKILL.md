@@ -432,9 +432,19 @@ Per vacancy, following its ATS file:
    not "the button stopped being clickable". Record it the same way, as
    `runs/<run-id>/<Company>_<vacancyId>/submitted.gif`, so the run holds both
    what was sent and the page that confirmed it.
-9. `update_application_status({vacancyId, status: "APPLIED", notes: …})` — a
-   **short note that points at the run folder**, not a transcript of the form.
-   Five things and no more:
+9. `update_application_status({vacancyId, status: "APPLIED", notes: …})` —
+   **immediately after the success signal, before touching the next vacancy.**
+   Not at the end of the batch, not "once the MCP is reachable again", not
+   collected into a file to replay later. OneTap.Work is the only record of what
+   has been applied to; every minute the status is stale, a re-run can send the
+   same employer a second application. On 2026-09-14 a run submitted eight
+   applications and left all eight `SAVED` in a `pending-onetap-updates.md` for
+   someone else to apply — they sat wrong for two days. If the OneTap call fails,
+   retry it there and then; if it still fails, **stop the run** and tell the user
+   rather than submitting a ninth form against an unreliable ledger.
+
+   The note itself is a **short pointer at the run folder**, not a transcript of
+   the form. Five things and no more:
 
    ```
    Applied <date> via <ATS> — "<the success signal, verbatim>".
