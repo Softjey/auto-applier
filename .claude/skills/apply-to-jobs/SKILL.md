@@ -330,6 +330,25 @@ Per vacancy, following its ATS file:
      do, at B2 English.** Plain words, concrete detail (what he did, how long).
      No literary turns ("the backend as my centre of gravity", "from problem to
      production"), no "commercial" before "experience".
+   - **"Why do you want to work here?" / "what do you like about our
+     product?" are about the employer, not about him.** Research the company
+     (culture page, engineering blog, the product, its security and
+     regulatory record), hand him a list of concrete things one could like,
+     and let him pick and say why — the reason is his, never inferred and
+     never a CV story used as a bridge to the posting. Then write it as his
+     own reflection: one sentence that frames the thought ("There are many
+     reasons why I'd like to work at X, but there are two I'd really want to
+     highlight."), then each point in whole sentences that explain
+     themselves. Every fact about the company that goes into the text is
+     verified first and worded precisely (a competitor "is out of the EU
+     market", not "lost its license", if that is what actually happened).
+   - **Never tezy, and "shorter" never means fragments.** "Two things. First,
+     dogfooding." and "The first is dogfooding: …" were both rejected —
+     headline fragments with a justification attached do not read like a
+     person. When an answer is too long, cut what repeats a thought already
+     made and what was added on top of his words (analogies, "it really
+     resonated with me", a tail that restates the point); keep every sentence
+     whole and the core thought complete.
    - **A project is described by the technologies this employer screens for,
      plus that he owned it.** Architecture level only ("microservices in NestJS
      over PostgreSQL") — never the list of services, what a service does, or
