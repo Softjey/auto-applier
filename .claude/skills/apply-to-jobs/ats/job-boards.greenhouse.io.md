@@ -61,3 +61,20 @@ consenting is not: choose **No**.
 
 URL becomes `/embed/job_app/confirmation?...` and the page reads "Thank you for
 applying!" (the title may be localized).
+
+## Simplify
+
+Supported, both on `job-boards(.eu).greenhouse.io` directly and inside a
+company-site iframe (on the wrapper page it can start autofilling by itself, but
+you still need the tab on the iframe URL to script the form). It fills name,
+e-mail, phone (+ country code), LinkedIn, sometimes the city text. It does
+**not** resolve the `candidate-location` autocomplete, leaves custom questions
+(salary, sponsorship, notice, languages, non-compete) empty, and **keeps writing
+for ~40 s** — a LinkedIn URL typed meanwhile came out doubled and a ticked
+sponsorship checkbox was reset. Wait for "Autofill complete!".
+
+**Location (City) autocomplete:** type `Warsaw` and wait for
+"Warsaw, Mazowieckie, Poland" (it is the first row once results load).
+`Warsaw, Pol`, `Warsaw, Masovian` and `Warszawa` return nothing or the wrong
+town. If it sticks on "Loading...", delete the last letter and type it again.
+Clicking elsewhere with an unresolved value clears the field.

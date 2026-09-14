@@ -68,3 +68,8 @@ Redirects to `/en/sites/<Tenant>/my-profile` with a "Thank you for your job
 application" toast, and the posting appears under ACTIVE JOB APPLICATIONS with
 the requisition id, an applied-on date and `Status: NEW`. Match on the
 `my-profile` URL plus the application row — the toast fades.
+
+## Simplify
+
+No panel on Oracle Recruiting Cloud (seen on Ciklum's `explore-jobs.ciklum.com`
+tenant, 2026-09-14). On a Simplify run, skip.

@@ -40,3 +40,11 @@ Named by the full question text rather than a short key, e.g.
 `name="This role is strictly a B2B Contractor position (freelance contract)…"`
 (radio) and `name="What is your expected monthly net rate (in USD) for this B2B
 contract?"` (text). Match on the prefix; do not expect an id.
+
+## Simplify
+
+Supported. It autofills the wrapper page, but the fields are unreachable there;
+navigate the tab to the iframe URL (it re-autofills the same fields by itself):
+first/last name, e-mail, phone, LinkedIn. Employer screening questions and the
+CV stay yours. After Submit it offers "Add Custom Application" to its tracker —
+cancel.

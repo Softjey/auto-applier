@@ -65,3 +65,15 @@ enough to be the question. Seen on this tenant: a mandatory
 "consent for this recruitment" (answer Yes), an optional "future recruitment
 processes" (answer No), and a screening question
 "Do you currently live in Poland and speak Polish fluently?".
+
+## Simplify
+
+Supported (2026-09-14, Avanquest). Fills name, e-mail, phone, City, Country and —
+from its own profile — the address block: Address `_` (matches our policy),
+but **Postal Code `00001` and Province `MZ`** (policy says `_` and
+`mazowieckie`) and **Date Available = today's date**, which is invented.
+Fix the first two, clear the date. It leaves the honeypot alone.
+
+A **visible reCAPTCHA checkbox** appears only after the first Submit click
+("Please confirm you're not a robot to continue") — a hard stop. Leave the
+filled tab for the user.

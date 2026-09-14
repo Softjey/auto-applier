@@ -89,3 +89,14 @@ checkbox is mandatory.
 
 URL becomes `/oneclick-ui/company/{Org}/publication/{uuid}/success` and the page
 reads "Application submitted!".
+
+## Simplify
+
+Supported (2026-09-14, Software Mind). On the posting page click "I'm interested"
+first; the panel's **Start Application → Autofill This Page** then fills step 1.
+What it did: name, e-mail ×2, phone, all Experience and Education entries from
+its own profile (real CV content — verify, don't assume). What it did wrong:
+reported "Autofill complete" with **Country/Region and City empty** (both
+required), and on the screening step answered **"Are you authorized to work in
+the job's location?" → No** while leaving every other screening question
+untouched. No résumé — use the shadow-DOM bridge above.

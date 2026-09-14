@@ -70,3 +70,8 @@ future-recruitment consent.
 
 Navigates to `public/form/thankyou/<id>?application_timestamp=...` with a green
 check. Match on the URL path; the redirect is prompt.
+
+## Simplify
+
+No panel on `*.traffit.com/public/form/...` (cerebre, 2026-09-14). On a
+Simplify run, skip.

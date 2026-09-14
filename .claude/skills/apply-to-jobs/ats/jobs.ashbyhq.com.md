@@ -54,3 +54,13 @@ consenting is optional even when answering is not.
 The Application tab is replaced in place, same URL, with a "Success" heading:
 "Your application was successfully submitted. We'll contact you if there are
 next steps."
+
+## Simplify
+
+Works best here (2026-09-14: Nord Security, Hostinger, Everfield, 42dot,
+Wonderful). Fills name, e-mail, phone, the Location autocomplete already
+resolved ("Warsaw, Masovian Voivodeship, Poland"), LinkedIn, GitHub, and often
+simple Yes/No and radio questions (legally authorised, sponsorship, "how did you
+hear"). Leaves: résumé, salary, work-authorisation *status* lists, required
+free text ("Motivation — why are you interested"), talent-pool consents.
+Yes/No segmented buttons it did not answer show no `_active_` class.
