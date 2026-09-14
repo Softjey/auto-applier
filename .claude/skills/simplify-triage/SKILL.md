@@ -17,11 +17,13 @@ file.
 Most SAVED vacancies are `USER_CREATED` (added from LinkedIn), and
 OneTap.Work only stores the LinkedIn posting as their source — never the
 employer's real ATS link (`get_apply_target` returns `kind: "source"` for
-these, not `kind: "direct"`). The real application host is only visible once
-LinkedIn's Apply control is used, and following that hand-off is slow and
-occasionally hangs (see the pitfall below). This skill's whole point is doing
-that survey efficiently and safely, without clicking through 50+ redirect
-chains.
+these, not `kind: "direct"`). The real application host is not shown on the
+page and clicking "Apply" to find out is slow and can hang (see the pitfall
+below) — but it doesn't need to be clicked at all: the destination is already
+sitting in the link's `href`, wrapped by LinkedIn's own `/safety/go/?url=...`
+redirect-shim, and the `find` tool reads and decodes it directly. This
+skill's whole point is doing that survey efficiently and safely, resolving
+every real ATS host without ever clicking through 50+ redirect chains.
 
 ## Procedure
 
@@ -60,60 +62,74 @@ chains.
      bare hostname (no path, no query string) into the report file; that is
      not the protected value.
 
-4. **For every LinkedIn-sourced vacancy, open the posting read-only — do not
-   click Apply.** Batch this with `browser_batch`, reusing one tab, in chunks
-   of ~5 vacancies (10 actions: `navigate` + a `javascript_tool` check) per
-   call — `browser_batch` aborts the whole batch on the first error, so
-   keep chunks small enough that one flaky page doesn't waste the rest. Per
-   vacancy:
+4. **For every LinkedIn-sourced vacancy, resolve the real host — do not
+   click Apply, read its `href` instead.** Batch this with `browser_batch`,
+   reusing one tab, in chunks of ~4 vacancies (8 actions: `navigate` + a
+   `find` call) per call — `browser_batch` aborts the whole batch on the
+   first error, so keep chunks small enough that one flaky page doesn't
+   waste the rest. Per vacancy:
 
-   ```js
-   const btns=[...document.querySelectorAll('button,a')].map(b=>b.innerText.trim());
-   JSON.stringify({
-     easy: btns.some(t=>/Easy Apply/i.test(t)),
-     apply: btns.some(t=>/^Apply$/i.test(t)),
-     offsite: /managed off LinkedIn/i.test(document.body.innerText),
-     closed: /no longer accepting|no longer being accepted/i.test(document.body.innerText)
-   })
+   ```json
+   {"name": "find", "input": {
+     "query": "the Apply link's destination URL or hostname (decode the linkedin.com/safety/go redirect if present)",
+     "tabId": <tabId>
+   }}
    ```
 
-   Classify each:
-   - `closed: true` → **already closed** on LinkedIn, regardless of what
-     OneTap.Work's `activityStatus` says. Flag for cleanup in step 6.
-   - `easy: true` → **LinkedIn Easy Apply**. The form is inside LinkedIn
-     itself — Simplify's best-documented, flagship use case. Bucket as
-     "Simplify likely helps", not "confirmed" (there's no `ats/linkedin.com.md`
-     yet — the first real run through one should create it, per the apply-to-jobs
+   `find` reads the element's real `href` from the DOM and decodes the
+   `url=` query parameter of LinkedIn's `/safety/go/?url=...` wrapper for
+   you — no navigation, no click, no popup, no redirect chain to wait out.
+   Interpret the result:
+   - No Apply/Easy-Apply element found, and the page text says "not
+     currently accepting applications" / "no longer accepting applications"
+     → **already closed** on LinkedIn, regardless of what OneTap.Work's
+     `activityStatus` says. Flag for cleanup in step 6.
+   - The matching element is an "Easy Apply" control with no external href
+     → **LinkedIn Easy Apply**. The form is inside LinkedIn itself —
+     Simplify's best-documented, flagship use case. Bucket as "Simplify
+     likely helps", not "confirmed" (there's no `ats/linkedin.com.md` yet —
+     the first real run through one should create it, per the apply-to-jobs
      Simplify fast path's own "add to it when you learn" rule).
-   - `offsite: true` (whether or not `apply` matched exactly — some postings
-     use a different label than the literal word "Apply") → **host unknown**.
-     Do not click through to find out. A single test of clicking an off-site
-     Apply control hung 30+ seconds on LinkedIn's own `/safety/go/`
-     redirect-shim without resolving — multiply that by every such vacancy
-     and the triage stops being fast. Bucket as "needs manual — ATS unknown
-     until a real apply run opens it" (that happens naturally in the
-     apply-to-jobs skill's own Phase 1 liveness probe, so nothing here is
-     wasted, only deferred).
+   - A decoded destination URL comes back → take its hostname and look it up
+     against step 1's table:
+     - host is in the *supported* list → **confirmed Simplify helps**
+       (note if it's a Workday host — those need a candidate account first,
+       flag that caveat).
+     - host is in the *not supported* list → **confirmed Simplify won't
+       help**, full manual fill.
+     - host isn't in the table at all → **host known, Simplify untested**.
+       Note the ATS product if you can identify it from the domain (e.g.
+       `*.myworkdayjobs.com` = Workday, `smrtr.io` = SmartRecruiters'
+       shortener, `*.recruitee.com` = Recruitee, `*.jobs.personio.com` =
+       Personio, `*.ocs.oraclecloud.com` = Oracle Recruiting Cloud,
+       `*.hibob.com` = HiBob, `jobs.lever.co` = Lever) — but don't guess
+       Simplify support for it, and don't assume a URL param that merely
+       *looks* like an ATS's signature (e.g. a `gh_src` query param) proves
+       it's that ATS; say so is unverified rather than asserting it.
 
 5. **Write the report** to `runs/<today's date>-simplify-triage.md` (create
    `runs/` if the very first run predates it — it shouldn't). Sections, in
    this order:
    - One-line counts summary at the top.
-   - "Simplify likely helps" — LinkedIn Easy Apply entries, plus any vacancy
-     whose resolved host is in step 1's *supported* list.
-   - "Needs manual — ATS unknown or unverified" — off-LinkedIn vacancies with
-     no confirmed host, plus any resolved host that is in step 1's table but
-     marked *not supported* or not in the table at all (say which of the two
-     it is, per row or per group).
-   - "Already closed but still SAVED" — the cleanup candidates from step 4.
-   - A short "Methodology" footer noting the date and that off-site hosts
-     were intentionally not chased individually (see step 4's reasoning).
+   - "Confirmed: Simplify will help" — resolved hosts matching step 1's
+     supported list (Workday ones flagged ⚠️ needs an account).
+   - "LinkedIn Easy Apply — Simplify likely helps".
+   - "Confirmed: Simplify will NOT help" — resolved hosts matching step 1's
+     not-supported list, with the reason per row.
+   - "Host resolved, Simplify untested" — real ATS known, no data yet on
+     whether Simplify works there.
+   - "Already closed — archived" — the cleanup candidates from step 4, once
+     step 6 has actually archived them.
+   - A short "Methodology" footer noting the date and the `find`-based
+     resolution method.
 
-6. **Offer the cleanup**, don't do it unasked: if any vacancies came back
-   `closed: true`, tell the user how many and offer to
-   `update_application_status({vacancyId, status: "NOT_INTERESTED", notes:
-   "<date>: closed on LinkedIn, never applied — found during Simplify
-   triage."})` for them. Only do it if they say yes.
+6. **Archive the closed ones without asking** — they're not a judgment call,
+   they're dead: `bulk_update_applications` with `status: "ARCHIVED"` and a
+   note like `"<date>: expired on LinkedIn — never applied, found during
+   Simplify triage."` for every vacancy flagged `closed` in step 4. (Use
+   `ARCHIVED`, not `NOT_INTERESTED` — that status means "actively
+   dismissed," which isn't what happened here.) Do ask before anything else
+   that changes vacancy status; this one cleanup is safe to just do.
 
 ## Pitfalls learned the hard way
 
@@ -124,14 +140,29 @@ chains.
   Do the browsing directly in the main session (or a `general-purpose`
   subagent with its own fresh context, not a `fork`, if delegating at all),
   and verify the output file actually exists before trusting a "done" report.
-- **Don't click an off-site "Apply" control to find the real host.** It
-  routes through LinkedIn's own redirect-shim (`/safety/go/...`) which can
-  hang the tab for 30+ seconds without ever resolving to a readable URL, and
-  a `javascript_tool` read of `a.href` on that link gets redacted anyway
-  (`[BLOCKED: ...]`) because it looks like it carries a token/query string.
-  Reading the button's visible label (`Easy Apply` vs plain `Apply` +
-  "managed off LinkedIn" phrasing) is cheap, reliable, and enough to sort
-  vacancies into the right bucket without ever needing the real URL.
+- **Don't click an off-site "Apply" control to find the real host — read its
+  `href` instead.** Clicking it (synthetic `.click()`, a real `computer`
+  click, even a trusted click via an element `ref`) can hang the tab for
+  30+ seconds: sometimes it routes through LinkedIn's redirect-shim
+  (`/safety/go/...`) and never resolves to a readable URL in the automated
+  tab, sometimes it instead pops the **Simplify Copilot** sidebar open right
+  there on the LinkedIn page (worth knowing: Simplify hooks the LinkedIn
+  Apply click itself, not just the destination ATS — so it may cover more of
+  this off-site bucket than the destination-host lookup alone suggests, but
+  don't rely on triggering that panel for the triage; it's slow and not
+  needed). Either way, a `javascript_tool` read of `a.href` on that link also
+  gets redacted (`[BLOCKED: ...]`) because it looks like it carries a
+  token/query string. None of that is necessary: the `find` tool reads the
+  same `href` straight from the DOM and decodes LinkedIn's `url=` wrapper
+  without navigating anywhere, in one call, every time.
+- **LinkedIn can start acting up after a lot of rapid automated page loads in
+  one session** (dozens of `navigate` calls back to back) — pages that
+  loaded fine earlier can start hanging on `document_idle` or on script
+  injection. If a `navigate`/`find`/screenshot call times out, `navigate` to
+  a **different** domain first to force the tab to recover, then go back to
+  the LinkedIn URL — a same-URL `navigate` alone may still be stuck. If it
+  keeps happening, slow down (smaller `browser_batch` chunks, or pause
+  between chunks) rather than retrying the same stuck call.
 - **`get_my_applications({status:"SAVED", limit:100})` on a full queue is
   too big for context.** Let it land in its tool-results file and process
   that file with `grep`/a script instead of reading it inline.
