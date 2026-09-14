@@ -127,6 +127,11 @@ a guessed answer reaches an employer.
 Ask the user which SAVED vacancies to process after listing what's available,
 then run Phase 1.
 
+**Where the Simplify Copilot extension is present on the form, Phases 2–4
+collapse into one pass per vacancy** — see § Simplify fast path. It is the
+default whenever the panel shows up; the full Phases 2–4 are for forms it does
+not support.
+
 ### Phase 1 — queue and resumes (parallel, no browser)
 
 1. `get_my_applications({status: "SAVED", activityStatus: "active", limit: 100})`,
@@ -199,7 +204,8 @@ then run Phase 1.
 
 ### Phase 2 — read every form (serial browser, read-only)
 
-For each vacancy, in one managed tab:
+For each vacancy **without** a Simplify panel on its form (§ Simplify fast
+path handles the rest), in one managed tab:
 
 1. Navigate to `vacancy.link` — never `vacancy.applyLink` — and follow the
    posting's own Apply control to the ATS. Liveness was already settled in
@@ -281,6 +287,83 @@ the floor (the script prints it), not the band.
 If a *new* unknown appears mid-Phase-4 (a form reveals fields only after a
 postback), the escalation rule still applies: stop and ask. Phase 3 shrinks
 that to a rare event; it does not abolish it.
+
+### Simplify fast path — Phases 2–4 in one pass where the extension works
+
+The user's Chrome has the **Simplify Copilot** extension. On the ATSes it
+supports it fills the contact block, links and some yes/no questions in one
+click, which turns a form from minutes of typing into a review. **When its panel
+is on the form, use it, and your job becomes: check what it wrote, fill what it
+left, fix what it got wrong.** Phase 1 (queue, liveness, band, resume) is
+unchanged — the band and the tailored PDF must exist before the browser opens.
+
+Seen working (2026-09-14): SmartRecruiters, Greenhouse (direct, and the
+company-site iframe once the tab is on the iframe's own URL), Ashby, Comeet
+(same iframe rule), BambooHR, Workday (but Workday needs an account — § Portals
+that require an account). Seen **not** present: Personio, Oracle Recruiting
+Cloud, Traffit, Spott, join.com, Salesforce-hosted career sites, and employers'
+own forms (bolt.eu, kake.co, Proxify, Comarch, Interia). The ATS file for the
+host records which, under a `## Simplify` heading — add to it when you learn.
+
+Per vacancy:
+
+1. **Reach the form** (Phase 2 step 1 rules apply — one managed tab, no
+   new-tab clicks). Decline non-essential cookies.
+2. **Detect the panel** with a cheap screenshot (scale 0.4 is enough): a
+   Simplify sidebar with **Autofill This Page** / **Start Application**. A
+   "Let's Strengthen Your Resume" card on a *job description* page is not the
+   form — open the application step first.
+   - No panel, and the user asked for a Simplify run → **skip**: leave it
+     `SAVED` with a one-line note ("no Simplify on <ATS>"), next vacancy.
+   - No panel otherwise → the normal Phases 2–4 below.
+3. **Click Autofill and wait for "Autofill complete!"** in the panel before
+   touching the form. It keeps writing for up to ~40 s after the click and on
+   some hosts starts by itself on load; a manual edit made meanwhile gets
+   overwritten or doubled (a LinkedIn URL typed into a field it was still
+   filling came out twice; a location and a checkbox you set were reset).
+4. **Read the whole form back once** — `$EXTRACT_FORM` or one run-JS dump of
+   every field's name, label and value — and check it against `profile.json`
+   and `qa[]`. Simplify fills from **its own profile, not ours**, so every value
+   it wrote is a claim to verify, not a fact. What it has actually got wrong:
+   - **A factual yes/no answered wrong**: "Are you authorized to work in the
+     job's location?" → **No**, on a Kraków role for a holder of a Polish work
+     permit. Disqualifying, and stated as fact. Read every radio/segmented
+     control it touched.
+   - **"Complete" with required fields still empty** — Country and City on
+     SmartRecruiters; a location autocomplete typed but never resolved on
+     Greenhouse (the field clears on blur). The panel's count is not a check.
+   - **Invented values**: "Date Available" set to *today* on BambooHR; postal
+     code `00001` and province `MZ` where `qa[]` holds a policy (`_`,
+     `mazowieckie`). Replace with the profile/qa answer, or clear an optional
+     field that has no true value.
+   - **No résumé, ever** — its profile holds none. Upload the tailored PDF from
+     `runs/` yourself, every time.
+   - **Screening questions left untouched** ("needs review" in the panel):
+     salary, sponsorship status, languages, consents, free text. These are
+     always yours.
+5. **Fill the gaps** exactly as Phase 4 below says — salary via
+   `$SALARY_QUOTE` in the units the field asks for (one employer, one number
+   across its postings), consents per policy, optional free text empty,
+   required free text per the rules in step 3. **Never use Simplify's
+   "Generate with AI" / "Tailor Resume" buttons** — its prose is not the user's
+   voice and its facts are not ours.
+6. **An answer that is not in `profile.json`/`qa[]` stops this vacancy, not
+   the run.** Leave the form unsubmitted, set the note on `SAVED` naming the
+   exact question(s), move on, and ask all of them in one batch at the end — this
+   is the Phase 3 round, collected as you go. Same for a required "why this
+   company" box (the reason is the user's pick) and for a CAPTCHA (leave the
+   filled tab open for the user, say so in the note, open a new tab for the next
+   vacancy).
+7. **Verify, submit, record** — one read-back of required fields and the CV chip
+   right before Submit (Phase 4 step 1's verify rules), then Phase 4 steps 8–9:
+   the success signal, **APPLIED immediately**, `answers.md` with a Source
+   column that says `Simplify` for what it filled and `by hand` for the rest.
+   After a successful submit Simplify pops **"Add Custom Application"** (its own
+   tracker) — **Cancel**; OneTap.Work is the only ledger.
+
+The confirmation pause (§ Confirmation mode) and every rule in § Things you
+never do still apply on this path. Speed comes from Simplify typing the obvious
+fields, not from reading less.
 
 ### Phase 4 — fill and submit (serial browser)
 

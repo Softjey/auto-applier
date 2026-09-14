@@ -55,6 +55,33 @@ Two quirks of this integration that the skill's phases are built around:
   the destination, then `navigate` the managed tab there), and never close a tab
   mid-run.
 
+Three more that decide how fast a run goes (all seen 2026-09-14):
+
+- **From a LinkedIn posting to the ATS in one call.** The "Apply" anchor is a
+  `linkedin.com/safety/go/?url=<encoded target>` link, and returning that
+  target is blocked (query-string / token data). Don't return it — go there:
+
+  ```js
+  const a = [...document.querySelectorAll("a")].find((e) => e.innerText.trim() === "Apply");
+  location.href = decodeURIComponent(new URL(a.href).searchParams.get("url"));
+  ```
+
+  then `tabs_context_mcp` shows where the tab landed. No `Apply` anchor at all
+  means Easy Apply or a closed posting. Clicking the button instead opens the
+  ATS in a tab outside the group.
+- **"Permission denied for this action on this domain" right after a
+  cross-domain navigation is usually transient.** Wait ~2 s and retry the same
+  call once before concluding the site needs a permission grant.
+- **An extension reconnect can hand you a new tab group** — the old tab ids are
+  gone ("Tab … is not in Claude's tab group"). Call `tabs_context_mcp` with
+  `createIfEmpty` and carry on; a filled form in the old group is lost.
+
+**Simplify Copilot** (see `SKILL.md` § Simplify fast path) is a Chrome
+extension, so it is there under either agent as long as the tab is the user's own
+Chrome. Its panel is a sidebar on the right; find **Autofill This Page** from a
+0.4-scale screenshot rather than a remembered coordinate — the panel shifts with
+the page width.
+
 ## Codex — the bundled `browser` plugin
 
 Tools: the `browser` plugin over the `node_repl` MCP server. Work through

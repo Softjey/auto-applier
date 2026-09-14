@@ -105,7 +105,10 @@ the same files instead of a fork of them.
   apply-to-jobs run.
 - `.claude/skills/apply-to-jobs/` — the main orchestrator, run in four
   phases: resumes (parallel) → read every form (serial, read-only) → one
-  batched question round → fill and submit (serial).
+  batched question round → fill and submit (serial). Where the user's Chrome
+  shows the Simplify Copilot panel on a form, phases 2–4 collapse into one pass:
+  Simplify autofills, the agent verifies every value against `profile.json`,
+  fills the gaps and submits (`SKILL.md` § Simplify fast path).
   - `scripts/lib/qa-match.mjs` — the one matcher every script shares, so a
     question never scores differently depending on who asked.
   - `scripts/lib/field-labels.mjs` — English form vocabulary, plus the merge
