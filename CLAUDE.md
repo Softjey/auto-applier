@@ -86,13 +86,13 @@ the same files instead of a fork of them.
   given form is decided per vacancy by `compensation.strategy` +
   `salary-quote.mjs`, not by the anchor — the qa[] salary entries are only
   the no-band baseline.
-- `credentials.json` — employer-portal accounts, keyed by registrable domain,
-  written by `apply-to-jobs/scripts/credentials.mjs`. Some ATSes (Workday, Avature)
-  refuse an application without a candidate account; the agent will not create one or
-  type a password into a site, so it generates the password, records it here, and hands
-  the user a `Company: login - password` line for the ~15-second sign-up, then finishes
-  the application. Keyed by domain so a second vacancy at the same employer reuses the
-  account instead of minting a second one.
+- `credentials.json` — employer-portal accounts, keyed by registrable domain. Some ATSes
+  (Workday, Avature) refuse an application without a candidate account; the agent neither
+  creates the account nor invents a password for it — it fills the sign-up form up to the
+  password, stops, and the user picks their own password and clicks Create Account, after
+  which the agent finishes the application. The file is the record of which portals have
+  an account, keyed by domain so a second vacancy at the same employer reuses it instead
+  of minting a second one; the agent no longer writes passwords into it.
 - `stories.json` — the user's own interview-prep material (STAR stories and
   long-form answers) imported from the Recruting `.docx` archive. This is what
   free-text "describe a time when…" fields are grounded in, so that a narrative

@@ -619,11 +619,11 @@ whether or not the link was clicked.
 Workday, Avature and others will not take an application at all without a candidate
 account. Refusing and stopping there loses the vacancy, so don't.
 
-**Before anything else, check whether an account already exists.** Two applications in
-this run had a password generated for a portal the user was already registered on — the
-Honeywell run, a few minutes earlier, had shown exactly what that looks like when it goes
-right: the profile came back pre-filled and the seven compliance questions were already
-answered. In order:
+**Before anything else, check whether an account already exists.** Two applications in one
+run were parked on the user for a portal he was already registered on — the Honeywell run,
+a few minutes earlier, had shown exactly what that looks like when it goes right: the
+profile came back pre-filled and the seven compliance questions were already answered.
+In order:
 
 1. **Load the portal and look for a signed-in state** — a name in the header, a Profile
    or Sign Out control, an existing candidate profile. If it is there, just apply; the
@@ -635,7 +635,7 @@ answered. In order:
      answer sheet or a commit. It is the user's secret and it does not need to pass
      through you for the sign-in to work.
    - If the browser has nothing saved, ask the user whether they already have an account
-     before generating anything. They will often know.
+     before parking the vacancy on them. They will often know.
 3. **Only when there is genuinely no account**, split the work at the password.
 
 Then:
@@ -645,32 +645,24 @@ Then:
    step 2 of 3.
 2. **Fill every field on that form except the password**, exactly as anywhere else, and
    verify the writes. Leave the tab open and untouched.
-3. **Generate the password and record it**, keyed by the registrable domain:
+3. **Stop there and wait for the user.** Do not generate a password and do not write to
+   `credentials.json` — the user picks and enters their own password and clicks Create
+   Account themselves. Say plainly that the form is ready and waiting on that tab.
 
-   ```bash
-   node $CREDENTIALS add --domain=<host> --company="<Name>" --url="<signup url>" \
-        --note="<the portal's own password rules, and anything tenant-specific>"
-   ```
-
-   It prints one line, `Company: login - password`, and writes `credentials.json` at the
-   repo root. Re-running for a domain that already has an entry is refused unless you
-   pass `--force`, so a second application to the same employer reuses the account
-   rather than silently minting a new password for it — `node $CREDENTIALS get
-   --domain=<host>` looks one up.
-4. **Hand the user the line and stop.** Several at once:
-   `node $CREDENTIALS handoff --domain=a --domain=b`. Say plainly that they type the
-   password and submit; it is seconds of their time.
-5. **When they say it is done, finish the application** — every remaining step, then
+   **When more than one vacancy in the same run is stuck at this step, open every one
+   of their Create Account forms in its own tab before saying anything** —
+   `tabs_create_mcp` once per pending portal, reach each one's account form exactly as
+   above (steps 1-2), then tell the user once that all of them are ready so they can
+   click Create Account in each tab back-to-back instead of doing one vacancy, waiting
+   for the agent, doing the next. Keep track of which tab belongs to which vacancy so
+   you can pick each one up again once the user confirms.
+4. **When they say it is done, finish the application** — every remaining step, then
    `APPLIED` as normal. Until then the vacancy stays `SAVED` with a note naming the
-   field that is waiting and saying the credential is in `credentials.json`.
+   field that is waiting on that tab.
 
 You never type the password into the site and never press the button that creates the
-account. Generating a string and writing it to a local file is not that, which is why
-this path is open when the direct one is not.
-
-`credentials.json` holds real credentials for real accounts. It is version-controlled
-deliberately — the user wants the record — under the same no-public-remote rule as
-`profile.json`.
+account — full stop, not even to generate and hand off a string for the user to type.
+The user owns the password from the first keystroke.
 
 ### Things you never do on an employer's form
 
