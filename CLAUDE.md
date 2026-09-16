@@ -103,6 +103,15 @@ the same files instead of a fork of them.
 - `.claude/skills/profile-interview/` — fills/updates `profile.json` via a
   structured interview with the user. Run before the first real
   apply-to-jobs run.
+- `.claude/skills/apply-method-triage/` — read-only survey of the SAVED
+  queue, sorting it into four groups by **the method each application
+  demands**: Easy Apply inside the board, an external ATS an autofill
+  extension can prefill, an external form typed by hand, and expired
+  postings (archived).
+  The groups are mutually exclusive and Easy Apply wins any overlap — where the
+  form lives decides how the run is driven; an extension is only an aid on top.
+  Support data lives in its `reference/`, extracted from the extension itself,
+  not from the `ats/*.md` notes. Run it before an apply run to plan one.
 - `.claude/skills/apply-to-jobs/` — the main orchestrator, run in four
   phases: resumes (parallel) → read every form (serial, read-only) → one
   batched question round → fill and submit (serial). Where the user's Chrome
