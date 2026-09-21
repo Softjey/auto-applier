@@ -87,7 +87,9 @@ extracted data. When they disagree, the table wins and the note gets corrected.
 The response is large — easily 1000+ lines. Let it land in its tool-results
 file and process that file with `grep` or a short script; do not try to hold it
 in context. Extract per vacancy: `vacancyId`, `companyName`, `title`,
-`source.kind`, and a `Source: LinkedIn (\d+)` match from `notes` if present.
+`vacancy.link`, `source.kind`, and a `Source: LinkedIn (\d+)` match from
+`notes` if present. `vacancy.link` is the onetap.work page — copy it verbatim,
+never build it from the id; it is what every report row links to (step 5).
 
 ### 3. Resolve the apply destination — cheapest rung first
 
@@ -152,8 +154,8 @@ fine here; by history this rung handles single vacancies, not dozens.
 ### 4. Classify
 
 Apply the group order from § The four groups. Record for each vacancy:
-`vacancyId`, company, title, group, the resolved host (bare hostname), the ATS
-product if identifiable, which rung answered, and a one-line reason.
+`vacancyId`, company, title, `link`, group, the resolved host (bare hostname),
+the ATS product if identifiable, which rung answered, and a one-line reason.
 
 Identify the ATS from the domain where it is unambiguous (`*.myworkdayjobs.com`
 = Workday, `smrtr.io` = SmartRecruiters' shortener, `*.recruitee.com` =
@@ -170,14 +172,18 @@ Two files, same directory, same run:
 `runs/<today's date>-triage.md` — for a person to read:
 - one-line counts summary at the top;
 - a section per group, in order 1, 2, 3, then 4, each a table of
-  Company / Title / Resolved host / ATS / link;
+  Company / Title / Resolved host / ATS / Reason, where **Title is a markdown
+  link to the vacancy's `link`** (`[Senior Frontend](https://onetap.work/job/…)`).
+  Every row, every group — unresolved and expired ones included. A row the user
+  cannot click through is a row they have to go and look up by hand. The link is
+  always `vacancy.link`, never the `get_apply_target` URL;
 - flag ⚠️ on any group-2 row whose ATS needs a candidate account before it will
   accept an application (Workday, Avature);
 - a short methodology footer: the date, which rung answered how many, and the
   extension version the support table was extracted from.
 
 `runs/<today's date>-triage.json` — for `apply-to-jobs` to consume: one object
-per vacancy with the fields from step 4, so a later run reads the group instead
+per vacancy with the fields from step 4 (`link` included), so a later run reads the group instead
 of re-deriving it or parsing markdown.
 
 ### 6. Archive the expired ones without asking
