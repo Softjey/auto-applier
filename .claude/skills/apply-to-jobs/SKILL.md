@@ -184,9 +184,23 @@ not support.
    at all?", never straight into Phase 4. A figure from source 3 or 4 is passed
    as the band but named honestly in `--source`; never present it as the
    employer's own.
-5. For each surviving vacancy, build the tailored resume. **These are
-   independent and touch nothing shared, so they may run in parallel** — one
-   subagent per vacancy is safe here and nowhere else in this skill.
+5. For each surviving vacancy, get the tailored resume — **look for one that
+   already exists before building anything.** The user usually tailors resumes
+   ahead of a run, and a second render for the same vacancy is wasted work that
+   leaves two divergent PDFs under the same filename.
+   - `find <resumeRepo>/out -type d -name "*_<vacancyId>-*"` — search **the whole
+     `out/` tree by vacancyId**, never by company name. `out/` is sorted into
+     status subfolders (`SAVED/`, `APPLIED/`, `INTERVIEW/`, …), and the company
+     part of the folder name does not follow OneTap's spelling
+     (`creatoriq_…`, `NTTDATABusinessSolutions_…`), so a top-level or
+     name-based check misses them.
+   - Found, with a PDF inside → that is the resume. Skip blocks, render and PDF
+     entirely; go straight to the copy step below, and use that folder's name
+     in the OneTap note.
+   - Found without a PDF → run only `<resumePdf>` on its `.html`.
+   - Not found → build it as below. **These builds are independent and touch
+     nothing shared, so they may run in parallel** — one subagent per vacancy
+     is safe here and nowhere else in this skill.
    - Follow `config.paths.resumeBlocksSkill` against `descriptionText`; write
      the blocks to `runs/<run-id>/<Company>_<vacancyId>/blocks.md`.
    - `node <resumeRender> <abs blocks.md> --company="<Company>_<vacancyId>" --force`
