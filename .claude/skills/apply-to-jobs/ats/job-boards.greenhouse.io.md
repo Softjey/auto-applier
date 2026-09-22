@@ -78,3 +78,24 @@ sponsorship checkbox was reset. Wait for "Autofill complete!".
 `Warsaw, Pol`, `Warsaw, Masovian` and `Warszawa` return nothing or the wrong
 town. If it sticks on "Loading...", delete the last letter and type it again.
 Clicking elsewhere with an unresolved value clears the field.
+
+**Simplify's first Autofill click reloads the page** with
+`?utm_source=Simplify&gh_src=Simplify` appended, and everything typed before it
+is gone (2026-09-21, WPP and Moniepoint). Open the posting with those two
+params already on the URL and the reload does not happen. It also re-triggers a
+fresh scan by itself after react-select interactions — stop it from the panel
+(square button) once the contact block is filled, or it can overwrite answers.
+
+**Greenhouse can 503 on every page for minutes** (job page and `/confirmation`
+alike). A submit that lands on `/confirmation` during an outage never shows
+"Thank you for applying!", so the success signal is the URL plus Simplify's
+"Application Submitted!" — note the gap in the OneTap note.
+
+**Background tabs work for everything except evidence.** With the tab not
+visible (`document.visibilityState === "hidden"`), focus-by-JS + typing,
+react-select type+Return, `file_upload` and ref clicks all work; screenshots
+are stale, so the GIF cannot be captured. Never pull focus while the user is
+typing a password in another tab — record the gap instead.
+
+**Tenant forms can carry another country's template** — Moniepoint's Poland
+posting asked salary "in PKR lakhs per annum". Convert with the NBP table-B rate.

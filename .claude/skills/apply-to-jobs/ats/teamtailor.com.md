@@ -91,3 +91,12 @@ the modal shut.
 A coordinate read before the file upload was ~40 px off by the time the CV chip
 had rendered, and the click landed on nothing. Re-`find` the submit button
 immediately before clicking it.
+
+## Simplify on Teamtailor (Zexter, 2026-09-22)
+
+The first Autofill click reloads the page with `?ref=Simplify&src=Simplify&utm_source=Simplify`,
+which closes the application modal; Simplify then "fills" fields that are not
+there. Stop it, reopen the modal with a real click on "Apply for this job" (a JS
+`.click()` does not open it), and type the fields yourself — focus by name + type
+works. Zexter's form also asks a required **Telegram account**, which is not in
+profile.json.

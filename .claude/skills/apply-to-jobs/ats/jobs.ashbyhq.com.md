@@ -64,3 +64,19 @@ simple Yes/No and radio questions (legally authorised, sponsorship, "how did you
 hear"). Leaves: résumé, salary, work-authorisation *status* lists, required
 free text ("Motivation — why are you interested"), talent-pool consents.
 Yes/No segmented buttons it did not answer show no `_active_` class.
+
+## Radios and Yes/No must be real clicks (2026-09-21, Attio)
+
+`label.click()` on a radio shows it checked and `input.checked` reads true, but
+React state is not updated: submit fails with "Missing entry for required field".
+Click the radio by ref/coordinate; for one already showing as checked, click a
+sibling option and then the right one. Yes/No segmented buttons can drop back to
+unselected after other edits (their hidden checkbox still reads true) — zoom on
+each one right before Submit and re-click by coordinate if it is grey.
+
+**In a background tab** (Chrome window not in front), ref clicks set a radio's
+DOM `checked` without React seeing it, and typing only reaches the tab after a
+fresh `javascript_tool` focus call. What works there: `el.focus()` + type for
+text, focus the radio + `space` for an unchecked radio, and for one that is
+DOM-checked but rejected on submit, focus it + ArrowUp + ArrowDown. Submit with
+focus on the button + Return. (CreatorIQ, 2026-09-22.)
