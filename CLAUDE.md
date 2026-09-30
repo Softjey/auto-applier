@@ -84,11 +84,14 @@ second agent reads the same files instead of a fork of them.
 - `.claude/skills/profile-interview/` — fills/updates `profile.json` via a structured
   interview. Run before the first real apply run.
 - `.claude/skills/apply-method-triage/` — read-only survey of the SAVED queue, sorted
-  into four groups by **the method each application demands**: Easy Apply inside the
-  board, an external ATS an autofill extension can prefill, an external form typed
-  by hand, and expired postings (archived). Groups are mutually exclusive and Easy
-  Apply wins any overlap. Support data lives in its `reference/`, extracted from the
-  extension itself, not from the `ats/*.md` notes. Writes `triage/<date>.md`.
+  into five groups by **the method each application demands**: a form the repo's own
+  `autofill/` extension fills (its adapters are read fresh each run, so a new adapter
+  moves vacancies with no edit to the skill — today Traffit, eRecruiter, justjoin.it),
+  Easy Apply inside the board, an external ATS Simplify can prefill, an external form
+  typed by hand, and expired postings (archived). Groups are mutually exclusive, first
+  match wins in that order. Simplify's support data lives in its `reference/`,
+  extracted from the extension itself, not from the `ats/*.md` notes. Writes
+  `triage/<date>.md`.
 - `.claude/skills/apply-to-jobs/` — the main orchestrator, in four phases: resumes
   (parallel) → read every form (serial, read-only) → one batched question round →
   fill and submit (serial). Where the user's Chrome shows the Simplify Copilot panel
