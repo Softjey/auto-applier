@@ -6,7 +6,7 @@ import { chromium, test as base, type BrowserContext, type Page } from '@playwri
 
 const ROOT = resolve(import.meta.dirname, '../../..');
 const EXTENSION = resolve(ROOT, 'packages/extension/.output/chrome-mv3');
-const FIXTURES = resolve(import.meta.dirname, '../fixtures');
+const FIXTURES = resolve(ROOT, 'fixtures');
 const PORT = 7357;
 
 async function waitForPort(): Promise<void> {

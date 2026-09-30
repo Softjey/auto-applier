@@ -1,0 +1,103 @@
+{
+  "$schemaVersion": 1,
+  "personal": {
+    "fullName": "Test Candidate",
+    "firstName": "Test",
+    "lastName": "Candidate",
+    "email": "test.candidate@example.invalid",
+    "phone": "+48 000 000 000",
+    "currentCity": "Warsaw",
+    "currentCountry": "Poland",
+    "citizenship": "Testland"
+  },
+  "links": {
+    "linkedin": "https://www.linkedin.com/in/test-candidate/",
+    "github": "https://github.com/test-candidate",
+    "portfolio": null,
+    "other": []
+  },
+  "workAuthorization": {
+    "citizenship": "Testland"
+  },
+  "location": {
+    "willingToRelocate": false
+  },
+  "compensation": {
+    "defaultCurrency": "PLN",
+    "expectedMin": 30000,
+    "expectedMax": 30000,
+    "period": "month",
+    "derivation": {
+      "hoursPerMonth": 168,
+      "currency": {
+        "lastChecked": "2026-01-01",
+        "lastRates": {
+          "USD": 4,
+          "EUR": 4.5
+        }
+      },
+      "contractForm": {
+        "uopGrossFactor": 1
+      }
+    },
+    "strategy": {
+      "baseline": 30000,
+      "floor": 25000,
+      "premium": {
+        "quote": 33000
+      },
+      "rounding": {
+        "monthlyPln": 1000,
+        "hourlyPln": 5,
+        "monthlyForeign": 100,
+        "annualForeign": 1000
+      }
+    }
+  },
+  "availability": {
+    "noticePeriod": "2 weeks"
+  },
+  "experience": [],
+  "languages": [
+    {
+      "language": "English",
+      "level": "full working proficiency",
+      "cefr": "B2"
+    },
+    {
+      "language": "Polish",
+      "level": "full working proficiency",
+      "cefr": "C1"
+    }
+  ],
+  "eeo": {
+    "policy": "decline"
+  },
+  "qa": [
+    {
+      "id": "test-authorized-poland",
+      "canonicalTopic": "work_authorization:Poland",
+      "question": "Are you legally authorized to work in Poland?",
+      "aliases": [],
+      "answer": "Yes — test data.",
+      "tags": ["work_authorization"],
+      "source": "test",
+      "createdAt": "2026-01-01",
+      "lastUsed": "2026-01-01",
+      "timesUsed": 0
+    },
+    {
+      "id": "test-availability",
+      "canonicalTopic": "availability",
+      "question": "When can you start?",
+      "aliases": ["Jaka jest Twoja dostępność?", "What is your notice period?", "Availability"],
+      "answer": "2 weeks",
+      "tags": ["availability"],
+      "source": "test",
+      "createdAt": "2026-01-01",
+      "lastUsed": "2026-01-01",
+      "timesUsed": 0
+    }
+  ],
+  "projects": []
+}

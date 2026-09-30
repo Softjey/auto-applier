@@ -1,11 +1,22 @@
 import { z } from 'zod';
 import { FieldDescriptor } from './field';
-import { PlanEntry } from './plan';
+import { PlanEntry, SalaryUnit } from './plan';
 
 export const DEFAULT_PORT = 7357;
 export const SERVER_ORIGIN = `http://127.0.0.1:${DEFAULT_PORT}`;
 
-export const PlanRequest = z.object({ fields: z.array(FieldDescriptor).max(500) });
+/** The band the VACANCY published, as typed by the user in the panel. Optional: none means "no band". */
+export const SalaryBand = z.object({
+  min: z.number().positive().optional(),
+  max: z.number().positive().optional(),
+  unit: SalaryUnit,
+});
+export type SalaryBand = z.infer<typeof SalaryBand>;
+
+export const PlanRequest = z.object({
+  fields: z.array(FieldDescriptor).max(500),
+  band: SalaryBand.optional(),
+});
 export type PlanRequest = z.infer<typeof PlanRequest>;
 
 export const PlanResponse = z.object({ plan: z.array(PlanEntry) });

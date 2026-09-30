@@ -4,10 +4,11 @@ import { HOST, PORT, REPO_ROOT } from './config';
 import { createLegacyResolver } from './legacy/resolver';
 import { CvService } from './services/cv-service';
 import { PlanService } from './services/plan-service';
+import { SalaryService } from './services/salary-service';
 
 const resolver = createLegacyResolver();
 const app = createApp({
-  plans: new PlanService(resolver),
+  plans: new PlanService(resolver, new SalaryService()),
   cvs: new CvService(resolver, process.env['AUTOFILL_RESUME_OUT']),
 });
 

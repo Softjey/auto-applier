@@ -34,10 +34,24 @@ describe('toPlanEntry', () => {
     ).toBe('decline');
   });
 
-  it('never auto-answers a language level: the scale differs per form', () => {
+  it('turns the profile language level into a CEFR instruction, not a guess at the form scale', () => {
     expect(
-      entry({ status: 'resolved', source: 'profile.languages[]', value: 'B2 — pick the closest' }),
-    ).toMatchObject({ action: 'manual', reason: 'language-level', hint: 'B2 — pick the closest' });
+      entry({
+        status: 'resolved',
+        source: 'profile.languages[]',
+        value: 'B2 — pick the closest option',
+      }),
+    ).toEqual({ id: 'f1', action: 'language-level', cefr: 'B2' });
+    expect(
+      entry({
+        status: 'resolved',
+        source: 'profile.languages[]',
+        value: 'Native — pick the closest',
+      }),
+    ).toMatchObject({ action: 'language-level', cefr: 'Native' });
+    expect(
+      entry({ status: 'resolved', source: 'profile.languages[]', value: 'fluent' }),
+    ).toMatchObject({ action: 'manual', reason: 'language-level' });
   });
 
   it('routes the CV upload and the salary separately', () => {

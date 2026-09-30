@@ -15,8 +15,8 @@ export function createApp({ plans, cvs }: AppDeps) {
     .use(loopbackExtensionOnly)
     .get('/ping', (c) => c.json({ ok: true }))
     .post('/plan', zValidator('json', PlanRequest), async (c) => {
-      const { fields } = c.req.valid('json');
-      const body: PlanResponse = { plan: await plans.plan(fields) };
+      const { fields, band } = c.req.valid('json');
+      const body: PlanResponse = { plan: await plans.plan(fields, band) };
       return c.json(body);
     })
     .post('/cvs', async (c) => c.json({ cvs: await cvs.list() }))

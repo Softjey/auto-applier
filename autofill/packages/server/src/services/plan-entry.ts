@@ -1,4 +1,4 @@
-import type { PlanEntry } from '@applier/protocol';
+import { Cefr, type PlanEntry } from '@applier/protocol';
 import type { ClassifyResult } from '../legacy/resolver';
 
 const CONSENT_SOURCE = 'consent policy';
@@ -47,10 +47,23 @@ export function toPlanEntry(id: string, r: ClassifyResult): PlanEntry {
       }
       if (r.source === EEO_SOURCE && value === 'decline') return { id, action: 'decline' };
       if (r.source === LANGUAGE_SOURCE) {
-        return { id, action: 'manual', reason: 'language-level', hint: value };
+        // "B2 — pick the closest option on this form's own scale": the level is the fact,
+        // mapping it onto the form's scale is the extension's job.
+        const cefr = Cefr.safeParse(cefrOf(value));
+        return cefr.success
+          ? { id, action: 'language-level', cefr: cefr.data }
+          : { id, action: 'manual', reason: 'language-level', hint: value };
       }
       if (value.trim() === '') return { id, action: 'manual', reason: 'unknown' };
       return { id, action: 'set', value, source: r.source ?? 'profile' };
     }
   }
+}
+
+/** "b2 — pick…" -> "B2"; "native level" -> "Native". */
+function cefrOf(value: string): string {
+  const first = /^\s*([abc][12]|native)/i.exec(value)?.[1] ?? '';
+  return first.length === 2
+    ? first.toUpperCase()
+    : first.charAt(0).toUpperCase() + first.slice(1).toLowerCase();
 }

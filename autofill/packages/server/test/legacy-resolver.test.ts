@@ -1,11 +1,12 @@
-// Integration: the real resolver against the real profile.json. It asserts
-// the SHAPE of the decisions, never personal values.
+// Integration: the real resolver and the real salary-quote.mjs against the FAKE test
+// profile (vitest.config.ts points APPLIER_PROFILE_PATH at it).
 import { describe, expect, it } from 'vitest';
 import type { FieldDescriptor } from '@applier/protocol';
 import { createLegacyResolver } from '../src/legacy/resolver';
 import { PlanService } from '../src/services/plan-service';
+import { SalaryService } from '../src/services/salary-service';
 
-const plans = new PlanService(createLegacyResolver());
+const plans = new PlanService(createLegacyResolver(), new SalaryService());
 const f = (id: string, label: string, kind: FieldDescriptor['kind'] = 'text'): FieldDescriptor => ({
   id,
   label,
@@ -24,7 +25,10 @@ describe('legacy resolver through PlanService', () => {
     ]);
     const by = Object.fromEntries(plan.map((p) => [p.id, p]));
     expect(by['email']).toMatchObject({ action: 'set' });
-    expect(by['salary']).toMatchObject({ action: 'manual', reason: 'salary' });
+    expect(by['salary']).toMatchObject({
+      action: 'salary',
+      quote: { amount: 30000, unit: { currency: 'PLN', period: 'month' } },
+    });
     expect(by['cv']).toMatchObject({ action: 'upload-cv' });
     expect(by['odd']).toMatchObject({ action: 'manual' });
   });

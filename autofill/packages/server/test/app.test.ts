@@ -4,6 +4,7 @@ import { createApp } from '../src/app';
 import type { Resolver } from '../src/legacy/resolver';
 import { CvService } from '../src/services/cv-service';
 import { PlanService } from '../src/services/plan-service';
+import { SalaryService } from '../src/services/salary-service';
 
 const EXTENSION = `chrome-extension://${'a'.repeat(32)}`;
 const resolver: Resolver = {
@@ -13,7 +14,10 @@ const resolver: Resolver = {
       : { status: 'resolved', value: `v:${f.label}`, source: 'test' },
   loadConfig: async () => ({}),
 };
-const app = createApp({ plans: new PlanService(resolver), cvs: new CvService(resolver) });
+const app = createApp({
+  plans: new PlanService(resolver, new SalaryService()),
+  cvs: new CvService(resolver),
+});
 
 const post = (headers: Record<string, string>, body: unknown) =>
   app.request('http://127.0.0.1:7357/plan', {
