@@ -32,6 +32,11 @@ export default defineContentScript({
       ui = await createShadowRootUi(ctx, {
         name: 'applier-autofill',
         position: 'overlay',
+        // Directly under <html>, not <body>: a modal library marks every other child of <body>
+        // aria-hidden / inert while its dialog is open, which would make the panel unclickable
+        // exactly when the application form is showing (justjoin.it).
+        anchor: 'html',
+        append: 'last',
         onMount: (container) => {
           const root = createRoot(container);
           root.render(<Panel adapter={adapter} backend={chromeBackend} />);

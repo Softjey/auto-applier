@@ -275,3 +275,16 @@ describe('ARIA widgets (Radix / shadcn forms, e.g. the new eRecruiter)', () => {
     expect(document.getElementById('c2')?.getAttribute('aria-checked')).toBe('false');
   });
 });
+
+describe('checkbox noise', () => {
+  it('drops an unlabelled optional toggle and does not list a never-tick box as a question', async () => {
+    document.body.innerHTML = `<form>
+      <input name="name"><label><input type="checkbox" value="on"></label>
+      <label><input type="checkbox" name="create_account_accepted"> I'm creating an account, I accept the Terms of Service</label></form>`;
+    const backend = fakeBackend([]);
+    const report = await fillForm({ adapter: justjoin, backend, doc: document, cvId: null });
+    expect(report.manual.map((m) => m.label)).not.toContain('on');
+    expect(report.manual.map((m) => m.label).join()).not.toMatch(/creating an account/);
+    expect(backend.asked.map((f) => f.label)).not.toContain('on');
+  });
+});

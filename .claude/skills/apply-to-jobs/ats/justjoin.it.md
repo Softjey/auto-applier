@@ -76,3 +76,18 @@ happened.
 Besides the two Just Join IT boxes, an employer may add its own
 `future_consent_accepted` ("przyszłe rekrutacje", or "affiliated entities").
 Every one seen so far is optional — check `required` and leave it unticked.
+
+## The modal is a `<form>`, not a dialog (seen by the autofill extension, 2026-09-30)
+
+The apply modal has no `role="dialog"`: it is a plain `form` holding `input[name=name]`
+(ONE field, "First and last name"), `input[name=email]`, `input[name=attachment]` (file),
+an unnamed optional checkbox, `create_account_accepted` and
+`marketing_consent_accepted`. The only `role="dialog"` on the page is the **cookie
+notice** — scoping by role lands on that, not on the form. Scope by
+`form:has(input[name=name])`.
+
+The cookie notice (and a "Create an account" popup) intercept pointer events: a normal
+click on Apply times out until the notice is closed or the click is forced.
+
+While the modal is open the app marks the rest of `<body>` `aria-hidden`/inert; anything
+injected into `<body>` (an overlay panel) becomes unreachable. Mount under `<html>`.

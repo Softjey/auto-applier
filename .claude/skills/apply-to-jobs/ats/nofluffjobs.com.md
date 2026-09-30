@@ -37,3 +37,11 @@ whose results render below the fold — skip it rather than fighting the modal.
 
 URL becomes `/job/<CODE>/success` with the banner "The application has been
 sent. Thank you for applying with No Fluff Jobs."
+
+## Headless Chromium is blocked (2026-09-30)
+
+A scripted Chromium gets CloudFront `403 ERROR: The request could not be satisfied`
+before any page renders. The user's own Chrome loads it fine. Not worth working around:
+inspect this site in the user's browser. Also: an offer whose Apply button carries the
+external-link icon (Devire's) is **not** the in-page modal — a click there did not open
+one, so treat such an offer as an external apply until seen otherwise.

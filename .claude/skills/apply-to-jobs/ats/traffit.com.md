@@ -75,3 +75,15 @@ check. Match on the URL path; the redirect is prompt.
 
 No panel on `*.traffit.com/public/form/...` (cerebre, 2026-09-14). On a
 Simplify run, skip.
+
+## Section legends and "Mark all" (seen by the autofill extension, 2026-09-30)
+
+Controls sit in `fieldset.form__section` under a `<legend>` that names the
+**section** ("Personal data:"), not the control. Read a control's label from its own
+`.form-group` row; taking the fieldset legend labels every field of the section
+identically. Consents also come with a `markAll` checkbox ("Mark all / Unmark all")
+that ticks the optional future-recruitment boxes too — never touch it.
+
+An already-chosen selectize (country defaults to the tenant's) keeps its options only
+in memory: the native `<select>` holds just the chosen `<option>`, so `selectedIndex`
+is 0 even though `select.value` is set. Test `.value`, not `.selectedIndex`.

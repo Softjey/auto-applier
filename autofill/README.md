@@ -32,6 +32,21 @@ Chrome → `chrome://extensions` → Developer mode → **Load unpacked** →
 panel appears bottom-right. Pick the CV (pre-selected when the company matches),
 press **Fill form**, read the **Needs you** list, fill those, press Send yourself.
 
+## Test
+
+```sh
+pnpm check                                            # typecheck + lint + format + unit tests
+pnpm --filter @applier/e2e exec playwright test fixture   # real Chromium + built extension + real server
+LIVE=1 pnpm --filter @applier/e2e test:live           # opt-in: real employer forms, FAKE data, never submitted
+```
+
+The e2e runs the **built** extension in a real Chromium against the real plan
+server, on a fake profile (`packages/e2e/fixtures/profile.test.json`) and a fixture CV,
+so it can never type the real person into a real form. It needs a Chromium: either
+`pnpm exec playwright install chromium`, or point `CHROMIUM_PATH` at one you already have
+(branded Chrome ignores `--load-extension`). No Fluff Jobs answers a scripted browser
+with a 403, so that adapter is only covered by fixtures.
+
 ## What it will and will not do
 
 | Field                                       | Behaviour                                                    |

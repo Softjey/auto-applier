@@ -5,9 +5,9 @@ export const justjoin: SiteAdapter = {
   id: 'justjoin',
   matchPatterns: ['https://justjoin.it/*'],
   matches: (url) => url.hostname === 'justjoin.it' && url.pathname.startsWith('/job-offer/'),
-  // Only the modal: the offer page itself has a search box and filters.
-  scope: (doc) =>
-    doc.querySelector('[role="dialog"]') ?? doc.querySelector('form:has(input[name="name"])'),
+  // Only the apply form: the offer page has a search form, and a cookie dialog that is
+  // also role=dialog (found on live justjoin.it: the modal itself has no dialog role).
+  scope: (doc) => doc.querySelector('form:has(input[name="name"])'),
   // The modal has ONE `name` field, not a given/family pair, and a bare "Name"
   // would resolve to the given name alone.
   label: (el) =>

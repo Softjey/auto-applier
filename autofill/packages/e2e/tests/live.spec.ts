@@ -32,6 +32,48 @@ const TARGETS: Target[] = [
     name: 'erecruiter wakacje',
     url: 'https://system.erecruiter.pl/FormTemplates/RecruitmentForm.aspx?WebID=a73da7a78aa64263829c6392e50e5d1c',
   },
+  {
+    name: 'justjoin altimetrik',
+    url: 'https://justjoin.it/job-offer/altimetrik-poland-senior-react-developer-krakow-javascript-c6d7cd5b',
+    open: async (page) => {
+      await page.waitForTimeout(2500);
+      // The cookie dialog overlays the page and swallows pointer events: force past it.
+      await page
+        .getByRole('button', { name: 'Decline all' })
+        .click({ force: true, timeout: 4000 })
+        .catch(() => undefined);
+      // The first click on Apply is often swallowed (ats/justjoin.it.md): click, probe, click again.
+      const apply = page.locator('button:has-text("Apply")').filter({ visible: true }).first();
+      const form = page.locator('input[name=name]');
+      for (let i = 0; i < 5; i++) {
+        await apply.click({ force: true, timeout: 4000 }).catch(() => undefined);
+        if (
+          await form.waitFor({ timeout: 3000 }).then(
+            () => true,
+            () => false,
+          )
+        )
+          break;
+      }
+    },
+  },
+  {
+    name: 'nofluffjobs devire',
+    url: 'https://nofluffjobs.com/job/ui-developer-devire-warszawa-1',
+    open: async (page) => {
+      await page
+        .getByRole('button', { name: /save settings|decline|reject/i })
+        .first()
+        .click({ timeout: 4000 })
+        .catch(() => undefined);
+      await page
+        .getByRole('button', { name: /^apply/i })
+        .first()
+        .click({ timeout: 5000 })
+        .catch(() => undefined);
+      await page.waitForTimeout(3500);
+    },
+  },
 ];
 
 const only = process.env['ONLY'];
@@ -48,7 +90,7 @@ test.describe('live forms (fake data, never submitted)', () => {
       await target.open?.(page);
       // system.erecruiter.pl redirects to form.erecruiter.pl: wait for the page to settle,
       // or the click lands on a panel that is about to be replaced.
-      await page.waitForLoadState('load').catch(() => undefined);
+      await page.waitForLoadState('load', { timeout: 8000 }).catch(() => undefined);
       await page.waitForTimeout(2500);
       await expect(panel(page), 'panel should mount on a form page').toBeVisible({
         timeout: 15_000,

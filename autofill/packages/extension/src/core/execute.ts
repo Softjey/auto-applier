@@ -61,6 +61,10 @@ export async function execute(
     case 'upload-cv':
       return left(control, 'handled by the CV step');
     case 'manual':
+      // A box the site says must never be auto-ticked is a policy, not a question for the user.
+      if (d.kind === 'checkbox-group' && adapter.neverTick?.test(d.label)) {
+        return left(control, 'never auto-ticked on this site');
+      }
       return {
         status: 'manual',
         id: d.id,
@@ -129,6 +133,9 @@ async function applySet(control: Control, value: string): Promise<Outcome> {
       }
       return applyOption(control, option.value, option.label);
     }
+
+    case 'checkbox-group':
+      return left(control, 'checkboxes follow the consent policy, not a text answer');
 
     default:
       return left(control, `cannot fill a ${d.kind}`);

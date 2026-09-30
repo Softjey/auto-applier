@@ -21,6 +21,16 @@ const SKIP_TYPES = new Set(['hidden', 'submit', 'button', 'reset', 'image', 'pas
 const COOKIE_WIDGET =
   '#onetrust-consent-sdk, #CybotCookiebotDialog, [id*="cookie" i], [class*="cookie" i], [aria-label*="cookie" i]';
 
+/**
+ * A lone checkbox nobody labelled ("on" is just its default value) and that is not
+ * required — e.g. a "message for the employer" switch — is not a question.
+ */
+const isMeaninglessToggle = ({ descriptor: d }: Control): boolean =>
+  d.kind === 'checkbox-group' &&
+  d.options?.length === 1 &&
+  (d.label === '' || d.label.toLowerCase() === 'on') &&
+  !d.required;
+
 const isChoice = (el: HTMLElement): boolean =>
   el instanceof HTMLInputElement && (el.type === 'checkbox' || el.type === 'radio');
 
@@ -79,8 +89,10 @@ export async function scan(root: ParentNode, adapter: SiteAdapter): Promise<Cont
     controls.push(await describe(el, label, nextId(), selectized));
   }
 
-  for (const group of groups.values()) controls.push(describeGroup(group, nextId()));
-  for (const group of ariaGroups(root)) controls.push(describeGroup(group, nextId()));
+  for (const group of [...groups.values(), ...ariaGroups(root)]) {
+    const control = describeGroup(group, nextId());
+    if (!isMeaninglessToggle(control)) controls.push(control);
+  }
 
   // Keep page order across the two passes.
   return controls.sort((a, b) => order(a.el, b.el));
