@@ -2,7 +2,7 @@
 
 A browser extension plus a local plan server that fills job-application forms on
 sites Simplify does not cover: **Traffit, eRecruiter, justjoin.it**.
-It fills what is a _fact in `profile.json`_ and stops. It never submits, never
+It fills what is a _fact in your `profile.json`_ and stops. It never submits, never
 guesses, and never holds your data itself.
 
 ```
@@ -16,6 +16,9 @@ page ── content script ──▶ background worker ──▶ localhost serve
   `.claude/skills/apply-to-jobs/scripts/resolve-fields.mjs`, so the agent and the
   extension never answer the same question differently. Also serves the tailored
   CVs from `<resumeRepo>/out/SAVED/`.
+- Your `profile.json` and `apply-config.json` are not in this repo: they live in your
+  private data repo, found through `$APPLIER_DATA_DIR`, the `.data-dir` file at the
+  repo root, or `../auto-applier-data` (see the root `README.md`).
 - `packages/extension` — WXT + React (panel in a Shadow DOM). `src/core` is
   site-agnostic (scan → plan → execute); `src/adapters` holds one file per ATS.
 
