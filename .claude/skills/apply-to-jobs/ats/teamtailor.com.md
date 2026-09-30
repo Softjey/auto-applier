@@ -58,7 +58,7 @@ same Chrome profile that submitted the form redirects to `/connect/login` — a
 Teamtailor Connect sign-in wall — instead of showing a confirmation. Signing in
 is out of scope, so the vacancy stays SAVED and the user clicks the link
 himself. Fetching the link out of the mailbox is still worth doing: put the URL
-into the OneTap note so he does not have to hunt for the message.
+into the OneTap note so they do not have to hunt for the message.
 
 Note that the recruiter's own "thank you for applying" auto-reply arrives
 **without** the link being clicked (one minute later on CodiLime, an hour later

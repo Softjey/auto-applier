@@ -62,7 +62,7 @@ move works on each — and **verify from the host's `files` attribute, not the l
 
 ```js
 [...document.querySelectorAll('spl-dropzone')].map(h => h.getAttribute('files'))
-// [{"fileName":"Jane_Doe_CV.pdf","fileId":"..."}]
+// [{"fileName":"<config.resumeFileName>","fileId":"..."}]
 ```
 
 The filename chip renders inside the shadow root, so `document.body.innerText` never
