@@ -1,6 +1,6 @@
 ---
 name: apply-to-jobs
-description: Pull SAVED vacancies from OneTap.Work, generate a tailored resume for each via the resume-rendering skills, apply in a real browser, and mark the vacancy APPLIED. Never invents an answer to a factual/personal application-form question — always matches against profile.json or stops and asks. Use when the user says "apply to my saved jobs" / "run the job applier", including phrasings in other languages.
+description: Pull SAVED vacancies from OneTap.Work, get a tailored resume for each from the user's resume repo, apply in a real browser, and mark the vacancy APPLIED. Never invents an answer to a factual/personal application-form question — always matches against profile.json or stops and asks. Use when the user says "apply to my saved jobs" / "run the job applier", including phrasings in other languages.
 ---
 
 # Apply to jobs
@@ -53,22 +53,16 @@ non-English vocabulary of the local job market — lives in **`$DATA/apply-confi
 never in this skill. Read it at the start of a run.
 
 ```
-config.paths.resumeBlocksSkill   the resume-blocks SKILL.md to follow
-config.paths.resumeRender        render.mjs
-config.paths.resumePdf           topdf.mjs
-config.paths.cvBaseHtml          the base CV the resume skills read
-config.paths.skillsCsv           skill ratings, if the resume repo keeps them
+config.paths.resumeRepo          the user's resume repo (see Phase 1 step 5)
 config.resumeFileName            what to name the PDF copied into runs/
 config.formVocabulary            locale phrasings, merged by lib/field-labels.mjs
 config.browser                   which browser instance to drive (see Preconditions)
 ```
 
 If the file is missing, ask the user for the paths once and offer to write it —
-do not guess a path and do not hardcode one back into this skill. The resume
-scripts resolve their own defaults relative to their own location but resolve
-positional file arguments relative to `process.cwd()`, so always pass absolute
-paths for both the script and its arguments, and never `cd` into the resume
-repo first.
+do not guess a path and do not hardcode one back into this skill. How the resume
+repo builds, names and stores resumes is its own business and lives only there —
+this skill must not restate it.
 
 Run folders: `$DATA/runs/<date>-<slug>/`, one folder per vacancy inside it named
 `<Company>_<vacancyId>`, plus the run's `summary.md`. Triage reports are not runs —
@@ -198,32 +192,17 @@ not support.
    at all?", never straight into Phase 4. A figure from source 3 or 4 is passed
    as the band but named honestly in `--source`; never present it as the
    employer's own.
-5. For each surviving vacancy, get the tailored resume — **look for one that
-   already exists before building anything.** The user usually tailors resumes
-   ahead of a run, and a second render for the same vacancy is wasted work that
-   leaves two divergent PDFs under the same filename.
-   - `find <resumeRepo>/out -type d -name "*_<vacancyId>-*"` — search **the whole
-     `out/` tree by vacancyId**, never by company name. `out/` is sorted into
-     status subfolders (`SAVED/`, `APPLIED/`, `INTERVIEW/`, …), and the company
-     part of the folder name does not follow OneTap's spelling
-     (`creatoriq_…`, `NTTDATABusinessSolutions_…`), so a top-level or
-     name-based check misses them.
-   - Found, with a PDF inside → that is the resume. Skip blocks, render and PDF
-     entirely; go straight to the copy step below, and use that folder's name
-     in the OneTap note.
-   - Found without a PDF → run only `<resumePdf>` on its `.html`.
-   - Not found → build it as below. **These builds are independent and touch
-     nothing shared, so they may run in parallel** — one subagent per vacancy
-     is safe here and nowhere else in this skill.
-   - Follow `config.paths.resumeBlocksSkill` against `descriptionText`; write
-     the blocks to `runs/<run-id>/<Company>_<vacancyId>/blocks.md`.
-   - `node <resumeRender> <abs blocks.md> --company="<Company>_<vacancyId>" --force`
-     — the `vacancyId` suffix is deliberate: two vacancies at the same company
-     would otherwise overwrite each other's output folder.
-   - `node <resumePdf> <abs generated .html> --force`.
-   - The PDF lands in `<resumeRepo>/out/<Company>_<vacancyId>-<Tailored-Title>/`.
-     That folder name is what identifies the resume later (every PDF has the
-     same filename) — it goes into the OneTap note in Phase 4.
+5. For each surviving vacancy, get the tailored resume from `config.paths.resumeRepo`.
+   **Do not assume how that repo works** — read its `README.md` and its
+   `.claude/skills/` first, and follow them. They say where finished resumes live
+   (check for an existing one by `vacancyId` before building anything: the user
+   usually tailors ahead of a run, and a second render leaves two divergent PDFs)
+   and how to build a missing one. Builds are independent and touch nothing shared,
+   so they may run in parallel — one subagent per vacancy is safe here and nowhere
+   else in this skill. Use absolute paths for every script and argument, and do not
+   `cd` into that repo.
+   - Note the resume's folder name in that repo: it identifies the resume later
+     (every PDF has the same filename) and goes into the OneTap note in Phase 4.
    - Copy the PDF to `runs/<run-id>/<Company>_<vacancyId>/<config.resumeFileName>`.
      **This copy is not optional**: it is the run's audit trail, and under
      Claude in Chrome it is also the only place the upload tool can read from
@@ -559,7 +538,7 @@ Per vacancy, following its ATS file:
 
    ```
    Applied <date> via <ATS> — "<the success signal, verbatim>".
-   Resume: <out-folder-name>.
+   Resume: <resume folder name in the resume repo>.
    <the salary line>.
    Details: runs/<run-id>/<Company>_<vacancyId>/ — answers.md (every question
    and answer), filled-form.gif, submitted.gif.
@@ -777,7 +756,7 @@ OneTap.Work's own `status`/`notes` (via `update_application_status` and
 applied to." This repo keeps no separate ledger — a second copy of that
 state would just be a second place for it to drift out of sync with the
 first. `$DATA/runs/<run-id>/` holds only an audit trail —
-screenshots, the answer sheet, the `blocks.md` used, a short summary — useful for
+screenshots, the answer sheet, the resume sent, a short summary — useful for
 seeing afterwards what an employer was told. Nothing in this skill's logic ever reads
 `runs/` to decide what's already been applied to; it always asks
 OneTap.Work.

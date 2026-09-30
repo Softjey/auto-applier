@@ -43,12 +43,10 @@ Rules that follow from the split:
 
 ## Related repositories
 
-- **Resume repo** (user's own; location in `apply-config.json` → `paths`) — base
-  CV, `skills.csv`, and three skills for tailoring a resume to a vacancy:
-  `resume-blocks` → `resume-render` → `resume-pdf`. This repo always calls their
-  scripts with **absolute paths** — `render.mjs`/`topdf.mjs` resolve positional
-  arguments relative to `process.cwd()`, so `cd`-ing into that repo first is
-  unnecessary and unsafe.
+- **Resume repo** (user's own; location in `apply-config.json` → `paths.resumeRepo`)
+  — the base CV and the skills that tailor a resume to a vacancy. How it stores and
+  builds resumes is documented there, not here: read its `README.md` and
+  `.claude/skills/`, and never copy that knowledge into this repo.
 - **OneTap.Work MCP** — the source of SAVED vacancies, and where the final status
   is written (`update_application_status`). It is the single source of truth for
   what has been applied to — this system keeps no separate application ledger.

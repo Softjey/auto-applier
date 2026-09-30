@@ -53,11 +53,6 @@ if (resumeRepo) {
   cfg.paths = {
     ...cfg.paths,
     resumeRepo: root,
-    resumeBlocksSkill: join(root, ".claude/skills/resume-blocks/SKILL.md"),
-    resumeRender: join(root, ".claude/skills/resume-render/render.mjs"),
-    resumePdf: join(root, ".claude/skills/resume-pdf/topdf.mjs"),
-    cvBaseHtml: join(root, "CV_Base.html"),
-    skillsCsv: join(root, "skills.csv"),
   };
   writeFileSync(cfgPath, JSON.stringify(cfg, null, 2) + "\n");
 }

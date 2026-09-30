@@ -80,7 +80,7 @@
     "yearsAsOf": null,
     "currentTitle": null,
     "seniorityLevel": null,
-    "note": "Compute using the resume-blocks rule: the earliest commercial software dev role in EXPERIENCE from the base CV. Never hardcode this number."
+    "note": "Compute using the resume repo's own rule for this: the earliest commercial software dev role in EXPERIENCE from the base CV. Never hardcode this number."
   },
   "languages": [],
   "eeo": {

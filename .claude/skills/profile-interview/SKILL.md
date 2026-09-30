@@ -21,22 +21,22 @@ and then hands back to this interview.
 
 1. **Read `profile.json`.** Note which structured fields are already filled;
    you'll skip those unless the user is explicitly correcting one.
-2. **Pre-fill from the CV, don't ask from scratch.** Read the base CV named by
-   `paths.cvBaseHtml` in `apply-config.json` (data repo) and pull
+2. **Pre-fill from the CV, don't ask from scratch.** Read the base CV in the resume
+   repo (`paths.resumeRepo` in `apply-config.json`; its README says which file) and pull
    `personal.email`, `personal.phone`, `personal.currentCity`,
    `personal.currentCountry`, `links.linkedin`, `links.github` from its
    contact section. Present these to the user as "I found X — confirm or
    correct?" rather than asking blind. If `apply-config.json` does not exist
-   yet, ask the user where their CV and resume-rendering repo live and write
+   yet, ask the user where their resume repo lives and write
    the file — that config is what keeps every absolute path out of these
    skills.
 3. **Compute years of experience the same way the resume skill does** — do
    not ask the user for a number, do not hardcode one. Open the same base CV,
    find the EXPERIENCE section, and take the start year of the *earliest entry
    that is genuinely commercial software development*. Pre-career and
-   adjacent-field roles do not count; the resume-blocks skill named by
-   `paths.resumeBlocksSkill` documents where that line falls, so read it rather
-   than deciding independently — the two skills disagreeing about the number is
+   adjacent-field roles do not count; the resume repo's own skills
+   document where that line falls, so read them rather than deciding
+   independently — the two skills disagreeing about the number is
    worse than either answer. `experience.yearsOfCommercialExperience` = current
    year minus that start year; record `experience.yearsAsOf` as today's date so
    it can be recomputed later without re-deriving the rule.

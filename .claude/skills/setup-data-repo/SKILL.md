@@ -29,9 +29,8 @@ node -e 'import("./.claude/skills/apply-to-jobs/scripts/lib/data-dir.mjs").then(
    found with no configuration). Anywhere outside this repo works; the skill then
    records it in `.data-dir`.
 2. **Do you keep a resume-rendering repo?** The path to it, or none. It fills
-   `apply-config.json`'s `paths` (`resume-blocks`, `resume-render`, `resume-pdf`,
-   `CV_Base.html`, `skills.csv`); without one, tailoring a resume per vacancy is
-   unavailable and the paths stay `null`.
+   `apply-config.json`'s `paths.resumeRepo`; without one, tailoring a resume per
+   vacancy is unavailable and it stays `null`.
 3. **Should it have a remote?** Only ever a **private** one, and only if they want
    off-machine backup. Never create or add a public remote: the repo will hold a
    phone number, salary expectations, work-authorization status and recordings of
