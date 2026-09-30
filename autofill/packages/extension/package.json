@@ -1,0 +1,26 @@
+{
+  "name": "@applier/extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser extension: scrapes a job-application form, asks the local server what to fill, fills it. Never submits.",
+  "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "typecheck": "wxt prepare && tsc --noEmit"
+  },
+  "dependencies": {
+    "@applier/protocol": "workspace:*",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.3.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@wxt-dev/module-react": "^1.2.2",
+    "wxt": "^0.21.4"
+  }
+}

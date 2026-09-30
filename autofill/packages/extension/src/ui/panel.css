@@ -1,0 +1,93 @@
+:host {
+  all: initial;
+}
+.af-panel,
+.af-fab {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2147483647;
+  font:
+    13px/1.4 system-ui,
+    sans-serif;
+  color: #1a1a1a;
+}
+.af-panel {
+  width: 280px;
+  max-height: 70vh;
+  overflow: auto;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+}
+.af-panel header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.af-x {
+  border: 0;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+.af-fab {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 0;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+.af-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.af-row select {
+  width: 100%;
+  padding: 4px;
+}
+.af-go {
+  width: 100%;
+  padding: 8px;
+  border: 0;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.af-go:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.af-note {
+  color: #666;
+  font-size: 12px;
+  margin: 6px 0;
+}
+.af-err {
+  color: #b00020;
+}
+.af-panel h4 {
+  margin: 10px 0 4px;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #555;
+}
+.af-panel ul {
+  margin: 0;
+  padding-left: 16px;
+}
+.af-panel em {
+  color: #888;
+  font-style: normal;
+  font-size: 12px;
+}
