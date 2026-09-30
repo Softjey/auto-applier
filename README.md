@@ -23,8 +23,9 @@ give that repo a public remote.
 ## Getting started
 
 ```sh
-git clone <this repo> auto-applier && cd auto-applier
-claude            # or: codex
+mkdir applier && cd applier            # a workspace for this repo and your data repo
+git clone <this repo> auto-applier
+claude                                 # or: codex — open it in the workspace
 ```
 
 Then ask: **"set me up"** — the `setup-data-repo` skill creates your private data repo,

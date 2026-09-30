@@ -2,8 +2,8 @@
 
 Private data repo for the auto-applier code repo at `{{CODE_REPO}}`. The skills
 (`apply-to-jobs`, `apply-method-triage`, `profile-interview`, `setup-data-repo`)
-live there — **start Claude Code in the code repo**, not here; it locates this
-directory on its own.
+live there. Start Claude Code in the code repo or in a workspace folder that
+contains both repos side by side; the scripts locate this directory on their own.
 
 ## Rules
 

@@ -21,7 +21,10 @@ person lives in a separate, private **data repo** (default: `../auto-applier-dat
 | `triage/<date>.md` | one readable report per triage of the SAVED queue |
 | `runs/<date>-<slug>/` | audit trail of each apply run — per vacancy `answers.md`, `salary.json`, the CV sent, screen recordings; plus `summary.md` |
 
-Scripts find the data repo through `scripts/lib/data-dir.mjs`: `$APPLIER_DATA_DIR`,
+Recommended layout: one workspace folder holding both repos side by side
+(`<workspace>/auto-applier/`, `<workspace>/auto-applier-data/`), with Claude Code
+opened in the workspace — sessions and memory then belong to the workspace, and the
+default `../auto-applier-data` just works. Scripts find the data repo through `scripts/lib/data-dir.mjs`: `$APPLIER_DATA_DIR`,
 then the path in `<repo>/.data-dir`, then `../auto-applier-data`. **No data repo
 yet → run the `setup-data-repo` skill** (it scaffolds one from `templates/data-repo/`
 and hands over to `profile-interview`). Bare paths like `profile.json` or
