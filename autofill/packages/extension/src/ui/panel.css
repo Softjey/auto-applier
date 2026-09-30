@@ -91,3 +91,19 @@
   font-style: normal;
   font-size: 12px;
 }
+
+.af-band {
+  margin: 6px 0;
+  font-size: 12px;
+}
+.af-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+.af-grid input,
+.af-grid select {
+  width: 100%;
+  padding: 3px;
+  box-sizing: border-box;
+}

@@ -13,7 +13,7 @@ export interface Control {
 }
 
 export type Outcome =
-  | { status: 'filled'; id: string; label: string }
+  | { status: 'filled'; id: string; label: string; detail?: string }
   | { status: 'left'; id: string; label: string; why: string }
   | { status: 'manual'; id: string; label: string; reason: string; hint?: string }
   | { status: 'failed'; id: string; label: string; why: string };

@@ -1,5 +1,6 @@
 import type { FieldOption } from '@applier/protocol';
 import { placeAliases } from './aliases';
+import { durationDays } from './duration';
 import { normalize } from './text';
 
 const YES = new Set(['yes', 'tak']);
@@ -35,6 +36,13 @@ export function matchOption(
   // "Poland" on a Polish form is "Polska"; "Warsaw" is "Warszawa".
   for (const alias of placeAliases(value)) {
     const hit = options.find((o) => isSame(o, normalize(alias)));
+    if (hit) return hit;
+  }
+
+  // "2 weeks" and "2 tygodnie" are one answer.
+  const days = durationDays(value);
+  if (days !== null) {
+    const hit = options.find((o) => durationDays(o.label) === days);
     if (hit) return hit;
   }
 

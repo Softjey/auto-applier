@@ -1,6 +1,7 @@
 <form class="flex flex-col">
   <div><label for="fn">Firstname *</label><input id="fn" name="firstName" /></div>
   <div><label for="em">Email *</label><input id="em" type="email" name="email" /></div>
+  <div><label for="ci">Miasto</label><input id="ci" name="city" /></div>
   <div class="flex w-full flex-col">
     <label for="rg1"
       >Do you have experience with international clients? <span aria-hidden="true">*</span></label
@@ -18,6 +19,73 @@
       </div>
     </div>
   </div>
+  <div class="flex w-full flex-col">
+    <label for="rg2">Oczekiwania finansowe w PLN (brutto / netto+VAT): *</label>
+    <div role="radiogroup" aria-required="true" id="rg2">
+      <div class="item">
+        <button type="button" role="radio" aria-checked="false" value="a" id="rg2-a"></button
+        ><label for="rg2-a">poniżej 26 000 zł</label>
+      </div>
+      <div class="item">
+        <button type="button" role="radio" aria-checked="false" value="b" id="rg2-b"></button
+        ><label for="rg2-b">26 000 - 28 000 zł</label>
+      </div>
+      <div class="item">
+        <button type="button" role="radio" aria-checked="false" value="c" id="rg2-c"></button
+        ><label for="rg2-c">28 000 - 30 000 zł</label>
+      </div>
+      <div class="item">
+        <button type="button" role="radio" aria-checked="false" value="d" id="rg2-d"></button
+        ><label for="rg2-d">30 000 - 32 000 zł</label>
+      </div>
+      <div class="item">
+        <button type="button" role="radio" aria-checked="false" value="e" id="rg2-e"></button
+        ><label for="rg2-e">powyżej 32 000 zł</label>
+      </div>
+    </div>
+  </div>
+  <div class="flex w-full flex-col">
+    <label for="rg3">Twoja znajomość języka angielskiego *</label>
+    <div role="radiogroup" aria-required="true" id="rg3">
+      <div class="item">
+        <button type="button" role="radio" aria-checked="false" value="0" id="rg3-0"></button
+        ><label for="rg3-0">Brak</label>
+      </div>
+      <div class="item">
+        <button type="button" role="radio" aria-checked="false" value="1" id="rg3-1"></button
+        ><label for="rg3-1">Podstawowa</label>
+      </div>
+      <div class="item">
+        <button type="button" role="radio" aria-checked="false" value="2" id="rg3-2"></button
+        ><label for="rg3-2">Komunikatywna</label>
+      </div>
+      <div class="item">
+        <button type="button" role="radio" aria-checked="false" value="3" id="rg3-3"></button
+        ><label for="rg3-3">Zaawansowana</label>
+      </div>
+      <div class="item">
+        <button type="button" role="radio" aria-checked="false" value="4" id="rg3-4"></button
+        ><label for="rg3-4">Biegła</label>
+      </div>
+    </div>
+  </div>
+  <div class="flex w-full flex-col">
+    <label for="rg4">Jaka jest Twoja dostępność? *</label>
+    <div role="radiogroup" aria-required="true" id="rg4">
+      <div class="item">
+        <button type="button" role="radio" aria-checked="false" value="0" id="rg4-0"></button
+        ><label for="rg4-0">Natychmiast</label>
+      </div>
+      <div class="item">
+        <button type="button" role="radio" aria-checked="false" value="1" id="rg4-1"></button
+        ><label for="rg4-1">2 tygodnie</label>
+      </div>
+      <div class="item">
+        <button type="button" role="radio" aria-checked="false" value="2" id="rg4-2"></button
+        ><label for="rg4-2">1 miesiąc</label>
+      </div>
+    </div>
+  </div>
   <div class="flex items-center">
     <button
       type="button"
@@ -32,6 +100,10 @@
   <div class="flex items-center">
     <button type="button" role="checkbox" aria-checked="false" id="c2"></button>
     <label for="c2">I consent to processing for future recruitment</label>
+  </div>
+  <div class="flex items-center">
+    <button type="button" role="checkbox" aria-checked="false" id="c3"></button>
+    <label for="c3">B2B</label>
   </div>
 </form>
 <script>

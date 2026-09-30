@@ -3,11 +3,12 @@ import type {
   BackgroundResponses,
   BackgroundResult,
   FieldDescriptor,
+  SalaryBand,
 } from '@applier/protocol';
 
 /** The only door from a page-side script to the local server. */
 export interface Backend {
-  plan(fields: FieldDescriptor[]): Promise<BackgroundResponses['plan']>;
+  plan(fields: FieldDescriptor[], band?: SalaryBand): Promise<BackgroundResponses['plan']>;
   cvs(): Promise<BackgroundResponses['cvs']>;
   cv(id: string): Promise<BackgroundResponses['cv']>;
 }
@@ -23,7 +24,7 @@ async function send<K extends BackgroundRequest['type']>(
 }
 
 export const chromeBackend: Backend = {
-  plan: (fields) => send({ type: 'plan', fields }),
+  plan: (fields, band) => send({ type: 'plan', fields, ...(band ? { band } : {}) }),
   cvs: () => send({ type: 'cvs' }),
   cv: (id) => send({ type: 'cv', id }),
 };

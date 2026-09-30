@@ -1,4 +1,4 @@
-import type { PlanEntry } from '@applier/protocol';
+import type { PlanEntry, SalaryBand } from '@applier/protocol';
 import type { SiteAdapter } from '../adapters';
 import { execute } from './execute';
 import type { Backend } from './messaging';
@@ -12,6 +12,8 @@ export interface RunOptions {
   doc: Document;
   /** Which tailored CV to attach; null attaches nothing. */
   cvId: string | null;
+  /** The band this vacancy published, when the user typed it in; otherwise "no band". */
+  band?: SalaryBand | undefined;
   sleep?: (ms: number) => Promise<void>;
 }
 
@@ -26,6 +28,7 @@ export async function fillForm({
   backend,
   doc,
   cvId,
+  band,
   sleep = defaultSleep,
 }: RunOptions): Promise<FillReport> {
   const root = adapter.scope?.(doc) ?? doc;
@@ -36,7 +39,10 @@ export async function fillForm({
 
   const pass = async (): Promise<Control[]> => {
     const controls = await scan(root, adapter);
-    const { plan } = await backend.plan(controls.map((c) => c.descriptor));
+    const { plan } = await backend.plan(
+      controls.map((c) => c.descriptor),
+      band,
+    );
     const byId = new Map<string, PlanEntry>(plan.map((p) => [p.id, p]));
     for (const control of controls) {
       const entry = byId.get(control.descriptor.id);

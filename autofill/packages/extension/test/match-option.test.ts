@@ -23,7 +23,7 @@ describe('matchOption', () => {
   });
 
   it('returns nothing rather than the closest guess', () => {
-    expect(matchOption(opts('Od zaraz', '2 tygodnie'), 'Immediately')).toBeUndefined();
+    expect(matchOption(opts('Od zaraz', '2 tygodnie'), 'Next spring')).toBeUndefined();
     expect(matchOption(opts('A'), '')).toBeUndefined();
   });
 });

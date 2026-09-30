@@ -64,7 +64,7 @@ describe('traffit', () => {
   it('reports a combobox answer it cannot map instead of forcing an option', async () => {
     document.body.innerHTML = fixture('traffit.html');
     installFakeBridge({ 'dynamic_form[properties][7][5]': [{ id: 'a1', label: 'Od zaraz' }] });
-    const backend = fakeBackend([when(/^Dostępność/, value('Immediately'))]);
+    const backend = fakeBackend([when(/^Dostępność/, value('Next spring'))]);
     const report = await fillForm({ adapter: traffit, backend, doc: document, cvId: null });
     expect(report.manual.map((m) => m.label)).toContain('Dostępność *');
     expect((document.getElementById('f5') as HTMLSelectElement).dataset['chosen']).toBeUndefined();
@@ -223,7 +223,7 @@ describe('ARIA widgets (Radix / shadcn forms, e.g. the new eRecruiter)', () => {
     await fillForm({ adapter: erecruiter, backend, doc: document, cvId: null });
     const asked = backend.asked.map((f) => `${f.kind}:${f.label}`);
     expect(asked).toContain('radio-group:Do you have experience with international clients? *');
-    expect(asked.filter((a) => a.startsWith('checkbox-group')).length).toBe(2);
+    expect(asked.filter((a) => a.startsWith('checkbox-group')).length).toBe(3);
     expect(
       backend.asked.find((f) => f.kind === 'radio-group')?.options?.map((o) => o.label),
     ).toEqual(['Yes', 'No']);
@@ -255,5 +255,80 @@ describe('checkbox noise', () => {
     expect(report.manual.map((m) => m.label)).not.toContain('on');
     expect(report.manual.map((m) => m.label).join()).not.toMatch(/creating an account/);
     expect(backend.asked.map((f) => f.label)).not.toContain('on');
+  });
+});
+
+describe('eRecruiter money, level and availability', () => {
+  const load = () => {
+    document.body.innerHTML = fixture('erecruiter-radix.html').replace(
+      /<script>[\s\S]*<\/script>/,
+      '',
+    );
+    document.querySelectorAll<HTMLElement>('[role=radio], [role=checkbox]').forEach((b) =>
+      b.addEventListener('click', () => {
+        if (b.getAttribute('role') === 'radio') {
+          b.closest('[role=radiogroup]')
+            ?.querySelectorAll('[role=radio]')
+            .forEach((r) => r.setAttribute('aria-checked', String(r === b)));
+        } else b.setAttribute('aria-checked', String(b.getAttribute('aria-checked') !== 'true'));
+      }),
+    );
+  };
+  const checked = (id: string) => document.getElementById(id)?.getAttribute('aria-checked');
+  const salary = (amount: number) =>
+    when(/finansowe/i, () => ({
+      action: 'salary' as const,
+      quote: {
+        amount,
+        unit: { currency: 'PLN', period: 'month' as const, basis: 'b2b-net' as const },
+        note: 'no-band baseline',
+      },
+    }));
+
+  it('chooses the salary band holding the quote, the CEFR-mapped step and the matching availability', async () => {
+    load();
+    const backend = fakeBackend([
+      salary(30000),
+      when(/angielsk/i, () => ({ action: 'language-level' as const, cefr: 'B2' as const })),
+      when(/dostępność/i, value('2 weeks')),
+    ]);
+    const report = await fillForm({ adapter: erecruiter, backend, doc: document, cvId: null });
+    expect(checked('rg2-d')).toBe('true'); // 30 000 - 32 000 zł
+    expect(checked('rg3-2')).toBe('true'); // B2 on a 5-step scale -> "Komunikatywna"
+    expect(checked('rg4-1')).toBe('true'); // 2 weeks -> "2 tygodnie"
+    const decisions = report.outcomes.flatMap((o) =>
+      o.status === 'filled' && o.detail ? [o.detail] : [],
+    );
+    expect(decisions.some((d) => /Komunikatywna/.test(d))).toBe(true);
+    expect(decisions.some((d) => /no-band baseline/.test(d))).toBe(true);
+  });
+
+  it('hands a salary back with the reason when no band holds the quote', async () => {
+    load();
+    document
+      .getElementById('rg2')
+      ?.querySelectorAll('[role=radio]')
+      .forEach((r, i) => i > 1 && r.parentElement?.remove());
+    const backend = fakeBackend([salary(50000)]);
+    const report = await fillForm({ adapter: erecruiter, backend, doc: document, cvId: null });
+    expect(report.manual.find((m) => /finansowe/i.test(m.label))?.reason).toBe('salary');
+  });
+
+  it('types the salary the way a person does into a text box', async () => {
+    document.body.innerHTML = `<form><div class="form-group"><label for="s">Oczekiwania finansowe</label><textarea id="s" name="s"></textarea></div></form>`;
+    const backend = fakeBackend([salary(30000)]);
+    await fillForm({ adapter: erecruiter, backend, doc: document, cvId: null });
+    expect((document.getElementById('s') as HTMLTextAreaElement).value).toBe('30 000 PLN');
+  });
+
+  it('leaves an optional unknown checkbox alone instead of listing it as a question', async () => {
+    load();
+    const report = await fillForm({
+      adapter: erecruiter,
+      backend: fakeBackend([]),
+      doc: document,
+      cvId: null,
+    });
+    expect(report.manual.map((m) => m.label)).not.toContain('B2B');
   });
 });

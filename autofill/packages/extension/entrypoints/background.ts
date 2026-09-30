@@ -30,7 +30,7 @@ async function handle(raw: unknown): Promise<unknown> {
   const message = BackgroundRequest.parse(raw);
   switch (message.type) {
     case 'plan':
-      return call('/plan', PlanResponse, post({ fields: message.fields }));
+      return call('/plan', PlanResponse, post({ fields: message.fields, band: message.band }));
     case 'cvs':
       return call('/cvs', CvListResponse, post({}));
     case 'cv':
