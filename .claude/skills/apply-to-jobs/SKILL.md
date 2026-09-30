@@ -8,15 +8,18 @@ description: Pull SAVED vacancies from OneTap.Work, get a tailored resume for ea
 You are the one actually clicking Submit on real applications to real
 companies under a real person's name. Everything here exists to keep that
 trustworthy: never invent a fact, never submit something you haven't shown
-the user (per the confirmation rule below), never leave OneTap.Work's
-tracking out of sync with what you actually did.
+the user (per the approval mode chosen at the start of the run — § Approval
+mode), never leave OneTap.Work's tracking out of sync with what you actually did.
 
 ## The one rule that matters more than any other
 
 **If a form asks something factual or personal and the exact answer is not
-already in `profile.json` or `stories.json` — you stop and ask the user. Every
+already in `profile.json` or `stories.json` — you do not answer it. Every
 time. No exceptions, no "it's probably fine", no inferring from context, no
 reusing an answer from a different country because it "should be similar".**
+What you do instead is **park that vacancy and move on** (§ Parking a vacancy),
+and the question goes to the user in the end-of-run action list. You never
+block the whole run on one vacancy's missing fact.
 Being 90% confident is not the same as knowing. The whole point of
 `profile.json`, `qa[]` and `stories.json` is that this agent's answers are
 always either verified facts or fresh answers from the user — never guesses.
@@ -27,7 +30,7 @@ contract-form conversions are arithmetic over a number the user already gave,
 not new facts, and asking again every time a form wants a different currency is
 noise. Follow `profile.compensation.derivation` — the user's own anchor figure
 plus the rules for converting it. Fetch a live FX rate, respect the stated
-ceiling, and show the arithmetic at the confirmation pause so the user can
+ceiling, and show the arithmetic at the approval pause (or in answers.md, in mode none) so the user can
 catch a bad rate before it is submitted. This is the *only* licensed
 derivation: it does not generalise to years of experience, skill levels, or
 anything else.
@@ -109,20 +112,59 @@ below.
   e-mail is finished in the same pass instead of being handed back — see
   § Finishing an application that verifies by e-mail.
 
-## Confirmation mode
+## Approval mode
 
-Keep a counter of vacancies **confirmed without the user asking for a
-change** in this run. For the **first 2–3 vacancies**, pause before the
-final Submit click (Phase 4 step 6) and wait for explicit go-ahead. Once 2–3
-have gone through cleanly, stop pausing for the rest of this run — continue
-straight through, except for the unknown-fact escalation in Phase 3, which is
-**always active regardless of this counter**. It is a different kind of stop
-(missing information) from the confirmation pause (review before an
-irreversible action), and the confirmation counter never suppresses it.
+**At the start of every run, ask the user how much approval they want before a
+Submit click** — one question, asked together with the choice of which SAVED
+vacancies to process (see below). Do not assume a mode from an earlier run and do
+not carry one over; the answer is for this run only. Offer exactly three:
 
-If a confirmed-vacancy pause turns up something wrong (bad field, wrong
-resume, hallucinated narrative text), fix it, and don't count that vacancy
-toward the 2–3 — the point of the trial period is 2–3 *clean* passes.
+| mode | behaviour |
+|------|-----------|
+| **every** | pause before the final Submit (Phase 4 step 7) on every vacancy and wait for explicit go-ahead |
+| **first N** | pause on the first 2–3 vacancies (ask N, default 3); once that many have gone through cleanly, stop pausing for the rest of the run |
+| **none** | never pause; fill, verify, submit and record straight through |
+
+If the user already named a mode in the request ("сам натискай submit", "approve
+each one"), use it and do not ask again.
+
+In **first N**, keep a counter of vacancies **confirmed without the user asking
+for a change**. If a pause turns up something wrong (bad field, wrong resume,
+hallucinated narrative text), fix it and don't count that vacancy — the point of
+the trial period is N *clean* passes. A vacancy that was parked (§ Parking a
+vacancy) never reached a pause and is not counted either.
+
+The approval mode governs only the **review before an irreversible action**. It
+never suppresses the missing-information rule above, the salary-floor check, or
+any rule in § Things you never do — those apply in every mode, including
+**none**.
+
+## Parking a vacancy
+
+A run does not stop to ask the user something about one vacancy while other
+vacancies could be worked on. When a vacancy needs something from the user, **park
+it and start the next one immediately**:
+
+- a required fact or answer that is not in `profile.json` / `qa[]` / `stories.json`
+  (an `unknown` field, a `review` you are not convinced about, a required "why
+  this company" box whose reason is the user's pick);
+- a `$SALARY_QUOTE` that exited 3 — "apply at this money at all?";
+- a CAPTCHA, a login or account the user must create, an e-mail-only application,
+  or any other step only the user can do;
+- a new unknown that appears mid-form (fields revealed after a postback).
+
+Parking means: **do not submit**; leave the vacancy `SAVED`; record in its note
+(and in `runs/<run-id>/<Company>_<vacancyId>/pending.md`) exactly what is needed —
+the question worded as the form words it, or the action, plus every value already
+prepared so the user finishes in one pass; leave a filled tab open only where the
+form cannot be rebuilt (CAPTCHA), and say so. Then carry on with the next vacancy.
+Never put a guess in a field to get past a parked question.
+
+When the queue is exhausted, hand the user **one action list, grouped by
+vacancy** (§ End-of-run action list). Whatever the user answers is recorded with
+`node $PROFILE_QA add ...`, and the parked vacancies are then resumed — at
+Phase 4 if the form is still open or rebuilt from `form.json`, with the same
+approval mode.
 
 ## Procedure — four phases
 
@@ -132,8 +174,9 @@ question the run needs into **one** round instead of interrupting the user per
 vacancy. Do not blur them: typing into a form before Phase 3 has closed is how
 a guessed answer reaches an employer.
 
-Ask the user which SAVED vacancies to process after listing what's available,
-then run Phase 1.
+Ask the user which SAVED vacancies to process after listing what's available —
+and, in the same message, which **approval mode** (§ Approval mode: every /
+first N / none) — then run Phase 1.
 
 **Where the Simplify Copilot extension is present on the form, Phases 2–4
 collapse into one pass per vacancy** — see § Simplify fast path. It is the
@@ -188,7 +231,7 @@ not support.
 
    No band found anywhere → omit `--min`/`--max` (the script has a rule for
    it). Staff / Lead / Principal or fully US-remote → `--tier=premium`. **Exit
-   code 3** → the vacancy goes into the Phase 3 question round as "do we apply
+   code 3** → the vacancy is parked and goes into the end-of-run action list as "do we apply
    at all?", never straight into Phase 4. A figure from source 3 or 4 is passed
    as the band but named honestly in `--source`; never present it as the
    employer's own.
@@ -243,7 +286,11 @@ path handles the rest), in one managed tab:
 Type nothing. Click nothing but navigation and cookie banners. A Phase 2 pass
 over the whole queue must be safe to abandon at any point.
 
-### Phase 3 — one question round
+### Phase 3 — resolve, park what can't be resolved
+
+Nothing in this phase waits on the user. Vacancies whose fields all resolve go
+on to Phase 4; vacancies with an `unknown` are **parked** (§ Parking a vacancy)
+and their questions go into the end-of-run action list.
 
 ```bash
 node $RESOLVE_FIELDS $DATA/runs/<run-id>/*/form.json
@@ -263,7 +310,8 @@ add the phrasing to the config — not to the skill.
   country/currency. If yes, `node $PROFILE_QA alias <id> --add="<this form's
   wording>"` so it resolves outright next time. If you are not genuinely
   convinced, treat it as `unknown`.
-- **`unknown`** — goes to the user.
+- **`unknown`** — the vacancy is parked; the question goes to the user in the
+  end-of-run action list.
 
 **Ask only for what is genuinely missing.** A `review` candidate that plainly
 asks the same thing (another wording of start date, contract form, language
@@ -272,28 +320,44 @@ already given live in `qa[]` too — consent checkboxes that are mandatory but
 broader than one application, availability lists with no exact option,
 multiple-choice self-assessments (ownership, startup pace, AI, distributed
 systems), 1–5 stack ratings computed from `skills.csv` — so a question of one of
-those kinds is answered from its policy entry and never re-asked. The question
-round is for new facts.
+those kinds is answered from its policy entry and never re-asked. The action
+list is for new facts.
 
 - **`runtime` salary fields** — already answered by Phase 1's `$SALARY_QUOTE`
   run. They are not questions for the user and not qa[] lookups; carry the
   computed figure into Phase 4, converted to the units the field actually asks
   for (`--as`, `--as-currency`, `--as-basis`).
 
-Collect the `unknown` list **across all vacancies** and ask in one batch. Record
-every answer with `node $PROFILE_QA add ...`, then re-run `$RESOLVE_FIELDS`
-until it reports `0 required field(s) still need a human answer`. Only then
-start Phase 4.
+Collect the `unknown` list **per vacancy** and keep it for the end-of-run action
+list. A vacancy enters Phase 4 only when `$RESOLVE_FIELDS` reports `0 required
+field(s) still need a human answer` for it. When the user later answers, record
+every answer with `node $PROFILE_QA add ...`, re-run `$RESOLVE_FIELDS`, and
+resume the parked vacancies.
 
-The same batch carries one more question, which is not a form field at all:
+One more item goes into the action list, which is not a form field at all:
 **every vacancy whose `$SALARY_QUOTE` exited 3**. Show the band, where it came
-from, and the floor, and ask whether to apply at that money at all. Silence is
-not consent — an unanswered one is not applied to. If the user says yes, quote
-the floor (the script prints it), not the band.
+from, and the floor, and ask whether to apply at that money at all. That vacancy
+is parked — never applied to until the user says yes. Silence is not consent. If
+the user says yes, quote the floor (the script prints it), not the band.
 
 If a *new* unknown appears mid-Phase-4 (a form reveals fields only after a
-postback), the escalation rule still applies: stop and ask. Phase 3 shrinks
-that to a rare event; it does not abolish it.
+postback), park that vacancy the same way and move on; do not stop the run.
+
+### End-of-run action list
+
+After the last vacancy has been worked — not before — give the user one list,
+**grouped by vacancy**, of everything that needs them. For each parked vacancy:
+
+```
+<Company> — <role> (<vacancyId>)
+  • <question as the form words it> — <what you need: a fact, a choice, yes/no>
+  • <manual step, e.g. "solve the CAPTCHA in the open tab" / "create the account, then click Create Account">
+  • <salary: band X from <source>, floor Y — apply at that money? yes/no>
+```
+
+Keep it to actions and questions; no narration. Put the applied/parked/dead
+counts and the run folder above the list. Once the user answers, record facts
+with `node $PROFILE_QA add ...` and resume the parked vacancies.
 
 ### Simplify fast path — Phases 2–4 in one pass where the extension works
 
@@ -354,13 +418,12 @@ Per vacancy:
    required free text per the rules in step 3. **Never use Simplify's
    "Generate with AI" / "Tailor Resume" buttons** — its prose is not the user's
    voice and its facts are not ours.
-6. **An answer that is not in `profile.json`/`qa[]` stops this vacancy, not
-   the run.** Leave the form unsubmitted, set the note on `SAVED` naming the
-   exact question(s), move on, and ask all of them in one batch at the end — this
-   is the Phase 3 round, collected as you go. Same for a required "why this
-   company" box (the reason is the user's pick) and for a CAPTCHA (leave the
-   filled tab open for the user, say so in the note, open a new tab for the next
-   vacancy).
+6. **An answer that is not in `profile.json`/`qa[]` parks this vacancy, not
+   the run** (§ Parking a vacancy). Leave the form unsubmitted, set the note on
+   `SAVED` naming the exact question(s), move on, and they go into the
+   end-of-run action list. Same for a required "why this company" box (the
+   reason is the user's pick) and for a CAPTCHA (leave the filled tab open for
+   the user, say so in the note, open a new tab for the next vacancy).
 7. **Verify, submit, record** — one read-back of required fields and the CV chip
    right before Submit (Phase 4 step 1's verify rules), then Phase 4 steps 8–9:
    the success signal, **APPLIED immediately**, `answers.md` with a Source
@@ -368,7 +431,7 @@ Per vacancy:
    After a successful submit Simplify pops **"Add Custom Application"** (its own
    tracker) — **Cancel**; OneTap.Work is the only ledger.
 
-The confirmation pause (§ Confirmation mode) and every rule in § Things you
+The approval pause (§ Approval mode) and every rule in § Things you
 never do still apply on this path. Speed comes from Simplify typing the obvious
 fields, not from reading less.
 
@@ -515,9 +578,10 @@ Per vacancy, following its ATS file:
      screening steps) are appended to the same file.
    - This is not optional and not a summary of the OneTap note: the note is
      ≤1000 characters and drops detail, the sheet is the full record.
-7. **Confirmation pause** while the run's clean-confirmation counter is below
-   2–3 (see § Confirmation mode): show the screenshot plus vacancy, PDF, key
-   answers and any drafted text, and wait.
+7. **Approval pause**, if the run's approval mode calls for one (every
+   vacancy, or first N and the counter is still below N — see § Approval mode;
+   never in mode none): show the screenshot plus vacancy, PDF, key answers and
+   any drafted text, and wait.
 8. Submit. Wait for a real success indicator — the one named in the ATS file,
    not "the button stopped being clickable". Record it the same way, as
    `runs/<run-id>/<Company>_<vacancyId>/submitted.gif`, so the run holds both
@@ -746,7 +810,7 @@ Real browser concurrency needs isolated browsers — a Playwright worker per
 vacancy, or one Chrome profile and agent session per worker with
 vacancies claimed through OneTap.Work status so two workers never take the
 same one. Until then the phased pipeline is what buys the wall-clock back:
-resumes generated in parallel, one question round instead of N, and no
+resumes generated in parallel, one end-of-run action list instead of N interruptions, and no
 rediscovery of ATS quirks.
 
 ## State tracking

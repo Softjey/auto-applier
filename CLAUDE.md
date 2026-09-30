@@ -91,7 +91,7 @@ second agent reads the same files instead of a fork of them.
   extracted from the extension itself, not from the `ats/*.md` notes. Writes
   `triage/<date>.md`.
 - `.claude/skills/apply-to-jobs/` — the main orchestrator, in four phases: resumes
-  (parallel) → read every form (serial, read-only) → one batched question round →
+  (parallel) → read every form (serial, read-only) → resolve, park what needs the user →
   fill and submit (serial). Where the user's Chrome shows the Simplify Copilot panel
   on a form, phases 2–4 collapse into one pass (`SKILL.md` § Simplify fast path).
   - `scripts/lib/data-dir.mjs` — where the data repo is; every script goes through it.
