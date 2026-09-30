@@ -1,3 +1,14 @@
 node_modules/
 .DS_Store
 *.tmp
+
+# Private data lives in a separate repo (see setup-data-repo). These can never
+# be committed here, even by accident.
+/.data-dir
+/profile.json
+/stories.json
+/credentials.json
+/apply-config.json
+/runs/
+/triage/
+/.claude/settings.local.json

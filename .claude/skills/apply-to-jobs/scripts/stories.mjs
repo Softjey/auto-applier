@@ -18,15 +18,13 @@
 //   stories.mjs list [--tags]
 
 import { readFileSync, existsSync } from "node:fs";
-import { resolve, dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { tokenize, jaccard, verdictFor } from "./lib/qa-match.mjs";
+import { optionalDataPath } from "./lib/data-dir.mjs";
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-const STORIES_PATH = join(resolve(HERE, "../../../.."), "stories.json");
+const STORIES_PATH = optionalDataPath("stories.json");
 
-if (!existsSync(STORIES_PATH)) {
-  console.error(`No stories.json at ${STORIES_PATH} — run import-stories.mjs first.`);
+if (!STORIES_PATH || !existsSync(STORIES_PATH)) {
+  console.error(`No stories.json at ${STORIES_PATH ?? "(no data repo found)"} — run import-stories.mjs first.`);
   process.exit(1);
 }
 const db = JSON.parse(readFileSync(STORIES_PATH, "utf8"));

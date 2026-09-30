@@ -28,14 +28,13 @@ import { resolve, dirname, join, basename, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 import { tokenize, jaccard } from "./lib/qa-match.mjs";
+import { dataPath } from "./lib/data-dir.mjs";
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = resolve(HERE, "../../../..");
-const DEFAULT_OUT = join(REPO_ROOT, "stories.json");
+const DEFAULT_OUT = () => dataPath("stories.json");
 
 const args = process.argv.slice(2);
 const srcDir = args.find((a) => !a.startsWith("--"));
-const outPath = (args.find((a) => a.startsWith("--out=")) || "").slice(6) || DEFAULT_OUT;
+const outPath = (args.find((a) => a.startsWith("--out=")) || "").slice(6) || DEFAULT_OUT();
 const dry = args.includes("--dry");
 
 if (!srcDir) {

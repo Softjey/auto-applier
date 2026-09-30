@@ -32,6 +32,7 @@ async function startServer(): Promise<ChildProcess> {
     cwd: ROOT,
     env: {
       ...process.env,
+      APPLIER_DATA_DIR: FIXTURES, // no apply-config.json here: tests never read the real one
       APPLIER_PROFILE_PATH: resolve(FIXTURES, 'profile.test.json'),
       AUTOFILL_RESUME_OUT: resolve(FIXTURES, 'out'),
     },

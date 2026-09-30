@@ -13,7 +13,6 @@
 //   profile-qa.mjs list [--tag=x] [--grep=text]
 
 import {
-  PROFILE_PATH,
   tokenize,
   bestMatchScore,
   verdictFor,

@@ -36,19 +36,19 @@ is indistinguishable from the extension being dead. On 2026-09-06 that cost a
 run several minutes of retries and a wrong diagnosis ("the extension is down")
 before the real cause surfaced.
 
-So: read `config.browser.claudeInChrome.deviceName` from `apply-config.json` and
+So: read `config.browser.claudeInChrome.deviceName` from `$DATA/apply-config.json` and
 `select_browser` the deviceId whose **name** matches. Do not store or trust a
 deviceId — they are reassigned when an extension reconnects. If no connected
 browser carries that name, call `switch_browser`: it prompts every installed
 extension and the user clicks Connect in the one they want, naming it in the
-process; write the new name back to `apply-config.json`.
+process; write the new name back to `$DATA/apply-config.json`.
 
 Two quirks of this integration that the skill's phases are built around:
 
 - **`file_upload` only reads files inside the session's own directories.** The
   resume repo is not one of them unless the user has run
   `/add-dir <resumeRepo>`, which is why Phase 1 copies every PDF into
-  `runs/<run-id>/<Company>_<vacancyId>/`.
+  `$DATA/runs/<run-id>/<Company>_<vacancyId>/`.
 - **Tabs live in one MCP tab group, and closing any tab dissolves it.** Every
   other open form then becomes undrivable — verified: one close out of nine was
   enough. So: never click a control that opens a new tab (click once to learn
@@ -95,7 +95,7 @@ Phase 2 rather than guessing the API.
 - **Uploads go through the file chooser**, not `setInputFiles`: start
   `tab.playwright.waitForEvent("filechooser")`, click the `input[type=file]`,
   then `chooser.setFiles(["<absolute path>"])`. Absolute paths only. There is
-  no directory restriction here, but Phase 1 still copies the PDF into `runs/`
+  no directory restriction here, but Phase 1 still copies the PDF into `$DATA/runs/`
   — that copy is what the run's audit trail is made of.
 - **Claim the user's own Chrome tab** rather than opening a detached one when
   the user is signed in to a job board; `claimTab` returns a normal
@@ -149,7 +149,7 @@ reach. What does work is the recorder:
 4. `gif_creator {action: "export", tabId, download: true, filename:
    "<Company>_<vacancyId>-filled-form.gif", options: {showWatermark: false,
    showProgressBar: false, showClickIndicators: false, quality: 5}}`
-5. `mv ~/Downloads/<filename> runs/<run-id>/<Company>_<vacancyId>/filled-form.gif`
+5. `mv ~/Downloads/<filename> $DATA/runs/<run-id>/<Company>_<vacancyId>/filled-form.gif`
 
 The export downloads through the browser, so the file lands in the user's
 Downloads folder and is moved from there. Only about half the screenshots

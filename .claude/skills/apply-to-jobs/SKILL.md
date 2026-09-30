@@ -38,9 +38,19 @@ are only the no-band baseline). See § Money.
 
 ## Configuration
 
+**This repo holds no personal data.** Everything about the person — `profile.json`,
+`stories.json`, `credentials.json`, `apply-config.json`, and the audit trail in
+`runs/` and `triage/` — lives in their private **data repo**, `$DATA`. The scripts
+find it on their own (`$APPLIER_DATA_DIR`, then the path in `.data-dir`, then
+`../auto-applier-data`); resolve it yourself once with
+`node -e 'import("./.claude/skills/apply-to-jobs/scripts/lib/data-dir.mjs").then(m=>console.log(m.requireDataDir()))'`.
+Every bare path in this skill — `profile.json`, `runs/<run-id>/…`, `stories.json` — is
+relative to `$DATA`. If there is no data repo yet, stop and run the
+**`setup-data-repo`** skill first.
+
 Everything installation-specific — absolute paths, the resume filename, and the
-non-English vocabulary of the local job market — lives in **`apply-config.json`
-at the repo root**, never in this skill. Read it at the start of a run.
+non-English vocabulary of the local job market — lives in **`$DATA/apply-config.json`**,
+never in this skill. Read it at the start of a run.
 
 ```
 config.paths.resumeBlocksSkill   the resume-blocks SKILL.md to follow
@@ -59,6 +69,10 @@ scripts resolve their own defaults relative to their own location but resolve
 positional file arguments relative to `process.cwd()`, so always pass absolute
 paths for both the script and its arguments, and never `cd` into the resume
 repo first.
+
+Run folders: `$DATA/runs/<date>-<slug>/`, one folder per vacancy inside it named
+`<Company>_<vacancyId>`, plus the run's `summary.md`. Triage reports are not runs —
+they go to `$DATA/triage/<date>.md` (see `apply-method-triage`).
 
 Paths inside this repo:
 
@@ -253,7 +267,7 @@ over the whole queue must be safe to abandon at any point.
 ### Phase 3 — one question round
 
 ```bash
-node $RESOLVE_FIELDS runs/<run-id>/*/form.json
+node $RESOLVE_FIELDS $DATA/runs/<run-id>/*/form.json
 ```
 
 It sorts every field into `resolved` (structured profile value or an `exact`
@@ -418,21 +432,21 @@ Per vacancy, following its ATS file:
    real submitted form.
 
    - **Answer the question asked.** "Describe your most relevant experience"
-     wants what he worked on and what he did, not the stack list. Re-read the
+     wants what they worked on and what they did, not the stack list. Re-read the
      question after drafting.
    - **Relevant = matches the vacancy's stack**, not the biggest or newest job.
      `profile.json.projects[]` says which project is the example for which
      stack.
    - **Full sentences, first person, natural — like telling a friend what you
-     do, at B2 English.** Plain words, concrete detail (what he did, how long).
+     do, at the English level in `profile.languages`.** Plain words, concrete detail (what they did, how long).
      No literary turns ("the backend as my centre of gravity", "from problem to
      production"), no "commercial" before "experience".
    - **"Why do you want to work here?" / "what do you like about our
-     product?" are about the employer, not about him.** Research the company
+     product?" are about the employer, not about the user.** Research the company
      (culture page, engineering blog, the product, its security and
-     regulatory record), hand him a list of concrete things one could like,
-     and let him pick and say why — the reason is his, never inferred and
-     never a CV story used as a bridge to the posting. Then write it as his
+     regulatory record), hand the user a list of concrete things one could like,
+     and let them pick and say why — the reason is theirs, never inferred and
+     never a CV story used as a bridge to the posting. Then write it as the user's
      own reflection: one sentence that frames the thought ("There are many
      reasons why I'd like to work at X, but there are two I'd really want to
      highlight."), then each point in whole sentences that explain
@@ -443,14 +457,14 @@ Per vacancy, following its ATS file:
      dogfooding." and "The first is dogfooding: …" were both rejected —
      headline fragments with a justification attached do not read like a
      person. When an answer is too long, cut what repeats a thought already
-     made and what was added on top of his words (analogies, "it really
+     made and what was added on top of the user's words (analogies, "it really
      resonated with me", a tail that restates the point); keep every sentence
      whole and the core thought complete.
    - **A project is described by the technologies this employer screens for,
-     plus that he owned it.** Architecture level only ("microservices in NestJS
+     plus that they owned it.** Architecture level only ("microservices in NestJS
      over PostgreSQL") — never the list of services, what a service does, or
-     that the product is his.
-   - **Nothing from the posting comes back as a claim about him.** No echoing
+     that the product is theirs.
+   - **Nothing from the posting comes back as a claim about the user.** No echoing
      its selling points ("used to taking a problem from analysis to delivery"),
      its framing ("React is the side I support"), or meta-sentences ("which
      matches this role"). No editorial tail on a factual answer — asked for the
@@ -571,9 +585,9 @@ Per vacancy, following its ATS file:
    user would want to see without opening a file (a hard requirement the profile
    does not meet). Anything longer belongs in the sheet.
 
-   `runs/` is tracked in git as of 2026-09-06, so the sheet is as durable as the
-   note — but the note is the only copy that lives off this laptop, which is why
-   the five fields above still stay in it.
+   `runs/` is version-controlled in the data repo, so the sheet is as durable as
+   the note — but the note is the only copy that lives off this laptop, which is
+   why the five fields above still stay in it.
 10. **If you cannot actually apply**, never set `APPLIED`, and split the two
    cases by whether the vacancy could still be applied to by hand:
    - **The posting is gone** (expired, filled, withdrawn, the ATS 404s) — it is
@@ -634,7 +648,7 @@ Workday, Avature and others will not take an application at all without a candid
 account. Refusing and stopping there loses the vacancy, so don't.
 
 **Before anything else, check whether an account already exists.** Two applications in one
-run were parked on the user for a portal he was already registered on — the Honeywell run,
+run were parked on the user for a portal they were already registered on — the Honeywell run,
 a few minutes earlier, had shown exactly what that looks like when it goes right: the
 profile came back pre-filled and the seven compliance questions were already answered.
 In order:
@@ -762,8 +776,8 @@ OneTap.Work's own `status`/`notes` (via `update_application_status` and
 `get_my_applications`) is the **only** source of truth for "what's been
 applied to." This repo keeps no separate ledger — a second copy of that
 state would just be a second place for it to drift out of sync with the
-first. `runs/<run-id>/` (gitignored) holds only an ephemeral audit trail —
-screenshots, the `blocks.md` used, a short summary — useful for debugging
-one specific run after the fact. Nothing in this skill's logic ever reads
+first. `$DATA/runs/<run-id>/` holds only an audit trail —
+screenshots, the answer sheet, the `blocks.md` used, a short summary — useful for
+seeing afterwards what an employer was told. Nothing in this skill's logic ever reads
 `runs/` to decide what's already been applied to; it always asks
 OneTap.Work.

@@ -1,0 +1,93 @@
+{
+  "$schemaVersion": 1,
+  "personal": {
+    "fullName": null,
+    "firstName": null,
+    "lastName": null,
+    "email": null,
+    "phone": null,
+    "currentCity": null,
+    "currentCountry": null,
+    "citizenship": null
+  },
+  "links": {
+    "linkedin": null,
+    "github": null,
+    "portfolio": null,
+    "other": []
+  },
+  "workAuthorization": {
+    "citizenship": null,
+    "residencePermitCountry": null,
+    "residencePermitType": null,
+    "note": "Country-specific answers ('are you authorized to work in X') live in qa[], tag work_authorization:<country>. This block is background only — never answer a country-specific question directly from here."
+  },
+  "location": {
+    "willingToRelocate": null,
+    "remotePreference": null,
+    "note": "Country-specific relocation answers live in qa[], tag relocation:<country>."
+  },
+  "compensation": {
+    "defaultCurrency": null,
+    "expectedMin": null,
+    "expectedMax": null,
+    "period": null,
+    "note": "ANCHOR = expectedMin/expectedMax in defaultCurrency. Every other currency or contract form is DERIVED from it by the rules in compensation.derivation — do not escalate a new currency to the user, compute it and state the arithmetic at the confirmation pause.",
+    "hourlyRate": null,
+    "alternates": [],
+    "derivation": {
+      "anchor": null,
+      "hoursPerMonth": 168,
+      "currency": {
+        "rule": "Divide the anchor by the central-bank mid rate for the target currency, then round.",
+        "rateSource": null,
+        "lastChecked": null,
+        "lastRates": {},
+        "worked": {}
+      },
+      "contractForm": {
+        "rule": null,
+        "worked": null,
+        "uopGrossFactor": 1
+      },
+      "note": "Recheck the FX rate whenever it is older than a few days. Keep worked examples so a reviewer can see how a number on a submitted form was reached."
+    },
+    "strategy": {
+      "note": "Numbers salary-quote.mjs computes from. The rules are in apply-to-jobs SKILL.md § Money and in the script; edit numbers here, rules there.",
+      "basis": null,
+      "baseline": null,
+      "floor": null,
+      "premium": {
+        "quote": null,
+        "appliesTo": null
+      },
+      "rounding": {
+        "monthlyPln": 1000,
+        "hourlyPln": 5,
+        "monthlyForeign": 100,
+        "annualForeign": 1000
+      }
+    }
+  },
+  "availability": {
+    "noticePeriod": null,
+    "earliestStartDate": null,
+    "employmentTypesOpenTo": [],
+    "currentEmploymentStatus": null
+  },
+  "experience": {
+    "yearsOfCommercialExperience": null,
+    "yearsAsOf": null,
+    "currentTitle": null,
+    "seniorityLevel": null,
+    "note": "Compute using the resume-blocks rule: the earliest commercial software dev role in EXPERIENCE from the base CV. Never hardcode this number."
+  },
+  "languages": [],
+  "eeo": {
+    "policy": "decline",
+    "note": "Voluntary demographic questions (race, gender, veteran status, disability) — default to 'Prefer not to answer' or the equivalent opt-out option. Escalate only if the field is mandatory and there is no opt-out."
+  },
+  "languagesDisclosurePolicy": null,
+  "projects": [],
+  "qa": []
+}

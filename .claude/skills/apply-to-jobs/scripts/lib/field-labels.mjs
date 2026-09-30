@@ -7,8 +7,8 @@
 //   * The vocabulary built in HERE is ENGLISH ONLY, on purpose. This skill ships
 //     as a general-purpose tool; it must not carry one user's job market baked
 //     into its source.
-//   * Every other language lives in the user's own `apply-config.json` at the
-//     repo root, alongside profile.json, and is merged on top at load time.
+//   * Every other language lives in the user's own `apply-config.json` in the
+//     data repo, alongside profile.json, and is merged on top at load time.
 //     Nothing in .claude/ ever has to change to support a new locale.
 //
 // Phrases, not regexes. A pack is a plain list of strings so that adding a
@@ -24,13 +24,10 @@
 // letters, hence the explicit \p{L} edges below.
 
 import { readFileSync, existsSync } from "node:fs";
-import { resolve, dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { optionalDataPath } from "./data-dir.mjs";
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-// lib/ -> scripts/ -> apply-to-jobs/ -> skills/ -> .claude/ -> repo root
-export const REPO_ROOT = resolve(HERE, "../../../../..");
-export const CONFIG_PATH = join(REPO_ROOT, "apply-config.json");
+// apply-config.json lives in the user's data repo; null when there is none (a fresh clone, CI).
+export const configPath = () => optionalDataPath("apply-config.json");
 
 // ---------------------------------------------------------------- phrases
 
@@ -151,11 +148,12 @@ export const TOPIC_PHRASES = {
 const asArray = (v) => (Array.isArray(v) ? v.filter((x) => typeof x === "string") : []);
 
 export function loadConfig() {
-  if (!existsSync(CONFIG_PATH)) return {};
+  const path = configPath();
+  if (!path || !existsSync(path)) return {};
   try {
-    return JSON.parse(readFileSync(CONFIG_PATH, "utf8"));
+    return JSON.parse(readFileSync(path, "utf8"));
   } catch (err) {
-    console.error(`Ignoring unreadable ${CONFIG_PATH}: ${err.message}`);
+    console.error(`Ignoring unreadable ${path}: ${err.message}`);
     return {};
   }
 }

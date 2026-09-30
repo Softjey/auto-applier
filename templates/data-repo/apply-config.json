@@ -1,0 +1,21 @@
+{
+  "$schemaVersion": 1,
+  "note": "User-owned configuration for the apply-to-jobs skill. Everything here is specific to ONE person's setup — absolute paths, and the languages their job market's application forms are written in. The skills in the code repo are generic and English-only; this file is what adapts them. Safe to delete: the skills fall back to English-only matching and will ask for the paths they need.",
+  "paths": {
+    "note": "Absolute paths to the repo that renders the tailored resume. The apply-to-jobs skill invokes these directly, never via cd. Leave the values null if you do not use a resume-rendering repo.",
+    "resumeRepo": null,
+    "resumeBlocksSkill": null,
+    "resumeRender": null,
+    "resumePdf": null,
+    "cvBaseHtml": null,
+    "skillsCsv": null
+  },
+  "resumeFileName": null,
+  "formVocabulary": {
+    "note": "Phrases, not regexes. Whitespace matches loosely; a trailing * matches any letter suffix, which is what makes inflected languages tractable. These are MERGED on top of the built-in English vocabulary, never replacing it. Add the language(s) your applications are written in.",
+    "fields": {},
+    "guards": {},
+    "topics": {},
+    "languageAliases": {}
+  }
+}

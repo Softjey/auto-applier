@@ -1,6 +1,6 @@
 // Phase 2 field-schema extractor. Paste this whole file into whatever your
 // runtime's run-JS-in-the-page capability is (see ./README.md), then save the
-// returned JSON to runs/<run-id>/<Company>_<vacancyId>/form.json.
+// returned JSON to $DATA/runs/<run-id>/<Company>_<vacancyId>/form.json.
 //
 // It only READS. It never types, clicks or submits — Phase 2 must be able to
 // run over every vacancy in the queue without touching a single employer.

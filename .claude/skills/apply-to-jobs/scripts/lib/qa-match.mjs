@@ -6,16 +6,17 @@
 // question that scores `likely` in one never scores `weak` in the other.
 
 import { readFileSync, writeFileSync, renameSync, existsSync } from "node:fs";
-import { resolve, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
+import { dataPath } from "./data-dir.mjs";
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-// lib/ -> scripts/ -> apply-to-jobs/ -> skills/ -> .claude/ -> repo root
 // APPLIER_PROFILE_PATH points the scripts at a different profile — used only by the
-// autofill e2e tests, which must never type the real person into a real form.
-export const PROFILE_PATH = process.env.APPLIER_PROFILE_PATH
-  ? resolve(process.env.APPLIER_PROFILE_PATH)
-  : resolve(HERE, "../../../../../profile.json");
+// autofill tests, which must never type the real person into a real form. Otherwise
+// profile.json lives in the user's data repo (see lib/data-dir.mjs).
+export function profilePath() {
+  return process.env.APPLIER_PROFILE_PATH
+    ? resolve(process.env.APPLIER_PROFILE_PATH)
+    : dataPath("profile.json");
+}
 
 const STOPWORDS = new Set([
   "a", "an", "the", "is", "are", "do", "does", "did", "you", "your", "i",
@@ -80,17 +81,25 @@ export function rankAgainstQa(question, qa) {
 }
 
 export function loadProfile() {
-  if (!existsSync(PROFILE_PATH)) {
-    console.error(`profile.json not found at ${PROFILE_PATH}`);
+  let path;
+  try {
+    path = profilePath();
+  } catch (err) {
+    console.error(err.message);
     process.exit(1);
   }
-  const profile = JSON.parse(readFileSync(PROFILE_PATH, "utf8"));
+  if (!existsSync(path)) {
+    console.error(`profile.json not found at ${path} — run the profile-interview skill.`);
+    process.exit(1);
+  }
+  const profile = JSON.parse(readFileSync(path, "utf8"));
   if (!Array.isArray(profile.qa)) profile.qa = [];
   return profile;
 }
 
 export function saveProfile(profile) {
-  const tmp = `${PROFILE_PATH}.tmp`;
+  const path = profilePath();
+  const tmp = `${path}.tmp`;
   writeFileSync(tmp, `${JSON.stringify(profile, null, 2)}\n`, "utf8");
-  renameSync(tmp, PROFILE_PATH);
+  renameSync(tmp, path);
 }

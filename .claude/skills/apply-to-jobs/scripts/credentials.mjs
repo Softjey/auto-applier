@@ -15,17 +15,25 @@
 //   node credentials.mjs list [--secrets]        # secrets are masked unless asked for
 //   node credentials.mjs handoff --domain=<h> [--domain=<h> ...]   # the "Company: login - password" block
 //
-// The store is credentials.json at the repo root. It holds real credentials for
+// The store is credentials.json in the data repo. It holds real credentials for
 // real accounts: same no-public-remote rule as profile.json and stories.json.
 
 import { readFileSync, writeFileSync, existsSync, renameSync } from "node:fs";
 import { randomInt } from "node:crypto";
-import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { dataPath } from "./lib/data-dir.mjs";
+import { profilePath } from "./lib/qa-match.mjs";
 
-const REPO = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "..");
-const STORE = join(REPO, "credentials.json");
-const DEFAULT_LOGIN = "user@example.com";
+const store = () => dataPath("credentials.json");
+
+// The login for a new portal account defaults to the profile's own e-mail.
+function defaultLogin() {
+  try {
+    return JSON.parse(readFileSync(profilePath(), "utf8")).personal?.email || null;
+  } catch {
+    return null;
+  }
+}
 
 // Character classes. Deliberately excludes look-alikes (O/0, l/1/I) because these
 // get retyped by hand from a terminal, and the punctuation is limited to what
@@ -59,7 +67,7 @@ export function generatePassword(length = 20) {
   return shuffle(chars).join("");
 }
 
-const load = () => (existsSync(STORE) ? JSON.parse(readFileSync(STORE, "utf8")) : { $schemaVersion: 1, note: "", entries: [] });
+const load = () => (existsSync(store()) ? JSON.parse(readFileSync(store(), "utf8")) : { $schemaVersion: 1, note: "", entries: [] });
 
 const save = (data) => {
   data.note =
@@ -68,9 +76,9 @@ const save = (data) => {
     "private, same no-public-remote rule as profile.json. The agent never creates these " +
     "accounts or types these passwords into a site; the user does, then the agent " +
     "continues the application.";
-  const tmp = STORE + ".tmp";
+  const tmp = store() + ".tmp";
   writeFileSync(tmp, JSON.stringify(data, null, 2) + "\n");
-  renameSync(tmp, STORE); // atomic — a half-written credential store is worse than none
+  renameSync(tmp, store()); // atomic — a half-written credential store is worse than none
 };
 
 // Only run the CLI when invoked directly — generatePassword is importable, and an
@@ -106,7 +114,7 @@ if (!RUN_AS_CLI) {
   const entry = {
     domain,
     company,
-    login: one("login") || DEFAULT_LOGIN,
+    login: one("login") || defaultLogin(),
     password: generatePassword(Number(one("length")) || 20),
     url: one("url") || null,
     createdAt: new Date().toISOString().slice(0, 10),
