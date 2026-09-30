@@ -2,7 +2,7 @@ import type { PlanEntry } from '@applier/protocol';
 import type { SiteAdapter } from '../adapters';
 import { findDeclineOption, matchOption } from './match-option';
 import { selectizeSet } from './selectize';
-import { setChecked, setSelectValue, setText } from './setters';
+import { isChecked, setChecked, setSelectValue, setText } from './setters';
 import type { Control, Outcome } from './types';
 
 const filled = (c: Control): Outcome => ({
@@ -27,6 +27,10 @@ const failed = (c: Control, why: string): Outcome => ({
  * A native select's placeholder is its first option; a selectize combobox keeps
  * its options in memory, so its native <select> holds only the chosen one.
  */
+/** The value a group member is identified by: an input's `value`, or an ARIA radio's `value` attribute. */
+export const optionKey = (m: HTMLElement): string =>
+  m instanceof HTMLInputElement ? m.value : (m.getAttribute('value') ?? m.textContent ?? '');
+
 const isChosen = (el: HTMLSelectElement, combobox: boolean): boolean =>
   el.value !== '' && (combobox || el.selectedIndex > 0);
 
@@ -71,7 +75,7 @@ export async function execute(
         return left(control, 'not a single consent box');
       if (!d.required) return left(control, 'optional consent stays unticked');
       if (adapter.neverTick?.test(d.label)) return left(control, 'never auto-ticked on this site');
-      const box = control.members[0] as HTMLInputElement;
+      const box = control.members[0] as HTMLElement;
       return setChecked(box, true)
         ? filled(control)
         : failed(control, 'the box did not stay ticked');
@@ -153,9 +157,9 @@ async function applyOption(
   }
 
   if (d.kind === 'radio-group') {
-    const target = control.members.find((m) => m.value === optionValue);
+    const target = control.members.find((m) => optionKey(m) === optionValue);
     if (!target) return failed(control, `no radio for "${optionLabel}"`);
-    if (control.members.some((m) => m.checked)) return left(control, 'already chosen');
+    if (control.members.some(isChecked)) return left(control, 'already chosen');
     return setChecked(target, true) ? filled(control) : failed(control, 'the radio did not stick');
   }
 

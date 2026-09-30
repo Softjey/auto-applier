@@ -195,3 +195,83 @@ describe('place names across languages', () => {
     expect(report.manual).toEqual([]);
   });
 });
+
+describe('radio groups without a legend, and cookie widgets', () => {
+  it('asks the planner the QUESTION above the radios, not the first option', async () => {
+    document.body.innerHTML = `<form>
+      <div class="q"><p>Do you have experience with international clients? *</p>
+        <div><label><input type="radio" name="q1" value="y"> Yes</label> <label><input type="radio" name="q1" value="n"> No</label></div>
+      </div>
+      <div id="onetrust-consent-sdk"><label><input type="checkbox" name="ot-group-id-C0002"> Performance Cookies</label></div>
+    </form>`;
+    const backend = fakeBackend([]);
+    await fillForm({ adapter: erecruiter, backend, doc: document, cvId: null });
+    expect(backend.asked.map((f) => f.label)).toEqual([
+      'Do you have experience with international clients? *',
+    ]);
+  });
+
+  it('answers a yes/no radio from a long profile answer', async () => {
+    document.body.innerHTML = `<form><fieldset><legend>Authorized to work in Poland?</legend>
+      <label><input type="radio" name="w" value="y"> Tak</label><label><input type="radio" name="w" value="n"> Nie</label></fieldset></form>`;
+    const backend = fakeBackend([when(/authorized/i, value('Yes — I hold a work permit.'))]);
+    await fillForm({ adapter: erecruiter, backend, doc: document, cvId: null });
+    expect((document.querySelector('[value=y]') as HTMLInputElement).checked).toBe(true);
+    expect((document.querySelector('[value=n]') as HTMLInputElement).checked).toBe(false);
+  });
+});
+
+describe('styled checkboxes and radios', () => {
+  it('keeps a zero-size native input behind a visible styled label', async () => {
+    document.body.innerHTML = `<form><label class="styled"><input type="checkbox" name="consent" required style="width:0;height:0;opacity:0"> I consent to the processing of my personal data</label></form>`;
+    const backend = fakeBackend([when(/consent/i, () => ({ action: 'check' }))]);
+    await fillForm({ adapter: erecruiter, backend, doc: document, cvId: null });
+    expect((document.querySelector('[name=consent]') as HTMLInputElement).checked).toBe(true);
+  });
+});
+
+describe('ARIA widgets (Radix / shadcn forms, e.g. the new eRecruiter)', () => {
+  const load = () => {
+    document.body.innerHTML = fixture('erecruiter-radix.html').replace(
+      /<script>[\s\S]*<\/script>/,
+      '',
+    );
+    // happy-dom does not run inline scripts: do what Radix does on click.
+    document.querySelectorAll<HTMLElement>('[role=radio], [role=checkbox]').forEach((b) =>
+      b.addEventListener('click', () => {
+        if (b.getAttribute('role') === 'radio') {
+          b.closest('[role=radiogroup]')
+            ?.querySelectorAll('[role=radio]')
+            .forEach((r) => r.setAttribute('aria-checked', String(r === b)));
+        } else b.setAttribute('aria-checked', String(b.getAttribute('aria-checked') !== 'true'));
+      }),
+    );
+  };
+
+  it('reads the radiogroup as one question and the checkbox as a consent, ignoring the aria-hidden shadows', async () => {
+    load();
+    const backend = fakeBackend([]);
+    await fillForm({ adapter: erecruiter, backend, doc: document, cvId: null });
+    const asked = backend.asked.map((f) => `${f.kind}:${f.label}`);
+    expect(asked).toContain('radio-group:Do you have experience with international clients? *');
+    expect(asked.filter((a) => a.startsWith('checkbox-group')).length).toBe(2);
+    expect(
+      backend.asked.find((f) => f.kind === 'radio-group')?.options?.map((o) => o.label),
+    ).toEqual(['Yes', 'No']);
+    expect(backend.asked.some((f) => f.key === 'custom_1' || f.key === '2996')).toBe(false);
+  });
+
+  it('answers the radio, ticks the mandatory consent and leaves the future-recruitment one', async () => {
+    load();
+    const backend = fakeBackend([
+      when(/international/i, value('Yes — several.')),
+      when(/future/i, () => ({ action: 'leave' })),
+      when(/consent/i, () => ({ action: 'check' })),
+    ]);
+    await fillForm({ adapter: erecruiter, backend, doc: document, cvId: null });
+    expect(document.getElementById('rg1-0')?.getAttribute('aria-checked')).toBe('true');
+    expect(document.getElementById('rg1-1')?.getAttribute('aria-checked')).toBe('false');
+    expect(document.getElementById('c1')?.getAttribute('aria-checked')).toBe('true');
+    expect(document.getElementById('c2')?.getAttribute('aria-checked')).toBe('false');
+  });
+});

@@ -46,6 +46,9 @@ test.describe('live forms (fake data, never submitted)', () => {
       await page.goto(target.url, { waitUntil: 'domcontentloaded' });
       const tLoad = Date.now() - t0;
       await target.open?.(page);
+      // system.erecruiter.pl redirects to form.erecruiter.pl: wait for the page to settle,
+      // or the click lands on a panel that is about to be replaced.
+      await page.waitForLoadState('load').catch(() => undefined);
       await page.waitForTimeout(2500);
       await expect(panel(page), 'panel should mount on a form page').toBeVisible({
         timeout: 15_000,
@@ -55,11 +58,14 @@ test.describe('live forms (fake data, never submitted)', () => {
       const options = await panel(page).getByRole('combobox').locator('option').allTextContents();
       if (options.length > 1) await panel(page).getByRole('combobox').selectOption({ index: 1 });
       await panel(page).getByRole('button', { name: 'Fill form' }).click();
-      await expect(panel(page).getByText(/filled|Plan server|failed/)).toBeVisible({
+      await expect(
+        panel(page).getByTestId('summary').or(panel(page).locator('.af-err')),
+      ).toBeVisible({
         timeout: 45_000,
       });
 
-      const summary = await panel(page).innerText();
+      const summary = (await panel(page).textContent()) ?? '';
+      const all = await panel(page).locator('details li').allTextContents();
       const fields = await page.evaluate(() =>
         [...document.querySelectorAll<HTMLInputElement>('input, select, textarea')]
           .filter((e) => e.type !== 'hidden' && !/-selectized$/.test(e.id))
@@ -85,7 +91,7 @@ test.describe('live forms (fake data, never submitted)', () => {
           })),
       );
       console.log(
-        `\n=== ${target.name}\n${summary}\n${fields.map((f) => `  ${f.t.padEnd(14)} ${f.k.padEnd(30)} ${f.v} ${f.sel} | ${f.lab}`).join('\n')}`,
+        `\n=== ${target.name} (dom ${tLoad}ms, panel ${tPanel}ms)\n${summary}\nALL:\n  ${all.join('\n  ')}\n${fields.map((f) => `  ${f.t.padEnd(14)} ${f.k.padEnd(30)} ${f.v} ${f.sel} | ${f.lab}`).join('\n')}`,
       );
     });
   }

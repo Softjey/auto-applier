@@ -1,0 +1,50 @@
+<form class="flex flex-col">
+  <div><label for="fn">Firstname *</label><input id="fn" name="firstName" /></div>
+  <div><label for="em">Email *</label><input id="em" type="email" name="email" /></div>
+  <div class="flex w-full flex-col">
+    <label for="rg1"
+      >Do you have experience with international clients? <span aria-hidden="true">*</span></label
+    >
+    <div role="radiogroup" aria-required="true" id="rg1">
+      <div class="item">
+        <button type="button" role="radio" aria-checked="false" value="0" id="rg1-0"></button
+        ><label for="rg1-0">Yes</label
+        ><input type="radio" name="custom_1" value="0" aria-hidden="true" tabindex="-1" />
+      </div>
+      <div class="item">
+        <button type="button" role="radio" aria-checked="false" value="1" id="rg1-1"></button
+        ><label for="rg1-1">No</label
+        ><input type="radio" name="custom_1" value="1" aria-hidden="true" tabindex="-1" />
+      </div>
+    </div>
+  </div>
+  <div class="flex items-center">
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked="false"
+      aria-required="true"
+      id="c1"
+    ></button>
+    <label for="c1">I consent to the processing of my personal data for this recruitment</label>
+    <input type="checkbox" name="2996" aria-hidden="true" tabindex="-1" />
+  </div>
+  <div class="flex items-center">
+    <button type="button" role="checkbox" aria-checked="false" id="c2"></button>
+    <label for="c2">I consent to processing for future recruitment</label>
+  </div>
+</form>
+<script>
+  // Radix flips aria-checked on click; a radio group allows one.
+  document.querySelectorAll('[role=radio], [role=checkbox]').forEach((b) => {
+    b.addEventListener('click', () => {
+      if (b.getAttribute('role') === 'radio') {
+        b.closest('[role=radiogroup]')
+          .querySelectorAll('[role=radio]')
+          .forEach((r) => r.setAttribute('aria-checked', String(r === b)));
+      } else {
+        b.setAttribute('aria-checked', String(b.getAttribute('aria-checked') !== 'true'));
+      }
+    });
+  });
+</script>

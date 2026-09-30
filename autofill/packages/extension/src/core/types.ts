@@ -5,8 +5,11 @@ export interface Control {
   descriptor: FieldDescriptor;
   /** The element to act on; for a checkbox/radio group, its first member. */
   el: HTMLElement;
-  /** Every input of a checkbox/radio group, in DOM order. */
-  members: HTMLInputElement[];
+  /**
+   * Every member of a checkbox/radio group, in DOM order: native inputs, or
+   * `[role=radio|checkbox]` elements for ARIA widgets (Radix / shadcn forms).
+   */
+  members: HTMLElement[];
 }
 
 export type Outcome =

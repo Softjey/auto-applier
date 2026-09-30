@@ -92,7 +92,7 @@ function Result({ report }: { report: FillReport }) {
   const failed = report.outcomes.filter((o) => o.status === 'failed');
   return (
     <section>
-      <p>
+      <p data-testid="summary">
         <strong>{filled}</strong> filled · {CV_NOTE[report.cv]}
       </p>
       {failed.length > 0 && (
@@ -107,6 +107,17 @@ function Result({ report }: { report: FillReport }) {
           </ul>
         </>
       )}
+      <details>
+        <summary>All fields ({report.outcomes.length})</summary>
+        <ul>
+          {report.outcomes.map((o) => (
+            <li key={o.id}>
+              <strong>{o.status}</strong> {o.label || '(unlabelled)'}{' '}
+              <em>{'why' in o ? o.why : 'reason' in o ? o.reason : ''}</em>
+            </li>
+          ))}
+        </ul>
+      </details>
       {report.manual.length > 0 && (
         <>
           <h4>Needs you ({report.manual.length})</h4>

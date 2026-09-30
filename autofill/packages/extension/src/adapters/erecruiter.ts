@@ -13,6 +13,8 @@ export const erecruiter: SiteAdapter = {
   matches: (url) =>
     /\.erecruiter\.pl$/.test(url.hostname) &&
     (url.pathname.startsWith('/form/') || /\/FormTemplates\//i.test(url.pathname)),
+  // The page also carries a cookie-consent widget; the application is the <form>.
+  scope: (doc) => doc.querySelector('form'),
   // The old form's postback rewrites the region/city selects after the upload,
   // so those must be filled AFTER it. The new form is unaffected by the wait.
   refillAfterCvMs: 2500,

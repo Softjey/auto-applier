@@ -9,7 +9,7 @@ const fixture = (name: string) =>
 const fill = async (page: Page) => {
   await expect(panel(page)).toBeVisible();
   await panel(page).getByRole('button', { name: 'Fill form' }).click();
-  await expect(panel(page).getByText(/filled/)).toBeVisible();
+  await expect(panel(page).getByTestId('summary')).toBeVisible();
 };
 
 // What real Traffit gives the page world: a selectize API on the native <select>.
@@ -44,7 +44,7 @@ test.describe('the real extension in a real Chromium, on fixture pages', () => {
     await expect(consent!).toBeChecked();
     await expect(future!).not.toBeChecked();
     expect(await page.locator('#f4').evaluate((el: HTMLInputElement) => el.files?.length)).toBe(1);
-    await expect(panel(page).getByText('CV attached')).toBeVisible();
+    await expect(panel(page).getByTestId('summary')).toContainText('CV attached');
     // "Dostępność" is a fact the profile has no exact answer for: it must be handed to the human.
     await expect(panel(page).getByText(/Needs you/)).toBeVisible();
     await expect(page.locator('#f5')).not.toHaveAttribute('data-chosen', /.+/);

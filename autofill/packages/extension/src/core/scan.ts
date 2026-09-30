@@ -1,6 +1,6 @@
 import type { FieldDescriptor, FieldKind, FieldOption } from '@applier/protocol';
 import type { SiteAdapter } from '../adapters';
-import { labelFor, looksRequired } from './labels';
+import { groupQuestion, labelFor, looksRequired, widgetLabel } from './labels';
 import { selectizeOptions } from './selectize';
 import { clean } from './text';
 import type { Control } from './types';
@@ -17,6 +17,13 @@ const TEXT_TYPES: Record<string, FieldKind> = {
 };
 const SKIP_TYPES = new Set(['hidden', 'submit', 'button', 'reset', 'image', 'password']);
 
+/** Cookie-consent widgets (OneTrust, Cookiebot…) live in the DOM of every page; they are not the form. */
+const COOKIE_WIDGET =
+  '#onetrust-consent-sdk, #CybotCookiebotDialog, [id*="cookie" i], [class*="cookie" i], [aria-label*="cookie" i]';
+
+const isChoice = (el: HTMLElement): boolean =>
+  el instanceof HTMLInputElement && (el.type === 'checkbox' || el.type === 'radio');
+
 const isSelectized = (el: Element): boolean => el.classList.contains('selectized');
 /** The text input selectize renders in front of its hidden <select>. */
 const isSelectizeShell = (el: HTMLElement): boolean =>
@@ -24,7 +31,10 @@ const isSelectizeShell = (el: HTMLElement): boolean =>
 
 interface Group {
   kind: 'checkbox-group' | 'radio-group';
-  members: HTMLInputElement[];
+  members: HTMLElement[];
+  /** Set when the widget names its own question (ARIA radiogroup). */
+  question?: string;
+  required?: boolean;
 }
 
 /**
@@ -41,10 +51,13 @@ export async function scan(root: ParentNode, adapter: SiteAdapter): Promise<Cont
 
   for (const el of elements) {
     if (el instanceof HTMLInputElement && SKIP_TYPES.has(el.type)) continue;
-    if (isSelectizeShell(el)) continue;
+    if (isSelectizeShell(el) || el.closest(COOKIE_WIDGET)) continue;
 
     const selectized = el instanceof HTMLSelectElement && isSelectized(el);
-    if (!selectized && (isHoneypotName(el.getAttribute('name') ?? '') || !isVisible(el))) {
+    if (
+      !selectized &&
+      (isHoneypotName(el.getAttribute('name') ?? '') || !isVisible(el, !isChoice(el)))
+    ) {
       // File inputs are routinely hidden behind a styled button; keep them.
       if (!(el instanceof HTMLInputElement && el.type === 'file')) continue;
     }
@@ -67,6 +80,7 @@ export async function scan(root: ParentNode, adapter: SiteAdapter): Promise<Cont
   }
 
   for (const group of groups.values()) controls.push(describeGroup(group, nextId()));
+  for (const group of ariaGroups(root)) controls.push(describeGroup(group, nextId()));
 
   // Keep page order across the two passes.
   return controls.sort((a, b) => order(a.el, b.el));
@@ -112,22 +126,66 @@ async function describe(
   return { descriptor, el, members: [] };
 }
 
+/**
+ * Radix / shadcn forms (the new eRecruiter, many others) draw radios and
+ * checkboxes as `<button role="radio|checkbox">`; the native inputs beside them
+ * are aria-hidden shadows nobody can operate. Read the widgets instead.
+ */
+function ariaGroups(root: ParentNode): Group[] {
+  const usable = (el: HTMLElement) => !el.closest(COOKIE_WIDGET) && isVisible(el, false);
+  const groups: Group[] = [];
+  for (const rg of root.querySelectorAll<HTMLElement>('[role="radiogroup"]')) {
+    const members = [...rg.querySelectorAll<HTMLElement>('[role="radio"]')];
+    if (members.length && usable(rg)) {
+      groups.push({
+        kind: 'radio-group',
+        members,
+        question: labelFor(rg),
+        required: rg.getAttribute('aria-required') === 'true',
+      });
+    }
+  }
+  for (const box of root.querySelectorAll<HTMLElement>('[role="checkbox"]')) {
+    if (usable(box))
+      groups.push({
+        kind: 'checkbox-group',
+        members: [box],
+        required: box.getAttribute('aria-required') === 'true',
+      });
+  }
+  return groups;
+}
+
+const memberLabel = (m: HTMLElement): string =>
+  m instanceof HTMLInputElement ? labelFor(m) : widgetLabel(m);
+const memberKey = (m: HTMLElement): string =>
+  m instanceof HTMLInputElement ? m.value : (m.getAttribute('value') ?? '');
+const memberRequired = (m: HTMLElement): boolean => m instanceof HTMLInputElement && m.required;
+
 function describeGroup(group: Group, id: string): Control {
-  const first = group.members[0] as HTMLInputElement;
+  const first = group.members[0] as HTMLElement;
   const legend = first.closest('fieldset')?.querySelector('legend');
-  const options: FieldOption[] = group.members.map((m) => ({
-    value: m.value,
-    label: labelFor(m) || m.value,
-  }));
-  // A single checkbox IS the question (every consent box); a group's question is its legend.
-  const label = legend ? clean(legend.textContent) : (options[0]?.label ?? '');
+  const options: FieldOption[] = group.members.map((m) => {
+    const label = memberLabel(m);
+    return { value: memberKey(m) || label, label: label || memberKey(m) };
+  });
+  // A single checkbox IS the question (every consent box); a group's question is its
+  // legend, or failing that the text above its options.
+  const label =
+    group.question ||
+    (legend
+      ? clean(legend.textContent)
+      : group.members.length === 1
+        ? (options[0]?.label ?? '')
+        : groupQuestion(group.members) || (options[0]?.label ?? ''));
   return {
     descriptor: {
       id,
       label,
-      key: first.name,
+      key: first.getAttribute('name') ?? first.id,
       kind: group.kind,
-      required: group.members.some((m) => m.required) || looksRequired(label),
+      required:
+        group.required === true || group.members.some(memberRequired) || looksRequired(label),
       options,
     },
     el: first,

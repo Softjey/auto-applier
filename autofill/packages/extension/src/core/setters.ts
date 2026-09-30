@@ -32,9 +32,14 @@ export function setSelectValue(el: HTMLSelectElement, optionValue: string): bool
   return el.value === optionValue;
 }
 
-export function setChecked(el: HTMLInputElement, checked: boolean): boolean {
-  if (el.checked !== checked) el.click(); // a real click keeps framework state in sync
-  return el.checked === checked;
+/** Native input or ARIA widget (`<button role="checkbox" aria-checked>`). */
+export function isChecked(el: HTMLElement): boolean {
+  return el instanceof HTMLInputElement ? el.checked : el.getAttribute('aria-checked') === 'true';
+}
+
+export function setChecked(el: HTMLElement, checked: boolean): boolean {
+  if (isChecked(el) !== checked) el.click(); // a real click keeps framework state in sync
+  return isChecked(el) === checked;
 }
 
 export function attachFile(el: HTMLInputElement, file: File): boolean {
