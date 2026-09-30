@@ -1,6 +1,6 @@
 ---
 name: apply-method-triage
-description: Triage every SAVED vacancy on OneTap.Work by the method its application demands — Easy Apply inside the job board, an external ATS form an autofill extension can prefill, an external form that must be typed by hand, or an expired posting. Read-only except for archiving dead postings. Writes runs/<date>-triage.md and a machine-readable triage.json. Use when the user asks to triage, categorize or group saved vacancies by how hard they are to apply to, or to plan an apply run before it starts.
+description: Triage every SAVED vacancy on OneTap.Work by the method its application demands — Easy Apply inside the job board, an external ATS form an autofill extension can prefill, an external form that must be typed by hand, or an expired posting. Read-only except for archiving dead postings. Writes one readable Markdown report, triage/<date>.md, in the user's data repo. Use when the user asks to triage, categorize or group saved vacancies by how hard they are to apply to, or to plan an apply run before it starts.
 ---
 
 # Apply-method triage
@@ -167,10 +167,16 @@ rather than asserting it.
 
 ### 5. Write the output
 
-Two files, same directory, same run:
+One file: **`$DATA/triage/<today's date>.md`**, where `$DATA` is the user's private
+data repo (resolve it with `lib/data-dir.mjs`, see `apply-to-jobs` § Configuration).
+Triage is a report, not a run, so it never goes under `runs/`. There is no JSON
+twin: nothing consumes one, and a second copy only drifts. A later run reads the
+report or simply re-derives the group.
 
-`runs/<today's date>-triage.md` — for a person to read:
-- one-line counts summary at the top;
+If the same day already has a report, write `<date>-2.md` rather than overwriting.
+
+Layout:
+- `# SAVED triage — <date>`, then a one-line counts summary;
 - a section per group, in order 1, 2, 3, then 4, each a table of
   Company / Title / Resolved host / ATS / Reason, where **Title is a markdown
   link to the vacancy's `link`** (`[Senior Frontend](https://onetap.work/job/…)`).
@@ -182,9 +188,12 @@ Two files, same directory, same run:
 - a short methodology footer: the date, which rung answered how many, and the
   extension version the support table was extracted from.
 
-`runs/<today's date>-triage.json` — for `apply-to-jobs` to consume: one object
-per vacancy with the fields from step 4 (`link` included), so a later run reads the group instead
-of re-deriving it or parsing markdown.
+**Keep the tables valid Markdown.** A literal `|` inside a cell ends the cell and
+shifts every column after it — and job titles are full of them
+(`Frontend Engineer | React + Next.js`). Escape every pipe in any cell as `\|`
+(including inside the link text), collapse newlines to spaces, and keep each row on
+one line. Before finishing, check that every row of a table has as many cells as
+its header; fix the row, never the header.
 
 ### 6. Archive the expired ones without asking
 
