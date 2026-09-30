@@ -1,0 +1,15 @@
+{
+  "name": "@applier/e2e",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "End-to-end tests: the built extension in a real Chromium against the real plan server, on intercepted fixture pages (and, opt-in, on live forms).",
+  "scripts": {
+    "test": "playwright test",
+    "test:live": "LIVE=1 playwright test live",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}

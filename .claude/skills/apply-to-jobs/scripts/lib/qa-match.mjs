@@ -11,7 +11,11 @@ import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 // lib/ -> scripts/ -> apply-to-jobs/ -> skills/ -> .claude/ -> repo root
-export const PROFILE_PATH = resolve(HERE, "../../../../../profile.json");
+// APPLIER_PROFILE_PATH points the scripts at a different profile — used only by the
+// autofill e2e tests, which must never type the real person into a real form.
+export const PROFILE_PATH = process.env.APPLIER_PROFILE_PATH
+  ? resolve(process.env.APPLIER_PROFILE_PATH)
+  : resolve(HERE, "../../../../../profile.json");
 
 const STOPWORDS = new Set([
   "a", "an", "the", "is", "are", "do", "does", "did", "you", "your", "i",

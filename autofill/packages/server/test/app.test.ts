@@ -77,8 +77,10 @@ describe('POST /plan', () => {
 
 describe('GET /cv', () => {
   it('404s an id that is not in the listing (no path traversal)', async () => {
-    const res = await app.request('http://127.0.0.1:7357/cv?id=../../../etc/passwd', {
-      headers: { origin: EXTENSION },
+    const res = await app.request('http://127.0.0.1:7357/cv', {
+      method: 'POST',
+      headers: { origin: EXTENSION, 'content-type': 'application/json' },
+      body: JSON.stringify({ id: '../../../etc/passwd' }),
     });
     expect(res.status).toBe(404);
   });

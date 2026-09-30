@@ -17,7 +17,11 @@ const STATUS_DIRS = ['SAVED'] as const;
  * crafted id cannot escape the out/ tree.
  */
 export class CvService {
-  constructor(private readonly resolver: Resolver) {}
+  /** `outDir` overrides <resumeRepo>/out (e2e tests point it at a fixture CV). */
+  constructor(
+    private readonly resolver: Resolver,
+    private readonly outDir?: string,
+  ) {}
 
   async list(): Promise<CvSummary[]> {
     return (await this.scan()).map(({ id, label }) => ({ id, label }));
@@ -35,10 +39,11 @@ export class CvService {
 
   private async scan(): Promise<CvEntry[]> {
     const { paths } = await this.resolver.loadConfig();
-    if (!paths?.resumeRepo) return [];
+    const out = this.outDir ?? (paths?.resumeRepo ? join(paths.resumeRepo, 'out') : undefined);
+    if (!out) return [];
     const entries: CvEntry[] = [];
     for (const status of STATUS_DIRS) {
-      const base = join(paths.resumeRepo, 'out', status);
+      const base = join(out, status);
       const dirs = await readdir(base).catch(() => [] as string[]);
       for (const dir of dirs) {
         const files = await readdir(join(base, dir)).catch(() => [] as string[]);

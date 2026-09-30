@@ -17,6 +17,9 @@ export type CvSummary = z.infer<typeof CvSummary>;
 export const CvListResponse = z.object({ cvs: z.array(CvSummary) });
 export type CvListResponse = z.infer<typeof CvListResponse>;
 
+export const CvRequest = z.object({ id: z.string().min(1) });
+export type CvRequest = z.infer<typeof CvRequest>;
+
 export const CvResponse = z.object({ name: z.string(), base64: z.string() });
 export type CvResponse = z.infer<typeof CvResponse>;
 

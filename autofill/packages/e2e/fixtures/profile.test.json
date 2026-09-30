@@ -1,0 +1,44 @@
+{
+  "$schemaVersion": 1,
+  "personal": {
+    "fullName": "Test Candidate",
+    "firstName": "Test",
+    "lastName": "Candidate",
+    "email": "test.candidate@example.invalid",
+    "phone": "+48 000 000 000",
+    "currentCity": "Warsaw",
+    "currentCountry": "Poland",
+    "citizenship": "Testland"
+  },
+  "links": {
+    "linkedin": "https://www.linkedin.com/in/test-candidate/",
+    "github": "https://github.com/test-candidate",
+    "portfolio": null,
+    "other": []
+  },
+  "workAuthorization": { "citizenship": "Testland" },
+  "location": { "willingToRelocate": false },
+  "compensation": {},
+  "availability": { "noticePeriod": "2 weeks" },
+  "experience": [],
+  "languages": [
+    { "language": "English", "level": "full working proficiency", "cefr": "B2" },
+    { "language": "Polish", "level": "full working proficiency", "cefr": "C1" }
+  ],
+  "eeo": { "policy": "decline" },
+  "qa": [
+    {
+      "id": "test-authorized-poland",
+      "canonicalTopic": "work_authorization:Poland",
+      "question": "Are you legally authorized to work in Poland?",
+      "aliases": [],
+      "answer": "Yes — test data.",
+      "tags": ["work_authorization"],
+      "source": "test",
+      "createdAt": "2026-01-01",
+      "lastUsed": "2026-01-01",
+      "timesUsed": 0
+    }
+  ],
+  "projects": []
+}

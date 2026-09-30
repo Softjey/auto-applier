@@ -1,6 +1,6 @@
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
-import { PlanRequest, type PlanResponse } from '@applier/protocol';
+import { CvRequest, PlanRequest, type PlanResponse } from '@applier/protocol';
 import { loopbackExtensionOnly } from './guards';
 import type { CvService } from './services/cv-service';
 import type { PlanService } from './services/plan-service';
@@ -19,9 +19,9 @@ export function createApp({ plans, cvs }: AppDeps) {
       const body: PlanResponse = { plan: await plans.plan(fields) };
       return c.json(body);
     })
-    .get('/cvs', async (c) => c.json({ cvs: await cvs.list() }))
-    .get('/cv', async (c) => {
-      const cv = await cvs.read(c.req.query('id') ?? '');
+    .post('/cvs', async (c) => c.json({ cvs: await cvs.list() }))
+    .post('/cv', zValidator('json', CvRequest), async (c) => {
+      const cv = await cvs.read(c.req.valid('json').id);
       return cv ? c.json(cv) : c.json({ error: 'unknown cv' }, 404);
     });
 }

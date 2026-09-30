@@ -19,19 +19,22 @@ async function call<T>(path: string, schema: ZodType<T>, init?: RequestInit): Pr
   return schema.parse(await res.json());
 }
 
+/** Every route is a POST — see server/src/guards.ts for why. */
+const post = (body: unknown): RequestInit => ({
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify(body),
+});
+
 async function handle(raw: unknown): Promise<unknown> {
   const message = BackgroundRequest.parse(raw);
   switch (message.type) {
     case 'plan':
-      return call('/plan', PlanResponse, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ fields: message.fields }),
-      });
+      return call('/plan', PlanResponse, post({ fields: message.fields }));
     case 'cvs':
-      return call('/cvs', CvListResponse);
+      return call('/cvs', CvListResponse, post({}));
     case 'cv':
-      return call(`/cv?id=${encodeURIComponent(message.id)}`, CvResponse);
+      return call('/cv', CvResponse, post({ id: message.id }));
   }
 }
 

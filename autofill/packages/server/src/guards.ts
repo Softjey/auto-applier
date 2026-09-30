@@ -11,6 +11,10 @@ const EXTENSION_ORIGIN = /^chrome-extension:\/\/[a-p]{32}$/;
  *  - Origin must be a chrome-extension:// origin: a web page's own fetch
  *    carries its page origin and is refused, and a no-cors request carries no
  *    Origin at all, so it is refused too.
+ *
+ * Every data route is therefore a POST: Chrome sends `Origin` on the
+ * extension's POSTs but omits it on its GETs (found in the e2e run), so a GET
+ * cannot be told apart from a no-cors page request.
  */
 export const loopbackExtensionOnly: MiddlewareHandler = async (c, next) => {
   // c.req.url is built from the Host header, so this is the Host the client sent.
