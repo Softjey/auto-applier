@@ -42,3 +42,7 @@ Codex's `browser` plugin). The extension in `autofill/` additionally needs pnpm.
 
 Scripts locate your data repo via `$APPLIER_DATA_DIR`, then the path in `.data-dir`, then
 `../auto-applier-data`. See `CLAUDE.md` for the full map.
+
+## License
+
+[MIT](LICENSE). The skills and scripts carry no personal data; yours stays in your own private data repo.
