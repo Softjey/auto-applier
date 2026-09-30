@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { FieldDescriptor } from './field';
-import { CvListResponse, CvResponse, PlanResponse } from './api';
+import type { CvListResponse, CvResponse, PlanResponse } from './api';
 
 /** Content script -> background service worker. The worker alone talks to the server. */
 export const BackgroundRequest = z.discriminatedUnion('type', [

@@ -1,13 +1,7 @@
 import { z } from 'zod';
 
 /** Why a field was left for a human (or for the agent). */
-export const ManualReason = z.enum([
-  'salary',
-  'narrative',
-  'review',
-  'unknown',
-  'language-level',
-]);
+export const ManualReason = z.enum(['salary', 'narrative', 'review', 'unknown', 'language-level']);
 export type ManualReason = z.infer<typeof ManualReason>;
 
 export const Candidate = z.object({
