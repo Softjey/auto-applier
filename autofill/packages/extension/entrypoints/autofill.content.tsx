@@ -3,7 +3,7 @@ import {
   createShadowRootUi,
   type ShadowRootContentScriptUi,
 } from 'wxt/utils/content-script-ui/shadow-root';
-import { MATCH_PATTERNS, pickAdapter } from '../src/adapters';
+import { MATCH_PATTERNS, pickAdapter, type SiteAdapter } from '../src/adapters';
 import { chromeBackend } from '../src/core/messaging';
 import { Panel } from '../src/ui/Panel';
 import '../src/ui/panel.css';
@@ -13,17 +13,19 @@ export default defineContentScript({
   cssInjectionMode: 'ui',
   async main(ctx) {
     let ui: ShadowRootContentScriptUi<Root> | null = null;
+    let mounted: SiteAdapter | null = null;
 
     // justjoin.it and nofluffjobs are SPAs: the page a form lives on is reached
-    // without a load, so the panel follows the location, not the document.
-    const sync = async () => {
-      const adapter = pickAdapter(new URL(location.href));
-      if (!adapter) {
-        ui?.remove();
-        ui = null;
-        return;
-      }
-      if (ui) return;
+    // without a load, so the panel follows the location, not the document. The
+    // Navigation API fires BEFORE `location.href` changes, so the destination
+    // comes from the event, never from `location`.
+    const sync = async (url: URL) => {
+      const adapter = pickAdapter(url);
+      if (adapter === mounted) return;
+      ui?.remove();
+      ui = null;
+      mounted = adapter;
+      if (!adapter) return;
       ui = await createShadowRootUi(ctx, {
         name: 'applier-autofill',
         position: 'overlay',
@@ -37,7 +39,7 @@ export default defineContentScript({
       ui.mount();
     };
 
-    await sync();
-    ctx.addEventListener(window, 'wxt:locationchange', () => void sync());
+    await sync(new URL(location.href));
+    ctx.addEventListener(window, 'wxt:locationchange', ({ newUrl }) => void sync(newUrl));
   },
 });
