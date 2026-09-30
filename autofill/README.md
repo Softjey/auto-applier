@@ -48,14 +48,17 @@ so it can never type the real person into a real form. It needs a Chromium: eith
 
 ## What it will and will not do
 
-| Field                                       | Behaviour                                                    |
-| ------------------------------------------- | ------------------------------------------------------------ |
-| Name, e-mail, phone, links, city            | filled from `profile.json`                                   |
-| Exact `qa[]` answers                        | filled; select/radio only if an option unambiguously matches |
-| Mandatory data consent                      | ticked; optional / future-recruitment / account boxes never  |
-| CV                                          | attached from the selected tailored PDF                      |
-| Salary, free-text, language level, unknowns | **left to you**, listed in the panel — the core rule holds   |
-| Anything already filled                     | untouched                                                    |
+| Field                            | Behaviour                                                                                                                                                                                      |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Name, e-mail, phone, links, city | filled from `profile.json`                                                                                                                                                                     |
+| Exact `qa[]` answers             | filled; select/radio only if an option unambiguously matches                                                                                                                                   |
+| Mandatory data consent           | ticked; optional / future-recruitment / account boxes never                                                                                                                                    |
+| CV                               | attached from the selected tailored PDF                                                                                                                                                        |
+| Salary                           | quoted by `salary-quote.mjs` for THIS vacancy (type the published band in the panel; empty = your baseline). A band radio gets the band that holds it; under your floor it refuses and says so |
+| Language level                   | the profile's CEFR level mapped onto the form's own scale (C1/C2 second-highest step, B2 the one below) and shown for you to check                                                             |
+| Start date / notice period       | `2 weeks` matches `2 tygodnie`, `immediately` matches `Natychmiast`                                                                                                                            |
+| Free text, unknown questions     | **left to you**, listed in the panel — the core rule holds                                                                                                                                     |
+| Anything already filled          | untouched                                                                                                                                                                                      |
 
 ## Adding an ATS
 
