@@ -78,6 +78,50 @@ test.describe('the real extension in a real Chromium, on fixture pages', () => {
     await expect(page.locator('[name$="ctl61$tbText"]')).toHaveValue('');
   });
 
+  test('erecruiter (Radix): salary band, language scale, availability and the mandatory consent', async ({
+    context,
+    page,
+  }) => {
+    await serveFixture(
+      context,
+      'https://form.erecruiter.pl/form/abc',
+      fixture('erecruiter-radix.html'),
+    );
+    await page.goto('https://form.erecruiter.pl/form/abc');
+    await fill(page);
+
+    const on = (id: string) =>
+      expect(page.locator(`#${id}`)).toHaveAttribute('aria-checked', 'true');
+    await on('rg2-d'); // baseline 30 000 -> "30 000 - 32 000 zł"
+    await on('rg3-2'); // English B2 on a five-step scale -> "Komunikatywna"
+    await on('rg4-1'); // notice period "2 weeks" -> "2 tygodnie"
+    await on('c1'); // the mandatory consent
+    await expect(page.locator('#c2')).toHaveAttribute('aria-checked', 'false'); // future recruitment
+    await expect(page.locator('#ci')).toHaveValue('Warsaw');
+    await expect(panel(page).getByText('Check these choices')).toBeVisible();
+  });
+
+  test('erecruiter: a band typed in the panel drives the quote, and one under the floor blocks it', async ({
+    context,
+    page,
+  }) => {
+    await serveFixture(
+      context,
+      'https://form.erecruiter.pl/form/abc',
+      fixture('erecruiter-radix.html'),
+    );
+    await page.goto('https://form.erecruiter.pl/form/abc');
+    await expect(panel(page)).toBeVisible();
+
+    await panel(page).getByText('Salary band of this vacancy').click();
+    await panel(page).getByPlaceholder('min').fill('18000');
+    await panel(page).getByPlaceholder('max').fill('22000');
+    await panel(page).getByRole('button', { name: 'Fill form' }).click();
+
+    await expect(panel(page).getByText('Below your salary floor')).toBeVisible();
+    await expect(page.locator('#rg2 [aria-checked="true"]')).toHaveCount(0);
+  });
+
   test('justjoin: acts inside the modal only and never ticks the account box', async ({
     context,
     page,

@@ -48,7 +48,10 @@ export function classify(field, profile, vocab) {
   if (field.kind === "honeypot") {
     return { status: "skip", why: "anti-autofill honeypot — writing here loses the answer" };
   }
-  if (field.kind === "file" || matches(vocab.topic.cvUpload, label)) {
+  // A CONSENT or a yes/no question can mention the CV ("...data contained in my CV") without
+  // being a place to put one. Only a file control, or a free-form box, is a CV field by label.
+  const isChoice = ["checkbox", "checkbox-group", "radio", "radio-group", "select", "combobox"].includes(field.kind);
+  if (field.kind === "file" || (!isChoice && matches(vocab.topic.cvUpload, label))) {
     return { status: "runtime", runtime: "cv", why: "the tailored PDF generated in Phase 1" };
   }
   if (matches(vocab.topic.eeo, label)) {

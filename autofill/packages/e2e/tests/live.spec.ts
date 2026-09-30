@@ -33,6 +33,10 @@ const TARGETS: Target[] = [
     url: 'https://system.erecruiter.pl/FormTemplates/RecruitmentForm.aspx?WebID=a73da7a78aa64263829c6392e50e5d1c',
   },
   {
+    name: 'erecruiter empik',
+    url: 'https://form.erecruiter.pl/form/8ec9427f90384fc288a1bc4a1d86092e',
+  },
+  {
     name: 'justjoin altimetrik',
     url: 'https://justjoin.it/job-offer/altimetrik-poland-senior-react-developer-krakow-javascript-c6d7cd5b',
     open: async (page) => {

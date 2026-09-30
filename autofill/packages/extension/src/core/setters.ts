@@ -32,13 +32,26 @@ export function setSelectValue(el: HTMLSelectElement, optionValue: string): bool
   return el.value === optionValue;
 }
 
+const SETTLE_MS = 500;
+const POLL_MS = 25;
+
 /** Native input or ARIA widget (`<button role="checkbox" aria-checked>`). */
 export function isChecked(el: HTMLElement): boolean {
   return el instanceof HTMLInputElement ? el.checked : el.getAttribute('aria-checked') === 'true';
 }
 
-export function setChecked(el: HTMLElement, checked: boolean): boolean {
-  if (isChecked(el) !== checked) el.click(); // a real click keeps framework state in sync
+/**
+ * Click, then wait for the state to settle. React/Radix apply a click in the next tick, so
+ * reading `aria-checked` straight after `click()` reports a failure that has not happened
+ * (found on live eRecruiter). Polls briefly; a state that never arrives is a real failure.
+ */
+export async function setChecked(el: HTMLElement, checked: boolean): Promise<boolean> {
+  if (isChecked(el) === checked) return true;
+  el.click(); // a real click keeps framework state in sync
+  for (let waited = 0; waited < SETTLE_MS; waited += POLL_MS) {
+    if (isChecked(el) === checked) return true;
+    await new Promise((resolve) => setTimeout(resolve, POLL_MS));
+  }
   return isChecked(el) === checked;
 }
 

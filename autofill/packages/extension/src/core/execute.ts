@@ -62,7 +62,10 @@ export async function execute(
     case 'leave':
       return left(control, 'policy: leave unchecked');
     case 'upload-cv':
-      return left(control, 'handled by the CV step');
+      // Only a file control takes the CV; anything else that got here is a mislabelled field.
+      return d.kind === 'file'
+        ? left(control, 'handled by the CV step')
+        : { status: 'manual', id: d.id, label: d.label, reason: 'unknown' };
     case 'manual':
       // A box the site says must never be auto-ticked is a policy, not a question for the user.
       if (d.kind === 'checkbox-group' && adapter.neverTick?.test(d.label)) {
@@ -92,7 +95,7 @@ export async function execute(
       if (!d.required) return left(control, 'optional consent stays unticked');
       if (adapter.neverTick?.test(d.label)) return left(control, 'never auto-ticked on this site');
       const box = control.members[0] as HTMLElement;
-      return setChecked(box, true)
+      return (await setChecked(box, true))
         ? filled(control)
         : failed(control, 'the box did not stay ticked');
     }
@@ -180,7 +183,7 @@ async function applyOption(
     const target = control.members.find((m) => optionKey(m) === optionValue);
     if (!target) return failed(control, `no radio for "${optionLabel}"`);
     if (control.members.some(isChecked)) return left(control, 'already chosen');
-    return setChecked(target, true)
+    return (await setChecked(target, true))
       ? filled(control, detail)
       : failed(control, 'the radio did not stick');
   }

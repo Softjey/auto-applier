@@ -4,6 +4,7 @@ import type { SiteAdapter } from '../adapters';
 import { guessCv } from '../core/guess-cv';
 import type { Backend } from '../core/messaging';
 import { fillForm } from '../core/run';
+import { usePageReady } from './use-page-ready';
 import type { FillReport } from '../core/types';
 
 type Phase =
@@ -55,6 +56,7 @@ export function Panel({ adapter, backend }: { adapter: SiteAdapter; backend: Bac
   const [cvId, setCvId] = useState<string | null>(null);
   const [phase, setPhase] = useState<Phase>({ kind: 'idle' });
   const [band, setBand] = useState<BandDraft>(EMPTY_BAND);
+  const pageReady = usePageReady();
 
   useEffect(() => {
     backend.cvs().then(
@@ -149,8 +151,8 @@ export function Panel({ adapter, backend }: { adapter: SiteAdapter; backend: Bac
         </div>
       </details>
 
-      <button className="af-go" disabled={phase.kind === 'working'} onClick={run}>
-        {phase.kind === 'working' ? 'Filling…' : 'Fill form'}
+      <button className="af-go" disabled={!pageReady || phase.kind === 'working'} onClick={run}>
+        {phase.kind === 'working' ? 'Filling…' : pageReady ? 'Fill form' : 'Waiting for the page…'}
       </button>
       <p className="af-note">
         Fills what is a fact in your profile. Never submits — you press Send.

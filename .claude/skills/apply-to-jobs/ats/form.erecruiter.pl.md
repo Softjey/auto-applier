@@ -50,3 +50,27 @@ checkboxes: it is not the form. Scope to the page's `<form>`.
 `system.erecruiter.pl/FormTemplates/…` redirects to `form.erecruiter.pl/form/<guid>`
 after load; anything that clicks right after `goto` can hit the page that is about to
 be replaced.
+
+## What the forms actually ask, and how each was answered (autofill extension, 2026-09-30)
+
+Seen on ALTEN, Wakacje.pl and EMPIK (all `form.erecruiter.pl/form/<guid>`):
+
+- **Salary comes three ways**: a textarea ("brutto na UoP:", "na kontrakcie B2B:"), a
+  free-text box asking amount + contract form, and — EMPIK — a **radiogroup of monthly
+  bands** ("26 000 - 28 000 zł", "poniżej 6 000 zł", "powyżej 34 000 zł"). For bands pick
+  the one that holds the quote; a figure on a boundary goes to the HIGHER band.
+- **Language level is an ordinal radio scale** ("Brak | Podstawowa | Komunikatywna |
+  Zaawansowana | Biegła"), not CEFR. Mapped by the rule in `system.erecruiter.pl.md`: C1/C2
+  take the second-highest step, B2 the one below (B2 -> "Komunikatywna" on five steps).
+- **Availability is a radiogroup** in Polish durations ("Natychmiast | 2 tygodnie | 1
+  miesiąc"); a notice period of "2 weeks" is the same answer as "2 tygodnie".
+- **Contract preference** ("Umowa o Pracę", "B2B") is two optional Radix checkboxes.
+- A consent's text can mention the CV ("...data contained in my CV"). A classifier that
+  looks for the word "CV" in a label will call it a file upload and the consent is then
+  never ticked. Only a `type=file` control is a CV field.
+- Consent boxes carry no `*` and no `aria-required` even when the form needs them; the
+  wording ("Zgoda jest dobrowolna" = voluntary) is the only signal.
+
+**Clicks before `load` are swallowed.** The page is Next.js and hydrates the whole
+`document`; until then a click on anything injected under `<html>` reaches the element but
+never the injector's own handlers. Wait for `load` before clicking.

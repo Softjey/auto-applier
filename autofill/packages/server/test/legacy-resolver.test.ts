@@ -16,6 +16,21 @@ const f = (id: string, label: string, kind: FieldDescriptor['kind'] = 'text'): F
 });
 
 describe('legacy resolver through PlanService', () => {
+  it('does not mistake a consent that mentions the CV for a CV upload', async () => {
+    const [plan] = await plans.plan([
+      {
+        id: 'c',
+        label:
+          'I consent to the processing of my personal data contained in my CV for this recruitment',
+        key: '',
+        kind: 'checkbox-group',
+        required: true,
+        options: [{ value: 'on', label: 'consent' }],
+      },
+    ]);
+    expect(plan).toMatchObject({ action: 'check' });
+  });
+
   it('resolves structural fields, defers salary, uploads the CV, leaves unknowns alone', async () => {
     const plan = await plans.plan([
       f('email', 'E-mail *', 'email'),
