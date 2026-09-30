@@ -145,6 +145,11 @@ the same files instead of a fork of them.
     to it in the same commit as the fix. Written in English and identified by
     DOM handle rather than by on-screen labels, since the same ATS renders in
     whatever language the employer hires in.
+- `autofill/` — a browser extension plus a loopback plan server that fills the
+  forms Simplify does not cover (Traffit, eRecruiter, justjoin.it, No Fluff Jobs)
+  from `profile.json`. TypeScript pnpm workspace; the server imports
+  `resolve-fields.mjs` so the extension and the agent resolve a question the same
+  way. It fills facts only and never submits. See `autofill/README.md`.
 - `runs/` — the audit trail of every apply run, **tracked in git since
   2026-09-06** (it used to be gitignored and treated as disposable). One folder
   per vacancy holding `answers.md` (every question the form asked and every
