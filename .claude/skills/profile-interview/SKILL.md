@@ -11,15 +11,18 @@ stop and ask about mid-application later — so it's worth getting this right
 once, but it does not need to be perfect: this skill is idempotent and safe
 to re-run any time a gap surfaces.
 
-`profile.json` lives at the repo root. Read it first — if it doesn't exist,
-create it from the schema below with every field `null`.
+`profile.json` lives in the user's private **data repo**, not in this repo
+(`lib/data-dir.mjs` finds it: `$APPLIER_DATA_DIR`, then `.data-dir`, then
+`../auto-applier-data`). If there is no data repo yet, run the `setup-data-repo`
+skill first — it creates one with a skeleton `profile.json` (every field `null`)
+and then hands back to this interview.
 
 ## Procedure
 
 1. **Read `profile.json`.** Note which structured fields are already filled;
    you'll skip those unless the user is explicitly correcting one.
 2. **Pre-fill from the CV, don't ask from scratch.** Read the base CV named by
-   `paths.cvBaseHtml` in `apply-config.json` (repo root) and pull
+   `paths.cvBaseHtml` in `apply-config.json` (data repo) and pull
    `personal.email`, `personal.phone`, `personal.currentCity`,
    `personal.currentCountry`, `links.linkedin`, `links.github` from its
    contact section. Present these to the user as "I found X — confirm or
