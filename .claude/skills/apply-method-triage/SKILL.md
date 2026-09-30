@@ -106,6 +106,17 @@ wrong:
 
 Check the own adapters **first**: a host both tables know is group 1.
 
+**A careers site on the employer's own domain can still be group 3.** What counts is where
+the *application step* lands, not the job page. Verified 2026-09-30 in a Chrome with
+Simplify: `careers.allegro.eu` (SAP SuccessFactors RMK) shows Simplify's job-details panel
+with no autofill ("Cover Letter: No Field Found"), but its Apply links to
+`career55.sapsf.eu/career?…&loginFlowRequired=true`, which matches the table
+(`*.sapsf.eu/career?*`) — Simplify there offers "Sign In & Autofill". So a custom-domain
+SuccessFactors vacancy is group 3 **with the ⚠ account flag** — read the `href` of the page's
+Apply link (`find`) for `sapsf`/`successfactors` rather than judging by the job page's
+host. Teamtailor on a custom domain (`dnatechnology.work`) was verified the same way:
+Simplify recognises the page (Start Application) although the host is in no table.
+
 `ats/*.md` under `apply-to-jobs` is **not** the source of truth for support.
 Those files hold per-ATS quirks paid for by real runs; the adapters and the table are
 code and extracted data. When they disagree, they win and the note gets corrected.
@@ -217,7 +228,8 @@ Layout:
   cannot click through is a row they have to go and look up by hand. The link is
   always `vacancy.link`, never the `get_apply_target` URL;
 - flag ⚠️ on any group-3 row whose ATS needs a candidate account before it will
-  accept an application (Workday, Avature);
+  accept an application (Workday, Avature, and SuccessFactors whenever the apply link
+  carries `loginFlowRequired=true`);
 - a short methodology footer: the date, which rung answered how many, the own
   adapters that were live (their ids), and the Simplify version the support table was
   extracted from.

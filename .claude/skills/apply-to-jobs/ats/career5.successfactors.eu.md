@@ -35,3 +35,15 @@ Panel present ("Autofill This Page"), not used on this form.
 ## Success signal
 
 Not yet observed.
+
+## Custom-domain careers sites (RMK) — verified 2026-09-30
+
+A company's own careers domain (e.g. `careers.<company>.eu`) fronts the same SuccessFactors
+back end. The job page there is not a supported Simplify page (its panel shows job details
+only); its Apply link is `/talentcommunity/apply/<id>/`, which **redirects to `/` when
+requested directly** (it needs the click's session), and the real application step lives on
+`career<NN>.sapsf.eu/career?career_company=<company>&…&loginFlowRequired=true`. That host
+matches Simplify's `*.sapsf.eu/career?*` pattern and Simplify shows "Sign In & Autofill", but
+`loginFlowRequired=true` means a **candidate account is needed first**: by the repo's rule the
+agent fills the sign-up form up to the password and the user sets their own.
+
