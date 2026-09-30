@@ -7,6 +7,14 @@ autofill engine actually matches against.
 
 - Extension: `Simplify Copilot`, Chrome id `pbanhockgagggenencehbnadejlgchfc`
 - Version read: **3.1.6** (2026-09-16)
+- Re-verified **2026-09-30**: the installed 3.1.6 config matches this table exactly (56 ATS
+  entries, every URL pattern, every exclusion, the embedded-detection column and the four
+  boards). The newest published build, **3.1.7**, was downloaded from the Chrome Web Store
+  update endpoint (sha256 `57c445a1…8db9363`, matching the server's hash) and its
+  `remoteConfig.json` diffed against 3.1.6: **no ATS entry changed** — same 57 keys, same
+  `urls`, `urlsExcluded`, `pathsExcluded` and `embeddedPaths`. Only the LinkedIn board's
+  `minFetchTime` (6000 -> 750) and four feature flags differ, none of which affect which
+  pages count as supported.
 - Path: `~/Library/Application Support/Google/Chrome/<profile>/Extensions/<id>/<version>/remoteConfig.json`
 - The extension loads it with `fetch(runtime.getURL("remoteConfig.json"))` —
   **from disk, not from a server**. So this table only changes when the
