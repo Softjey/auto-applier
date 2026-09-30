@@ -42,7 +42,9 @@ describe('access guards', () => {
   });
 
   it('refuses a non-loopback Host (DNS rebinding)', async () => {
-    const res = await app.request('http://evil.example:7357/ping', { headers: { origin: EXTENSION } });
+    const res = await app.request('http://evil.example:7357/ping', {
+      headers: { origin: EXTENSION },
+    });
     expect(res.status).toBe(403);
   });
 

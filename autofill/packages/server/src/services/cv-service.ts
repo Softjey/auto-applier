@@ -27,7 +27,10 @@ export class CvService {
     const hit = (await this.scan()).find((cv) => cv.id === id);
     if (!hit) return null;
     const { resumeFileName } = await this.resolver.loadConfig();
-    return { name: resumeFileName ?? 'CV.pdf', base64: (await readFile(hit.file)).toString('base64') };
+    return {
+      name: resumeFileName ?? 'CV.pdf',
+      base64: (await readFile(hit.file)).toString('base64'),
+    };
   }
 
   private async scan(): Promise<CvEntry[]> {
@@ -42,7 +45,12 @@ export class CvService {
         const pdf = files.find((name) => /\.pdf$/i.test(name));
         if (!pdf) continue;
         const file = join(base, dir, pdf);
-        entries.push({ id: `${status}/${dir}`, label: dir, file, mtimeMs: (await stat(file)).mtimeMs });
+        entries.push({
+          id: `${status}/${dir}`,
+          label: dir,
+          file,
+          mtimeMs: (await stat(file)).mtimeMs,
+        });
       }
     }
     return entries.sort((a, b) => b.mtimeMs - a.mtimeMs);

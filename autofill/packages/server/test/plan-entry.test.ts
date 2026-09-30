@@ -22,15 +22,16 @@ describe('toPlanEntry', () => {
   });
 
   it('maps the consent policy to check / leave', () => {
-    const consent = (value: string) => entry({ status: 'resolved', source: 'consent policy', value });
+    const consent = (value: string) =>
+      entry({ status: 'resolved', source: 'consent policy', value });
     expect(consent('CHECK — mandatory for this application').action).toBe('check');
     expect(consent('LEAVE UNCHECKED — broader than this one application').action).toBe('leave');
   });
 
   it('maps the EEO policy to decline', () => {
-    expect(entry({ status: 'resolved', source: 'profile.eeo.policy', value: 'decline' }).action).toBe(
-      'decline',
-    );
+    expect(
+      entry({ status: 'resolved', source: 'profile.eeo.policy', value: 'decline' }).action,
+    ).toBe('decline');
   });
 
   it('never auto-answers a language level: the scale differs per form', () => {

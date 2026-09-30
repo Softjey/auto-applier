@@ -1,5 +1,5 @@
 packages:
-  - "packages/*"
+  - 'packages/*'
 # esbuild's postinstall only verifies/links its platform binary. Everything
 # else that wants to run scripts stays blocked until it is reviewed here.
 allowBuilds:
