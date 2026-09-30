@@ -10,6 +10,9 @@ import '../src/ui/panel.css';
 
 export default defineContentScript({
   matches: MATCH_PATTERNS,
+  // DOMContentLoaded, not "idle": slow third-party widgets (reCAPTCHA, maps) can hold the
+  // load event for a minute, and the panel should not wait for them.
+  runAt: 'document_end',
   cssInjectionMode: 'ui',
   async main(ctx) {
     let ui: ShadowRootContentScriptUi<Root> | null = null;

@@ -1,11 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import type { Page } from '@playwright/test';
 import { expect, panel, serveFixture, test } from './harness';
 
 const fixture = (name: string) =>
   readFileSync(resolve(import.meta.dirname, '../../extension/test/fixtures', name), 'utf8');
 
-const fill = async (page: import('@playwright/test').Page) => {
+const fill = async (page: Page) => {
   await expect(panel(page)).toBeVisible();
   await panel(page).getByRole('button', { name: 'Fill form' }).click();
   await expect(panel(page).getByText(/filled/)).toBeVisible();

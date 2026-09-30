@@ -1,4 +1,5 @@
 import type { FieldOption } from '@applier/protocol';
+import { placeAliases } from './aliases';
 import { normalize } from './text';
 
 const YES = new Set(['yes', 'tak']);
@@ -26,8 +27,16 @@ export function matchOption(
   const wanted = normalize(value);
   if (!wanted) return undefined;
 
-  const exact = options.find((o) => normalize(o.label) === wanted || normalize(o.value) === wanted);
+  const isSame = (o: FieldOption, w: string) =>
+    normalize(o.label) === w || normalize(o.value) === w;
+  const exact = options.find((o) => isSame(o, wanted));
   if (exact) return exact;
+
+  // "Poland" on a Polish form is "Polska"; "Warsaw" is "Warszawa".
+  for (const alias of placeAliases(value)) {
+    const hit = options.find((o) => isSame(o, normalize(alias)));
+    if (hit) return hit;
+  }
 
   const answer = yesNo(value);
   if (answer) {

@@ -34,14 +34,14 @@ press **Fill form**, read the **Needs you** list, fill those, press Send yoursel
 
 ## What it will and will not do
 
-| Field                                       | Behaviour                                                              |
-| ------------------------------------------- | ---------------------------------------------------------------------- |
-| Name, e-mail, phone, links, city            | filled from `profile.json`                                             |
-| Exact `qa[]` answers                        | filled; select/radio only if an option unambiguously matches           |
-| Mandatory data consent                      | ticked; optional / future-recruitment / account boxes never            |
-| CV                                          | attached from the selected tailored PDF                                |
-| Salary, free-text, language level, unknowns | **left to you**, listed in the panel — the core rule holds             |
-| Anything already filled                     | untouched                                                              |
+| Field                                       | Behaviour                                                    |
+| ------------------------------------------- | ------------------------------------------------------------ |
+| Name, e-mail, phone, links, city            | filled from `profile.json`                                   |
+| Exact `qa[]` answers                        | filled; select/radio only if an option unambiguously matches |
+| Mandatory data consent                      | ticked; optional / future-recruitment / account boxes never  |
+| CV                                          | attached from the selected tailored PDF                      |
+| Salary, free-text, language level, unknowns | **left to you**, listed in the panel — the core rule holds   |
+| Anything already filled                     | untouched                                                    |
 
 ## Adding an ATS
 

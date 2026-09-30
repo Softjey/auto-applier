@@ -21,6 +21,11 @@ export default tseslint.config(
     },
   },
   {
+    // Playwright insists its fixtures' first argument is a destructuring pattern, even an empty one.
+    files: ['packages/e2e/**/*.ts'],
+    rules: { 'no-empty-pattern': ['error', { allowObjectPatternsAsParameters: true }] },
+  },
+  {
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],

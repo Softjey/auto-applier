@@ -116,7 +116,7 @@ describe('justjoin', () => {
   it('stays inside the modal and never ticks the account / terms box', async () => {
     document.body.innerHTML = fixture('justjoin.html');
     const backend = fakeBackend([
-      when(/^Name/, value('Jan Kowalski')),
+      when(/full name/i, value('Jan Kowalski')),
       when(/^Email/, value('jan@example.com')),
       when(/creating an account/i, () => ({ action: 'check' })),
       when(/consent/i, () => ({ action: 'check' })),
@@ -157,3 +157,41 @@ describe('nofluffjobs', () => {
 });
 
 void nothing;
+
+describe('labels inside a fieldset section (found on live Traffit)', () => {
+  it('names a select by its own row, never by the section legend, and ignores "mark all"', async () => {
+    document.body.innerHTML = `
+      <fieldset class="form__section"><legend>Personal data:</legend>
+        <div class="section__content"><div class="form-group">
+          <span>Your availability *</span><select name="dynamic_form[properties][1][1]"><option value="">-</option><option value="1">ASAP</option></select>
+        </div></div>
+        <label><input type="checkbox" name="markAll"> Mark all</label>
+      </fieldset>`;
+    const backend = fakeBackend([]);
+    await fillForm({ adapter: traffit, backend, doc: document, cvId: null });
+    expect(backend.asked.map((f) => f.label)).toEqual(['Your availability *']);
+  });
+});
+
+describe('place names across languages', () => {
+  it("matches 'Poland'/'Warsaw' to a Polish form's 'Polska'/'Warszawa'", async () => {
+    document.body.innerHTML = `<form>
+      <div class="form-group"><label for="c">Country *</label><select id="c" name="country"><option value="">-</option><option value="pl">Polska</option><option value="ua">Ukraina</option></select></div>
+      <div class="form-group"><label for="t">City *</label><select id="t" name="city"><option value="">-</option><option value="w">Warszawa</option></select></div>
+    </form>`;
+    const backend = fakeBackend([
+      when(/^Country/, value('Poland')),
+      when(/^City/, value('Warsaw')),
+    ]);
+    await fillForm({ adapter: traffit, backend, doc: document, cvId: null });
+    expect((document.getElementById('c') as HTMLSelectElement).value).toBe('pl');
+    expect((document.getElementById('t') as HTMLSelectElement).value).toBe('w');
+  });
+
+  it('leaves an already-chosen select alone even when the profile answer maps to nothing', async () => {
+    document.body.innerHTML = `<div class="form-group"><label for="c">Country *</label><select id="c" name="country"><option value="">-</option><option value="pl" selected>Polska</option></select></div>`;
+    const backend = fakeBackend([when(/^Country/, value('Atlantis'))]);
+    const report = await fillForm({ adapter: traffit, backend, doc: document, cvId: null });
+    expect(report.manual).toEqual([]);
+  });
+});

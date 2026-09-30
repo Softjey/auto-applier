@@ -23,6 +23,13 @@ const failed = (c: Control, why: string): Outcome => ({
   why,
 });
 
+/**
+ * A native select's placeholder is its first option; a selectize combobox keeps
+ * its options in memory, so its native <select> holds only the chosen one.
+ */
+const isChosen = (el: HTMLSelectElement, combobox: boolean): boolean =>
+  el.value !== '' && (combobox || el.selectedIndex > 0);
+
 const isEmpty = (el: HTMLElement): boolean => {
   if (el instanceof HTMLSelectElement)
     return el.selectedIndex <= 0 && (el.value === '' || el.selectedIndex === 0);
@@ -103,6 +110,9 @@ async function applySet(control: Control, value: string): Promise<Outcome> {
     case 'select':
     case 'combobox':
     case 'radio-group': {
+      // A choice the page (or a previous pass) already made is never overwritten.
+      if (d.kind !== 'radio-group' && isChosen(el as HTMLSelectElement, d.kind === 'combobox'))
+        return left(control, 'already chosen');
       const option = matchOption(d.options ?? [], value);
       if (!option) {
         return {
