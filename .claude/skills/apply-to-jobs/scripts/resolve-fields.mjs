@@ -20,6 +20,7 @@
 // list is empty before any typing starts.
 
 import { readFileSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 import { rankAgainstQa, loadProfile } from "./lib/qa-match.mjs";
 import { buildVocabulary, matches } from "./lib/field-labels.mjs";
 
@@ -41,14 +42,14 @@ const STRUCTURAL = [
   ["bareName", (p) => p.personal?.firstName],
 ];
 
-function classify(field, profile, vocab) {
+export function classify(field, profile, vocab) {
   const label = field.label || field.key || "";
 
   if (field.kind === "honeypot") {
     return { status: "skip", why: "anti-autofill honeypot — writing here loses the answer" };
   }
   if (field.kind === "file" || matches(vocab.topic.cvUpload, label)) {
-    return { status: "runtime", why: "the tailored PDF generated in Phase 1" };
+    return { status: "runtime", runtime: "cv", why: "the tailored PDF generated in Phase 1" };
   }
   if (matches(vocab.topic.eeo, label)) {
     return { status: "resolved", source: "profile.eeo.policy", value: profile.eeo?.policy || "decline" };
@@ -88,6 +89,7 @@ function classify(field, profile, vocab) {
   if (matches(vocab.topic.salary, label)) {
     return {
       status: "runtime",
+      runtime: "salary",
       why: "compute for THIS vacancy: node scripts/salary-quote.mjs (profile.compensation.strategy). Never answer from a qa[] baseline",
     };
   }
@@ -187,4 +189,5 @@ function main() {
   console.log(`\n${blocking} required field(s) still need a human answer across ${report.length} form(s).`);
 }
 
-main();
+// Only run as a CLI: autofill/server.mjs imports classify() from here.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();
