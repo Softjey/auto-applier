@@ -18,7 +18,7 @@ export default defineContentScript({
     let ui: ShadowRootContentScriptUi<Root> | null = null;
     let mounted: SiteAdapter | null = null;
 
-    // justjoin.it and nofluffjobs are SPAs: the page a form lives on is reached
+    // justjoin.it is a SPA: the page a form lives on is reached
     // without a load, so the panel follows the location, not the document. The
     // Navigation API fires BEFORE `location.href` changes, so the destination
     // comes from the event, never from `location`.

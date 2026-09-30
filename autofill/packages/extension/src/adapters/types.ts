@@ -19,8 +19,6 @@ export interface SiteAdapter {
   ignore?(el: HTMLElement, label: string): boolean;
   /** Labels that must never be ticked even if the plan says check. */
   neverTick?: RegExp;
-  /** Checkboxes on this site cannot be read or driven reliably: leave every one to the user. */
-  leaveCheckboxes?: boolean;
   /**
    * Uploading the CV makes the site rewrite the form (eRecruiter's postback
    * resets selects). Fill, upload, wait this long, then fill again.

@@ -93,25 +93,6 @@ test.describe('the real extension in a real Chromium, on fixture pages', () => {
     await expect(page.locator('[name=consent]')).toBeChecked();
   });
 
-  test('nofluffjobs: labels anonymous inputs by position and leaves checkboxes alone', async ({
-    context,
-    page,
-  }) => {
-    await serveFixture(
-      context,
-      'https://nofluffjobs.com/pl/job/dev-acme-warszawa',
-      fixture('nofluffjobs.html'),
-    );
-    await page.goto('https://nofluffjobs.com/pl/job/dev-acme-warszawa');
-    await fill(page);
-
-    const inputs = page.locator('[role=dialog] input:not([type=checkbox])');
-    await expect(inputs.nth(0)).toHaveValue('Test Candidate');
-    await expect(inputs.nth(1)).toHaveValue('test.candidate@example.invalid');
-    await expect(inputs.nth(2)).toHaveValue('+48 000 000 000');
-    await expect(page.locator('input[type=checkbox]')).not.toBeChecked();
-  });
-
   test('an SPA route change to an offer page mounts the panel without a reload', async ({
     context,
     page,

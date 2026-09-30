@@ -74,7 +74,6 @@ export async function execute(
       };
 
     case 'check': {
-      if (adapter.leaveCheckboxes) return left(control, 'checkboxes are left to you on this site');
       if (d.kind !== 'checkbox-group' || control.members.length !== 1)
         return left(control, 'not a single consent box');
       if (!d.required) return left(control, 'optional consent stays unticked');

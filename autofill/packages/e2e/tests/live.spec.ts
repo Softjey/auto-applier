@@ -57,23 +57,6 @@ const TARGETS: Target[] = [
       }
     },
   },
-  {
-    name: 'nofluffjobs devire',
-    url: 'https://nofluffjobs.com/job/ui-developer-devire-warszawa-1',
-    open: async (page) => {
-      await page
-        .getByRole('button', { name: /save settings|decline|reject/i })
-        .first()
-        .click({ timeout: 4000 })
-        .catch(() => undefined);
-      await page
-        .getByRole('button', { name: /^apply/i })
-        .first()
-        .click({ timeout: 5000 })
-        .catch(() => undefined);
-      await page.waitForTimeout(3500);
-    },
-  },
 ];
 
 const only = process.env['ONLY'];

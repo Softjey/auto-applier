@@ -2,13 +2,11 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { pickAdapter } from '../src/adapters';
 import { erecruiter } from '../src/adapters/erecruiter';
 import { justjoin } from '../src/adapters/justjoin';
-import { nofluffjobs } from '../src/adapters/nofluffjobs';
 import { traffit } from '../src/adapters/traffit';
 import { fillForm } from '../src/core/run';
 import { fakeBackend, fixture, installFakeBridge, when } from './helpers';
 
 const value = (v: string) => () => ({ action: 'set' as const, value: v, source: 'test' });
-const nothing = async () => undefined;
 
 beforeEach(() => {
   document.body.innerHTML = '';
@@ -23,7 +21,6 @@ describe('pickAdapter', () => {
     ['https://skk.erecruiter.pl/Offer.aspx?oid=1', null],
     ['https://justjoin.it/job-offer/acme-dev', 'justjoin'],
     ['https://justjoin.it/', null],
-    ['https://nofluffjobs.com/pl/job/dev-acme-warszawa', 'nofluffjobs'],
     ['https://example.com/', null],
   ])('%s -> %s', (url, id) => {
     expect(pickAdapter(new URL(url))?.id ?? null).toBe(id);
@@ -129,34 +126,6 @@ describe('justjoin', () => {
     expect((document.querySelector('[name=consent]') as HTMLInputElement).checked).toBe(true);
   });
 });
-
-describe('nofluffjobs', () => {
-  it('labels the anonymous inputs by position and leaves every checkbox alone', async () => {
-    document.body.innerHTML = fixture('nofluffjobs.html');
-    const backend = fakeBackend([
-      when(/full name/i, value('Jan Kowalski')),
-      when(/^E-mail/i, value('jan@example.com')),
-      when(/^Phone/i, value('+48 111 222 333')),
-      when(/future/i, () => ({ action: 'check' })),
-    ]);
-    await fillForm({ adapter: nofluffjobs, backend, doc: document, cvId: null });
-
-    const [name, email, phone] = [
-      ...document.querySelectorAll<HTMLInputElement>('[role=dialog] input'),
-    ];
-    expect([name?.value, email?.value, phone?.value]).toEqual([
-      'Jan Kowalski',
-      'jan@example.com',
-      '+48 111 222 333',
-    ]);
-    expect((document.querySelector('input[type=checkbox]') as HTMLInputElement).checked).toBe(
-      false,
-    );
-    expect(backend.asked.some((f) => f.key === 'site-search')).toBe(false);
-  });
-});
-
-void nothing;
 
 describe('labels inside a fieldset section (found on live Traffit)', () => {
   it('names a select by its own row, never by the section legend, and ignores "mark all"', async () => {

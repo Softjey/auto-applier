@@ -1,7 +1,7 @@
 # autofill
 
 A browser extension plus a local plan server that fills job-application forms on
-sites Simplify does not cover: **Traffit, eRecruiter, justjoin.it, No Fluff Jobs**.
+sites Simplify does not cover: **Traffit, eRecruiter, justjoin.it**.
 It fills what is a _fact in `profile.json`_ and stops. It never submits, never
 guesses, and never holds your data itself.
 
@@ -44,8 +44,7 @@ The e2e runs the **built** extension in a real Chromium against the real plan
 server, on a fake profile (`packages/e2e/fixtures/profile.test.json`) and a fixture CV,
 so it can never type the real person into a real form. It needs a Chromium: either
 `pnpm exec playwright install chromium`, or point `CHROMIUM_PATH` at one you already have
-(branded Chrome ignores `--load-extension`). No Fluff Jobs answers a scripted browser
-with a 403, so that adapter is only covered by fixtures.
+(branded Chrome ignores `--load-extension`).
 
 ## What it will and will not do
 

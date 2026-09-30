@@ -1,10 +1,9 @@
 import { erecruiter } from './erecruiter';
 import { justjoin } from './justjoin';
-import { nofluffjobs } from './nofluffjobs';
 import { traffit } from './traffit';
 import type { SiteAdapter } from './types';
 
-export const ADAPTERS: readonly SiteAdapter[] = [traffit, erecruiter, justjoin, nofluffjobs];
+export const ADAPTERS: readonly SiteAdapter[] = [traffit, erecruiter, justjoin];
 
 export const MATCH_PATTERNS: string[] = ADAPTERS.flatMap((a) => [...a.matchPatterns]);
 

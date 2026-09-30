@@ -146,7 +146,7 @@ the same files instead of a fork of them.
     DOM handle rather than by on-screen labels, since the same ATS renders in
     whatever language the employer hires in.
 - `autofill/` — a browser extension plus a loopback plan server that fills the
-  forms Simplify does not cover (Traffit, eRecruiter, justjoin.it, No Fluff Jobs)
+  forms Simplify does not cover (Traffit, eRecruiter, justjoin.it)
   from `profile.json`. TypeScript pnpm workspace; the server imports
   `resolve-fields.mjs` so the extension and the agent resolve a question the same
   way. It fills facts only and never submits. See `autofill/README.md`.
