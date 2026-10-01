@@ -107,3 +107,16 @@
   padding: 3px;
   box-sizing: border-box;
 }
+
+/* Docked: a full-height column; dock.ts shrinks the page by its width so nothing is covered. */
+.af-panel.af-docked {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 320px;
+  max-height: none;
+  box-sizing: border-box;
+  border-width: 0 0 0 1px;
+  border-radius: 0;
+  box-shadow: none;
+}

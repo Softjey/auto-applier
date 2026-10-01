@@ -4,6 +4,7 @@ import type { SiteAdapter } from '../adapters';
 import { guessCv } from '../core/guess-cv';
 import type { Backend } from '../core/messaging';
 import { fillForm } from '../core/run';
+import { useDock } from './dock';
 import { usePageReady } from './use-page-ready';
 import type { FillReport } from '../core/types';
 
@@ -57,6 +58,7 @@ export function Panel({ adapter, backend }: { adapter: SiteAdapter; backend: Bac
   const [phase, setPhase] = useState<Phase>({ kind: 'idle' });
   const [band, setBand] = useState<BandDraft>(EMPTY_BAND);
   const pageReady = usePageReady();
+  useDock('right', open);
 
   useEffect(() => {
     backend.cvs().then(
@@ -87,7 +89,7 @@ export function Panel({ adapter, backend }: { adapter: SiteAdapter; backend: Bac
   }
 
   return (
-    <aside className="af-panel" aria-label="Applier Autofill">
+    <aside className="af-panel af-docked" aria-label="Applier Autofill">
       <header>
         <strong>Applier Autofill</strong>
         <button className="af-x" onClick={() => setOpen(false)} aria-label="Minimise">

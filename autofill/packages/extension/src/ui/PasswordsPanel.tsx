@@ -1,10 +1,17 @@
 import { useState, useSyncExternalStore } from 'react';
 import type { PasswordController } from '../passwords/controller';
+import { useDock } from './dock';
 
-/** The password manager's widget, bottom-left (the form filler owns bottom-right). */
+/**
+ * The password manager's widget: a sidebar that pushes the page right (the form filler owns the
+ * right side). Inside an iframe it cannot move the page, so it floats bottom-left instead.
+ */
 export function PasswordsPanel({ controller }: { controller: PasswordController }) {
   const s = useSyncExternalStore(controller.subscribe, controller.getState);
   const [open, setOpen] = useState(true);
+  const docked = window === window.top;
+  const showsPanel = !s.prompt && open && !(s.offline && !s.notice) && !!(s.form || s.notice);
+  useDock('left', docked && showsPanel);
 
   if (!s.form && !s.prompt && !s.notice) return null;
 
@@ -42,7 +49,10 @@ export function PasswordsPanel({ controller }: { controller: PasswordController 
   // An unconfirmed entry is the draft this very panel just made: not "an account you already have".
   const exact = s.matches.filter((m) => m.level === 'exact' && m.verified);
   return (
-    <aside className="pw-panel" aria-label="Applier Passwords">
+    <aside
+      className={docked ? 'pw-panel pw-docked' : 'pw-panel'}
+      aria-label="Applier Passwords"
+    >
       <header>
         <strong>Applier Passwords</strong>
         <button className="pw-x" onClick={() => setOpen(false)} aria-label="Minimise">
