@@ -1,6 +1,7 @@
 import type { FieldOption } from '@applier/protocol';
 import { rootOf } from './deep';
 import { matchOption } from './match-option';
+import { sleep } from './sleep';
 import { clean, normalize } from './text';
 import { isVisible } from './visibility';
 
@@ -16,8 +17,8 @@ const OPEN_WAIT_MS = 700;
 const TYPEAHEAD_WAIT_MS = 3000;
 const SETTLE_MS = 400;
 const CLOSE_WAIT_MS = 300;
-
-const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+const KEY_GAP_MS = 40;
+const SUGGEST_SETTLE_MS = 350;
 
 export type ListCombobox = HTMLElement;
 
@@ -71,15 +72,29 @@ function visibleOptions(el: ListCombobox): HTMLElement[] {
   const scope: ParentNode =
     (owned ? (rootOf(el).getElementById(owned) ?? el.ownerDocument.getElementById(owned)) : null) ??
     el.ownerDocument;
+  // With no listbox of its own to look in, the whole page is searched; rows that belong to a
+  // DIFFERENT control's listbox (a list left open elsewhere) are not this control's options.
+  const foreign = owned
+    ? new Set<string>()
+    : new Set(
+        [...el.ownerDocument.querySelectorAll('[aria-controls][role="combobox"]')]
+          .filter((c) => c !== el)
+          .map((c) => c.getAttribute('aria-controls') ?? ''),
+      );
   return [...scope.querySelectorAll<HTMLElement>('[role="option"]')].filter(
-    (o) => isVisible(o, false) && clean(o.textContent) !== '',
+    (o) =>
+      isVisible(o, false) &&
+      clean(o.textContent) !== '' &&
+      !foreign.has(o.closest('[role="listbox"]')?.id ?? '\0'),
   );
 }
 
 async function waitForOptions(el: ListCombobox, ms: number): Promise<HTMLElement[]> {
-  for (let waited = 0; ; waited += POLL_MS) {
+  // By the clock, not by counting polls: a background tab runs a 25 ms timer once a second.
+  const deadline = performance.now() + ms;
+  for (;;) {
     const rows = visibleOptions(el);
-    if (rows.length > 0 || waited >= ms) return rows;
+    if (rows.length > 0 || performance.now() >= deadline) return rows;
     await sleep(POLL_MS);
   }
 }
@@ -96,15 +111,17 @@ async function open(el: ListCombobox): Promise<HTMLElement[]> {
 async function close(el: ListCombobox): Promise<void> {
   press(el, 'Escape');
   await sleep(POLL_MS);
-  if (!isPopoverSelect(el)) return;
-  // A popover updates `aria-expanded` a moment after the key; clicking before that would
-  // reopen it. Only one that is still open once the page has had time to react is toggled shut,
-  // so its rows cannot leak into the next list.
-  for (let waited = 0; waited < CLOSE_WAIT_MS; waited += POLL_MS) {
+  // `aria-expanded` follows the key a moment later; acting before that would reopen a list that
+  // is already closing. One still open after the page has had time to react is shut by hand, so
+  // its rows cannot leak into the next list.
+  const deadline = performance.now() + CLOSE_WAIT_MS;
+  while (performance.now() < deadline) {
     if (el.getAttribute('aria-expanded') !== 'true') return;
     await sleep(POLL_MS);
   }
-  click(el);
+  if (isPopoverSelect(el))
+    click(el); // a toggle
+  else el.blur(); // react-select shuts its menu when it loses focus
   await sleep(POLL_MS);
 }
 
@@ -162,8 +179,8 @@ export async function comboChoose(el: ListCombobox, label: string): Promise<bool
   click(row);
   await sleep(SETTLE_MS);
   if (took(el, wanted)) {
-    // A popover is not a Select: picking a row may leave its list open over the next field.
-    if (isPopoverSelect(el)) await close(el);
+    // A pick may leave its list open (a popover, a phone-country selector) over the next field.
+    if (el.getAttribute('aria-expanded') === 'true') await close(el);
     return true;
   }
 
@@ -194,14 +211,36 @@ function typeInto(el: HTMLInputElement, text: string): void {
 }
 
 /**
- * Every comma-separated part of the answer ("Warsaw, Poland") appears in the row's label
- * ("Warsaw, Masovian Voivodeship, Poland"). Used only to find ONE row among an
+ * One key at a time — keydown, an `insertText` InputEvent, keyup — with a short gap. Location
+ * autocompletes (Greenhouse's Places search) ignore a value set in one go and answer only to
+ * typing; a person's keystrokes are exactly what they listen for.
+ */
+async function typeLikeAPerson(el: HTMLInputElement, text: string): Promise<void> {
+  const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
+  el.focus();
+  let typed = '';
+  for (const ch of text) {
+    el.dispatchEvent(new KeyboardEvent('keydown', { key: ch, bubbles: true, cancelable: true }));
+    typed += ch;
+    if (setter) setter.call(el, typed);
+    else el.value = typed;
+    el.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText', data: ch }));
+    el.dispatchEvent(new KeyboardEvent('keyup', { key: ch, bubbles: true, cancelable: true }));
+    await sleep(KEY_GAP_MS);
+  }
+}
+
+/**
+ * Every word of the answer ("Warsaw, Poland (mazowieckie).") appears in the row's label
+ * ("Warsaw, Mazowieckie, Poland"), in any order. Used only to find ONE row among an
  * autocomplete's suggestions, never to settle for a near miss.
  */
 const holdsAllParts = (row: string, answer: string): boolean => {
-  const parts = answer.split(',').map(normalize).filter(Boolean);
-  const text = normalize(row);
-  return parts.length > 0 && parts.every((p) => text.includes(p));
+  const words = normalize(answer)
+    .split(/\s+/)
+    .filter((w) => w.length > 1);
+  const text = ` ${normalize(row)} `;
+  return words.length > 0 && words.every((w) => text.includes(` ${w}`));
 };
 
 /**
@@ -210,22 +249,28 @@ const holdsAllParts = (row: string, answer: string): boolean => {
  * in Poland, one in Indiana) is a refusal, not a coin toss: the typed text is cleared and the
  * field is handed back.
  */
-export async function comboTypeahead(el: ListCombobox, answer: string): Promise<boolean> {
-  if (!(el instanceof HTMLInputElement)) return false;
+export async function comboTypeahead(
+  el: ListCombobox,
+  answer: string,
+): Promise<{ ok: boolean; seen: string[] }> {
+  if (!(el instanceof HTMLInputElement)) return { ok: false, seen: [] };
   // Search by the first part only ("Warsaw"): an autocomplete rarely finds "Warsaw, Poland"
   // as typed, and the remaining parts are what pick the one row among its suggestions.
-  typeInto(el, answer.split(',')[0]?.trim() || answer);
-  const rows = await waitForOptions(el, TYPEAHEAD_WAIT_MS);
+  await typeLikeAPerson(el, answer.split(',')[0]?.trim() || answer);
+  const first = await waitForOptions(el, TYPEAHEAD_WAIT_MS);
+  // The first suggestions are often a partial answer that the next keystroke's response replaces.
+  const rows = first.length > 0 ? (await sleep(SUGGEST_SETTLE_MS), visibleOptions(el)) : first;
   const options = rows.map((r) => ({ value: labelOf(r), label: labelOf(r) }));
 
   const exact = matchOption(options, answer);
   const partial = options.filter((o) => holdsAllParts(o.label, answer));
   const pick = exact ?? (partial.length === 1 ? partial[0] : undefined);
 
+  const seen = options.slice(0, 4).map((o) => o.label);
   if (!pick) {
     typeInto(el, '');
     await close(el);
-    return false;
+    return { ok: false, seen };
   }
-  return comboChoose(el, pick.label);
+  return { ok: await comboChoose(el, pick.label), seen };
 }

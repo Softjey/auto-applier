@@ -1,3 +1,5 @@
+import { sleep } from './sleep';
+
 /**
  * Writing values the way a person's typing would, so React/Vue/Angular-controlled
  * inputs actually notice. Setting `el.value` directly is silently reverted by
@@ -55,9 +57,12 @@ export function isChecked(el: HTMLElement): boolean {
 export async function setChecked(el: HTMLElement, checked: boolean): Promise<boolean> {
   if (isChecked(el) === checked) return true;
   el.click(); // a real click keeps framework state in sync
-  for (let waited = 0; waited < SETTLE_MS; waited += POLL_MS) {
+  // Measured on the clock, not by counting polls: a tab in the background runs a 25 ms timer
+  // once a second, and "20 polls" would then be twenty seconds.
+  const deadline = performance.now() + SETTLE_MS;
+  while (performance.now() < deadline) {
     if (isChecked(el) === checked) return true;
-    await new Promise((resolve) => setTimeout(resolve, POLL_MS));
+    await sleep(POLL_MS);
   }
   return isChecked(el) === checked;
 }

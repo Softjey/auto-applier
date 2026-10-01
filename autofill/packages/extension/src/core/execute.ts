@@ -163,15 +163,15 @@ async function applySet(control: Control, value: string): Promise<Outcome> {
       if (alreadyChosen(control)) return left(control, 'already chosen');
       // An autocomplete that shows rows only once you type (a location box).
       if (d.kind === 'combobox' && d.optionsHidden && isListCombobox(el)) {
-        return (await comboTypeahead(el, value))
-          ? filled(control)
-          : {
-              status: 'manual',
-              id: d.id,
-              label: d.label,
-              reason: 'no option matches the profile answer',
-              hint: value.slice(0, 120),
-            };
+        const found = await comboTypeahead(el, value);
+        if (found.ok) return filled(control);
+        return {
+          status: 'manual',
+          id: d.id,
+          label: d.label,
+          reason: 'no option matches the profile answer',
+          hint: `${value.slice(0, 80)} — the list offered: ${found.seen.join(' | ') || 'nothing'}`,
+        };
       }
       const option = matchOption(d.options ?? [], value);
       if (!option) {

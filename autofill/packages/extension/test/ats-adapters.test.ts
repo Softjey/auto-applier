@@ -87,6 +87,13 @@ describe('greenhouse (react-select dropdowns)', () => {
     ]);
   });
 
+  it("resolves the profile's own location wording, with a parenthetical and a full stop", async () => {
+    setup();
+    const backend = fakeBackend([when(/^Location/, value('Warsaw, Poland (mazowieckie).'))]);
+    await fillForm({ adapter: greenhouse, backend, doc: document, cvId: null });
+    expect(picked('candidate-location')).toBe('Warsaw, Mazowieckie, Poland');
+  });
+
   it('refuses an ambiguous location instead of guessing, and clears what it typed', async () => {
     setup();
     const backend = fakeBackend([when(/^Location/, value('Warsaw'))]);

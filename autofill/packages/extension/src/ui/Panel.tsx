@@ -176,6 +176,15 @@ function Result({ report }: { report: FillReport }) {
       <p data-testid="summary">
         <strong>{filled}</strong> filled · {CV_NOTE[report.cv]}
       </p>
+      {report.timing && (
+        <p className="af-note" data-testid="timing">
+          scan {(report.timing.scan / 1000).toFixed(1)}s · plan{' '}
+          {(report.timing.plan / 1000).toFixed(1)}s · fill{' '}
+          {(report.timing.execute / 1000).toFixed(1)}s
+          {report.timing.slowest.length > 0 &&
+            ` · slowest: ${report.timing.slowest.map((s) => `${s.label} ${s.ms}ms`).join('; ')}`}
+        </p>
+      )}
       {failed.length > 0 && (
         <>
           <h4>Did not stick</h4>
@@ -225,6 +234,7 @@ function Result({ report }: { report: FillReport }) {
             {report.manual.map((o) => (
               <li key={o.id}>
                 {o.label || '(unlabelled field)'} <em>{o.reason}</em>
+                {o.hint && <span className="af-hint"> — {o.hint}</span>}
               </li>
             ))}
           </ul>

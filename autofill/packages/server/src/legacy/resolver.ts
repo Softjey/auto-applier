@@ -42,6 +42,31 @@ type FieldLabelsModule = {
 const load = <T>(file: string): Promise<T> =>
   import(pathToFileURL(resolve(SCRIPTS, file)).href) as Promise<T>;
 
+interface PersonalProfile {
+  personal?: { currentCity?: string; currentCountry?: string };
+}
+
+/**
+ * A city box that offers suggestions as you type ("Warsaw" -> Warsaw, Poland / Warsaw, Indiana /
+ * Warsaw, New York …) cannot be answered with the bare city: it is ambiguous, and the extension
+ * rightly refuses to guess. The profile knows the country, so the answer carries it. A box that
+ * lists its options up front, or any other field, is left as the resolver answered.
+ */
+export function withCountryForSuggestions(
+  field: FieldDescriptor,
+  result: ClassifyResult,
+  profile: unknown,
+): ClassifyResult {
+  const { currentCity, currentCountry } = (profile as PersonalProfile).personal ?? {};
+  const isSuggestBox = field.kind === 'combobox' && field.optionsHidden === true;
+  if (!isSuggestBox || result.status !== 'resolved' || !currentCity || !currentCountry) {
+    return result;
+  }
+  return typeof result.value === 'string' && result.value.trim() === currentCity
+    ? { ...result, value: `${currentCity}, ${currentCountry}` }
+    : result;
+}
+
 export function createLegacyResolver(): Resolver {
   return {
     async classify(field) {
@@ -51,7 +76,11 @@ export function createLegacyResolver(): Resolver {
         load<FieldLabelsModule>('lib/field-labels.mjs'),
       ]);
       const profile = loadProfile();
-      return classify(field, profile, buildVocabulary(profile));
+      return withCountryForSuggestions(
+        field,
+        classify(field, profile, buildVocabulary(profile)),
+        profile,
+      );
     },
     async loadConfig() {
       const { loadConfig } = await load<FieldLabelsModule>('lib/field-labels.mjs');

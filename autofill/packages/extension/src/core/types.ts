@@ -23,6 +23,13 @@ export interface FillReport {
   cv: 'uploaded' | 'not-asked' | 'no-cv-selected' | 'failed';
   /** Controls that need a human, in page order. */
   manual: Extract<Outcome, { status: 'manual' }>[];
+  /** Where the time went (ms), summed over passes; `slowest` are the fields that took longest. */
+  timing?: {
+    scan: number;
+    plan: number;
+    execute: number;
+    slowest: { label: string; ms: number }[];
+  };
 }
 
 export type { FieldDescriptor, PlanEntry };

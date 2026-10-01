@@ -4,6 +4,7 @@ import { execute } from './execute';
 import type { Backend } from './messaging';
 import { scan } from './scan';
 import { attachFile, base64ToFile } from './setters';
+import { sleep as defaultSleep } from './sleep';
 import type { Control, FillReport, Outcome } from './types';
 
 export interface RunOptions {
@@ -16,8 +17,6 @@ export interface RunOptions {
   band?: SalaryBand | undefined;
   sleep?: (ms: number) => Promise<void>;
 }
-
-const defaultSleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 /**
  * One fill: scan -> plan (server) -> execute -> CV -> (optionally) settle and
@@ -46,18 +45,30 @@ export async function fillForm({
   };
   let targets: Control[] = [];
 
+  const timing = { scan: 0, plan: 0, execute: 0 };
+  const perField: { label: string; ms: number }[] = [];
+
   const pass = async (apply = true): Promise<Control[]> => {
+    const t0 = performance.now();
     const controls = await scan(root, adapter);
+    const t1 = performance.now();
     const { plan } = await backend.plan(
       controls.map((c) => c.descriptor),
       band,
     );
+    const t2 = performance.now();
+    timing.scan += t1 - t0;
+    timing.plan += t2 - t1;
     const byId = new Map<string, PlanEntry>(plan.map((p) => [p.id, p]));
     targets = cvTargets(controls, byId);
     for (const control of apply ? controls : []) {
       const entry = byId.get(control.descriptor.id);
       if (!entry || entry.action === 'upload-cv') continue;
+      const started = performance.now();
       const outcome = await execute(control, entry, adapter);
+      const took = performance.now() - started;
+      timing.execute += took;
+      perField.push({ label: control.descriptor.label.slice(0, 50), ms: Math.round(took) });
       // Keep the strongest result across passes: a field filled in pass one must not
       // be downgraded to "already filled" by pass two.
       const prev = outcomes.get(`${control.descriptor.key}|${control.descriptor.label}`);
@@ -99,6 +110,12 @@ export async function fillForm({
     outcomes: list,
     cv,
     manual: list.filter((o): o is Extract<Outcome, { status: 'manual' }> => o.status === 'manual'),
+    timing: {
+      scan: Math.round(timing.scan),
+      plan: Math.round(timing.plan),
+      execute: Math.round(timing.execute),
+      slowest: perField.sort((a, b) => b.ms - a.ms).slice(0, 4),
+    },
   };
 }
 
