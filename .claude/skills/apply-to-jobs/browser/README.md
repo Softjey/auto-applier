@@ -54,6 +54,21 @@ Two quirks of this integration that the skill's phases are built around:
   enough. So: never click a control that opens a new tab (click once to learn
   the destination, then `navigate` the managed tab there), and never close a tab
   mid-run.
+- **Tab hygiene without closing (re-verified 2026-10-01).** A tab you cannot close
+  mid-run still must not pile up. Reuse: after a vacancy's success signal is
+  recorded, `navigate` the *same* tab to the next vacancy instead of opening a
+  new one. Open a new tab only to **park** a form that needs the user (the parked
+  tab then stays as the user's to-do). Closing is for the very end of the run,
+  once nothing needs driving any more, and then ask the user first if any
+  parked tab is still open — the first close dissolves the group and the
+  parked tabs become undrivable (`tabs_close_mcp` refuses them: "not in Claude's
+  tab group"), so the user closes those by hand.
+- **A glitched tab is replaced, not repaired.** After a failed or detached
+  `screenshot` (usually right after a Simplify click or a file upload) a tab can
+  keep a stale 392x180 viewport, so every coordinate click lands wrong while JS
+  still works; `resize_window` does not undo it, a `navigate` does. Check
+  `innerWidth` after any "Detached"/"different extension" error, and do the
+  click-dependent steps (Yes/No segmented buttons) before the file upload.
 
 Three more that decide how fast a run goes (all seen 2026-09-14):
 

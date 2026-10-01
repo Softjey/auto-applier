@@ -753,6 +753,17 @@ the tab to the user, with the vacancy left un-APPLIED:
 - Enter data that is not in `profile.json`, including "obvious" fields like a
   street address or postal code.
 
+### Tabs: do not leave finished ones behind
+
+After a vacancy's success signal and its `APPLIED` write, that tab is finished:
+reuse it for the next vacancy (`navigate`, no new tab) so finished forms do not
+accumulate. A new tab is only for a **parked** vacancy (the user must act on that
+form), and it stays open on purpose. Closing a tab dissolves the browser group
+and strands every other open tab (see `$BROWSER_GUIDE`), so close nothing while a
+parked form, or anything you still have to drive, remains. At the very end, if
+only finished tabs are left, close them; if parked tabs are open, tell the user
+which ones are theirs and ask before closing anything.
+
 ### End of run
 
 Summarize, with reasons: applied; still `SAVED` because something blocks them
