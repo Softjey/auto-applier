@@ -25,9 +25,18 @@ const STOPWORDS = new Set([
   "could", "please", "it", "if", "yes", "no",
 ]);
 
+// Fold diacritics so "widełek" and "widelek" are one token: qa[] phrasings are stored
+// ASCII-only while real forms arrive with the accents. ł/đ have no decomposition.
+function fold(text) {
+  return text
+    .normalize("NFD")
+    .replace(/\p{M}+/gu, "")
+    .replace(/ł/g, "l")
+    .replace(/đ/g, "d");
+}
+
 export function tokenize(text) {
-  return (text || "")
-    .toLowerCase()
+  return fold((text || "").toLowerCase())
     .replace(/[^\p{L}\p{N}\s]/gu, " ")
     .split(/\s+/)
     .filter(Boolean)
