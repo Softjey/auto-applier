@@ -286,12 +286,22 @@ export class PasswordController {
     }
   }
 
+  /**
+   * "The form is gone" must hold: a page that redraws itself (SuccessFactors) drops the form from
+   * the DOM for a moment, which is not a sign-in. Gone twice in a row, a beat apart.
+   */
+  private async formStaysGone(): Promise<boolean> {
+    if (accountFormShown(this.o.doc)) return false;
+    await this.sleep(1500);
+    return !accountFormShown(this.o.doc) && !showsError(this.o.doc);
+  }
+
   /** Same-document submit (a SPA): poll until the form goes away or an error shows. */
   private async watchSubmit(): Promise<void> {
     for (let waited = 0; waited < 8000; waited += 500) {
       await this.sleep(500);
       if (showsError(this.o.doc)) return void (await this.resolve(false));
-      if (!accountFormShown(this.o.doc)) return void (await this.resolve(true));
+      if (await this.formStaysGone()) return void (await this.resolve(true));
     }
   }
 
@@ -305,7 +315,7 @@ export class PasswordController {
     }
     if (!pending) return;
     await this.sleep(this.settleMs);
-    await this.resolve(!showsError(this.o.doc) && !accountFormShown(this.o.doc));
+    await this.resolve(!showsError(this.o.doc) && (await this.formStaysGone()));
   }
 
   private async resolve(success: boolean): Promise<void> {

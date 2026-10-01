@@ -61,8 +61,8 @@ const flag = (name) => {
 const one = (name) => (flag(name) || [null])[0];
 const has = (name) => args.includes(`--${name}`);
 const mask = (p) => p.slice(0, 2) + "…".repeat(6) + p.slice(-2);
-const forHost = (entries, host, login) =>
-  entries.filter((e) => !isDead(e) && matchLevel(e.domain, host) && (!login || e.login === login));
+const forHost = (entries, host, login, { dead = false } = {}) =>
+  entries.filter((e) => (dead || !isDead(e)) && matchLevel(e.domain, host) && (!login || e.login === login));
 
 if (!RUN_AS_CLI) {
   // imported as a module: expose generatePassword and do nothing else
@@ -128,7 +128,7 @@ if (!RUN_AS_CLI) {
   const domain = one("domain");
   const file = store();
   const data = loadStore(file);
-  const hits = forHost(data.entries, domain || "", one("login"));
+  const hits = forHost(data.entries, domain || "", one("login"), { dead: true });
   if (!domain || !hits.length) {
     console.error(`no entry for ${domain}`);
     process.exit(1);
@@ -150,7 +150,7 @@ if (!RUN_AS_CLI) {
   for (const e of entries) {
     console.log(
       `${e.domain.padEnd(38)} ${(e.company ?? "").padEnd(14)} ${e.login.padEnd(30)} ` +
-        `${has("secrets") ? e.password : mask(e.password)}  ${e.verified ? "verified" : "UNVERIFIED"}  ${e.createdAt}`,
+        `${has("secrets") ? e.password : mask(e.password)}  ${isDead(e) ? "UNUSED" : e.verified ? "verified" : "UNVERIFIED"}  ${e.createdAt}`,
     );
   }
 } else {
