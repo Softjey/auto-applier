@@ -18,10 +18,17 @@ function hasLayout(doc: Document): boolean {
  * loses mandatory consents (found on live eRecruiter). Only an ancestor that is
  * itself display:none / hidden counts against them.
  */
+/** The parent, stepping out of a shadow root to its host. */
+const parentOf = (node: HTMLElement): HTMLElement | null => {
+  if (node.parentElement) return node.parentElement;
+  const root = node.getRootNode();
+  return root instanceof ShadowRoot ? (root.host as HTMLElement) : null;
+};
+
 export function isVisible(el: HTMLElement, checkSize = true): boolean {
   const view = el.ownerDocument.defaultView;
   if (!view) return false;
-  for (let node: HTMLElement | null = el; node; node = node.parentElement) {
+  for (let node: HTMLElement | null = el; node; node = parentOf(node)) {
     const style = view.getComputedStyle(node);
     if (style.display === 'none' || style.visibility === 'hidden') return false;
     if (node.hidden || node.getAttribute('aria-hidden') === 'true') return false;

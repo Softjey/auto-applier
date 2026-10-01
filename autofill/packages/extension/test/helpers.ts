@@ -88,7 +88,7 @@ export function mountFakeCombobox(control: HTMLElement, options: FakeComboboxOpt
     control.setAttribute('aria-expanded', 'false');
   };
   const choose = (label: string) => {
-    if (control instanceof HTMLButtonElement) {
+    if (!(control instanceof HTMLInputElement)) {
       control.textContent = label;
       control.removeAttribute('data-placeholder');
     } else {

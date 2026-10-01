@@ -1,3 +1,4 @@
+import { rootOf } from './deep';
 import { clean } from './text';
 
 const CONTAINER =
@@ -19,7 +20,7 @@ const byId = (root: Document | ShadowRoot, id: string): HTMLElement | null =>
 
 /** The visible question a control answers, as text. Best effort, never throws. */
 export function labelFor(el: HTMLElement, rowFallback = true): string {
-  const doc = el.ownerDocument;
+  const doc = rootOf(el);
 
   const aria = el.getAttribute('aria-label');
   if (aria && clean(aria)) return clean(aria);
@@ -80,7 +81,7 @@ function rowText(row: Element): string {
 export function groupQuestion(members: readonly HTMLElement[]): string {
   const first = members[0];
   if (!first) return '';
-  const doc = first.ownerDocument;
+  const doc = rootOf(first);
   // The options' own labels — wrapping <label>s and <label for=id>s — are not the question.
   const optionLabels = members.flatMap((m) => {
     const own = [m.closest('label')];
@@ -91,7 +92,7 @@ export function groupQuestion(members: readonly HTMLElement[]): string {
   while (node && !members.every((m) => node?.contains(m))) node = node.parentElement;
 
   for (let hops = 0; node && hops < 3; hops++, node = node.parentElement) {
-    const walker = doc.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+    const walker = first.ownerDocument.createTreeWalker(node, NodeFilter.SHOW_TEXT);
     for (let text = walker.nextNode(); text; text = walker.nextNode()) {
       const line = clean(text.textContent);
       const host = text.parentElement;

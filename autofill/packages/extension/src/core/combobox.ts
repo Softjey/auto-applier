@@ -1,4 +1,5 @@
 import type { FieldOption } from '@applier/protocol';
+import { rootOf } from './deep';
 import { matchOption } from './match-option';
 import { clean, normalize } from './text';
 import { isVisible } from './visibility';
@@ -17,12 +18,14 @@ const SETTLE_MS = 400;
 
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
-export type ListCombobox = HTMLInputElement | HTMLButtonElement;
+export type ListCombobox = HTMLElement;
 
-/** A `role=combobox` input (react-select, autocompletes) or button (Radix Select). */
-export const isListCombobox = (el: Element): el is ListCombobox =>
-  el.getAttribute('role') === 'combobox' &&
-  (el instanceof HTMLInputElement || el instanceof HTMLButtonElement);
+/**
+ * A `role=combobox` control: an input (react-select, autocompletes), a button (Radix Select) or
+ * another element (Angular Material's <mat-select>).
+ */
+export const isListCombobox = (el: Element): boolean =>
+  el instanceof HTMLElement && el.getAttribute('role') === 'combobox';
 
 function press(el: HTMLElement, key: string): void {
   for (const type of ['keydown', 'keyup']) {
@@ -46,9 +49,11 @@ function click(el: HTMLElement): void {
 
 /** The rows currently offered: the listbox this control owns, else any visible option on the page. */
 function visibleOptions(el: ListCombobox): HTMLElement[] {
-  const doc = el.ownerDocument;
   const owned = el.getAttribute('aria-controls') ?? el.getAttribute('aria-owns');
-  const scope: ParentNode = (owned ? doc.getElementById(owned) : null) ?? doc;
+  // Overlays (Material, Radix) render in <body>, outside the control's own shadow root.
+  const scope: ParentNode =
+    (owned ? (rootOf(el).getElementById(owned) ?? el.ownerDocument.getElementById(owned)) : null) ??
+    el.ownerDocument;
   return [...scope.querySelectorAll<HTMLElement>('[role="option"]')].filter(
     (o) => isVisible(o, false) && clean(o.textContent) !== '',
   );
@@ -91,9 +96,14 @@ const PLACEHOLDER = /^(select|choose|wybierz|please select|\.\.\.|—|-)\W*$/i;
 
 /** Whether the control already shows an answer (never overwrite one the page or a person set). */
 export function comboChosen(el: ListCombobox): boolean {
-  if (el instanceof HTMLButtonElement) {
+  if (el.matches('mat-select, .mat-mdc-select, .mat-select')) {
+    return el.querySelector('.mat-mdc-select-placeholder, .mat-select-placeholder') === null;
+  }
+  if (!(el instanceof HTMLInputElement)) {
     return !el.hasAttribute('data-placeholder') && !PLACEHOLDER.test(clean(el.textContent));
   }
+  // An autocomplete that takes its pick into the input itself (Angular Material).
+  if (el.value !== '') return true;
   // react-select keeps the search text in the input, and the answer in a sibling node.
   const box = el.closest('[class*="control"]') ?? el.parentElement?.parentElement;
   return box?.querySelector(VALUE_NODE) != null;
@@ -101,11 +111,11 @@ export function comboChosen(el: ListCombobox): boolean {
 
 /** What the control displays now, for checking a pick took. */
 function shown(el: ListCombobox): string {
-  const box =
-    el instanceof HTMLButtonElement
-      ? el
-      : (el.closest('[class*="control"]') ?? el.parentElement?.parentElement ?? el);
-  return normalize(clean(box.textContent));
+  if (el instanceof HTMLInputElement) {
+    const box = el.closest('[class*="control"]') ?? el.parentElement?.parentElement ?? el;
+    return normalize(`${clean(box.textContent)} ${el.value}`);
+  }
+  return normalize(clean(el.textContent));
 }
 
 /** Opens the list and picks the row labelled `label`; checks that the control now shows it. */

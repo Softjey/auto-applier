@@ -1,6 +1,7 @@
 import type { FieldDescriptor, FieldKind, FieldOption } from '@applier/protocol';
 import type { SiteAdapter, WidgetGroup } from '../adapters';
 import { comboOptions, isListCombobox } from './combobox';
+import { deepAll } from './deep';
 import { groupQuestion, labelFor, looksRequired, widgetLabel } from './labels';
 import { selectizeOptions } from './selectize';
 import { clean } from './text';
@@ -8,7 +9,7 @@ import type { Control } from './types';
 import { isHoneypotName, isVisible } from './visibility';
 
 // `button[role=combobox]` is a Radix / shadcn Select trigger; its native <select> twin is aria-hidden.
-const CONTROLS = 'input, select, textarea, button[role="combobox"]';
+const CONTROLS = 'input, select, textarea, [role="combobox"]:not(input)';
 const TEXT_TYPES: Record<string, FieldKind> = {
   text: 'text',
   search: 'text',
@@ -59,7 +60,11 @@ const isRequiredShadow = (el: HTMLElement): boolean =>
  * from the page world. Read-only — nothing is typed or clicked.
  */
 export async function scan(root: ParentNode, adapter: SiteAdapter): Promise<Control[]> {
-  const elements = [...root.querySelectorAll<HTMLElement>(CONTROLS)];
+  const elements = deepAll(root, CONTROLS);
+  // Document order across shadow roots, which compareDocumentPosition cannot give.
+  const position = new Map(deepAll(root, '*').map((e, i) => [e, i]));
+  const order = (a: HTMLElement, b: HTMLElement): number =>
+    (position.get(a) ?? 0) - (position.get(b) ?? 0);
   const groups = new Map<string, Group>();
   const controls: Control[] = [];
   let n = 0;
@@ -107,9 +112,6 @@ export async function scan(root: ParentNode, adapter: SiteAdapter): Promise<Cont
   // Keep page order across the two passes.
   return controls.sort((a, b) => order(a.el, b.el));
 }
-
-const order = (a: HTMLElement, b: HTMLElement): number =>
-  a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
 
 async function describe(
   el: HTMLElement,
@@ -162,8 +164,8 @@ async function describe(
 function ariaGroups(root: ParentNode): Group[] {
   const usable = (el: HTMLElement) => !el.closest(COOKIE_WIDGET) && isVisible(el, false);
   const groups: Group[] = [];
-  for (const rg of root.querySelectorAll<HTMLElement>('[role="radiogroup"]')) {
-    const members = [...rg.querySelectorAll<HTMLElement>('[role="radio"]')];
+  for (const rg of deepAll(root, '[role="radiogroup"]')) {
+    const members = deepAll(rg, '[role="radio"]');
     if (members.length && usable(rg)) {
       groups.push({
         kind: 'radio-group',
@@ -173,7 +175,7 @@ function ariaGroups(root: ParentNode): Group[] {
       });
     }
   }
-  for (const box of root.querySelectorAll<HTMLElement>('[role="checkbox"]')) {
+  for (const box of deepAll(root, '[role="checkbox"]')) {
     if (usable(box))
       groups.push({
         kind: 'checkbox-group',

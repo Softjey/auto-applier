@@ -37,6 +37,11 @@ export interface SiteAdapter {
    * resets selects). Fill, upload, wait this long, then fill again.
    */
   refillAfterCvMs?: number;
+  /**
+   * Uploading the CV makes the site parse it and overwrite fields already filled
+   * (SmartRecruiters writes junk into First name). Upload first, wait, then fill.
+   */
+  cvFirst?: boolean;
 }
 
 /** A group of clickable options the adapter found in its own markup. */

@@ -1,8 +1,12 @@
 import { ashby } from './ashby';
+import { bamboohr } from './bamboohr';
+import { comeet } from './comeet';
 import { erecruiter } from './erecruiter';
 import { greenhouse } from './greenhouse';
 import { justjoin } from './justjoin';
 import { lever } from './lever';
+import { smartrecruiters } from './smartrecruiters';
+import { solidjobs } from './solidjobs';
 import { teamtailor } from './teamtailor';
 import { traffit } from './traffit';
 import type { SiteAdapter, WidgetGroup } from './types';
@@ -15,6 +19,10 @@ export const ADAPTERS: readonly SiteAdapter[] = [
   greenhouse,
   lever,
   teamtailor,
+  comeet,
+  bamboohr,
+  smartrecruiters,
+  solidjobs,
 ];
 
 export const MATCH_PATTERNS: string[] = ADAPTERS.flatMap((a) => [...a.matchPatterns]);

@@ -14,7 +14,8 @@ function setNative(
 }
 
 function fire(el: HTMLElement, ...types: string[]): void {
-  for (const type of types) el.dispatchEvent(new Event(type, { bubbles: true, cancelable: true }));
+  for (const type of types)
+    el.dispatchEvent(new Event(type, { bubbles: true, cancelable: true, composed: true }));
 }
 
 export function setText(el: HTMLInputElement | HTMLTextAreaElement, value: string): boolean {

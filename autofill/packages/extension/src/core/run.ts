@@ -37,14 +37,24 @@ export async function fillForm({
   const outcomes = new Map<string, Outcome>();
   let cv: FillReport['cv'] = 'not-asked';
 
-  const pass = async (): Promise<Control[]> => {
+  // Every control the plan says takes the CV (a form can have a parse-and-prefill dropzone AND a
+  // required CV box); falls back to the first file input when the planner named none.
+  const cvTargets = (controls: Control[], plan: Map<string, PlanEntry>): Control[] => {
+    const files = controls.filter((c) => c.descriptor.kind === 'file');
+    const named = files.filter((c) => plan.get(c.descriptor.id)?.action === 'upload-cv');
+    return named.length > 0 ? named : files.slice(0, 1);
+  };
+  let targets: Control[] = [];
+
+  const pass = async (apply = true): Promise<Control[]> => {
     const controls = await scan(root, adapter);
     const { plan } = await backend.plan(
       controls.map((c) => c.descriptor),
       band,
     );
     const byId = new Map<string, PlanEntry>(plan.map((p) => [p.id, p]));
-    for (const control of controls) {
+    targets = cvTargets(controls, byId);
+    for (const control of apply ? controls : []) {
       const entry = byId.get(control.descriptor.id);
       if (!entry || entry.action === 'upload-cv') continue;
       const outcome = await execute(control, entry, adapter);
@@ -58,14 +68,29 @@ export async function fillForm({
     return controls;
   };
 
-  const first = await pass();
+  const uploadAll = async (): Promise<FillReport['cv']> => {
+    let result: FillReport['cv'] = 'not-asked';
+    for (const target of targets) {
+      const one = await uploadCv(target, backend, cvId);
+      if (result !== 'uploaded') result = one;
+    }
+    return result;
+  };
 
-  const fileControl = first.find((c) => c.descriptor.kind === 'file');
-  if (fileControl) {
-    cv = await uploadCv(fileControl, backend, cvId);
-    if (cv === 'uploaded' && adapter.refillAfterCvMs) {
-      await sleep(adapter.refillAfterCvMs);
-      await pass();
+  if (adapter.cvFirst) {
+    // Learn which controls take the CV, upload, let the site's parser finish, then fill.
+    await pass(false);
+    cv = await uploadAll();
+    if (cv === 'uploaded') await sleep(adapter.refillAfterCvMs ?? 2500);
+    await pass();
+  } else {
+    await pass();
+    if (targets.length > 0) {
+      cv = await uploadAll();
+      if (cv === 'uploaded' && adapter.refillAfterCvMs) {
+        await sleep(adapter.refillAfterCvMs);
+        await pass();
+      }
     }
   }
 
