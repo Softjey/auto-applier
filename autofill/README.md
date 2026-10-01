@@ -94,6 +94,8 @@ pnpm check                                            # typecheck + lint + forma
 pnpm --filter @applier/e2e exec playwright test fixture   # real Chromium + built extension + real server
 pnpm --filter @applier/e2e exec playwright test passwords # the password manager, same setup
 LIVE=1 pnpm --filter @applier/e2e test:live           # opt-in: real employer forms, FAKE data, never submitted
+# ONLY=<substring> narrows it to one target; CHROMIUM_PATH=<Chromium binary> reuses one you already have.
+# It serves the Polish form vocabulary from fixtures/apply-config.test.json (phrases only), so Polish forms resolve.
 ```
 
 The e2e runs the **built** extension in a real Chromium against the real plan
