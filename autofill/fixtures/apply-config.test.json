@@ -1,0 +1,69 @@
+{
+  "$schemaVersion": 1,
+  "note": "Fake config for the e2e suite: the Polish form vocabulary only (phrases, no personal data) and no paths.",
+  "paths": {
+    "resumeRepo": null
+  },
+  "resumeFileName": null,
+  "formVocabulary": {
+    "note": "Phrases, not regexes. Whitespace matches loosely; a trailing * matches any letter suffix, which is what makes inflected languages (Polish, Ukrainian) tractable. These are MERGED on top of the built-in English vocabulary, never replacing it — a form that mixes languages still resolves.",
+    "fields": {
+      "fullName": ["imie i nazwisko", "imię i nazwisko"],
+      "firstName": ["imie", "imię"],
+      "lastName": ["nazwisko"],
+      "email": ["adres e-mail", "adres email"],
+      "phone": ["telefon*", "numer telefonu"],
+      "portfolio": ["strona*"],
+      "city": ["miasto", "miejscowosc", "miejscowość"],
+      "country": ["kraj"],
+      "bareName": ["imie", "imię"]
+    },
+    "guards": {
+      "bareName": ["firma", "nazwa firmy", "plik", "uzytkownik", "użytkownik"]
+    },
+    "topics": {
+      "languageLevel": ["stopien*", "stopień*", "znajomosc*", "znajomość*", "poziom*"],
+      "consent": [
+        "zgoda",
+        "zgode",
+        "zgodę",
+        "zgody",
+        "wyrazam zgode",
+        "wyrażam zgodę",
+        "przetwarzanie danych",
+        "rodo",
+        "regulamin*",
+        "akceptacja regulaminu",
+        "polityk* prywatnosci",
+        "polityk* prywatności",
+        "oswiadczam*",
+        "oświadczam*",
+        "zapoznalem sie",
+        "zapoznałem się"
+      ],
+      "futureConsent": ["przyszl*", "przyszł*", "kolejnych", "kolejnych rekrutacji"],
+      "salary": [
+        "wynagrodz*",
+        "oczekiwania finansowe",
+        "oczekiwan* finansow*",
+        "stawk*",
+        "widelki",
+        "widełki",
+        "zarobk*",
+        "oczekiwana kwota",
+        "oczekiwane wynagrodzenie",
+        "зарплат*",
+        "очікуван* зарплат*",
+        "винагород*",
+        "ставк*"
+      ],
+      "eeo": ["plec", "płeć"],
+      "cvUpload": ["plik cv", "zyciorys", "życiorys"]
+    },
+    "languageAliases": {
+      "English": ["angielski*", "angielskiego", "jezyk angielski", "język angielski"],
+      "Polish": ["polski*", "polskiego", "jezyk polski", "język polski"],
+      "Ukrainian": ["ukrainski*", "ukraiński*", "jezyk ukrainski", "język ukraiński"]
+    }
+  }
+}

@@ -25,6 +25,48 @@ describe('a language level typed into a box that lists the CEFR codes', () => {
   });
 });
 
+describe('optional boxes with nothing known for them', () => {
+  it('leaves an optional text / url box empty instead of listing it, but a required one is listed', async () => {
+    document.body.innerHTML = `<form>
+      <div class="form-group"><label for="a">Other website</label><input id="a" name="a"></div>
+      <div class="form-group"><label for="b">Anything else?</label><textarea id="b" name="b"></textarea></div>
+      <div class="form-group"><label for="c">Mystery question *</label><input id="c" name="c"></div></form>`;
+    const unknown = () => ({ action: 'manual' as const, reason: 'unknown' });
+    const report = await fillForm({
+      adapter: erecruiter,
+      backend: fakeBackend([when(/./, unknown)]),
+      doc: document,
+      cvId: null,
+    });
+    expect(report.manual.map((m) => m.label)).toEqual(['Mystery question *']);
+  });
+});
+
+describe('a masked phone box', () => {
+  it('counts the number as kept when the mask only removed the spaces', async () => {
+    document.body.innerHTML = `<form><div class="form-group"><label for="p">Phone *</label><input id="p" type="tel" name="phone"></div></form>`;
+    const input = document.getElementById('p') as HTMLInputElement;
+    // a mask: keeps digits and the plus, drops everything else
+    input.addEventListener('input', () => {
+      const cleaned = input.value.replace(/[^\d+]/g, '');
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set?.call(
+        input,
+        cleaned,
+      );
+    });
+    const report = await fillForm({
+      adapter: erecruiter,
+      backend: fakeBackend([
+        when(/Phone/, () => ({ action: 'set', value: '+48 000 000 000', source: 't' })),
+      ]),
+      doc: document,
+      cvId: null,
+    });
+    expect(input.value).toBe('+48000000000');
+    expect(report.outcomes.map((o) => o.status)).toEqual(['filled']);
+  });
+});
+
 describe('optional free text', () => {
   const load = (star: string) => {
     document.body.innerHTML = `<form><div class="form-group"><label for="m">Wiadomość do Rekrutera/ki ${star}</label><textarea id="m" name="m"></textarea></div></form>`;

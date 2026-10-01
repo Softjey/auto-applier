@@ -57,6 +57,27 @@ const TARGETS: Target[] = [
     url: 'https://jobs.lever.co/spotify/2193db3f-77c5-43b8-b030-8f92c9882bf1/apply',
   },
   {
+    name: 'smartrecruiters softwaremind',
+    url: 'https://jobs.smartrecruiters.com/oneclick-ui/company/SoftwareMind/publication/7d0ed70c-3874-4cf6-9a64-cd7637e19755?dcr_ci=SoftwareMind',
+  },
+  { name: 'bamboohr latentai', url: 'https://latentai.bamboohr.com/careers/40' },
+  { name: 'comeet apply', url: 'https://www.comeet.co/jobs/B7.007/45.270/apply' },
+  { name: 'solidjobs apply', url: 'https://solid.jobs/apply/37593/blackbird-fullstack-react-node' },
+  {
+    name: 'teamtailor flyps',
+    url: 'https://flyps.teamtailor.com/jobs/8248547-senior-fullstack-engineer/89d2366a-b5b8-4a72-8b56-144e5d48fcc3',
+    // the form mounts ~10 s after the page (ats/teamtailor.com.md)
+    open: async (page) => {
+      // "Apply now" only expands the form in place; nothing is sent.
+      await page
+        .getByRole('link', { name: /apply now/i })
+        .first()
+        .click({ timeout: 8000 })
+        .catch(() => undefined);
+      await page.locator('input[name="candidate[email]"]').waitFor({ timeout: 25_000 });
+    },
+  },
+  {
     name: 'justjoin altimetrik',
     url: 'https://justjoin.it/job-offer/altimetrik-poland-senior-react-developer-krakow-javascript-c6d7cd5b',
     open: async (page) => {

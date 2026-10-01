@@ -1,6 +1,6 @@
 import { spawn, type ChildProcess } from 'node:child_process';
 import { mkdtempSync } from 'node:fs';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { copyFile, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { chromium, test as base, type BrowserContext, type Page } from '@playwright/test';
@@ -50,6 +50,8 @@ async function waitForPort(): Promise<void> {
  */
 async function startServer(): Promise<ChildProcess> {
   await assertPortFree();
+  // The Polish form vocabulary (phrases only) the real config carries, so Polish forms resolve.
+  await copyFile(resolve(FIXTURES, 'apply-config.test.json'), join(DATA_DIR, 'apply-config.json'));
   const server = spawn('pnpm', ['--filter', '@applier/server', 'start'], {
     cwd: ROOT,
     env: {

@@ -89,11 +89,13 @@ export async function execute(
       if (d.kind === 'checkbox-group' && !d.required && entry.reason !== 'below-floor') {
         return left(control, 'optional checkbox left unticked');
       }
-      // An optional free-text box (a message to the recruiter) stays empty: nothing is lost.
+      // An optional free-text box (a message to the recruiter, a second website) with nothing
+      // known for it stays empty: nothing is lost, and the standing policy is not to fill them.
+      // A `review` one is different: the resolver has a candidate answer for the agent to judge.
       if (
-        (d.kind === 'textarea' || d.kind === 'text') &&
+        (d.kind === 'textarea' || d.kind === 'text' || d.kind === 'url') &&
         !d.required &&
-        entry.reason === 'narrative'
+        (entry.reason === 'narrative' || entry.reason === 'unknown')
       ) {
         return left(control, 'optional free text left empty');
       }

@@ -26,7 +26,17 @@ export function setText(el: HTMLInputElement | HTMLTextAreaElement, value: strin
   fire(el, 'input', 'change');
   el.blur();
   // Verify what the page now holds, not what we sent (a controlled input can revert).
-  return el.value === value;
+  return el.value === value || sameFormatted(el, value);
+}
+
+/**
+ * A phone box with a mask keeps "+48000000000" for "+48 000 000 000": it took the number and
+ * dropped the spaces. For a tel input, the same digits are the same answer.
+ */
+function sameFormatted(el: HTMLInputElement | HTMLTextAreaElement, value: string): boolean {
+  if (!(el instanceof HTMLInputElement) || el.type !== 'tel') return false;
+  const digits = (s: string) => s.replace(/\D/g, '');
+  return digits(value) !== '' && digits(el.value) === digits(value);
 }
 
 export function setSelectValue(el: HTMLSelectElement, optionValue: string): boolean {
