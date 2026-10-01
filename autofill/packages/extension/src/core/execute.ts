@@ -1,6 +1,7 @@
 import type { Cefr, FieldOption, PlanEntry, SalaryQuote } from '@applier/protocol';
 import type { SiteAdapter } from '../adapters';
 import { comboChoose, comboChosen, comboTypeahead, isListCombobox } from './combobox';
+import { startDateFor } from './date-box';
 import { pickLevel } from './level-scale';
 import { findDeclineOption, matchOption } from './match-option';
 import { pickBand } from './ranges';
@@ -145,9 +146,16 @@ async function applySet(control: Control, value: string): Promise<Outcome> {
     case 'url':
     case 'number':
     case 'textarea': {
-      if (!isEmpty(el)) return left(control, 'already filled');
-      return setText(el as HTMLInputElement | HTMLTextAreaElement, value)
-        ? filled(control)
+      const box = el as HTMLInputElement | HTMLTextAreaElement;
+      // A date box wants a date, not "2 weeks": today plus the duration, in the box's own format.
+      const date = box instanceof HTMLInputElement ? startDateFor(box.placeholder, value) : null;
+      const text = date ?? value;
+      // A date picker that opens on today's date holds a default, not an answer.
+      const isDefaultDate =
+        date !== null && box.value === startDateFor(box.placeholder, 'immediately');
+      if (!isEmpty(el) && !isDefaultDate) return left(control, 'already filled');
+      return setText(box, text)
+        ? filled(control, date ? `${value} -> ${date}` : undefined)
         : failed(control, 'the page did not keep the value');
     }
 

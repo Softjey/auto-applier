@@ -56,9 +56,28 @@ export function typeableAnswer(answer, kind) {
   // "...where a single number is required, 3": a typed years-of-experience box takes that number.
   const single = /single number[^,)]*,\s*(\d+(?:[.,]\d+)?)/i.exec(answer);
   if (single && !CHOICE_KINDS.has(kind)) return { ok: true, value: single[1] };
-  if (!GUIDANCE.test(answer) || CHOICE_KINDS.has(kind)) return { ok: true, value: answer };
-  return { ok: false };
+  if (CHOICE_KINDS.has(kind)) return { ok: true, value: answer };
+  // "B2B — the compensation anchor in profile.json is 150 PLN/h net …": an explanation for the
+  // agent after a dash. A box takes the short lead only ("B2B"); a lead that is itself long means
+  // the whole answer is prose written for the agent, and a person would not type it.
+  const [lead, ...rest] = answer.split(/\s[—–]\s/);
+  if (rest.length > 0 && AGENT_NOTE.test(rest.join(" "))) {
+    return lead.length <= LEAD_MAX ? { ok: true, value: lead.trim() } : { ok: false };
+  }
+  // The whole answer is an instruction to the agent ("Tick it when mandatory", "Leave blank.
+  // Standing policy…", "Pick the earliest option"), or is too long to be a value a person types
+  // into a box: the agent reads it and decides.
+  if (GUIDANCE.test(answer) || INSTRUCTION.test(answer) || answer.length > TYPED_MAX) {
+    return { ok: false };
+  }
+  return { ok: true, value: answer };
 }
+
+const LEAD_MAX = 40;
+const TYPED_MAX = 160;
+// Words that only an instruction to the agent contains.
+const AGENT_NOTE = /\b(profile\.json|profile records|the cv shows|qa\[\]|anchor|derive|standing policy|stated by the user|never pick|never (?:volunteer|answer)|pick the|choose the|where offered|escalate)\b/i;
+const INSTRUCTION = /\b(tick it|leave (?:it )?(?:blank|empty|unticked)|standing policy|stated by the user|the user\b|user answers|pick the|choose the|top option|highest option|middle(?:-high)? option|recompute|enter only|skills\.csv|never pick|never volunteer|when the form|if a form|where offered|escalate|for other stacks)/i;
 
 export function classify(field, profile, vocab) {
   const label = field.label || field.key || "";
