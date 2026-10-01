@@ -30,3 +30,17 @@ export const loopbackExtensionOnly: MiddlewareHandler = async (c, next) => {
   if (c.req.method === 'OPTIONS') return c.body(null, 204);
   await next();
 };
+
+/**
+ * Passwords get a stricter door than profile facts: any installed extension can send
+ * "Origin: chrome-extension://<its own id>", so the credential routes accept only OUR
+ * extension's pinned id (protocol EXTENSION_ID, or $AUTOFILL_EXTENSION_ID for a store build).
+ */
+export const pinnedExtensionOnly =
+  (extensionId: string): MiddlewareHandler =>
+  async (c, next) => {
+    if (c.req.header('origin') !== `chrome-extension://${extensionId}`) {
+      return c.json({ error: 'not the Applier extension' }, 403);
+    }
+    await next();
+  };
