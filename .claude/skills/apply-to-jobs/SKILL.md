@@ -36,8 +36,8 @@ derivation: it does not generalise to years of experience, skill levels, or
 anything else.
 
 The figure itself is per vacancy, not per user: every salary field is answered
-by `$SALARY_QUOTE` run for that vacancy, never by a qa[] salary entry (those
-are only the no-band baseline). See § Money.
+by `$SALARY_QUOTE` run for that vacancy. `qa[]` holds no salary entries; the
+no-band baseline lives in `profile.compensation.strategy`. See § Money.
 
 ## Configuration
 
@@ -154,6 +154,8 @@ it and start the next one immediately**:
 - a required fact or answer that is not in `profile.json` / `qa[]` / `stories.json`
   (an `unknown` field, a `review` you are not convinced about, a required "why
   this company" box whose reason is the user's pick);
+- an essay draft that needs the user's ok / not ok (§ Essays and "tell us about"
+  questions) — only when no story fits cleanly;
 - a `$SALARY_QUOTE` that exited 3 — "apply at this money at all?";
 - a CAPTCHA, an e-mail-only application, a sign-in the extension could not complete
   (§ Portals that require an account), or any other step only the user can do;
@@ -165,6 +167,30 @@ the question worded as the form words it, or the action, plus every value alread
 prepared so the user finishes in one pass; leave a filled tab open only where the
 form cannot be rebuilt (CAPTCHA), and say so. Then carry on with the next vacancy.
 Never put a guess in a field to get past a parked question.
+
+**Fill everything you can before parking.** A parked form is a form with one or two
+holes, not an untouched one: every field that resolves is filled, the CV uploaded,
+consents set, salary entered; only the missing answers are left. The user's reply
+then costs one field, not a form.
+
+### Essays and "tell us about" questions
+
+A required free-text question about experience, a hard problem, an AI workflow and
+the like is **drafted by you, not parked** — including when the form says "no AI" or
+"in your own words". The user reads the result; the rules in Phase 4 step 3 decide how
+it must read.
+
+1. `node $STORIES find "<the question>"`, then judge titles and tags yourself
+   (§ Phase 4 step 4). Ground every clause in one story's Situation/Task/Action/Result.
+2. **A story fits cleanly → write it and submit as part of the normal flow.** No
+   pause, no question.
+3. **Nothing fits, or the best story fits only partly** (the question asks for
+   something the story only touches, a different stack, a different kind of problem)
+   → still write the best draft, fill the rest of the form, and park the vacancy for a
+   single **ok / not ok** from the user, showing the draft and the story it came from.
+   *ok* → submit. *not ok* → the user's comment decides: rewrite, or another story.
+4. An optional essay stays empty. A "why do you want to work here" box keeps its own
+   rule (Phase 4 step 3): the reason is the user's pick.
 
 When the queue is exhausted, hand the user **one action list, grouped by
 vacancy** (§ End-of-run action list). Whatever the user answers is recorded with
@@ -271,7 +297,7 @@ path handles the rest), in one managed tab:
    `NOT_INTERESTED` with the reason — and move on.
    Keep one tab for the whole run and follow your runtime's tab rules in
    `$BROWSER_GUIDE` — under Claude in Chrome, a control that opens a new tab
-   and a tab closed mid-run both cost you every other open form.
+   costs you every other open form, and so does closing a tab (§ Tabs: never close one).
 2. Decline non-essential cookies.
 3. Run `$EXTRACT_FORM` through the run-JS-in-the-page capability and save what
    it returns to `runs/<run-id>/<Company>_<vacancyId>/form.json`. It returns a
@@ -330,6 +356,16 @@ systems), 1–5 stack ratings computed from `skills.csv` — so a question of on
 those kinds is answered from its policy entry and never re-asked. The action
 list is for new facts.
 
+- **Personal and demographic questions** (gender, marital status, race, disability,
+  veteran status, pronouns, and the like) — when the field is required and the
+  options include **"Prefer not to say"** or an equivalent opt-out, pick it. No
+  question to the user. An optional one is left empty.
+  Age / date of birth is the one exception that is not opt-out by default: leave it
+  empty when optional; when the form will not submit without it, enter the date of
+  birth in `qa[]` (`date-of-birth-when-mandatory`). A mandatory personal question with
+  no opt-out and no `qa[]` answer (religion, say) is a real unknown: park it. Marital status is answered from `qa[]`
+  (single) only in that mandatory-no-opt-out case.
+- **Willingness to work over 40 hours a week** — always yes (`qa[]` policy).
 - **`runtime` salary fields** — already answered by Phase 1's `$SALARY_QUOTE`
   run. They are not questions for the user and not qa[] lookups; carry the
   computed figure into Phase 4, converted to the units the field actually asks
@@ -539,8 +575,10 @@ Per vacancy, following its ATS file:
    every clause traceable to its Situation/Task/Action/Result. `$STORIES find`
    ranks by lexical overlap only — a behavioural question shares almost no
    vocabulary with the story that answers it, so a low score is not a verdict.
-   Read the titles and tags and judge yourself; if nothing fits, that is still
-   an escalation.
+   Read the titles and tags and judge yourself. A clean fit is written and
+   submitted; a partial fit or none is drafted anyway and goes to the user for an
+   ok / not ok (§ Essays and "tell us about" questions) — not a blank parked
+   question.
 5. **Screenshot the filled form and keep the screenshots.** Not one glance — a
    record. Scroll through the whole form and capture every section, so that
    between the images every answer the employer will receive is legible: name
@@ -762,14 +800,17 @@ the tab to the user, with the vacancy left un-APPLIED:
 
 ### Tabs: do not leave finished ones behind
 
+**Never close a tab — not mid-run, not at the end, not when the user asks you to tidy
+up.** Closing any tab dissolves the browser group and strands every other open tab
+(see `$BROWSER_GUIDE`); in a real run one close left six forms undrivable. If the user
+asks for finished tabs to be closed, say that closing is theirs to do by hand and why.
+
 After a vacancy's success signal and its `APPLIED` write, that tab is finished:
 reuse it for the next vacancy (`navigate`, no new tab) so finished forms do not
-accumulate. A new tab is only for a **parked** vacancy (the user must act on that
-form), and it stays open on purpose. Closing a tab dissolves the browser group
-and strands every other open tab (see `$BROWSER_GUIDE`), so close nothing while a
-parked form, or anything you still have to drive, remains. At the very end, if
-only finished tabs are left, close them; if parked tabs are open, tell the user
-which ones are theirs and ask before closing anything.
+accumulate. A new tab is only for a **parked** vacancy, and it stays open. A parked
+tab can still be lost (an extension reconnect hands out a new group), so never treat
+it as the only copy of the work: everything prepared goes into `pending.md` and
+`form.json`, and a parked form is rebuilt from those when its tab is gone.
 
 ### End of run
 

@@ -135,7 +135,7 @@ export const TOPIC_PHRASES = {
     "salary", "salaries", "compensation", "remuneration", "earnings", "wage",
     "expected salary", "desired salary", "salary expectation*", "expected compensation",
     "desired pay", "expected pay", "pay expectation*", "compensation expectation*",
-    "financial expectation*", "hourly rate", "daily rate", "day rate",
+    "financial expectation*", "hourly rate", "hourly net rate", "net hourly rate", "monthly rate", "annual rate", "yearly rate", "daily rate", "day rate",
     "expected rate", "rate expectation*", "your rate", "how much do you expect",
   ],
 

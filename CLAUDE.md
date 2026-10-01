@@ -103,6 +103,10 @@ second agent reads the same files instead of a fork of them.
   - `scripts/resolve-fields.mjs` — sorts a form's fields into resolved / narrative /
     review / unknown against `profile.json`. Never guesses: only a structured value
     or an `exact` qa[] hit counts as resolved.
+    Order matters: an `exact` qa[] hit beats the loose structural vocabulary (single
+    words like "country" or "mobile"), so a recorded answer is never shadowed. Every
+    qa[] entry has a unique `canonicalTopic` and a `kind` (fact / policy / narrative /
+    employer-specific); `profile-qa.mjs add` requires both. Salary is never in qa[].
   - `scripts/salary-quote.mjs` — the figure for one vacancy's salary field, computed
     from its published band per `compensation.strategy`. Exit code 3 = under the
     floor, ask the user before applying at all. Whatever it returns is recorded in

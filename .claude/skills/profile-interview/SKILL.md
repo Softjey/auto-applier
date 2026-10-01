@@ -45,6 +45,14 @@ and then hands back to this interview.
    block:
    - **Contact/links** — anything not already pulled from the CV; a
      portfolio URL if one exists.
+   - **Personal facts forms ask for** — date of birth and marital status
+     (`personal.dateOfBirth`, `personal.maritalStatus`). They are never filled
+     automatically: also seed `qa[]` entries `date-of-birth-when-mandatory` and
+     `marital-status` (`--kind=policy`) whose policy is: "Prefer not to say" when a
+     required field offers it, empty when optional, the real value only when mandatory
+     with no opt-out. Ask the user to confirm that policy rather than assuming it.
+   - **Standing answers for recurring screening questions** — willingness to work
+     over 40 hours a week (seed as a `policy` entry, answer the user's own).
    - **Work authorization** — citizenship, current residence permit
      country/type. Keep this in the structured block as *background only*;
      it never directly answers a country-specific "are you authorized to
@@ -67,15 +75,16 @@ and then hands back to this interview.
    which is machine-managed — never hand-edit that array).
 6. **Seed `qa[]` with the most common ATS phrasings**, scoped to the user's
    current base country (from step 2/4), via
-   `node .claude/skills/apply-to-jobs/scripts/profile-qa.mjs add ...` for
-   each. This is what saves the first real `apply-to-jobs` run from
+   `node .claude/skills/apply-to-jobs/scripts/profile-qa.mjs add --question=… --answer=…
+   --canonical=<topic> --kind=fact|policy|narrative|employer-specific` for each
+   (`--canonical` and `--kind` are required; a topic that already exists is refused —
+   add an `alias` instead). This is what saves the first real `apply-to-jobs` run from
    stopping on nearly every vacancy. At minimum, seed:
    - work authorization in the base country (`work_authorization:<country>`)
    - visa sponsorship needed (`sponsorship:<country>`)
    - willingness to relocate (`relocation:<country>` or a general answer)
    - notice period
    - earliest start date
-   - salary expectation in the base currency (`salary:<currency>`)
    - LinkedIn URL / GitHub URL / portfolio URL
    - "How did you hear about us?" — a generic, reusable answer
    - hybrid/onsite willingness
@@ -133,7 +142,8 @@ documentation for `apply-to-jobs`, not something to fill in per-user.
 
 `compensation.derivation` and `compensation.strategy` hold numbers the applier
 computes from, not answers to read out. When a salary changes, it changes in
-two places — the anchor here, and every `qa[]` entry tagged `baseline-only`.
+one place — the anchor and `compensation.strategy` here. `qa[]` holds no salary
+entries: salary fields are always computed per vacancy by `salary-quote.mjs`.
 
 `eeo.policy` defaults to `"decline"` (prefer-not-to-answer on voluntary
 demographic questions). Only change it if the user explicitly asks to

@@ -62,11 +62,11 @@ Two quirks of this integration that the skill's phases are built around:
   mid-run still must not pile up. Reuse: after a vacancy's success signal is
   recorded, `navigate` the *same* tab to the next vacancy instead of opening a
   new one. Open a new tab only to **park** a form that needs the user (the parked
-  tab then stays as the user's to-do). Closing is for the very end of the run,
-  once nothing needs driving any more, and then ask the user first if any
-  parked tab is still open — the first close dissolves the group and the
-  parked tabs become undrivable (`tabs_close_mcp` refuses them: "not in Claude's
-  tab group"), so the user closes those by hand.
+  tab then stays as the user's to-do). **Never call `tabs_close_mcp`** — not at
+  the end of a run either, and not when the user asks for tidying: the first close
+  dissolves the group and every other tab becomes undrivable (`tabs_close_mcp`
+  refuses them: "not in Claude's tab group"). Tell the user closing is theirs to do
+  by hand.
 - **A glitched tab is replaced, not repaired.** After a failed or detached
   `screenshot` (usually right after a Simplify click or a file upload) a tab can
   keep a stale 392x180 viewport, so every coordinate click lands wrong while JS

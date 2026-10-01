@@ -11,7 +11,8 @@ contains both repos side by side; the scripts locate this directory on their own
 - Nothing here is code. Do not add scripts or skills to this repo; they belong
   in the code repo so every user gets them.
 - `qa[]` in `profile.json` is machine-managed — add entries with
-  `profile-qa.mjs add`, never by hand-editing the array. Structured fields above
+  `profile-qa.mjs add` (requires `--canonical` and `--kind`: fact / policy /
+  narrative / employer-specific), never by hand-editing the array. Structured fields above
   it are fine to edit directly.
 - The core rule of the system: an application form is never answered with an
   invented fact. Only `profile.json` / `stories.json` facts, or ask the user.

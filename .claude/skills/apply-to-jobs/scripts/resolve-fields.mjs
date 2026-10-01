@@ -104,6 +104,17 @@ export function classify(field, profile, vocab) {
     };
   }
 
+  // A recorded answer to this very question beats the loose structural vocabulary.
+  // The structural rules match single words ("country", "mobile", "name", "address"),
+  // so without this a qa[] answer was shadowed: "authorized to work in this country?"
+  // came back "Poland", "Experience shipping mobile apps" came back the phone number,
+  // a street-address field came back the first name.
+  const ranked = rankAgainstQa(label, profile.qa);
+  const top = ranked[0];
+  if (top?.verdict === "exact") {
+    return { status: "resolved", source: `qa:${top.entry.id}`, value: top.entry.answer, score: +top.score.toFixed(2) };
+  }
+
   for (const [key, get] of STRUCTURAL) {
     if (matches(vocab.guard[key], label)) continue;
     if (matches(vocab.field[key], label)) {
@@ -112,13 +123,8 @@ export function classify(field, profile, vocab) {
     }
   }
 
-  const ranked = rankAgainstQa(label, profile.qa);
-  const top = ranked[0];
   if (!top || top.verdict === "none") {
     return { status: "unknown", why: "no qa[] entry comes close", candidates: [] };
-  }
-  if (top.verdict === "exact") {
-    return { status: "resolved", source: `qa:${top.entry.id}`, value: top.entry.answer, score: +top.score.toFixed(2) };
   }
   // likely / weak -> Claude must read both questions and decide.
   return {

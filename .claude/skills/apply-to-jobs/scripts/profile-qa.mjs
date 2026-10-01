@@ -6,8 +6,9 @@
 //
 // Usage:
 //   profile-qa.mjs find "<question text>" [--limit=5] [--json]
-//   profile-qa.mjs add --question="..." --answer="..." [--tags=a,b]
-//                       [--canonical=topic] [--aliases="v1|v2"] [--force]
+//   profile-qa.mjs add --question="..." --answer="..." --canonical=topic
+//                       --kind=fact|policy|narrative|employer-specific
+//                       [--tags=a,b] [--aliases="v1|v2"] [--force]
 //   profile-qa.mjs alias <id> --add="new phrasing seen on this ATS"
 //   profile-qa.mjs touch <id>
 //   profile-qa.mjs list [--tag=x] [--grep=text]
@@ -87,14 +88,25 @@ function cmdFind(positional, flags) {
 }
 
 function cmdAdd(flags) {
-  const { question, answer, canonical, tags, aliases, force } = flags;
-  if (!question || !answer) {
+  const { question, answer, canonical, kind, tags, aliases, force } = flags;
+  const KINDS = ["fact", "policy", "narrative", "employer-specific"];
+  if (!question || !answer || !canonical || !KINDS.includes(kind)) {
     console.error(
-      'Usage: profile-qa.mjs add --question="..." --answer="..." [--tags=a,b] [--canonical=topic] [--aliases="v1|v2"] [--force]',
+      `Usage: profile-qa.mjs add --question="..." --answer="..." --canonical=topic --kind=${KINDS.join("|")} [--tags=a,b] [--aliases="v1|v2"] [--force]`,
     );
+    console.error(
+      "  fact: a true statement about the user. policy: a standing rule for how to answer (consents, self-assessments, opt-outs).",
+    );
+    console.error("  narrative: prose. employer-specific: only for one company.");
     process.exit(1);
   }
   const profile = loadProfile();
+  const sameTopic = profile.qa.find((e) => e.canonicalTopic === canonical);
+  if (sameTopic && !force) {
+    console.error(`Refusing to add: canonical topic "${canonical}" already exists as ${sameTopic.id}.`);
+    console.error(`Consider instead: node profile-qa.mjs alias ${sameTopic.id} --add="${question}"`);
+    process.exit(1);
+  }
   const queryTokens = tokenize(question);
   const ranked = profile.qa
     .map((entry) => ({ entry, score: bestMatchScore(queryTokens, entry) }))
@@ -111,7 +123,8 @@ function cmdAdd(flags) {
 
   const entry = {
     id: generateId(canonical),
-    canonicalTopic: canonical || null,
+    canonicalTopic: canonical,
+    kind,
     question,
     aliases: aliases ? aliases.split("|").map((s) => s.trim()).filter(Boolean) : [],
     answer,

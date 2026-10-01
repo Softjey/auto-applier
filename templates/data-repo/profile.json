@@ -8,7 +8,9 @@
     "phone": null,
     "currentCity": null,
     "currentCountry": null,
-    "citizenship": null
+    "citizenship": null,
+    "dateOfBirth": null,
+    "maritalStatus": null
   },
   "links": {
     "linkedin": null,
@@ -85,7 +87,7 @@
   "languages": [],
   "eeo": {
     "policy": "decline",
-    "note": "Voluntary demographic questions (race, gender, veteran status, disability) — default to 'Prefer not to answer' or the equivalent opt-out option. Escalate only if the field is mandatory and there is no opt-out."
+    "note": "Personal and demographic questions (race, gender, marital status, veteran status, disability, pronouns) — when required and an opt-out exists ('Prefer not to say' or equivalent), pick it; no question to the user. Optional ones stay empty. Escalate only if mandatory with no opt-out and no qa[] answer."
   },
   "languagesDisclosurePolicy": null,
   "projects": [],
