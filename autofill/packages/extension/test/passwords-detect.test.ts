@@ -139,6 +139,28 @@ describe('first step of a two-step sign-in', () => {
   });
 });
 
+describe('first step on a sign-in site that is not English', () => {
+  it('login.pracuj.pl: "Podaj e-mail, aby się zalogować" → "Dalej" is an identifier step', () => {
+    document.title = 'Logowanie | Pracuj.pl';
+    page(
+      `<h1>Podaj adres e-mail aby się zalogować lub utworzyć konto</h1>
+       <form><input type="email" name="email" id="email"><button type="submit">Dalej</button>
+       <button type="button">Kontynuuj z Google</button></form>`,
+      'https://login.pracuj.pl/',
+    );
+    expect(kinds()).toEqual(['identifier']);
+    document.title = '';
+  });
+
+  it('a German sign-in page is recognised by its host and its words', () => {
+    page(
+      `<form><h1>Anmelden</h1><input type="email" name="u"><input type="password" name="p"><button>Anmelden</button></form>`,
+      'https://accounts.example.de/',
+    );
+    expect(kinds()).toEqual(['login']);
+  });
+});
+
 describe('did it work?', () => {
   it('sees an error message, and sees none when the page is quiet', () => {
     page(`<form><input type="password"><div role="alert">Invalid email or password</div></form>`);

@@ -1,0 +1,113 @@
+<form id="form-login" data-testid="form-login" novalidate="">
+  <div>
+    <div>
+      <div>
+        <label id="username-_r0_-label" for="username-_r0_"
+          >Email<span aria-hidden="true" title="required">*</span></label
+        >
+        <div>
+          <div
+            role="presentation"
+            data-ds--text-field--container="true"
+            data-testid="username-container"
+          >
+            <input
+              aria-describedby=" "
+              aria-labelledby="username-_r0_-label"
+              id="username-_r0_"
+              autocomplete="username"
+              type="email"
+              data-ds--text-field--input="true"
+              data-testid="username"
+              name="username"
+              placeholder="Enter your email"
+              required=""
+              value=""
+            />
+          </div>
+        </div>
+        <div aria-live="polite" data-testid="message-wrapper"></div>
+      </div>
+    </div>
+    <div>
+      <div>
+        <div>
+          <div>
+            <label id="password-_r1_-label" for="password-_r1_">Password</label>
+            <div>
+              <div
+                role="presentation"
+                data-ds--text-field--container="true"
+                data-testid="password-container"
+              >
+                <input
+                  aria-describedby=" "
+                  aria-labelledby="password-_r1_-label"
+                  id="password"
+                  autocomplete="current-password"
+                  type="password"
+                  spellcheck="false"
+                  data-ds--text-field--input="true"
+                  data-testid="password"
+                  name="password"
+                  placeholder="Enter password"
+                  value=""
+                />
+                <div>
+                  <button type="button">
+                    <span
+                      ><span data-vc="icon-undefined" aria-hidden="true"></span
+                      ><span>Show password</span></span
+                    >
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div aria-live="polite" data-testid="message-wrapper"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div>
+        <label data-testid="remember-me-checkbox--checkbox-label"
+          ><input
+            tabindex="0"
+            type="checkbox"
+            name="remember"
+            data-testid="remember-me-checkbox--hidden-checkbox"
+            value=""
+          /><span>Remember me</span></label
+        >
+        <div>
+          <button
+            aria-expanded="false"
+            aria-haspopup="true"
+            id="_r3_"
+            data-ds--inline-message--button="true"
+            type="button"
+          >
+            <span
+              ><span data-ds--inline-message--icon="true"
+                ><span
+                  data-testid="inline-message-icon"
+                  role="img"
+                  aria-label="More info about Remember Me."
+                ></span></span
+              ><span></span
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button id="login-submit" data-testid="login-submit-idf-testid" tabindex="0" type="submit">
+    <span>Continue</span>
+  </button>
+  <div>
+    <button id="passwordless-button" tabindex="0" type="button">
+      <span><span data-vc="icon-undefined" role="img" aria-label="email"></span></span
+      ><span>Log in with email</span><span><span></span></span>
+    </button>
+  </div>
+</form>

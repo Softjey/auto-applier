@@ -21,9 +21,15 @@ export interface AccountForm {
   submit: HTMLElement | null;
 }
 
+// English, Polish, German, French, Spanish. Stems, not whole words: "zalogować" and "zaloguj się"
+// are one verb (found on login.pracuj.pl, which a whole-word pattern missed).
 const SIGNUP_WORDS =
-  /sign\s?up|create\s+(an?\s+|your\s+)?(account|profile)|register|registration|join\b|get started|zarejestruj|rejestracj|za[łl][óo][żz]|utw[óo]rz|stw[óo]rz|nowe konto|nie masz konta/i;
-const LOGIN_WORDS = /sign\s?in|log\s?in|login|zaloguj|logowanie|masz ju[żz] konto/i;
+  /sign\s?up|create\s+(an?\s+|your\s+)?(account|profile)|register|registration|join\b|get started|zarejestruj|rejestracj|za[łl][óo][żz]|utw[óo]rz|stw[óo]rz|nowe konto|nie masz konta|registrier|konto erstellen|cr[ée]er un compte|inscri|crear (una )?cuenta|registrarse/i;
+const LOGIN_WORDS =
+  /sign\s?in|log\s?in|login|zalog|logowan|loguj|masz ju[żz] konto|anmeld|einlogg|se connecter|connexion|iniciar sesi[óo]n/i;
+const NEXT_WORDS = /next|continue|dalej|kontynu|weiter|continuer|continuar|siguiente/i;
+/** A host that exists only to sign people in: login.example.com, accounts.example.com … */
+const LOGIN_HOST = /^(login|signin|auth|accounts?|id|sso|secure|identity|connect|idp)\./i;
 const NEWSLETTER = /newsletter|subscribe|subskry|zapisz si[ęe]|mailing|promo/i;
 const USERNAME_HINT = /user(name)?|e-?mail|login|identifier|account|konto|adres/i;
 const COOKIE_WIDGET =
@@ -167,7 +173,10 @@ export function findAccountForms(doc: Document): AccountForm[] {
  * sign-in — an e-mail box in a footer or a newsletter strip is not one.
  */
 function findIdentifierStep(doc: Document): AccountForm | null {
-  const loginPage = LOGIN_PATH.test(doc.location?.pathname ?? '');
+  const loginPage =
+    LOGIN_PATH.test(doc.location?.pathname ?? '') ||
+    LOGIN_HOST.test(doc.location?.hostname ?? '') ||
+    LOGIN_WORDS.test(doc.title);
   // Cheap attribute tests first: this runs on every page change, and the visibility
   // check (computed style) is the expensive part.
   const candidates = [...doc.querySelectorAll<HTMLInputElement>('input')].filter(
@@ -185,8 +194,7 @@ function findIdentifierStep(doc: Document): AccountForm | null {
     const submit = findSubmit(scope);
     const context = contextText(scope, submit);
     if (NEWSLETTER.test(context)) continue;
-    const says =
-      LOGIN_WORDS.test(context) || (loginPage && /next|continue|dalej|kontynu/i.test(context));
+    const says = LOGIN_WORDS.test(context) || (loginPage && NEXT_WORDS.test(context));
     if (!says || SIGNUP_WORDS.test(buttonText(submit ?? scope))) continue;
     return { kind: 'identifier', scope, username: input, emails: [input], passwords: [], submit };
   }

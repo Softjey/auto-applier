@@ -53,10 +53,15 @@ export default defineContentScript({
     await ensureUi();
 
     // Sign-in forms are routinely drawn late (SPAs, modals, a second step): follow the DOM.
+    // A throttle, not a debounce: a page that mutates all the time (an SPA that never settles)
+    // would keep resetting a debounce and the form would never be looked at (found on Atlassian).
     let timer: ReturnType<typeof setTimeout> | undefined;
     const schedule = () => {
-      clearTimeout(timer);
-      timer = setTimeout(() => void controller.refresh(), 400);
+      if (timer) return;
+      timer = setTimeout(() => {
+        timer = undefined;
+        void controller.refresh();
+      }, 400);
     };
     const observer = new MutationObserver(schedule);
     observer.observe(document.documentElement, {
