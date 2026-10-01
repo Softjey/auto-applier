@@ -15,6 +15,7 @@ const POLL_MS = 25;
 const OPEN_WAIT_MS = 700;
 const TYPEAHEAD_WAIT_MS = 3000;
 const SETTLE_MS = 400;
+const CLOSE_WAIT_MS = 300;
 
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
@@ -25,7 +26,17 @@ export type ListCombobox = HTMLElement;
  * another element (Angular Material's <mat-select>).
  */
 export const isListCombobox = (el: Element): boolean =>
-  el instanceof HTMLElement && el.getAttribute('role') === 'combobox';
+  el instanceof HTMLElement && (el.getAttribute('role') === 'combobox' || isPopoverSelect(el));
+
+/**
+ * A plain button that opens a popover holding a listbox and carries no combobox role (the new
+ * eRecruiter's "Wybierz" country and start-date lists). It is a field only if the list it
+ * opens has rows: a date picker opens a dialog too.
+ */
+export const isPopoverSelect = (el: Element): el is HTMLButtonElement =>
+  el instanceof HTMLButtonElement &&
+  el.getAttribute('role') !== 'combobox' &&
+  /^(dialog|listbox)$/.test(el.getAttribute('aria-haspopup') ?? '');
 
 function press(el: HTMLElement, key: string): void {
   for (const type of ['keydown', 'keyup']) {
@@ -50,6 +61,12 @@ function click(el: HTMLElement): void {
 /** The rows currently offered: the listbox this control owns, else any visible option on the page. */
 function visibleOptions(el: ListCombobox): HTMLElement[] {
   const owned = el.getAttribute('aria-controls') ?? el.getAttribute('aria-owns');
+  // A popover's list is mounted only once it is open: until then there are no rows, and
+  // another popover's rows left on the page must not be taken for them.
+  const mine = owned
+    ? (rootOf(el).getElementById(owned) ?? el.ownerDocument.getElementById(owned))
+    : null;
+  if (isPopoverSelect(el) && owned && !mine) return [];
   // Overlays (Material, Radix) render in <body>, outside the control's own shadow root.
   const scope: ParentNode =
     (owned ? (rootOf(el).getElementById(owned) ?? el.ownerDocument.getElementById(owned)) : null) ??
@@ -69,12 +86,25 @@ async function waitForOptions(el: ListCombobox, ms: number): Promise<HTMLElement
 
 async function open(el: ListCombobox): Promise<HTMLElement[]> {
   el.focus();
-  press(el, 'ArrowDown');
+  // A popover button answers a click, not the arrow key; only a closed one needs it.
+  if (isPopoverSelect(el)) {
+    if (el.getAttribute('aria-expanded') !== 'true') click(el);
+  } else press(el, 'ArrowDown');
   return waitForOptions(el, OPEN_WAIT_MS);
 }
 
 async function close(el: ListCombobox): Promise<void> {
   press(el, 'Escape');
+  await sleep(POLL_MS);
+  if (!isPopoverSelect(el)) return;
+  // A popover updates `aria-expanded` a moment after the key; clicking before that would
+  // reopen it. Only one that is still open once the page has had time to react is toggled shut,
+  // so its rows cannot leak into the next list.
+  for (let waited = 0; waited < CLOSE_WAIT_MS; waited += POLL_MS) {
+    if (el.getAttribute('aria-expanded') !== 'true') return;
+    await sleep(POLL_MS);
+  }
+  click(el);
   await sleep(POLL_MS);
 }
 
@@ -131,7 +161,11 @@ export async function comboChoose(el: ListCombobox, label: string): Promise<bool
 
   click(row);
   await sleep(SETTLE_MS);
-  if (shown(el).includes(wanted) && comboChosen(el)) return true;
+  if (shown(el).includes(wanted) && comboChosen(el)) {
+    // A popover is not a Select: picking a row may leave its list open over the next field.
+    if (isPopoverSelect(el)) await close(el);
+    return true;
+  }
 
   // Some libraries only take a row from the keyboard: walk down to it and press Enter.
   await open(el);

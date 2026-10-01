@@ -48,6 +48,17 @@ describe('multiple choice: Radix checkbox clusters and <select multiple>', () =>
     expect(report.manual.find((m) => /rodzaj umowy/.test(m.label))?.hint).toBe('Freelance');
   });
 
+  it('takes a sentence answer as one choice, not as a list', async () => {
+    radixBoxes();
+    const sentence =
+      'B2B — the compensation anchor is 150 PLN/h net on a B2B invoice; open to UoP if B2B is unavailable.';
+    const backend = fakeBackend([when(/rodzaj umowy/i, value(sentence))]);
+    const report = await fillForm({ adapter: erecruiter, backend, doc: document, cvId: null });
+    expect(state('b2b')).toBe('true');
+    expect(state('uop')).toBe('false');
+    expect(report.manual.map((m) => m.label).join()).not.toMatch(/rodzaj umowy/);
+  });
+
   it('selects the named options of a <select multiple> and keeps existing ones', async () => {
     document.body.innerHTML = `<form><div class="form-group"><label for="t">Which technologies? Select all that apply.</label>
       <select id="t" name="t" multiple><option value="r">React</option><option value="n">Next.js</option><option value="g">Git</option><option value="x">Terraform</option></select></div></form>`;

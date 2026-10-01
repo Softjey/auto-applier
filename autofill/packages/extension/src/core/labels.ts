@@ -99,7 +99,8 @@ export function groupQuestion(members: readonly HTMLElement[]): string {
       if (!line || !host || host.closest('script, style, button, select, option, textarea'))
         continue;
       if (optionLabels.some((l) => l.contains(text))) continue;
-      return line.slice(0, 160);
+      // A label's "*" often sits in its own aria-hidden span, a separate text node.
+      return (host.tagName === 'LABEL' ? clean(host.textContent) : line).slice(0, 160);
     }
   }
   return '';

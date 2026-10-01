@@ -49,10 +49,7 @@ export function PasswordsPanel({ controller }: { controller: PasswordController 
   // An unconfirmed entry is the draft this very panel just made: not "an account you already have".
   const exact = s.matches.filter((m) => m.level === 'exact' && m.verified);
   return (
-    <aside
-      className={docked ? 'pw-panel pw-docked' : 'pw-panel'}
-      aria-label="Applier Passwords"
-    >
+    <aside className={docked ? 'pw-panel pw-docked' : 'pw-panel'} aria-label="Applier Passwords">
       <header>
         <strong>Applier Passwords</strong>
         <button className="pw-x" onClick={() => setOpen(false)} aria-label="Minimise">

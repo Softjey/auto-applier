@@ -182,13 +182,18 @@ async function applySet(control: Control, value: string): Promise<Outcome> {
 }
 
 /** "React, Next.js" -> the options each part names; a part that names none is reported, not guessed. */
+const LIST_ITEM_MAX = 40;
+
 function pickMany(options: readonly FieldOption[], value: string) {
   const picked: FieldOption[] = [];
   const missing: string[] = [];
-  for (const part of value
+  const parts = value
     .split(/[,;]/)
     .map((p) => p.trim())
-    .filter(Boolean)) {
+    .filter(Boolean);
+  // A list is short items ("React, Next.js"); a long piece means a sentence ("B2B — the anchor
+  // is …; open to UoP"), which is one answer and is matched whole.
+  for (const part of parts.some((p) => p.length > LIST_ITEM_MAX) ? [value.trim()] : parts) {
     const hit = matchOption(options, part);
     if (hit) picked.push(hit);
     else missing.push(part);

@@ -1,6 +1,6 @@
 import type { FieldDescriptor, FieldKind, FieldOption } from '@applier/protocol';
 import type { SiteAdapter, WidgetGroup } from '../adapters';
-import { comboOptions, isListCombobox } from './combobox';
+import { comboOptions, isListCombobox, isPopoverSelect } from './combobox';
 import { deepAll } from './deep';
 import { groupQuestion, labelFor, looksRequired, widgetLabel } from './labels';
 import { selectizeOptions } from './selectize';
@@ -9,7 +9,9 @@ import type { Control } from './types';
 import { isHoneypotName, isVisible } from './visibility';
 
 // `button[role=combobox]` is a Radix / shadcn Select trigger; its native <select> twin is aria-hidden.
-const CONTROLS = 'input, select, textarea, [role="combobox"]:not(input)';
+// A button that opens a popover list is a candidate too; describe() drops it if the list is empty.
+const CONTROLS =
+  'input, select, textarea, [role="combobox"]:not(input), button[aria-haspopup="dialog"], button[aria-haspopup="listbox"]';
 const TEXT_TYPES: Record<string, FieldKind> = {
   text: 'text',
   search: 'text',
@@ -97,7 +99,8 @@ export async function scan(root: ParentNode, adapter: SiteAdapter): Promise<Cont
       continue;
     }
 
-    controls.push(await describe(el, label, nextId(), selectized));
+    const control = await describe(el, label, nextId(), selectized);
+    if (control) controls.push(control);
   }
 
   for (const group of [
@@ -118,7 +121,7 @@ async function describe(
   label: string,
   id: string,
   selectized: boolean,
-): Promise<Control> {
+): Promise<Control | null> {
   let kind: FieldKind = 'other';
   let options: FieldOption[] | undefined;
   let optionsHidden: boolean | undefined;
@@ -131,6 +134,7 @@ async function describe(
     // react-select / Radix: the options exist only while the list is open, so open it and read.
     kind = 'combobox';
     const found = await comboOptions(el);
+    if (found.length === 0 && isPopoverSelect(el)) return null; // a date picker, not a select
     if (found.length > 0) options = found;
     else optionsHidden = true; // an async autocomplete: it offers rows only once you type
   } else if (el instanceof HTMLSelectElement) {
