@@ -94,6 +94,14 @@ describe('greenhouse (react-select dropdowns)', () => {
     expect(picked('candidate-location')).toBe('Warsaw, Mazowieckie, Poland');
   });
 
+  it("does not need the parenthetical region to match the site's name for it", async () => {
+    setup();
+    // the profile says "mazowieckie"; another site would list "Masovian Voivodeship"
+    const backend = fakeBackend([when(/^Location/, value('Warsaw, Poland (zzz-no-such-region).'))]);
+    await fillForm({ adapter: greenhouse, backend, doc: document, cvId: null });
+    expect(picked('candidate-location')).toBe('Warsaw, Mazowieckie, Poland');
+  });
+
   it('refuses an ambiguous location instead of guessing, and clears what it typed', async () => {
     setup();
     const backend = fakeBackend([when(/^Location/, value('Warsaw'))]);

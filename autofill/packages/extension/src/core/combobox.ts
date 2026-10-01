@@ -232,11 +232,13 @@ async function typeLikeAPerson(el: HTMLInputElement, text: string): Promise<void
 
 /**
  * Every word of the answer ("Warsaw, Poland (mazowieckie).") appears in the row's label
- * ("Warsaw, Mazowieckie, Poland"), in any order. Used only to find ONE row among an
- * autocomplete's suggestions, never to settle for a near miss.
+ * ("Warsaw, Masovian Voivodeship, Poland"), in any order. A parenthetical is a gloss, not a key:
+ * the region goes by different names on different sites ("mazowieckie", "Masovian"), so it does
+ * not have to match. Used only to find ONE row among an autocomplete's suggestions, never to
+ * settle for a near miss.
  */
 const holdsAllParts = (row: string, answer: string): boolean => {
-  const words = normalize(answer)
+  const words = normalize(answer.replace(/\([^)]*\)/g, ' '))
     .split(/\s+/)
     .filter((w) => w.length > 1);
   const text = ` ${normalize(row)} `;
