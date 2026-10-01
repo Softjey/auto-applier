@@ -82,8 +82,10 @@ upgraded on the next save. `verified: false` is an account the extension created
 sign-in has confirmed yet. The CLI (`.claude/skills/apply-to-jobs/scripts/credentials.mjs`:
 `status`, `list`, `get`, `add`, `verify`, `remove`) works on the same file.
 
-**After pulling this change:** reload the extension in `chrome://extensions` (the manifest now
-carries a `key`, so Chrome assigns it the pinned id) and restart `pnpm dev:server`.
+**Reloading.** Reload the extension in `chrome://extensions` once (the manifest carries a `key`,
+so Chrome assigns it the pinned id). After that it reloads itself within ~30 s of every
+`pnpm --filter @applier/extension build`, as long as `pnpm dev:server` is running (the server
+reports the build's mtime; the widget's `data-built` shows which build is live).
 
 ## Test
 
