@@ -197,6 +197,11 @@ Rules for driving it:
 
 - **Click the portal's own Sign in / Create account button yourself.** The extension fills,
   never submits.
+- The panel (bottom-left) can cover the site's own button, and a `ref` click on a covered
+  submit button did **not** submit (verified 2026-10-01 on a mock portal). Minimise the panel
+  (×) first, then click the button by coordinates, and confirm the page actually moved on.
+- After a failed sign-in many portals reload the form empty and the extension fills the saved
+  login again: type a different login only after the reload, and expect the old one back.
 - A page with no account form has **no panel** — absence is not an error.
 - A small round **!** instead of the panel means the plan server is not running
   (`pnpm --dir autofill dev:server`); start it, do not work around it.

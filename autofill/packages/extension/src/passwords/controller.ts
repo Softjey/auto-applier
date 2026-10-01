@@ -227,7 +227,10 @@ export class PasswordController {
           login: draft.login,
           filled: report.outcomes.filter((o) => o.status === 'filled').length,
           ticked,
-          manual: report.manual.map((m) => m.label || '(unlabelled field)'),
+          // a box we just ticked (terms) is not "needs you", even though the form filler left it for a human
+          manual: report.manual
+            .map((m) => m.label || '(unlabelled field)')
+            .filter((label) => !ticked.some((t) => label.startsWith(t.slice(0, 40)))),
         },
         notice:
           result.username && result.passwords
