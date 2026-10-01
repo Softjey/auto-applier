@@ -95,6 +95,18 @@ Three more that decide how fast a run goes (all seen 2026-09-14):
   gone ("Tab … is not in Claude's tab group"). Call `tabs_context_mcp` with
   `createIfEmpty` and carry on; a filled form in the old group is lost.
 
+**A click needs a screenshot first.** After `navigate` (or any reload) a coordinate click
+that was not preceded by a `screenshot` of that page never reaches the document: no
+`pointerdown`, no `click`, nothing happens and nothing errors (verified on the extension's own
+**Fill form** button by listening for events in the page). Take a `screenshot`, then click; the
+second click "working" was always this. Reading the own panel's result: its host is
+`applier-autofill`, an open shadow root, so `host.shadowRoot.querySelectorAll('li')` gives every
+filled / needs-you line as text without a screenshot.
+
+**The own extension reloads itself** about 30 s after `pnpm --filter @applier/extension build`
+(the background compares the built manifest's mtime with its own build time, via the plan
+server), so a rebuild needs no click in `chrome://extensions`. Wait ≤ 30 s and re-navigate.
+
 **Simplify Copilot** (see `SKILL.md` § Simplify fast path) is a Chrome
 extension, so it is there under either agent as long as the tab is the user's own
 Chrome. Its panel is a sidebar on the right; find **Autofill This Page** from a

@@ -161,7 +161,7 @@ export async function comboChoose(el: ListCombobox, label: string): Promise<bool
 
   click(row);
   await sleep(SETTLE_MS);
-  if (shown(el).includes(wanted) && comboChosen(el)) {
+  if (took(el, wanted)) {
     // A popover is not a Select: picking a row may leave its list open over the next field.
     if (isPopoverSelect(el)) await close(el);
     return true;
@@ -172,10 +172,18 @@ export async function comboChoose(el: ListCombobox, label: string): Promise<bool
   for (let i = 0; i <= index; i++) press(el, 'ArrowDown');
   press(el, 'Enter');
   await sleep(SETTLE_MS);
-  const ok = shown(el).includes(wanted) && comboChosen(el);
+  const ok = took(el, wanted);
   if (!ok) await close(el);
   return ok;
 }
+
+/**
+ * A pick took when the control now holds an answer AND either shows the row's words or has shut
+ * its list. A phone-country selector shows only a flag and "+48" for the row "Poland +48", so the
+ * words alone cannot be the test.
+ */
+const took = (el: ListCombobox, wanted: string): boolean =>
+  comboChosen(el) && (shown(el).includes(wanted) || el.getAttribute('aria-expanded') !== 'true');
 
 function typeInto(el: HTMLInputElement, text: string): void {
   const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
@@ -204,7 +212,9 @@ const holdsAllParts = (row: string, answer: string): boolean => {
  */
 export async function comboTypeahead(el: ListCombobox, answer: string): Promise<boolean> {
   if (!(el instanceof HTMLInputElement)) return false;
-  typeInto(el, answer);
+  // Search by the first part only ("Warsaw"): an autocomplete rarely finds "Warsaw, Poland"
+  // as typed, and the remaining parts are what pick the one row among its suggestions.
+  typeInto(el, answer.split(',')[0]?.trim() || answer);
   const rows = await waitForOptions(el, TYPEAHEAD_WAIT_MS);
   const options = rows.map((r) => ({ value: labelOf(r), label: labelOf(r) }));
 

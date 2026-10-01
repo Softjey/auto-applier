@@ -8,6 +8,9 @@ import { chromeBackend } from '../src/core/messaging';
 import { Panel } from '../src/ui/Panel';
 import '../src/ui/panel.css';
 
+const MAX_RESTORES = 10;
+const RESTORE_DEBOUNCE_MS = 300;
+
 export default defineContentScript({
   matches: MATCH_PATTERNS,
   // DOMContentLoaded, not "idle": slow third-party widgets (reCAPTCHA, maps) can hold the
@@ -46,6 +49,22 @@ export default defineContentScript({
       });
       ui.mount();
     };
+
+    // A page that hydrates after we mounted (Greenhouse: React error #418, "hydration failed")
+    // replaces the whole <html> element and drops what it did not render, our panel included.
+    // The observer therefore watches the document, not <html>. Put the panel back.
+    let restores = 0;
+    let pending: number | undefined;
+    new MutationObserver(() => {
+      if (!ui || ui.shadowHost.isConnected || restores >= MAX_RESTORES) return;
+      window.clearTimeout(pending);
+      pending = window.setTimeout(() => {
+        if (!ui || ui.shadowHost.isConnected) return;
+        restores++;
+        ui.remove();
+        ui.mount();
+      }, RESTORE_DEBOUNCE_MS);
+    }).observe(document, { childList: true, subtree: true });
 
     await sync(new URL(location.href));
     ctx.addEventListener(window, 'wxt:locationchange', ({ newUrl }) => void sync(newUrl));

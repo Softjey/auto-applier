@@ -81,3 +81,37 @@ describe('popover selects (a button with aria-haspopup, no combobox role)', () =
     expect(text('d')).toBe('Pick a date');
   });
 });
+
+describe('a phone-country selector that shows only the code once picked', () => {
+  it("counts the pick as taken although the row's words are not displayed", async () => {
+    document.body.innerHTML = `<form><label for="p">Country</label>
+      <button type="button" id="p" role="combobox" aria-expanded="false" aria-controls="lb">Select</button></form>`;
+    const button = document.getElementById('p') as HTMLButtonElement;
+    let list: HTMLElement | null = null;
+    const shut = () => {
+      list?.remove();
+      list = null;
+      button.setAttribute('aria-expanded', 'false');
+    };
+    button.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') return shut();
+      if (e.key !== 'ArrowDown' || list) return;
+      list = document.createElement('div');
+      list.id = 'lb';
+      const row = document.createElement('div');
+      row.setAttribute('role', 'option');
+      row.textContent = 'Poland +48';
+      row.addEventListener('click', () => {
+        button.textContent = '+48'; // flag and code only
+        shut();
+      });
+      list.append(row);
+      document.body.append(list);
+      button.setAttribute('aria-expanded', 'true');
+    });
+    const backend = fakeBackend([when(/Country/, value('Poland'))]);
+    const report = await fillForm({ adapter: erecruiter, backend, doc: document, cvId: null });
+    expect(button.textContent).toBe('+48');
+    expect(report.manual).toEqual([]);
+  });
+});
