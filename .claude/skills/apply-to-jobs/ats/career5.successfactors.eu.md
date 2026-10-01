@@ -48,3 +48,13 @@ matches Simplify's `*.sapsf.eu/career?*` pattern and Simplify shows "Sign In & A
 login, or create the account with the Applier extension's **Create account** button (SKILL.md
 § Portals that require an account), not with Simplify's "Sign In & Autofill".
 
+
+## Account creation through the Applier extension — verified 2026-10-01 (Allegro, career55.sapsf.eu)
+
+The registration block sits inside the application form (fields `fbclc_userName`, `fbclc_emailConf`,
+`fbclc_pwd`, `fbclc_pwdConf`, `fbclc_fName`, `fbclc_lName`, `tor__fcellPhone`, `tor__fcity`).
+The extension's **Create account** fills all of them in ~25 s on the real page (the panel says "Working…"
+that whole time — wait, do not click again) and the form's questions it can resolve (salary box →
+`30 000 PLN`). The extension's "Needs you" list wrongly includes the language switcher ("English US") — ignore it.
+**The form ends in a reCAPTCHA**, so Apply (which creates the account) is the user's click: park the vacancy
+with the tab open. The saved login stays unconfirmed in `credentials.json` until a sign-in works.
