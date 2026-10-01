@@ -97,6 +97,49 @@
       "createdAt": "2026-01-01",
       "lastUsed": "2026-01-01",
       "timesUsed": 0
+    },
+    {
+      "kind": "fact",
+      "tags": [],
+      "source": "test",
+      "createdAt": "2026-01-01",
+      "lastUsed": "2026-01-01",
+      "timesUsed": 0,
+      "id": "test-contract",
+      "canonicalTopic": "contract",
+      "question": "Preferred contract type?",
+      "aliases": ["Contract form"],
+      "answer": "B2B — the anchor in profile.json is 150 PLN/h net; open to UoP if B2B is unavailable.",
+      "value": "B2B"
+    },
+    {
+      "kind": "fact",
+      "tags": [],
+      "source": "test",
+      "createdAt": "2026-01-01",
+      "lastUsed": "2026-01-01",
+      "timesUsed": 0,
+      "id": "test-react-years",
+      "canonicalTopic": "react-years",
+      "question": "How many years of React experience do you have?",
+      "aliases": [],
+      "answer": "3-4 years (choose the 3-4 bracket where offered; where a single number is required, 3).",
+      "value": "3",
+      "pick": "3-4 years"
+    },
+    {
+      "kind": "policy",
+      "tags": [],
+      "source": "test",
+      "createdAt": "2026-01-01",
+      "lastUsed": "2026-01-01",
+      "timesUsed": 0,
+      "id": "test-pronouns",
+      "canonicalTopic": "pronouns",
+      "question": "What are your pronouns?",
+      "aliases": [],
+      "answer": "Leave blank. Standing policy: optional identity questions are skipped.",
+      "value": null
     }
   ],
   "projects": []

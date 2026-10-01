@@ -73,6 +73,29 @@ export function typeableAnswer(answer, kind) {
   return { ok: true, value: answer };
 }
 
+/**
+ * What a form field receives from a qa[] entry. An entry has two voices:
+ *   answer — what the AGENT reads: the fact with its how-and-when ("B2B — the anchor is …",
+ *            "Tick it when mandatory");
+ *   value  — the exact text a person would type ("B2B"); `null` = never typed, only the agent
+ *            decides (a standing policy, a rule);
+ *   pick   — what to look for in a list or radio group when that is not `answer`.
+ * A list or radio matches `pick`, else `answer`. A box takes `value`. An entry with no `value`
+ * is a legacy one: its `answer` goes through the typeableAnswer heuristic, which hands anything
+ * that reads as an instruction back to the agent.
+ */
+export function formValue(entry, kind) {
+  if (CHOICE_KINDS.has(kind)) return { ok: true, value: entry.pick ?? entry.answer };
+  if (entry.value === null) {
+    return { ok: false, why: "this entry is a rule for the agent (value: null) — read it and decide; nothing is typed from it" };
+  }
+  if (typeof entry.value === "string") return { ok: true, value: entry.value };
+  const typed = typeableAnswer(entry.answer, kind);
+  return typed.ok
+    ? typed
+    : { ok: false, why: "the recorded answer carries instructions for the agent, not text to type into a box — read it and type the value (or give the entry a `value`)" };
+}
+
 const LEAD_MAX = 40;
 const TYPED_MAX = 160;
 // Words that only an instruction to the agent contains.
@@ -149,13 +172,13 @@ export function classify(field, profile, vocab) {
   const ranked = rankAgainstQa(label, profile.qa);
   const top = ranked[0];
   if (top?.verdict === "exact") {
-    const typed = typeableAnswer(top.entry.answer, field.kind);
+    const typed = formValue(top.entry, field.kind);
     if (typed.ok) {
       return { status: "resolved", source: `qa:${top.entry.id}`, value: typed.value, score: +top.score.toFixed(2) };
     }
     return {
       status: "review",
-      why: "the recorded answer carries instructions for the agent, not text to type into a box — read it and type the value",
+      why: typed.why,
       candidates: [{ id: top.entry.id, q: top.entry.question, a: top.entry.answer, score: +top.score.toFixed(2) }],
     };
   }

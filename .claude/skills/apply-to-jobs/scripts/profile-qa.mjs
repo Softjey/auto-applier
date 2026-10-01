@@ -8,12 +8,16 @@
 //   profile-qa.mjs find "<question text>" [--limit=5] [--json]
 //   profile-qa.mjs add --question="..." --answer="..." --canonical=topic
 //                       --kind=fact|policy|narrative|employer-specific
+//                       [--value="text a form receives" | --no-value] [--pick="option to look for"]
 //                       [--tags=a,b] [--aliases="v1|v2"] [--force]
+//   profile-qa.mjs set-value <id> (--value="..." | --no-value | --clear) [--pick="..." | --clear-pick]
+//   profile-qa.mjs migrate-values [--apply]   (propose, then write, a `value` for entries without one)
 //   profile-qa.mjs alias <id> --add="new phrasing seen on this ATS"
 //   profile-qa.mjs touch <id>
 //   profile-qa.mjs remove <id>      (e.g. after moving a story into stories.json)
 //   profile-qa.mjs list [--tag=x] [--grep=text]
 
+import { typeableAnswer } from "./resolve-fields.mjs";
 import {
   tokenize,
   bestMatchScore,
@@ -89,7 +93,7 @@ function cmdFind(positional, flags) {
 }
 
 function cmdAdd(flags) {
-  const { question, answer, canonical, kind, tags, aliases, force } = flags;
+  const { question, answer, canonical, kind, tags, aliases, force, value, pick } = flags;
   const KINDS = ["fact", "policy", "narrative", "employer-specific"];
   if (!question || !answer || !canonical || !KINDS.includes(kind)) {
     console.error(
@@ -135,6 +139,7 @@ function cmdAdd(flags) {
     question,
     aliases: aliases ? aliases.split("|").map((s) => s.trim()).filter(Boolean) : [],
     answer,
+    ...voice(flags),
     tags: tags ? tags.split(",").map((s) => s.trim()).filter(Boolean) : [],
     source: "user-provided",
     createdAt: today(),
@@ -144,6 +149,64 @@ function cmdAdd(flags) {
   profile.qa.push(entry);
   saveProfile(profile);
   console.log(`Added ${entry.id}: "${entry.question}" -> "${entry.answer}"`);
+}
+
+// An entry has two voices: `answer` is what the agent reads (the fact with its how-and-when), `value`
+// is the exact text a form box receives (`null` = never typed, only the agent decides) and `pick` is
+// what to look for in a list when that differs from `answer`. See SKILL.md § The qa[] answer format.
+function voice(flags) {
+  const out = {};
+  if (flags["no-value"]) out.value = null;
+  else if (typeof flags.value === "string") out.value = flags.value;
+  if (typeof flags.pick === "string") out.pick = flags.pick;
+  return out;
+}
+
+function cmdSetValue(positional, flags) {
+  const id = positional[0];
+  const wants = flags["no-value"] || flags.clear || typeof flags.value === "string" || typeof flags.pick === "string" || flags["clear-pick"];
+  if (!id || !wants) {
+    console.error('Usage: profile-qa.mjs set-value <id> (--value="..." | --no-value | --clear) [--pick="..." | --clear-pick]');
+    process.exit(1);
+  }
+  const profile = loadProfile();
+  const entry = profile.qa.find((e) => e.id === id);
+  if (!entry) {
+    console.error(`No qa entry with id "${id}"`);
+    process.exit(1);
+  }
+  if (flags.clear) delete entry.value;
+  Object.assign(entry, voice(flags));
+  if (flags["clear-pick"]) delete entry.pick;
+  saveProfile(profile);
+  console.log(`${id}: value=${JSON.stringify(entry.value)} pick=${JSON.stringify(entry.pick)}`);
+}
+
+// Proposes a `value` for every entry that has none, from the same heuristic the resolver used on
+// legacy entries: a clean answer needs nothing; a note-bearing one gets its short lead; an answer
+// that is itself an instruction gets `null` (the agent decides). Nothing is written without --apply.
+function cmdMigrateValues(flags) {
+  const profile = loadProfile();
+  const changes = [];
+  for (const entry of profile.qa) {
+    if ("value" in entry) continue;
+    const typed = typeableAnswer(entry.answer, "text");
+    const proposal = !typed.ok ? null : typed.value !== entry.answer ? typed.value : undefined;
+    if (proposal !== undefined) changes.push({ entry, proposal });
+  }
+  for (const { entry, proposal } of changes) {
+    const shown = proposal === null ? "null (rule for the agent)" : JSON.stringify(proposal);
+    console.log(`${entry.id}  [${entry.kind}]  value -> ${shown}`);
+    console.log(`    answer: ${entry.answer.replace(/\n/g, " ").slice(0, 110)}`);
+  }
+  console.log(`\n${changes.length} of ${profile.qa.length} entries get a value; the rest are clean as they are.`);
+  if (!flags.apply) {
+    console.log("Dry run. Re-run with --apply to write.");
+    return;
+  }
+  for (const { entry, proposal } of changes) entry.value = proposal;
+  saveProfile(profile);
+  console.log("Written.");
 }
 
 function cmdRemove(positional) {
@@ -223,6 +286,8 @@ function cmdList(flags) {
     console.log(`  Q: ${e.question}`);
     if ((e.aliases || []).length) console.log(`  aliases: ${e.aliases.join(" | ")}`);
     console.log(`  A: ${e.answer}`);
+    if ("value" in e) console.log(`  value: ${e.value === null ? "null (agent only)" : JSON.stringify(e.value)}`);
+    if (e.pick) console.log(`  pick: ${JSON.stringify(e.pick)}`);
   }
 }
 
@@ -242,6 +307,12 @@ switch (cmd) {
   case "touch":
     cmdTouch(positional);
     break;
+  case "set-value":
+    cmdSetValue(positional, flags);
+    break;
+  case "migrate-values":
+    cmdMigrateValues(flags);
+    break;
   case "remove":
     cmdRemove(positional);
     break;
@@ -249,6 +320,6 @@ switch (cmd) {
     cmdList(flags);
     break;
   default:
-    console.error("Usage: profile-qa.mjs <find|add|alias|touch|remove|list> ...");
+    console.error("Usage: profile-qa.mjs <find|add|alias|touch|set-value|migrate-values|remove|list> ...");
     process.exit(1);
 }

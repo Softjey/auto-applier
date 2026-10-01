@@ -113,6 +113,13 @@ second agent reads the same files instead of a fork of them.
     employer-specific); `profile-qa.mjs add` requires both, and refuses a narrative over
     450 chars (that is a story → `stories.json`). `remove <id>` deletes an entry. Salary
     is never in qa[].
+    An entry has two voices: `answer` is read by the agent (the fact with its how-and-when),
+    `value` is the exact text a form box receives (`null` = a rule, never typed) and `pick`
+    names the option to look for in a list when that differs. The resolver gives a box the
+    `value` and a list the `pick` or `answer`; an entry with no `value` is legacy and its
+    `answer` runs through `typeableAnswer`, which hands instructions back as `review`.
+    `set-value` and `migrate-values` maintain it; see `apply-to-jobs/SKILL.md` § The qa[]
+    answer format.
   - `scripts/salary-quote.mjs` — the figure for one vacancy's salary field, computed
     from its published band per `compensation.strategy`. Exit code 3 = under the
     floor, ask the user before applying at all. Whatever it returns is recorded in

@@ -218,6 +218,29 @@ Rules:
 - Spotting an old `narrative` entry in `qa[]` that is really a story (long, tells what
   happened): move it — add the story, `profile-qa.mjs remove <id>` — and tell the user.
 
+#### The `qa[]` answer format: `answer`, `value`, `pick`
+
+A `qa[]` entry speaks in two voices, and the extension must never confuse them:
+
+| Field | Who reads it | What it holds |
+| --- | --- | --- |
+| `answer` | **you** (the agent) | the fact with its how-and-when: `B2B — the compensation anchor is 150 PLN/h; open to UoP if B2B is unavailable`, `Tick it when the form makes it mandatory` |
+| `value` | **a form box** (the extension types it; so do you) | the exact text a person would type: `B2B`, `In 2 weeks`, `3`. `null` means **never typed** — a standing rule only the agent applies |
+| `pick` | a list / radio group | what to look for among the options when that is not `answer` (`3-4 years` where the box takes `3`) |
+
+- A **box** receives `value`. A **list or radio** is matched against `pick`, else `answer`
+  (its start is what names the option). An entry with no `value` is a legacy one: the
+  resolver runs a heuristic over `answer` and hands anything that reads as an instruction
+  back as `review`. Give such an entry a `value` rather than relying on that.
+- When you record an answer, write `answer` for yourself and `value` for the form
+  (`profile-qa.mjs add … --value="B2B"`, or `--no-value` for a rule). Fix an old entry with
+  `profile-qa.mjs set-value <id> --value="…" | --no-value | --clear [--pick="…"]`.
+  `profile-qa.mjs migrate-values` proposes a `value` for every entry that has none
+  (dry-run; `--apply` writes), and is safe to re-run.
+- **Never type `answer` into a box by hand either**: if the entry has a `value`, that is the
+  text; if it is `null`, the entry is a rule you apply (leave a field empty, pick the
+  highest option) and not a string.
+
 When the queue is exhausted, hand the user **one action list, grouped by
 vacancy** (§ End-of-run action list). Whatever the user answers is recorded where
 § "Where an answer from the user is recorded" says (facts with

@@ -15,7 +15,10 @@ contains both repos side by side; the scripts locate this directory on their own
   narrative / employer-specific), never by hand-editing the array. Structured fields above
   it are fine to edit directly.
 - `qa[]` holds facts, policies and short answers only; every story lives in
-  `stories.json`.
+  `stories.json`. An entry has `answer` (what the agent reads, with its how-and-when),
+  `value` (the exact text a form box takes; `null` = a rule that is never typed) and an
+  optional `pick` (what to look for in a list). Set them with `profile-qa.mjs add --value`
+  / `set-value`.
 - `stories.json` is edited by an agent through the `import-stories` skill (plain JSON,
   no importer); run `stories.mjs validate` after any change.
 - The core rule of the system: an application form is never answered with an

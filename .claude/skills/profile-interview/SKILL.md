@@ -76,9 +76,13 @@ and then hands back to this interview.
 6. **Seed `qa[]` with the most common ATS phrasings**, scoped to the user's
    current base country (from step 2/4), via
    `node .claude/skills/apply-to-jobs/scripts/profile-qa.mjs add --question=… --answer=…
-   --canonical=<topic> --kind=fact|policy|narrative|employer-specific` for each
+   --canonical=<topic> --kind=fact|policy|narrative|employer-specific
+   [--value="<exact text a form box takes>" | --no-value]` for each
    (`--canonical` and `--kind` are required; a topic that already exists is refused —
-   add an `alias` instead). This is what saves the first real `apply-to-jobs` run from
+   add an `alias` instead). `--answer` is what the agent reads (a fact with its
+   how-and-when); `--value` is the clean text a form box would receive (`B2B`, `In 2
+   weeks`) and `--no-value` marks a rule that is never typed — see `apply-to-jobs/SKILL.md`
+   § The qa[] answer format. This is what saves the first real `apply-to-jobs` run from
    stopping on nearly every vacancy. `qa[]` is for facts, policies and short answers —
    if the user starts telling a story (a project, a problem they solved), stop and
    hand it to the `import-stories` skill instead. At minimum, seed:
@@ -160,4 +164,5 @@ a salary expectation changes, a notice period changes after a new job
 starts, etc. When updating an existing `qa[]` entry's answer rather than
 adding a new fact, edit it directly with Edit (or delete + re-add) —
 `profile-qa.mjs` has no `update` command by design, since changing an
-existing fact is rare enough to not need its own CLI surface.
+existing fact is rare enough to not need its own CLI surface. The one exception is the
+form-facing text: `profile-qa.mjs set-value <id> --value="…"` (or `--no-value`, `--pick`).
