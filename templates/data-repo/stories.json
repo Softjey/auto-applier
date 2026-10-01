@@ -1,0 +1,6 @@
+{
+  "$schemaVersion": 2,
+  "note": "Your own STAR stories and about-me texts. Every entry is a fact about your own work, written or approved by you; narrative form fields are grounded in these instead of invented. Build and edit it with the import-stories skill; check it with stories.mjs validate.",
+  "stories": [],
+  "about": []
+}

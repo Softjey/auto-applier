@@ -75,7 +75,8 @@ node .claude/skills/apply-to-jobs/scripts/profile-qa.mjs list   # "No matching q
 git -C <dir> remote -v                                           # empty, or a private remote you created
 ```
 
-Tell the user where the data repo is, that it is private, and that the next step is
+Tell the user where the data repo is, that it is private, that `import-stories` is where
+their STAR stories come from (hand it any material, or it interviews them), and that the next step is
 `apply-method-triage` (to see the queue) or `apply-to-jobs`.
 
 ## Migrating from the old single-repo layout

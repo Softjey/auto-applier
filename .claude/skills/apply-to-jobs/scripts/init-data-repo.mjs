@@ -67,4 +67,4 @@ if (target !== DEFAULT_DATA_DIR) writeFileSync(DATA_DIR_POINTER, target + "\n");
 
 console.log(`Data repo ready at ${target}`);
 console.log(target === DEFAULT_DATA_DIR ? "(default location — no pointer needed)" : `Pointer written to ${DATA_DIR_POINTER}`);
-console.log("Next: run the profile-interview skill to fill profile.json. Never add a public remote to this repo.");
+console.log("Next: run the profile-interview skill to fill profile.json, then import-stories for your STAR stories. Never add a public remote to this repo.");

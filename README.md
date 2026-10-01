@@ -9,7 +9,7 @@ It is a set of agent skills (Claude Code, Codex) plus two small tools:
 
 | | |
 | --- | --- |
-| `.claude/skills/` | the skills: `setup-data-repo`, `profile-interview`, `apply-method-triage`, `apply-to-jobs` |
+| `.claude/skills/` | the skills: `setup-data-repo`, `profile-interview`, `import-stories`, `apply-method-triage`, `apply-to-jobs` |
 | `.claude/skills/apply-to-jobs/ats/` | per-ATS notes: quirks that cost a failed submit to learn |
 | `autofill/` | a browser extension + loopback server that prefill forms Simplify does not cover ([README](autofill/README.md)) |
 | `templates/data-repo/` | the skeleton of your private data repo |
@@ -29,7 +29,10 @@ claude                                 # or: codex — open it in the workspace
 ```
 
 Then ask: **"set me up"** — the `setup-data-repo` skill creates your private data repo,
-and `profile-interview` fills in your facts. After that:
+and `profile-interview` fills in your facts. Then **"import my stories"** — hand the
+agent whatever you have about your work (interview prep, notes, CV, a pasted chat; or
+nothing, and it interviews you) and `import-stories` turns it into the STAR stories
+that essay questions are answered from. After that:
 
 - *"triage my saved jobs"* → `triage/<date>.md` in your data repo, grouped by how each
   application has to be submitted;

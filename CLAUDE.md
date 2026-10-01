@@ -16,7 +16,7 @@ person lives in a separate, private **data repo** (default: `../auto-applier-dat
 | --- | --- |
 | `profile.json` | the user's structured facts + the `qa[]` bank of form answers |
 | `apply-config.json` | paths to their resume repo, resume file name, `formVocabulary` for non-English forms |
-| `stories.json` | STAR stories / long answers that free-text fields are grounded in |
+| `stories.json` | STAR stories (tagged `themes` / `stack`) and about-me texts that free-text fields are grounded in |
 | `credentials.json` | the user's employer-portal logins, kept by the extension's password manager (private; real passwords) |
 | `triage/<date>.md` | one readable report per triage of the SAVED queue |
 | `runs/<date>-<slug>/` | audit trail of each apply run — per vacancy `answers.md`, `salary.json`, the CV sent, screen recordings; plus `summary.md` |
@@ -81,6 +81,10 @@ second agent reads the same files instead of a fork of them.
   `templates/data-repo/` (`scripts/init-data-repo.mjs`) and points this repo at it.
 - `.claude/skills/profile-interview/` — fills/updates `profile.json` via a structured
   interview. Run before the first real apply run.
+- `.claude/skills/import-stories/` — builds/updates `stories.json` from whatever the
+  user hands over (docs, notes, CV, chat, or an interview). Instructions only, no
+  script: the agent sorts, drops what does not belong (company-specific answers,
+  salary, scripts), asks about gaps, writes the JSON and runs `stories.mjs validate`.
 - `.claude/skills/apply-method-triage/` — read-only survey of the SAVED queue, sorted
   into five groups by **the method each application demands**: a form the repo's own
   `autofill/` extension fills (its adapters are read fresh each run, so a new adapter
@@ -106,12 +110,18 @@ second agent reads the same files instead of a fork of them.
     Order matters: an `exact` qa[] hit beats the loose structural vocabulary (single
     words like "country" or "mobile"), so a recorded answer is never shadowed. Every
     qa[] entry has a unique `canonicalTopic` and a `kind` (fact / policy / narrative /
-    employer-specific); `profile-qa.mjs add` requires both. Salary is never in qa[].
+    employer-specific); `profile-qa.mjs add` requires both, and refuses a narrative over
+    450 chars (that is a story → `stories.json`). `remove <id>` deletes an entry. Salary
+    is never in qa[].
   - `scripts/salary-quote.mjs` — the figure for one vacancy's salary field, computed
     from its published band per `compensation.strategy`. Exit code 3 = under the
     floor, ask the user before applying at all. Whatever it returns is recorded in
     the OneTap.Work application note, every time.
-  - `scripts/stories.mjs`, `import-stories.mjs` — search / import `stories.json`.
+  - `scripts/stories.mjs` — `find` (question → fixed theme list → stories), `show`,
+    `list`, `themes`, `coverage`, `validate` over `stories.json`; the theme vocabulary
+    and its question keywords (English + Polish, diacritic-blind) are in
+    `scripts/lib/story-themes.mjs`; `scripts/test-story-themes.mjs` is its regression
+    test (run it after touching the keys). There is no importer.
   - `scripts/credentials.mjs`, `scripts/lib/credentials-store.mjs` — the portal-account
     store (`credentials.json`, schema 2), shared with the autofill extension's password
     manager. The extension fills sign-ins and creates accounts (generated, never-reused
@@ -137,3 +147,9 @@ The agent filling out an application form **never invents a fact**. If the exact
 answer isn't in `profile.json` (neither in the structured fields nor in `qa[]` with
 enough confidence) — stop, ask the user, record the answer via `profile-qa.mjs add`,
 and only then continue. Details in `.claude/skills/apply-to-jobs/SKILL.md`.
+
+**Where answers live:** `qa[]` holds facts, standing policies and short answers; every
+story (an event — project, problem, conflict, "tell us about a time") lives in
+`stories.json`, whoever supplied it. An answer the user gives that tells an event is
+written there through `import-stories`, never into `qa[]` (`profile-qa.mjs add` refuses
+a long narrative).

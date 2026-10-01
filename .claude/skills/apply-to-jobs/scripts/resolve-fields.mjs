@@ -23,6 +23,7 @@ import { readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { rankAgainstQa, loadProfile } from "./lib/qa-match.mjs";
 import { buildVocabulary, matches } from "./lib/field-labels.mjs";
+import { themesFor, looksLikeAbout } from "./lib/story-themes.mjs";
 
 // Order is load-bearing. "First and last name" is ONE field asking for both,
 // and it has to be tested before the last-name rule, which would otherwise
@@ -120,6 +121,21 @@ export function classify(field, profile, vocab) {
     if (matches(vocab.field[key], label)) {
       const value = get(profile);
       if (value) return { status: "resolved", source: "profile (structured)", value };
+    }
+  }
+
+  // An open text box that asks for an event ("the hardest problem you solved", "a time
+  // you disagreed", "what are you proud of", "tell us about yourself") is answered
+  // from stories.json, not from qa[] — stories never live in qa[]. Only when no qa[]
+  // entry is a real candidate (none / weak): a "likely" one is still Claude's call.
+  // Free-text boxes only; a theme word inside a radio or a yes/no is a fact question.
+  if (field.kind === "textarea" && (!top || top.verdict === "none" || top.verdict === "weak")) {
+    const themes = Object.keys(themesFor(label));
+    if (themes.length || looksLikeAbout(label)) {
+      return {
+        status: "narrative",
+        why: `a story question (${looksLikeAbout(label) ? "about-me" : themes.join(", ")}) — node stories.mjs find "<the question>", ground it in one story; flag the text in the run summary`,
+      };
     }
   }
 

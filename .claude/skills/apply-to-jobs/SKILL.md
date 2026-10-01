@@ -83,7 +83,6 @@ Paths inside this repo:
 PROFILE_QA      = .claude/skills/apply-to-jobs/scripts/profile-qa.mjs
 RESOLVE_FIELDS  = .claude/skills/apply-to-jobs/scripts/resolve-fields.mjs
 STORIES         = .claude/skills/apply-to-jobs/scripts/stories.mjs
-IMPORT_STORIES  = .claude/skills/apply-to-jobs/scripts/import-stories.mjs
 SALARY_QUOTE    = .claude/skills/apply-to-jobs/scripts/salary-quote.mjs
 CREDENTIALS     = .claude/skills/apply-to-jobs/scripts/credentials.mjs
 EXTRACT_FORM    = .claude/skills/apply-to-jobs/browser/extract-form.js
@@ -192,9 +191,37 @@ it must read.
 4. An optional essay stays empty. A "why do you want to work here" box keeps its own
    rule (Phase 4 step 3): the reason is the user's pick.
 
+### Where an answer from the user is recorded: `qa[]` or `stories.json`
+
+Whenever the user gives you an answer — to a parked question, in a review, on their own
+initiative — decide where it lives **before** you write it down:
+
+| The answer is… | It goes to |
+| --- | --- |
+| a fact, a standing rule, a yes/no, a number, a short phrase, something about one employer | `qa[]` — `node $PROFILE_QA add …` |
+| **an event**: a project they built, a problem they solved, a conflict, a failure, "what are you proud of", "tell us about a time…" — anything with a situation and what they did about it | **`stories.json`** — follow the `import-stories` skill (S/T/A/R, `themes`, `stack`, a `short` version, `stories.mjs validate`) |
+| a "tell me about yourself" / bio text | `stories.json` → `about[]` |
+
+Rules:
+
+- **All stories live in `stories.json`; `qa[]` holds only the simple answers.** A story
+  is never stored as a `qa[]` answer, not even a short one — `profile-qa.mjs add`
+  refuses a long `narrative` for this reason. If a question has both a yes/no and an
+  example ("Do you have AI experience? Describe it"), `qa[]` gets the one-line "Yes,
+  built X" and the example lives in the story.
+- The user's own words are the raw material. Write them into the story without adding
+  a fact; ask only for the S/T/A/R piece they did not give. The `short` you draft from
+  it is what goes into the box now; when the user sees it and says ok, set
+  `shortReviewed: true`.
+- If a form answer was grounded in a story, say which one in the run's `answers.md`
+  (the story id), the way a `qa[]` id is named.
+- Spotting an old `narrative` entry in `qa[]` that is really a story (long, tells what
+  happened): move it — add the story, `profile-qa.mjs remove <id>` — and tell the user.
+
 When the queue is exhausted, hand the user **one action list, grouped by
-vacancy** (§ End-of-run action list). Whatever the user answers is recorded with
-`node $PROFILE_QA add ...`, and the parked vacancies are then resumed — at
+vacancy** (§ End-of-run action list). Whatever the user answers is recorded where
+§ "Where an answer from the user is recorded" says (facts with
+`node $PROFILE_QA add ...`, stories in `stories.json`), and the parked vacancies are then resumed — at
 Phase 4 if the form is still open or rebuilt from `form.json`, with the same
 approval mode.
 
@@ -399,8 +426,9 @@ After the last vacancy has been worked — not before — give the user one list
 ```
 
 Keep it to actions and questions; no narration. Put the applied/parked/dead
-counts and the run folder above the list. Once the user answers, record facts
-with `node $PROFILE_QA add ...` and resume the parked vacancies.
+counts and the run folder above the list. Once the user answers, record it where
+§ "Where an answer from the user is recorded" says — facts with `node $PROFILE_QA add ...`,
+stories in `stories.json` — and resume the parked vacancies.
 
 ### Simplify fast path — Phases 2–4 in one pass where the extension works
 
@@ -567,18 +595,22 @@ Per vacancy, following its ATS file:
    narrative: search `stories.json` first (`node $STORIES find "<the question>"`),
    and only ask if nothing there really fits.
 
-   `stories.json` holds the user's own interview-prep material — STAR stories
-   with their own `Best for:` tags, plus long-form answers — imported from a
-   .docx archive by `$IMPORT_STORIES`. It is what makes "describe the hardest
-   problem you solved" answerable without inventing anything: pick the story
-   that genuinely fits, compress it to the length the field wants, and keep
-   every clause traceable to its Situation/Task/Action/Result. `$STORIES find`
-   ranks by lexical overlap only — a behavioural question shares almost no
-   vocabulary with the story that answers it, so a low score is not a verdict.
-   Read the titles and tags and judge yourself. A clean fit is written and
+   `stories.json` holds the user's own STAR stories (each tagged with `themes`
+   and `stack`) and `about[]` texts, built by the `import-stories` skill. It is
+   what makes "describe the hardest problem you solved" answerable without
+   inventing anything: pick the story that genuinely fits, compress it to the
+   length the field wants, and keep every clause traceable to its
+   Situation/Task/Action/Result. `$STORIES find` maps the question onto the
+   fixed theme list and shows the stories sharing a theme (`*` marks the shared
+   ones); a question that names a technology also pulls stories with that
+   `stack`. Each story may carry a `short` (1–2 sentences) — use it as the draft
+   for a small box, but while `shortReviewed` is `false` the user has not
+   approved it, so flag it like any drafted sentence. "No story shares a theme"
+   means ask or park — never stretch a story to fit. A clean fit is written and
    submitted; a partial fit or none is drafted anyway and goes to the user for an
    ok / not ok (§ Essays and "tell us about" questions) — not a blank parked
-   question.
+   question. A question about something the user did that has no story at all is
+   a gap: tell the user, and the `import-stories` skill is how it gets filled.
 5. **Screenshot the filled form and keep the screenshots.** Not one glance — a
    record. Scroll through the whole form and capture every section, so that
    between the images every answer the employer will receive is legible: name

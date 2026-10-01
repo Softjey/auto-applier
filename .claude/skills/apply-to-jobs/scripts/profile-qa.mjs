@@ -11,6 +11,7 @@
 //                       [--tags=a,b] [--aliases="v1|v2"] [--force]
 //   profile-qa.mjs alias <id> --add="new phrasing seen on this ATS"
 //   profile-qa.mjs touch <id>
+//   profile-qa.mjs remove <id>      (e.g. after moving a story into stories.json)
 //   profile-qa.mjs list [--tag=x] [--grep=text]
 
 import {
@@ -97,7 +98,13 @@ function cmdAdd(flags) {
     console.error(
       "  fact: a true statement about the user. policy: a standing rule for how to answer (consents, self-assessments, opt-outs).",
     );
-    console.error("  narrative: prose. employer-specific: only for one company.");
+    console.error("  narrative: one or two plain sentences. employer-specific: only for one company.");
+    console.error("  A story (an event: a project, a problem, a conflict) does NOT go here — it goes in stories.json (import-stories skill).");
+    process.exit(1);
+  }
+  if (kind === "narrative" && String(answer).length > 450 && !force) {
+    console.error(`Refusing to add: a ${String(answer).length}-char narrative is a story, and stories live in stories.json.`);
+    console.error("Write it with the import-stories procedure (S/T/A/R + themes + a short version); keep only a one-line answer here. --force overrides.");
     process.exit(1);
   }
   const profile = loadProfile();
@@ -137,6 +144,23 @@ function cmdAdd(flags) {
   profile.qa.push(entry);
   saveProfile(profile);
   console.log(`Added ${entry.id}: "${entry.question}" -> "${entry.answer}"`);
+}
+
+function cmdRemove(positional) {
+  const id = positional[0];
+  if (!id) {
+    console.error("Usage: profile-qa.mjs remove <id>");
+    process.exit(1);
+  }
+  const profile = loadProfile();
+  const at = profile.qa.findIndex((e) => e.id === id);
+  if (at === -1) {
+    console.error(`No qa entry with id "${id}"`);
+    process.exit(1);
+  }
+  const [gone] = profile.qa.splice(at, 1);
+  saveProfile(profile);
+  console.log(`Removed ${id} (${gone.canonicalTopic}).`);
 }
 
 function cmdAlias(positional, flags) {
@@ -218,10 +242,13 @@ switch (cmd) {
   case "touch":
     cmdTouch(positional);
     break;
+  case "remove":
+    cmdRemove(positional);
+    break;
   case "list":
     cmdList(flags);
     break;
   default:
-    console.error("Usage: profile-qa.mjs <find|add|alias|touch|list> ...");
+    console.error("Usage: profile-qa.mjs <find|add|alias|touch|remove|list> ...");
     process.exit(1);
 }

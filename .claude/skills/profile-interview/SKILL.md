@@ -79,7 +79,9 @@ and then hands back to this interview.
    --canonical=<topic> --kind=fact|policy|narrative|employer-specific` for each
    (`--canonical` and `--kind` are required; a topic that already exists is refused —
    add an `alias` instead). This is what saves the first real `apply-to-jobs` run from
-   stopping on nearly every vacancy. At minimum, seed:
+   stopping on nearly every vacancy. `qa[]` is for facts, policies and short answers —
+   if the user starts telling a story (a project, a problem they solved), stop and
+   hand it to the `import-stories` skill instead. At minimum, seed:
    - work authorization in the base country (`work_authorization:<country>`)
    - visa sponsorship needed (`sponsorship:<country>`)
    - willingness to relocate (`relocation:<country>` or a general answer)
