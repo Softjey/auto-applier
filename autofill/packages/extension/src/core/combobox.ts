@@ -104,7 +104,12 @@ async function open(el: ListCombobox): Promise<HTMLElement[]> {
   // A popover button answers a click, not the arrow key; only a closed one needs it.
   if (isPopoverSelect(el)) {
     if (el.getAttribute('aria-expanded') !== 'true') click(el);
-  } else press(el, 'ArrowDown');
+  } else {
+    // An autocomplete input (Angular Material) lists its rows on focus + click; the arrow key
+    // alone leaves it shut. A react-select takes the arrow key whether or not it was clicked.
+    if (el instanceof HTMLInputElement && el.getAttribute('aria-expanded') !== 'true') click(el);
+    press(el, 'ArrowDown');
+  }
   return waitForOptions(el, OPEN_WAIT_MS);
 }
 

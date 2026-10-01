@@ -2,6 +2,7 @@ import type { Cefr, FieldOption, PlanEntry, SalaryQuote } from '@applier/protoco
 import type { SiteAdapter } from '../adapters';
 import { comboChoose, comboChosen, comboTypeahead, isListCombobox } from './combobox';
 import { startDateFor } from './date-box';
+import { durationDays } from './duration';
 import { pickLevel } from './level-scale';
 import { findDeclineOption, matchOption } from './match-option';
 import { pickBand } from './ranges';
@@ -104,6 +105,9 @@ export async function execute(
         id: d.id,
         label: d.label,
         reason: entry.reason,
+        // A list that already shows an answer (a default the page chose): say which, so the
+        // person can check it without scrolling to the field.
+        ...(heldAnswer(control) ? { hint: `now: ${heldAnswer(control)}` } : {}),
         ...(entry.hint ? { hint: entry.hint } : {}),
       };
 
@@ -185,6 +189,17 @@ async function applySet(control: Control, value: string): Promise<Outcome> {
       }
       const option = matchOption(d.options ?? [], value);
       if (!option) {
+        // The standing rule for a fixed list of start dates with no option as far out as the
+        // notice period: take the earliest ("od zaraz" / ASAP). It is shown, never silent.
+        const earliest = earliestStart(d.options ?? [], value);
+        if (earliest) {
+          return applyOption(
+            control,
+            earliest.value,
+            earliest.label,
+            `${value}: not on the list -> "${earliest.label}" (earliest available)`,
+          );
+        }
         return {
           status: 'manual',
           id: d.id,
@@ -202,6 +217,25 @@ async function applySet(control: Control, value: string): Promise<Outcome> {
     default:
       return left(control, `cannot fill a ${d.kind}`);
   }
+}
+
+/** The answer a select / dropdown already shows, or '' (no choice, or not a list). */
+function heldAnswer(c: Control): string {
+  const { descriptor: d, el } = c;
+  if (!alreadyChosen(c)) return '';
+  if (el instanceof HTMLSelectElement) return clean(el.selectedOptions[0]?.text ?? '');
+  return d.kind === 'combobox' ? clean(el.textContent).slice(0, 60) : '';
+}
+
+/**
+ * A duration answer ("2 weeks") on a list that has no option for it but does have an immediate
+ * one ("od zaraz", "natychmiast", "immediately"): that option. Only for a duration, only when one
+ * option is the single immediate choice.
+ */
+function earliestStart(options: readonly FieldOption[], value: string): FieldOption | undefined {
+  if (durationDays(value) === null || durationDays(value) === 0) return undefined;
+  const immediate = options.filter((o) => durationDays(o.label) === 0);
+  return immediate.length === 1 ? immediate[0] : undefined;
 }
 
 /** "React, Next.js" -> the options each part names; a part that names none is reported, not guessed. */
