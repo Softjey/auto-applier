@@ -43,3 +43,7 @@ export type CvResponse = z.infer<typeof CvResponse>;
 
 export const ErrorResponse = z.object({ error: z.string() });
 export type ErrorResponse = z.infer<typeof ErrorResponse>;
+
+/** When the extension build on disk was last written (ms): the running extension reloads itself if this is newer than its own. */
+export const BuildResponse = z.object({ builtAt: z.number().nullable() });
+export type BuildResponse = z.infer<typeof BuildResponse>;

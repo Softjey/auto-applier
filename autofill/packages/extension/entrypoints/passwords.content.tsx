@@ -13,6 +13,8 @@ import '../src/ui/passwords.css';
  * fixtures), not just the supported ATSes: an employer's sign-in lives wherever the
  * employer put it. It does nothing, and mounts nothing, on a page with no account form.
  */
+declare const __BUILT_AT__: number;
+
 export default defineContentScript({
   matches: ['https://*/*', 'http://localhost/*', 'http://127.0.0.1/*'],
   allFrames: true,
@@ -45,6 +47,7 @@ export default defineContentScript({
         },
         onRemove: (root) => root?.unmount(),
       });
+      ui.shadowHost.dataset['built'] = String(__BUILT_AT__); // which build is running (self-reload check)
       ui.mount();
     };
     controller.subscribe(() => void ensureUi());

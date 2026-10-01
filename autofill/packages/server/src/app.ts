@@ -12,6 +12,7 @@ import {
 } from '@applier/protocol';
 import { z } from 'zod';
 import { loopbackExtensionOnly, pinnedExtensionOnly } from './guards';
+import { buildTime } from './services/build-service';
 import type { CredsService } from './services/creds-service';
 import type { CvService } from './services/cv-service';
 import type { PlanService } from './services/plan-service';
@@ -36,6 +37,7 @@ export function createApp({ plans, cvs, creds, extensionId = EXTENSION_ID }: App
     .use(loopbackExtensionOnly)
     .use('/creds/*', pinnedExtensionOnly(extensionId))
     .get('/ping', (c) => c.json({ ok: true }))
+    .post('/build', async (c) => c.json({ builtAt: await buildTime() }))
     .post('/plan', zValidator('json', PlanRequest), async (c) => {
       const { fields, band } = c.req.valid('json');
       const body: PlanResponse = { plan: await plans.plan(fields, band) };

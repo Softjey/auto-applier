@@ -91,3 +91,16 @@ describe('GET /cv', () => {
     expect(res.status).toBe(404);
   });
 });
+
+describe('POST /build', () => {
+  it('answers the extension with the build time (a number, or null without a build)', async () => {
+    const res = await app.request('http://127.0.0.1:7357/build', {
+      method: 'POST',
+      headers: { origin: EXTENSION, 'content-type': 'application/json' },
+      body: '{}',
+    });
+    expect(res.status).toBe(200);
+    const { builtAt } = (await res.json()) as { builtAt: number | null };
+    expect(builtAt === null || typeof builtAt === 'number').toBe(true);
+  });
+});

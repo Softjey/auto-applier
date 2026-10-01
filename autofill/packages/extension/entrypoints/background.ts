@@ -1,5 +1,6 @@
 import {
   BackgroundRequest,
+  BuildResponse,
   CredsCheckResponse,
   CredsDraftResponse,
   CredsMatchResponse,
@@ -198,7 +199,28 @@ async function handle(
   }
 }
 
+declare const __BUILT_AT__: number;
+
+/**
+ * Dev convenience: when a newer build of this extension sits on disk (the server sees it), reload.
+ * Chrome does not reload an unpacked extension by itself, and chrome://extensions cannot be driven
+ * by a script. Needs the plan server; without one it silently does nothing.
+ */
+async function reloadIfRebuilt() {
+  try {
+    const { builtAt } = await call('/build', BuildResponse, post({}));
+    if (builtAt !== null && builtAt > __BUILT_AT__ + 1000) browser.runtime.reload();
+  } catch {
+    /* no server, no build: nothing to do */
+  }
+}
+
 export default defineBackground(() => {
+  browser.alarms.create('rebuilt-check', { periodInMinutes: 0.5 });
+  browser.alarms.onAlarm.addListener((a) => {
+    if (a.name === 'rebuilt-check') void reloadIfRebuilt();
+  });
+  void reloadIfRebuilt();
   browser.runtime.onMessage.addListener((raw: unknown, sender) =>
     handle(raw, sender).then(
       (data): BackgroundResult<unknown> => ({ ok: true, data }),
