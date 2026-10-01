@@ -10,7 +10,7 @@ const ATTR = 'data-af-id';
 const TIMEOUT_MS = 1500;
 
 interface BridgeRequest {
-  op: 'options' | 'set';
+  op: 'options' | 'set' | 'add';
   target: string;
   optionId?: string;
 }
@@ -48,10 +48,12 @@ export async function selectizeOptions(el: HTMLElement, id: string): Promise<Fie
   return res.options.map((o) => ({ value: o.id, label: o.label }));
 }
 
+/** `add` appends to a multi-select (keeps what is chosen); otherwise the value is replaced. */
 export async function selectizeSet(
   el: HTMLElement,
   id: string,
   optionId: string,
+  add = false,
 ): Promise<boolean> {
-  return (await request(el, { op: 'set', optionId }, id)).ok;
+  return (await request(el, { op: add ? 'add' : 'set', optionId }, id)).ok;
 }

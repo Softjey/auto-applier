@@ -23,7 +23,9 @@ export function installFakeBridge(options: Record<string, { id: string; label: s
       );
     if (!el || !list) return reply({ ok: false });
     if (req.op === 'options') return reply({ ok: true, options: list });
-    el.dataset['chosen'] = req.optionId ?? '';
+    // `add` appends (a multi-select keeps what is chosen); `set` replaces.
+    const kept = req.op === 'add' && el.dataset['chosen'] ? `${el.dataset['chosen']},` : '';
+    el.dataset['chosen'] = `${kept}${req.optionId ?? ''}`;
     reply({ ok: true });
   });
 }

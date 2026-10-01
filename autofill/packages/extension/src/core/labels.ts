@@ -67,7 +67,10 @@ export const looksRequired = (label: string): boolean => /[*✱]|obowi[aą]zkowe
 function rowText(row: Element): string {
   const copy = row.cloneNode(true) as Element;
   copy
-    .querySelectorAll('select, option, input, textarea, script, style, button')
+    .querySelectorAll(
+      // A selectize widget draws its list inside the row once it has been used.
+      'select, option, input, textarea, script, style, button, .selectize-control, .selectize-dropdown, [role="listbox"]',
+    )
     .forEach((n) => n.remove());
   const lines = (copy.textContent ?? '').split('\n').map(clean).filter(Boolean);
   return (lines[0] ?? '').slice(0, 120);

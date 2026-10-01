@@ -10,12 +10,14 @@ interface SelectizeApi {
     { id: string | number; title?: string; locality?: string; text?: string }
   >;
   setValue(id: string | number, silent: boolean): void;
+  addItem(id: string | number, silent?: boolean): void;
+  items: string[];
 }
 type WithSelectize = HTMLElement & { selectize?: SelectizeApi };
 
 interface Req {
   id: string;
-  op: 'options' | 'set';
+  op: 'options' | 'set' | 'add';
   target: string;
   optionId?: string;
 }
@@ -49,8 +51,10 @@ export default defineContentScript({
       }
       const hit = Object.values(api.options).find((o) => String(o.id) === req.optionId);
       if (!hit) return answer(req.id, { ok: false });
-      api.setValue(hit.id, false);
-      answer(req.id, { ok: true });
+      if (req.op === 'add') api.addItem(hit.id, false);
+      else api.setValue(hit.id, false);
+      // Selectize may refuse (a closed option, a max-items cap): report what it holds.
+      answer(req.id, { ok: api.items.map(String).includes(String(hit.id)) });
     });
   },
 });

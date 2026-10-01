@@ -1,3 +1,6 @@
+/** This extension's own panels (`applier-autofill`, `applier-passwords`): their fields are not the page's. */
+const isOwnPanel = (el: Element): boolean => el.localName.startsWith('applier-');
+
 /**
  * querySelectorAll that also walks into OPEN shadow roots, in document order (a host's shadow
  * content comes right after the host). SmartRecruiters draws its whole form inside shadow DOM;
@@ -7,7 +10,7 @@ export function deepAll<T extends Element = HTMLElement>(root: ParentNode, selec
   const out: T[] = [];
   for (const el of root.querySelectorAll('*')) {
     if (el.matches(selector)) out.push(el as T);
-    if (el.shadowRoot) out.push(...deepAll<T>(el.shadowRoot, selector));
+    if (el.shadowRoot && !isOwnPanel(el)) out.push(...deepAll<T>(el.shadowRoot, selector));
   }
   return out;
 }

@@ -88,6 +88,14 @@ export async function execute(
       if (d.kind === 'checkbox-group' && !d.required && entry.reason !== 'below-floor') {
         return left(control, 'optional checkbox left unticked');
       }
+      // An optional free-text box (a message to the recruiter) stays empty: nothing is lost.
+      if (
+        (d.kind === 'textarea' || d.kind === 'text') &&
+        !d.required &&
+        entry.reason === 'narrative'
+      ) {
+        return left(control, 'optional free text left empty');
+      }
       return {
         status: 'manual',
         id: d.id,
@@ -146,7 +154,12 @@ async function applySet(control: Control, value: string): Promise<Outcome> {
     case 'select':
     case 'combobox':
     case 'radio-group': {
-      if (el instanceof HTMLSelectElement && el.multiple) return applyMultiSelect(control, value);
+      if (el instanceof HTMLSelectElement && el.multiple) {
+        // Selectize keeps its own state: set through its API, not on the hidden <select>.
+        return d.kind === 'combobox'
+          ? applySelectizeMulti(control, value)
+          : applyMultiSelect(control, value);
+      }
       if (alreadyChosen(control)) return left(control, 'already chosen');
       // An autocomplete that shows rows only once you type (a location box).
       if (d.kind === 'combobox' && d.optionsHidden && isListCombobox(el)) {
@@ -224,6 +237,19 @@ async function applyChoices(control: Control, value: string): Promise<Outcome> {
   return missing.length > 0
     ? partial(control, missing)
     : filled(control, picked.map((o) => o.label).join(', '));
+}
+
+/** A selectize multi-select: add every option the answer names through the page-world bridge. */
+async function applySelectizeMulti(control: Control, value: string): Promise<Outcome> {
+  const { picked, missing } = pickMany(control.descriptor.options ?? [], value);
+  if (picked.length === 0) return partial(control, missing.length ? missing : [value]);
+  for (const option of picked) {
+    if (!(await selectizeSet(control.el, control.descriptor.id, option.value, true))) {
+      return failed(control, `"${option.label}" was refused by the list`);
+    }
+  }
+  const shown = picked.map((o) => o.label).join(', ');
+  return missing.length > 0 ? partial(control, missing) : filled(control, shown);
 }
 
 /** <select multiple>: select every option the answer names, keep what is already selected. */
@@ -330,11 +356,20 @@ async function applySalary(control: Control, quote: SalaryQuote): Promise<Outcom
   }
 }
 
+const NAMES_CEFR = /\b[ABC][12]\b.*\b[ABC][12]\b/;
+
 /** The profile's CEFR level -> the option on this form's own scale, shown so it is never silent. */
 async function applyLevel(control: Control, cefr: Cefr): Promise<Outcome> {
   const { descriptor: d } = control;
   const options: readonly FieldOption[] = d.options ?? [];
 
+  // A text box whose question lists the CEFR codes ("Native, C2, C1, B2 …") takes the code itself.
+  if ((d.kind === 'text' || d.kind === 'textarea') && NAMES_CEFR.test(d.label)) {
+    if (!isEmpty(control.el)) return left(control, 'already filled');
+    return setText(control.el as HTMLInputElement | HTMLTextAreaElement, cefr)
+      ? filled(control, `${cefr} (the form lists CEFR codes)`)
+      : failed(control, 'the page did not keep the value');
+  }
   if (d.kind !== 'select' && d.kind !== 'combobox' && d.kind !== 'radio-group') {
     return { status: 'manual', id: d.id, label: d.label, reason: 'language-level', hint: cefr };
   }

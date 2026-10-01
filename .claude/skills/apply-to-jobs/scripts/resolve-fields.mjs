@@ -43,6 +43,23 @@ const STRUCTURAL = [
   ["bareName", (p) => p.personal?.firstName],
 ];
 
+// A qa[] answer may end in a note to the agent: "3-4 years (choose the 3-4 bracket where
+// offered; where a single number is required, 3)". Picking an option from a list reads the
+// answer's start; a box would receive the note itself. A `write exactly "X"` note names
+// the text; any other note on a typed answer is the agent's call.
+const CHOICE_KINDS = new Set(["checkbox", "checkbox-group", "radio", "radio-group", "select", "combobox"]);
+const GUIDANCE = /\((?:[^)]*\b(?:choose|pick|select|write|type|where|if|use)\b)[^)]*\)/i;
+
+export function typeableAnswer(answer, kind) {
+  const exact = /write exactly\s+["“]([^"”]+)["”]/i.exec(answer);
+  if (exact && !CHOICE_KINDS.has(kind)) return { ok: true, value: exact[1] };
+  // "...where a single number is required, 3": a typed years-of-experience box takes that number.
+  const single = /single number[^,)]*,\s*(\d+(?:[.,]\d+)?)/i.exec(answer);
+  if (single && !CHOICE_KINDS.has(kind)) return { ok: true, value: single[1] };
+  if (!GUIDANCE.test(answer) || CHOICE_KINDS.has(kind)) return { ok: true, value: answer };
+  return { ok: false };
+}
+
 export function classify(field, profile, vocab) {
   const label = field.label || field.key || "";
 
@@ -113,7 +130,15 @@ export function classify(field, profile, vocab) {
   const ranked = rankAgainstQa(label, profile.qa);
   const top = ranked[0];
   if (top?.verdict === "exact") {
-    return { status: "resolved", source: `qa:${top.entry.id}`, value: top.entry.answer, score: +top.score.toFixed(2) };
+    const typed = typeableAnswer(top.entry.answer, field.kind);
+    if (typed.ok) {
+      return { status: "resolved", source: `qa:${top.entry.id}`, value: typed.value, score: +top.score.toFixed(2) };
+    }
+    return {
+      status: "review",
+      why: "the recorded answer carries instructions for the agent, not text to type into a box — read it and type the value",
+      candidates: [{ id: top.entry.id, q: top.entry.question, a: top.entry.answer, score: +top.score.toFixed(2) }],
+    };
   }
 
   for (const [key, get] of STRUCTURAL) {
