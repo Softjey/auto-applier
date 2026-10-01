@@ -1,9 +1,11 @@
 import type { Cefr, FieldOption, PlanEntry, SalaryQuote } from '@applier/protocol';
 import type { SiteAdapter } from '../adapters';
+import { comboChoose, comboChosen, comboTypeahead, isListCombobox } from './combobox';
 import { pickLevel } from './level-scale';
 import { findDeclineOption, matchOption } from './match-option';
 import { pickBand } from './ranges';
 import { selectizeSet } from './selectize';
+import { clean } from './text';
 import { isChecked, setChecked, setSelectValue, setText } from './setters';
 import type { Control, Outcome } from './types';
 
@@ -32,10 +34,21 @@ const failed = (c: Control, why: string): Outcome => ({
  */
 /** The value a group member is identified by: an input's `value`, or an ARIA radio's `value` attribute. */
 export const optionKey = (m: HTMLElement): string =>
-  m instanceof HTMLInputElement ? m.value : (m.getAttribute('value') ?? m.textContent ?? '');
+  m instanceof HTMLInputElement ? m.value : (m.getAttribute('value') ?? clean(m.textContent));
 
 const isChosen = (el: HTMLSelectElement, combobox: boolean): boolean =>
   el.value !== '' && (combobox || el.selectedIndex > 0);
+
+/**
+ * A choice the page (or a previous pass) already made is never overwritten. Radio groups check
+ * their own members instead (see applyOption).
+ */
+const alreadyChosen = (c: Control): boolean => {
+  const { descriptor: d, el } = c;
+  if (d.kind === 'radio-group') return false;
+  if (el instanceof HTMLSelectElement) return isChosen(el, d.kind === 'combobox');
+  return isListCombobox(el) && comboChosen(el);
+};
 
 const isEmpty = (el: HTMLElement): boolean => {
   if (el instanceof HTMLSelectElement)
@@ -133,9 +146,19 @@ async function applySet(control: Control, value: string): Promise<Outcome> {
     case 'select':
     case 'combobox':
     case 'radio-group': {
-      // A choice the page (or a previous pass) already made is never overwritten.
-      if (d.kind !== 'radio-group' && isChosen(el as HTMLSelectElement, d.kind === 'combobox'))
-        return left(control, 'already chosen');
+      if (alreadyChosen(control)) return left(control, 'already chosen');
+      // An autocomplete that shows rows only once you type (a location box).
+      if (d.kind === 'combobox' && d.optionsHidden && isListCombobox(el)) {
+        return (await comboTypeahead(el, value))
+          ? filled(control)
+          : {
+              status: 'manual',
+              id: d.id,
+              label: d.label,
+              reason: 'no option matches the profile answer',
+              hint: value.slice(0, 120),
+            };
+      }
       const option = matchOption(d.options ?? [], value);
       if (!option) {
         return {
@@ -174,9 +197,10 @@ async function applyOption(
   }
 
   if (d.kind === 'combobox') {
-    return (await selectizeSet(el, d.id, optionValue))
-      ? filled(control, detail)
-      : failed(control, 'the combobox refused the option');
+    const taken = isListCombobox(el)
+      ? await comboChoose(el, optionLabel)
+      : await selectizeSet(el, d.id, optionValue);
+    return taken ? filled(control, detail) : failed(control, 'the combobox refused the option');
   }
 
   if (d.kind === 'radio-group') {
@@ -233,9 +257,7 @@ async function applySalary(control: Control, quote: SalaryQuote): Promise<Outcom
     case 'select':
     case 'combobox':
     case 'radio-group': {
-      if (d.kind !== 'radio-group' && isChosen(el as HTMLSelectElement, d.kind === 'combobox')) {
-        return left(control, 'already chosen');
-      }
+      if (alreadyChosen(control)) return left(control, 'already chosen');
       const band = pickBand(d.options ?? [], quote.amount);
       return band
         ? applyOption(control, band.value, band.label, said)
@@ -249,15 +271,13 @@ async function applySalary(control: Control, quote: SalaryQuote): Promise<Outcom
 
 /** The profile's CEFR level -> the option on this form's own scale, shown so it is never silent. */
 async function applyLevel(control: Control, cefr: Cefr): Promise<Outcome> {
-  const { descriptor: d, el } = control;
+  const { descriptor: d } = control;
   const options: readonly FieldOption[] = d.options ?? [];
 
   if (d.kind !== 'select' && d.kind !== 'combobox' && d.kind !== 'radio-group') {
     return { status: 'manual', id: d.id, label: d.label, reason: 'language-level', hint: cefr };
   }
-  if (d.kind !== 'radio-group' && isChosen(el as HTMLSelectElement, d.kind === 'combobox')) {
-    return left(control, 'already chosen');
-  }
+  if (alreadyChosen(control)) return left(control, 'already chosen');
   const pick = pickLevel(options, cefr);
   if (!pick)
     return { status: 'manual', id: d.id, label: d.label, reason: 'language-level', hint: cefr };

@@ -1,0 +1,41 @@
+<form id="application-form">
+  <ul>
+    <li class="application-question">
+      <label
+        ><div class="application-label">Full name<span class="required">✱</span></div>
+        <div class="application-field"><input type="text" name="name" /></div
+      ></label>
+    </li>
+    <li class="application-question">
+      <label
+        ><div class="application-label">Email<span class="required">✱</span></div>
+        <div class="application-field"><input type="email" name="email" /></div
+      ></label>
+    </li>
+    <li class="application-question">
+      <label
+        ><div class="application-label">Resume/CV<span class="required">✱</span></div>
+        <div class="application-field"><input type="file" name="resume" /></div
+      ></label>
+    </li>
+    <li class="application-question custom-question">
+      <label
+        ><div class="application-label">Notice period<span class="required">✱</span></div>
+        <div class="application-field">
+          <select name="cards[abc][field0]">
+            <option value="">Select…</option>
+            <option>Immediately</option>
+            <option>2 weeks</option>
+            <option>1 month</option>
+          </select>
+        </div></label
+      >
+    </li>
+    <li class="application-question">
+      <label
+        ><div class="application-label">Current company</div>
+        <div class="application-field"><input type="text" name="org" /></div
+      ></label>
+    </li>
+  </ul>
+</form>

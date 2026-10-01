@@ -37,6 +37,26 @@ const TARGETS: Target[] = [
     url: 'https://form.erecruiter.pl/form/8ec9427f90384fc288a1bc4a1d86092e',
   },
   {
+    name: 'greenhouse kalepa',
+    url: 'https://job-boards.greenhouse.io/kalepa/jobs/4359670004',
+  },
+  {
+    name: 'greenhouse firstconnect',
+    url: 'https://job-boards.greenhouse.io/firstconnectinsurance/jobs/5196265008',
+  },
+  {
+    name: 'ashby hostinger',
+    url: 'https://jobs.ashbyhq.com/hostinger/57b7805f-412c-44fa-b8ac-6dc045a4e01d/application',
+  },
+  {
+    name: 'ashby leovegas',
+    url: 'https://jobs.ashbyhq.com/leovegasgroup/793c221b-d553-4bd0-bf12-a2fedbb06a62/application',
+  },
+  {
+    name: 'lever spotify',
+    url: 'https://jobs.lever.co/spotify/2193db3f-77c5-43b8-b030-8f92c9882bf1/apply',
+  },
+  {
     name: 'justjoin altimetrik',
     url: 'https://justjoin.it/job-offer/altimetrik-poland-senior-react-developer-krakow-javascript-c6d7cd5b',
     open: async (page) => {

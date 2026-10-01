@@ -60,3 +60,76 @@ export const when =
   (re: RegExp, make: (f: FieldDescriptor) => Omit<PlanEntry, 'id'>): Rule =>
   (f) =>
     re.test(f.label) ? ({ id: f.id, ...make(f) } as PlanEntry) : undefined;
+
+interface FakeComboboxOptions {
+  /** The rows: fixed, or computed from what was typed (an async autocomplete). */
+  rows: string[] | ((typed: string) => string[]);
+  /** Ignore mouse clicks on rows — the list can then only be driven from the keyboard. */
+  keyboardOnly?: boolean;
+}
+
+/**
+ * Stand-in for react-select / Radix Select: a `role=combobox` control that opens a
+ * `role=listbox` of `role=option` rows on ArrowDown, closes on Escape, and shows the pick
+ * (a button's own text with `data-placeholder` removed; an input's `.select__single-value`).
+ */
+export function mountFakeCombobox(control: HTMLElement, options: FakeComboboxOptions): void {
+  let list: HTMLElement | null = null;
+  let active = -1;
+  const rowsFor = () =>
+    typeof options.rows === 'function'
+      ? options.rows(control instanceof HTMLInputElement ? control.value : '')
+      : options.rows;
+
+  const close = () => {
+    list?.remove();
+    list = null;
+    active = -1;
+    control.setAttribute('aria-expanded', 'false');
+  };
+  const choose = (label: string) => {
+    if (control instanceof HTMLButtonElement) {
+      control.textContent = label;
+      control.removeAttribute('data-placeholder');
+    } else {
+      const box = control.closest('.select__control') ?? control.parentElement!;
+      const value = document.createElement('div');
+      value.className = 'select__single-value';
+      value.textContent = label;
+      box.prepend(value);
+      (control as HTMLInputElement).value = '';
+    }
+    close();
+  };
+  const render = () => {
+    list?.remove();
+    list = document.createElement('div');
+    list.setAttribute('role', 'listbox');
+    list.id = `${control.id || 'cb'}-listbox`;
+    for (const label of rowsFor()) {
+      const row = document.createElement('div');
+      row.setAttribute('role', 'option');
+      row.textContent = label;
+      if (!options.keyboardOnly) row.addEventListener('click', () => choose(label));
+      list.append(row);
+    }
+    document.body.append(list);
+    control.setAttribute('aria-controls', list.id);
+    control.setAttribute('aria-expanded', 'true');
+  };
+
+  control.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') return close();
+    if (e.key === 'ArrowDown') {
+      if (!list) return render();
+      active = Math.min(active + 1, rowsFor().length - 1);
+    }
+    if (e.key === 'Enter' && list && active >= 0) choose(rowsFor()[active] ?? '');
+  });
+  if (control instanceof HTMLInputElement) {
+    control.addEventListener('input', () => setTimeout(() => list && render(), 20));
+    // an async autocomplete shows rows as you type, without being opened first
+    if (typeof options.rows === 'function')
+      control.addEventListener('input', () => setTimeout(() => !list && render(), 20));
+  }
+}

@@ -35,9 +35,15 @@ export function setSelectValue(el: HTMLSelectElement, optionValue: string): bool
 const SETTLE_MS = 500;
 const POLL_MS = 25;
 
-/** Native input or ARIA widget (`<button role="checkbox" aria-checked>`). */
+/**
+ * Native input, ARIA widget (`<button role="checkbox" aria-checked>`, `aria-pressed`), or a
+ * segmented button that shows its state only through a CSS-module class (Ashby's `_active_<hash>`).
+ */
 export function isChecked(el: HTMLElement): boolean {
-  return el instanceof HTMLInputElement ? el.checked : el.getAttribute('aria-checked') === 'true';
+  if (el instanceof HTMLInputElement) return el.checked;
+  const aria = el.getAttribute('aria-checked') ?? el.getAttribute('aria-pressed');
+  if (aria !== null) return aria === 'true';
+  return /(^|\s)_active_/.test(el.className);
 }
 
 /**

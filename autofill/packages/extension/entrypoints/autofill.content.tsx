@@ -23,7 +23,7 @@ export default defineContentScript({
     // Navigation API fires BEFORE `location.href` changes, so the destination
     // comes from the event, never from `location`.
     const sync = async (url: URL) => {
-      const adapter = pickAdapter(url);
+      const adapter = pickAdapter(url, document);
       if (adapter === mounted) return;
       ui?.remove();
       ui = null;

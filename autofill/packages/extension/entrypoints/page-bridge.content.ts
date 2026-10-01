@@ -1,4 +1,4 @@
-import { MATCH_PATTERNS } from '../src/adapters';
+import { BRIDGE_PATTERNS } from '../src/adapters';
 
 // Runs in the PAGE's own JS world. Selectize hangs its API off the native
 // <select> as `el.selectize`, an expando the isolated content-script world
@@ -21,7 +21,7 @@ interface Req {
 }
 
 export default defineContentScript({
-  matches: MATCH_PATTERNS,
+  matches: BRIDGE_PATTERNS,
   world: 'MAIN',
   runAt: 'document_start',
   main() {

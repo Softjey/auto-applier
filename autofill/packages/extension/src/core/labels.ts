@@ -56,7 +56,7 @@ export function labelFor(el: HTMLElement, rowFallback = true): string {
   return clean(el.getAttribute('placeholder'));
 }
 
-export const looksRequired = (label: string): boolean => /\*|obowi[aą]zkowe/i.test(label);
+export const looksRequired = (label: string): boolean => /[*✱]|obowi[aą]zkowe/i.test(label);
 
 /**
  * The row's own words: controls, their options and scripts are stripped first,

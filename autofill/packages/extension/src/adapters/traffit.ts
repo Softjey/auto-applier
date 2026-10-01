@@ -4,6 +4,7 @@ import type { SiteAdapter } from './types';
 export const traffit: SiteAdapter = {
   id: 'traffit',
   matchPatterns: ['https://*.traffit.com/*'],
+  needsBridge: true,
   // /public/an/<hash> is the job description; the form is /public/form/a/<hash>.
   matches: (url) =>
     /\.traffit\.com$/.test(url.hostname) && url.pathname.startsWith('/public/form/'),

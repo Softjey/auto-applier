@@ -1,12 +1,14 @@
 import type { FieldDescriptor, FieldKind, FieldOption } from '@applier/protocol';
-import type { SiteAdapter } from '../adapters';
+import type { SiteAdapter, WidgetGroup } from '../adapters';
+import { comboOptions, isListCombobox } from './combobox';
 import { groupQuestion, labelFor, looksRequired, widgetLabel } from './labels';
 import { selectizeOptions } from './selectize';
 import { clean } from './text';
 import type { Control } from './types';
 import { isHoneypotName, isVisible } from './visibility';
 
-const CONTROLS = 'input, select, textarea';
+// `button[role=combobox]` is a Radix / shadcn Select trigger; its native <select> twin is aria-hidden.
+const CONTROLS = 'input, select, textarea, button[role="combobox"]';
 const TEXT_TYPES: Record<string, FieldKind> = {
   text: 'text',
   search: 'text',
@@ -39,13 +41,17 @@ const isSelectized = (el: Element): boolean => el.classList.contains('selectized
 const isSelectizeShell = (el: HTMLElement): boolean =>
   el.closest('.selectize-control') !== null || /-selectized$/.test(el.id);
 
-interface Group {
-  kind: 'checkbox-group' | 'radio-group';
-  members: HTMLElement[];
-  /** Set when the widget names its own question (ARIA radiogroup). */
-  question?: string;
-  required?: boolean;
-}
+type Group = WidgetGroup;
+
+/**
+ * react-select parks an invisible, read-only twin of its input beside it (so the browser can
+ * enforce `required`). It is not a field; only the combobox next to it is.
+ */
+const isRequiredShadow = (el: HTMLElement): boolean =>
+  el instanceof HTMLInputElement &&
+  el.tabIndex === -1 &&
+  el.readOnly &&
+  el.ownerDocument.defaultView?.getComputedStyle(el).opacity === '0';
 
 /**
  * Turns the form into Controls: one per real field, honeypots and shells
@@ -61,7 +67,7 @@ export async function scan(root: ParentNode, adapter: SiteAdapter): Promise<Cont
 
   for (const el of elements) {
     if (el instanceof HTMLInputElement && SKIP_TYPES.has(el.type)) continue;
-    if (isSelectizeShell(el) || el.closest(COOKIE_WIDGET)) continue;
+    if (isSelectizeShell(el) || isRequiredShadow(el) || el.closest(COOKIE_WIDGET)) continue;
 
     const selectized = el instanceof HTMLSelectElement && isSelectized(el);
     if (
@@ -89,7 +95,11 @@ export async function scan(root: ParentNode, adapter: SiteAdapter): Promise<Cont
     controls.push(await describe(el, label, nextId(), selectized));
   }
 
-  for (const group of [...groups.values(), ...ariaGroups(root)]) {
+  for (const group of [
+    ...groups.values(),
+    ...ariaGroups(root),
+    ...(adapter.groups?.(root) ?? []),
+  ]) {
     const control = describeGroup(group, nextId());
     if (!isMeaninglessToggle(control)) controls.push(control);
   }
@@ -115,6 +125,12 @@ async function describe(
     kind = 'combobox';
     options = (await selectizeOptions(el, id)) ?? undefined;
     if (!options) optionsHidden = true;
+  } else if (isListCombobox(el)) {
+    // react-select / Radix: the options exist only while the list is open, so open it and read.
+    kind = 'combobox';
+    const found = await comboOptions(el);
+    if (found.length > 0) options = found;
+    else optionsHidden = true; // an async autocomplete: it offers rows only once you type
   } else if (el instanceof HTMLSelectElement) {
     kind = 'select';
     options = [...el.options]
@@ -168,8 +184,9 @@ function ariaGroups(root: ParentNode): Group[] {
   return groups;
 }
 
+// A segmented button has no label wiring: its own text ("Yes") is its label.
 const memberLabel = (m: HTMLElement): string =>
-  m instanceof HTMLInputElement ? labelFor(m) : widgetLabel(m);
+  m instanceof HTMLInputElement ? labelFor(m) : widgetLabel(m) || clean(m.textContent);
 const memberKey = (m: HTMLElement): string =>
   m instanceof HTMLInputElement ? m.value : (m.getAttribute('value') ?? '');
 const memberRequired = (m: HTMLElement): boolean => m instanceof HTMLInputElement && m.required;

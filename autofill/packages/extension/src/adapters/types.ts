@@ -11,6 +11,19 @@ export interface SiteAdapter {
   readonly matchPatterns: readonly string[];
   /** Is this URL a page that carries (or opens) an application form? */
   matches(url: URL): boolean;
+  /**
+   * For an ATS that lives on its customers' own domains (Teamtailor career sites): the
+   * URL alone says nothing, so the page is asked. Consulted only when no adapter's
+   * `matches` took the URL.
+   */
+  detect?(url: URL, doc: Document): boolean;
+  /** Needs the page-world selectize bridge (page-bridge.content.ts). */
+  readonly needsBridge?: boolean;
+  /**
+   * Radio / checkbox groups the generic scan cannot see — custom segmented buttons that carry
+   * no ARIA role (Ashby's Yes/No). Each group's `members` are the clickable elements.
+   */
+  groups?(root: ParentNode): WidgetGroup[];
   /** Where the form lives (a modal, a form element). Default: the whole document. */
   scope?(doc: Document): ParentNode | null;
   /** Override the scraped label of a control (for forms that have none). */
@@ -24,4 +37,13 @@ export interface SiteAdapter {
    * resets selects). Fill, upload, wait this long, then fill again.
    */
   refillAfterCvMs?: number;
+}
+
+/** A group of clickable options the adapter found in its own markup. */
+export interface WidgetGroup {
+  kind: 'radio-group' | 'checkbox-group';
+  members: HTMLElement[];
+  /** The question the group answers, as the page words it. */
+  question?: string;
+  required?: boolean;
 }

@@ -1,0 +1,14 @@
+<img src="https://assets.teamtailor-cdn.com/logo.png" alt="" />
+<form>
+  <label for="fn">First name</label><input id="fn" name="candidate[first_name]" />
+  <label for="ln">Last name</label><input id="ln" name="candidate[last_name]" />
+  <label for="em">Email</label><input id="em" name="candidate[email]" type="email" />
+  <label for="cv">Resume</label><input id="cv" type="file" name="candidate[resume]" />
+  <label for="slider">How many years with Node?</label
+  ><input id="slider" type="range" min="1" max="5" name="candidate[answers_attributes][0][range]" />
+  <input type="hidden" name="candidate[consent]" value="0" />
+  <label
+    ><input type="checkbox" name="candidate[consent]" value="1" required /> I accept the privacy
+    policy</label
+  >
+</form>
