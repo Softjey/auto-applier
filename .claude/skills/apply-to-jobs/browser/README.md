@@ -48,7 +48,11 @@ Two quirks of this integration that the skill's phases are built around:
 - **`file_upload` only reads files inside the session's own directories.** The
   resume repo is not one of them unless the user has run
   `/add-dir <resumeRepo>`, which is why Phase 1 copies every PDF into
-  `$DATA/runs/<run-id>/<Company>_<vacancyId>/`.
+  `$DATA/runs/<run-id>/<Company>_<vacancyId>/`. That copy is readable only when the
+  session was opened in the workspace folder that holds both repos (verified
+  2026-10-01); a session opened inside the code repo gets "only files this session is
+  allowed to…" for `$DATA/runs/…`. A `data:` URL cannot serve as a test page —
+  `navigate` rejects it; serve one from a local port.
 - **Tabs live in one MCP tab group, and closing any tab dissolves it.** Every
   other open form then becomes undrivable — verified: one close out of nine was
   enough. So: never click a control that opens a new tab (click once to learn

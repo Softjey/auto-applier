@@ -51,6 +51,12 @@ Every bare path in this skill — `profile.json`, `runs/<run-id>/…`, `stories.
 relative to `$DATA`. If there is no data repo yet, stop and run the
 **`setup-data-repo`** skill first.
 
+**Session folder.** Claude Code must be opened in the workspace folder that holds both
+repos, not inside the code repo: the browser's `file_upload` only reads files under the
+session's own directories, so from inside the code repo it cannot see `$DATA/runs/…`.
+If the working directory does not contain the data repo, stop and ask the user to
+restart the session from the workspace folder.
+
 Everything installation-specific — absolute paths, the resume filename, and the
 non-English vocabulary of the local job market — lives in **`$DATA/apply-config.json`**,
 never in this skill. Read it at the start of a run.
@@ -248,9 +254,10 @@ not support.
      (every PDF has the same filename) and goes into the OneTap note in Phase 4.
    - Copy the PDF to `runs/<run-id>/<Company>_<vacancyId>/<config.resumeFileName>`.
      **This copy is not optional**: it is the run's audit trail, and under
-     Claude in Chrome it is also the only place the upload tool can read from
-     (see `$BROWSER_GUIDE`). Every copy has the same filename, so check the
-     path you copied from before uploading.
+     Claude in Chrome it is also where the upload tool reads from, provided the
+     session was opened in the workspace folder (§ Configuration, `$BROWSER_GUIDE`).
+     Every copy has the same filename, so check the path you copied from before
+     uploading.
 
 ### Phase 2 — read every form (serial browser, read-only)
 
