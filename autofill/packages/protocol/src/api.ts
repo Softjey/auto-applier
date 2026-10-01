@@ -2,7 +2,14 @@ import { z } from 'zod';
 import { FieldDescriptor } from './field';
 import { PlanEntry, SalaryUnit } from './plan';
 
-export const DEFAULT_PORT = 7357;
+/**
+ * Dev default 7357. AUTOFILL_PORT overrides it at runtime (server) and at BUILD time (the
+ * extension bundle: wxt.config.ts defines it), so the e2e suite runs its own server on its own
+ * port and can never talk to the dev server that holds the real profile and passwords.
+ */
+// Node has a real `process`; the extension bundle gets this exact expression replaced at build time.
+declare const process: { env: { AUTOFILL_PORT?: string } };
+export const DEFAULT_PORT = Number(process.env.AUTOFILL_PORT || 7357);
 export const SERVER_ORIGIN = `http://127.0.0.1:${DEFAULT_PORT}`;
 
 /** The band the VACANCY published, as typed by the user in the panel. Optional: none means "no band". */
