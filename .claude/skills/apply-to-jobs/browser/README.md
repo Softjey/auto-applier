@@ -159,3 +159,29 @@ one per form.
 Codex's `browser` plugin has `tab.screenshot()`, which returns the image
 directly — write it straight to the run folder as `filled-01.png`, `filled-02.png`
 and skip the GIF entirely.
+
+## Sign-in and sign-up: the Applier Passwords panel
+
+The autofill extension doubles as the user's password manager (`SKILL.md` § Portals that
+require an account). It adds a small panel to the **bottom-left** of any page that shows a
+sign-in or sign-up form (the form filler's own panel is bottom-right). Both live in open
+shadow roots, so `find` / `read_page` reach them by their accessible names:
+
+| What you want | Control (accessible name) |
+| --- | --- |
+| fill a saved login | button **Fill login** (the extension also does it by itself when one login fits) |
+| generate + fill a new account | button **Create account** |
+| the portal refuses the password | **New password**, **Letters & digits only** |
+| keep a login the user just typed | **Save** in the "Save password?" prompt |
+
+Rules for driving it:
+
+- **Click the portal's own Sign in / Create account button yourself.** The extension fills,
+  never submits.
+- A page with no account form has **no panel** — absence is not an error.
+- A small round **!** instead of the panel means the plan server is not running
+  (`pnpm --dir autofill dev:server`); start it, do not work around it.
+- After the click, give the page a couple of seconds: the extension decides "did it work?"
+  from the next page (form gone, no error text) before offering to save.
+- Never read a password field's value to "check" the fill: the panel's notice
+  ("Filled login …") and the field being non-empty are the check.

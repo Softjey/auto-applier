@@ -44,6 +44,7 @@ only); its Apply link is `/talentcommunity/apply/<id>/`, which **redirects to `/
 requested directly** (it needs the click's session), and the real application step lives on
 `career<NN>.sapsf.eu/career?career_company=<company>&…&loginFlowRequired=true`. That host
 matches Simplify's `*.sapsf.eu/career?*` pattern and Simplify shows "Sign In & Autofill", but
-`loginFlowRequired=true` means a **candidate account is needed first**: by the repo's rule the
-agent fills the sign-up form up to the password and the user sets their own.
+`loginFlowRequired=true` means a **candidate account is needed first**: sign in with the saved
+login, or create the account with the Applier extension's **Create account** button (SKILL.md
+§ Portals that require an account), not with Simplify's "Sign In & Autofill".
 

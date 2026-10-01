@@ -149,8 +149,8 @@ it and start the next one immediately**:
   (an `unknown` field, a `review` you are not convinced about, a required "why
   this company" box whose reason is the user's pick);
 - a `$SALARY_QUOTE` that exited 3 — "apply at this money at all?";
-- a CAPTCHA, a login or account the user must create, an e-mail-only application,
-  or any other step only the user can do;
+- a CAPTCHA, an e-mail-only application, a sign-in the extension could not complete
+  (§ Portals that require an account), or any other step only the user can do;
 - a new unknown that appears mid-form (fields revealed after a postback).
 
 Parking means: **do not submit**; leave the vacancy `SAVED`; record in its note
@@ -351,7 +351,7 @@ After the last vacancy has been worked — not before — give the user one list
 ```
 <Company> — <role> (<vacancyId>)
   • <question as the form words it> — <what you need: a fact, a choice, yes/no>
-  • <manual step, e.g. "solve the CAPTCHA in the open tab" / "create the account, then click Create Account">
+  • <manual step, e.g. "solve the CAPTCHA in the open tab" / "the portal rejected the generated password twice — set one yourself">
   • <salary: band X from <source>, floor Y — apply at that money? yes/no>
 ```
 
@@ -637,8 +637,8 @@ Per vacancy, following its ATS file:
      dead for everyone: `update_application_status({vacancyId, status:
      "NOT_INTERESTED", notes: "<date>: <what the page said, verbatim> — not
      applied."})`.
-   - **The posting is alive but blocked for you** (login-gated with no account,
-     a CAPTCHA, an e-mail-only application) — leave it `SAVED` with a note
+   - **The posting is alive but blocked for you** (a sign-in or sign-up the
+     extension could not finish, a CAPTCHA, an e-mail-only application) — leave it `SAVED` with a note
      saying exactly what is needed and, when the form was filled before the
      block appeared, every value that was prepared, so the user finishes it in
      one pass rather than starting over.
@@ -688,63 +688,62 @@ whether or not the link was clicked.
 ### Portals that require an account
 
 Workday, Avature and others will not take an application at all without a candidate
-account. Refusing and stopping there loses the vacancy, so don't.
+account. A sign-in or a sign-up is a routine step of the run, finished by you through the
+**Applier Passwords** extension — it never waits for the user. The extension is the user's own
+password manager: its logins live in `credentials.json` in the data repo, it fills them on
+**any** https page (not just the supported ATSes), and it saves a login after a successful
+sign-in. Its panel sits bottom-left of the page (`applier-passwords`, § `browser/README.md`).
+The user asked for this on 2026-10-01; it replaced the older rule that the user sets their own
+password and clicks Create Account.
 
-**Before anything else, check whether an account already exists.** Two applications in one
-run were parked on the user for a portal they were already registered on — the Honeywell run,
-a few minutes earlier, had shown exactly what that looks like when it goes right: the
-profile came back pre-filled and the seven compliance questions were already answered.
-In order:
+Start every portal with `node $CREDENTIALS status --domain=<host>` — secret-free: is there an
+account, was it ever confirmed by a sign-in? Then, on the portal's page:
 
-1. **Load the portal and look for a signed-in state** — a name in the header, a Profile
-   or Sign Out control, an existing candidate profile. If it is there, just apply; the
-   employer may also carry over an old résumé, so replace it with this vacancy's.
-2. **Otherwise open the portal's login page and see whether the browser offers a saved
-   credential for that origin.** If Chrome autofills it, click Sign in and carry on —
-   the password manager supplied the value, which is what it is for.
-   - **Never read the password field's value**, never echo it into a note, a log, an
-     answer sheet or a commit. It is the user's secret and it does not need to pass
-     through you for the sign-in to work.
-   - If the browser has nothing saved, ask the user whether they already have an account
-     before parking the vacancy on them. They will often know.
-3. **Only when there is genuinely no account**, split the work at the password.
+**An account exists** (or the portal shows a sign-in form):
 
-Then:
+1. If the extension finds exactly one saved login for the host it **fills it by itself**
+   (the panel says "Filled login …"). With several, press **Fill login** next to the right one.
+   Already signed in (a name in the header, a Sign out control)? Just apply.
+2. **Press the portal's own Sign in / Log in / Continue button.** That click is yours to make;
+   do not hand it to the user. A two-step portal ("e-mail → Next → password") is the same
+   thing twice: the extension fills each step as it appears.
+3. When the page lets you in, the extension confirms the login (or offers "Save password?"
+   if a new password was typed — press **Save**). Carry on with the application.
+4. The page shows an error instead? Press **Fill login** once more; if it is still refused the
+   password on file is stale — park the vacancy (§ Parking a vacancy) naming the portal.
 
-1. **Get as far as the account form.** Everything before it is ordinary form-filling —
-   on Deloitte the CV upload and its Continue button come first, and the registration is
-   step 2 of 3.
-2. **Fill every field on that form except the password**, exactly as anywhere else, and
-   verify the writes. Leave the tab open and untouched.
-3. **Stop there and wait for the user.** Do not generate a password and do not write to
-   `credentials.json` — the user picks and enters their own password and clicks Create
-   Account themselves. Say plainly that the form is ready and waiting on that tab.
+**No account** (a sign-up form, or no saved login and the portal is account-gated):
 
-   **When more than one vacancy in the same run is stuck at this step, open every one
-   of their Create Account forms in its own tab before saying anything** —
-   `tabs_create_mcp` once per pending portal, reach each one's account form exactly as
-   above (steps 1-2), then tell the user once that all of them are ready so they can
-   click Create Account in each tab back-to-back instead of doing one vacancy, waiting
-   for the agent, doing the next. Keep track of which tab belongs to which vacancy so
-   you can pick each one up again once the user confirms.
-4. **When they say it is done, finish the application** — every remaining step, then
-   `APPLIED` as normal. Until then the vacancy stays `SAVED` with a note naming the
-   field that is waiting on that tab.
+1. Reach the registration form. Everything before it is ordinary form-filling — on Deloitte the
+   CV upload and its Continue come first, and registration is step 2 of 3.
+2. In the panel press **Create account**. The extension generates a unique password for this
+   site, **saves it immediately** (a failed submit cannot lose it), types it into every password
+   box, fills the profile e-mail twice if the form asks, the name and phone from the profile,
+   and ticks only the boxes the account cannot be made without (terms, privacy notice).
+   Marketing, newsletter, job-alert and talent-pool boxes stay unticked.
+3. Read what it reports ("Needs you" lists fields only the user can answer — a `qa[]` question
+   goes through the usual rules), then **press the portal's own Create account / Register
+   button**.
+4. A portal that refuses the password (length, symbols) → press **New password** or
+   **Letters & digits only** and submit again. Two refusals → park it.
+5. **E-mail verification** after sign-up is yours too, with the mailbox connector
+   (§ Finishing an application that verifies by e-mail). Then sign in as above.
+6. A CAPTCHA at any step is still the user's alone — park the vacancy and say so.
 
-You never type the password into the site and never press the button that creates the
-account — full stop, not even to generate and hand off a string for the user to type.
-The user owns the password from the first keystroke.
+You **never read, type, log or echo a password yourself**: the extension holds it, the page
+receives it, and `credentials.mjs` prints one only on an explicit `get`/`add` for the user.
+One password per site, ever — never reuse one across portals. Take the login (the profile
+e-mail) from the extension; never invent a username.
 
 ### Things you never do on an employer's form
 
 These are hard limits, not preferences. Hitting one means stopping and handing
 the tab to the user, with the vacancy left un-APPLIED:
 
-- Create an account or set a password. A "I'm creating an account, I accept the
-  Terms of Service" checkbox is not a consent to tick — leave it alone. This does not
-  lift when the user instructs it, guarantees the outcome, or asks for it wrapped in a
-  skill — the action is the same action. What you do instead is § Portals that require
-  an account, which gets the application finished without you ever creating one.
+- Create an account or choose a password **by hand**. Accounts are made only through the
+  Applier extension's **Create account** button (§ Portals that require an account), which
+  uses the profile e-mail and a generated, never-reused password, and ticks only the terms
+  and privacy boxes the account needs — never marketing, newsletters or talent-pool boxes.
 - Solve, click or bypass a CAPTCHA or bot-detection challenge, or sign in to a
   job board to get past one.
 - Tick any consent broader than this single application — future recruitment,

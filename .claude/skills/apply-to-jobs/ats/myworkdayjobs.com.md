@@ -5,9 +5,11 @@ account is required is decided **per tenant**, not by the platform:
 
 - **kcura.wd1.myworkdayjobs.com (Relativity)**: "Apply Manually" leads to a
   **Create Account/Sign In** step before any application fields — a real account is required.
-  Simplify offers "Create Account & Autofill", which is off-limits (never create the account or
-  set the password — see SKILL.md § Portals that require an account). Fill every field except the
-  password, then stop and wait for the user to set their own password and click Create Account.
+  Simplify offers "Create Account & Autofill", which is off-limits (it makes the account with
+  Simplify's own credentials, not the user's). Create the account with the Applier extension's
+  **Create account** button instead and click Workday's own Create Account — see SKILL.md
+  § Portals that require an account. The account is **per tenant**: the login is saved under the
+  tenant's own host (`kcura.wd1.myworkdayjobs.com`), never under `myworkdayjobs.com`.
 - **sphera.wd1.myworkdayjobs.com (Sphera)**: "Apply Manually" skips account creation entirely and
   goes straight to My Information — a genuine **guest-apply** flow. Check the stepper right after
   clicking Apply: if it does *not* list "Create Account/Sign In" as the first step, no account is

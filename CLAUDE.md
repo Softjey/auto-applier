@@ -17,7 +17,7 @@ person lives in a separate, private **data repo** (default: `../auto-applier-dat
 | `profile.json` | the user's structured facts + the `qa[]` bank of form answers |
 | `apply-config.json` | paths to their resume repo, resume file name, `formVocabulary` for non-English forms |
 | `stories.json` | STAR stories / long answers that free-text fields are grounded in |
-| `credentials.json` | which employer portals have an account for them (private; real logins) |
+| `credentials.json` | the user's employer-portal logins, kept by the extension's password manager (private; real passwords) |
 | `triage/<date>.md` | one readable report per triage of the SAVED queue |
 | `runs/<date>-<slug>/` | audit trail of each apply run — per vacancy `answers.md`, `salary.json`, the CV sent, screen recordings; plus `summary.md` |
 
@@ -108,18 +108,22 @@ second agent reads the same files instead of a fork of them.
     floor, ask the user before applying at all. Whatever it returns is recorded in
     the OneTap.Work application note, every time.
   - `scripts/stories.mjs`, `import-stories.mjs` — search / import `stories.json`.
-  - `scripts/credentials.mjs` — the portal-account registry. The agent never creates
-    an account or invents a password: it fills the sign-up form up to the password,
-    stops, and the user sets their own and clicks Create Account.
+  - `scripts/credentials.mjs`, `scripts/lib/credentials-store.mjs` — the portal-account
+    store (`credentials.json`, schema 2), shared with the autofill extension's password
+    manager. The extension fills sign-ins and creates accounts (generated, never-reused
+    password, saved before the submit); the agent presses the portal's own buttons and
+    never reads or types a password. `credentials.mjs status` answers "is there an
+    account?" without a secret.
   - `browser/extract-form.js` — read-only field-schema dump run in the page during
     phase 2. Flags anti-autofill honeypots.
   - `ats/<host>.md` — quirks paid for by a failed submit, keyed by exact host then by
     registrable domain. Add to it in the same commit as the fix. English, identified
     by DOM handle rather than on-screen labels, and free of one person's answers.
 - `autofill/` — a browser extension plus a loopback plan server that fills the forms
-  Simplify does not cover (Traffit, eRecruiter, justjoin.it) from `profile.json`.
+  Simplify does not cover (Traffit, eRecruiter, justjoin.it) from `profile.json`, and
+  keeps the user's portal logins (sign-in, sign-up, save-after-login) on every https page.
   TypeScript pnpm workspace; the server imports `resolve-fields.mjs` so the extension
-  and the agent resolve a question the same way. Fills facts only, never submits.
+  and the agent resolve a question the same way. Fills, never submits.
   Meant to be published — see `autofill/README.md`.
 - `templates/data-repo/` — what `setup-data-repo` copies into a new data repo.
 

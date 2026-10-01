@@ -35,17 +35,70 @@ Chrome → `chrome://extensions` → Developer mode → **Load unpacked** →
 panel appears bottom-right. Pick the CV (pre-selected when the company matches),
 press **Fill form**, read the **Needs you** list, fill those, press Send yourself.
 
+## Password manager
+
+The same extension is a small password manager for employer portals. It runs on **every https
+page** (plus loopback http, for tests), not only on the supported ATSes, and does nothing — mounts
+nothing — on a page without a sign-in or sign-up form. Its widget sits bottom-left (the form
+filler's panel is bottom-right).
+
+```
+page ── content script ──▶ background worker ──▶ localhost server ──▶ credentials.json
+ (find the form, fill)      (names the origin)     (match / reveal)     (private data repo)
+```
+
+| Situation                                                                             | Behaviour                                                                                                                                                                                                                                                                                  |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Sign-in form, one saved login for exactly this host                                   | filled by itself (top frame only; switch off in Settings)                                                                                                                                                                                                                                  |
+| Several saved logins, or one from a related subdomain                                 | listed in the widget; **Fill login** fills the one you pick                                                                                                                                                                                                                                |
+| Two-step sign-in ("e-mail → Next → password")                                         | each step is filled as it appears                                                                                                                                                                                                                                                          |
+| Sign-up form, no account yet                                                          | **Create account**: generates a unique password, **saves it before anything is submitted**, fills e-mail (twice if asked), password(s), the profile's name/phone, and ticks only the terms / privacy boxes the account needs — never marketing, newsletter, job-alert or talent-pool boxes |
+| The portal refuses the password                                                       | **New password**, **Letters & digits only** (the generator respects `maxlength`)                                                                                                                                                                                                           |
+| A sign-in you did by hand succeeds                                                    | "Save password?" — or silently, with _Save new logins without asking_ on                                                                                                                                                                                                                   |
+| Change-password forms, honeypot fields, an e-mail box in a footer or newsletter strip | left alone                                                                                                                                                                                                                                                                                 |
+
+It fills and saves; it never presses the site's own Sign in / Create account button. Success is
+read from the page after the submit — the form is gone and no error text shows — not assumed.
+
+**What keeps it safe.**
+
+- Passwords live **only** in `credentials.json` in your private data repo (same no-public-remote
+  rule as `profile.json`). Nothing is stored in the extension, and nothing in this repo.
+- The server hands a password only to **this extension's pinned id** (`EXTENSION_ID`, fixed by the
+  public `key` in `wxt.config.ts`; a store build sets `AUTOFILL_EXTENSION_ID`). Any extension can
+  send `Origin: chrome-extension://…`, so the origin check alone is not enough.
+- The page never says which site it is on. The service worker takes the origin from the browser's
+  own `sender.url`, and the store only returns an entry whose domain fits it: exact host, or the
+  same registrable domain — **never across a multi-tenant host** (one Workday tenant never gets
+  another's password), never on a look-alike (`evil-acme.com`), never on plain http.
+- Sign-in lists carry no passwords. A password crosses once, at the moment of a fill, and a
+  submitted password waits in `storage.session` (memory, per tab, five minutes) until the next
+  page shows whether it worked.
+- Records marked `"status": "UNUSED …"` are kept but never offered; unknown fields survive a rewrite.
+
+`credentials.json` is schema 2 (`id`, `domain` = the exact host, `login`, `password`, `verified`,
+`createdAt`, `updatedAt`, `lastUsedAt`, `createdBy`); schema-1 files are read as they are and
+upgraded on the next save. `verified: false` is an account the extension created that no
+sign-in has confirmed yet. The CLI (`.claude/skills/apply-to-jobs/scripts/credentials.mjs`:
+`status`, `list`, `get`, `add`, `verify`, `remove`) works on the same file.
+
+**After pulling this change:** reload the extension in `chrome://extensions` (the manifest now
+carries a `key`, so Chrome assigns it the pinned id) and restart `pnpm dev:server`.
+
 ## Test
 
 ```sh
 pnpm check                                            # typecheck + lint + format + unit tests
 pnpm --filter @applier/e2e exec playwright test fixture   # real Chromium + built extension + real server
+pnpm --filter @applier/e2e exec playwright test passwords # the password manager, same setup
 LIVE=1 pnpm --filter @applier/e2e test:live           # opt-in: real employer forms, FAKE data, never submitted
 ```
 
 The e2e runs the **built** extension in a real Chromium against the real plan
 server, on a fake profile (`packages/e2e/fixtures/profile.test.json`) and a fixture CV,
-so it can never type the real person into a real form. It needs a Chromium: either
+so it can never type the real person into a real form. It runs its own server on its own port
+(7399, `AUTOFILL_E2E_PORT`) with an empty data repo and an extension built into `.output-e2e/`, so it can
+never reach a dev server that holds the real profile and passwords, and refuses to start if the port is taken. It needs a Chromium: either
 `pnpm exec playwright install chromium`, or point `CHROMIUM_PATH` at one you already have
 (branded Chrome ignores `--load-extension`).
 

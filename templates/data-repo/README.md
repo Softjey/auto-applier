@@ -13,7 +13,7 @@ notes live in the code repo; nothing in here is ever needed to read them.
 | `profile.json` | Structured facts about me plus the `qa[]` bank of form answers. Edited by the `profile-interview` skill and `profile-qa.mjs`. |
 | `apply-config.json` | Paths to my resume repo, the resume file name, the vocabulary of the languages my applications are written in. |
 | `stories.json` | STAR stories and long answers that free-text fields are grounded in (optional). |
-| `credentials.json` | Which employer portals have an account for me (optional). Private. |
+| `credentials.json` | My employer-portal logins, kept by the autofill extension's password manager (optional). Private — real passwords. |
 | `triage/<date>.md` | One readable report per triage of the SAVED queue. |
 | `runs/<run-id>/` | The audit trail of each apply run: per vacancy `answers.md`, `salary.json`, the CV that was sent, screen recordings; plus a `summary.md`. |
 
