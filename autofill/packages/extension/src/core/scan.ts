@@ -175,15 +175,57 @@ function ariaGroups(root: ParentNode): Group[] {
       });
     }
   }
-  for (const box of deepAll(root, '[role="checkbox"]')) {
-    if (usable(box))
-      groups.push({
-        kind: 'checkbox-group',
-        members: [box],
-        required: box.getAttribute('aria-required') === 'true',
-      });
+  const boxes = deepAll(root, '[role="checkbox"]').filter(usable);
+  const clustered = new Set<HTMLElement>();
+  for (const members of checkboxClusters(boxes)) {
+    members.forEach((m) => clustered.add(m));
+    groups.push({
+      kind: 'checkbox-group',
+      members,
+      required: members[0]?.closest('[aria-required="true"]') !== null,
+    });
+  }
+  for (const box of boxes) {
+    if (clustered.has(box)) continue;
+    groups.push({
+      kind: 'checkbox-group',
+      members: [box],
+      required: box.getAttribute('aria-required') === 'true',
+    });
   }
   return groups;
+}
+
+const OPTION_LABEL_MAX = 40;
+const OTHER_CONTROLS =
+  'input:not([aria-hidden="true"]), select, textarea, [role="combobox"], [role="radiogroup"]';
+
+/**
+ * Radix checkboxes that answer ONE question ("Preferowany rodzaj umowy: UoP / B2B") are
+ * siblings under a shared wrapper; each on its own would read as a separate consent. Climb to
+ * the smallest wrapper holding several of them and no other control. Long labels are
+ * consents, so a wrapper of those is not a choice list.
+ */
+function checkboxClusters(boxes: HTMLElement[]): HTMLElement[][] {
+  const clusters: HTMLElement[][] = [];
+  const seen = new Set<HTMLElement>();
+  for (const box of boxes) {
+    if (seen.has(box)) continue;
+    let node: HTMLElement | null = box.parentElement;
+    let found: HTMLElement[] | null = null;
+    for (let hops = 0; node && hops < 4; hops++, node = node.parentElement) {
+      const inside = boxes.filter((b) => node?.contains(b));
+      if (node.querySelector(OTHER_CONTROLS)) break;
+      if (inside.length > 1) {
+        found = inside;
+        break;
+      }
+    }
+    if (!found || found.some((b) => memberLabel(b).length > OPTION_LABEL_MAX)) continue;
+    found.forEach((b) => seen.add(b));
+    clusters.push(found);
+  }
+  return clusters;
 }
 
 // A segmented button has no label wiring: its own text ("Yes") is its label.

@@ -146,6 +146,7 @@ async function applySet(control: Control, value: string): Promise<Outcome> {
     case 'select':
     case 'combobox':
     case 'radio-group': {
+      if (el instanceof HTMLSelectElement && el.multiple) return applyMultiSelect(control, value);
       if (alreadyChosen(control)) return left(control, 'already chosen');
       // An autocomplete that shows rows only once you type (a location box).
       if (d.kind === 'combobox' && d.optionsHidden && isListCombobox(el)) {
@@ -173,11 +174,66 @@ async function applySet(control: Control, value: string): Promise<Outcome> {
     }
 
     case 'checkbox-group':
-      return left(control, 'checkboxes follow the consent policy, not a text answer');
+      return applyChoices(control, value);
 
     default:
       return left(control, `cannot fill a ${d.kind}`);
   }
+}
+
+/** "React, Next.js" -> the options each part names; a part that names none is reported, not guessed. */
+function pickMany(options: readonly FieldOption[], value: string) {
+  const picked: FieldOption[] = [];
+  const missing: string[] = [];
+  for (const part of value
+    .split(/[,;]/)
+    .map((p) => p.trim())
+    .filter(Boolean)) {
+    const hit = matchOption(options, part);
+    if (hit) picked.push(hit);
+    else missing.push(part);
+  }
+  return { picked, missing };
+}
+
+const partial = (c: Control, missing: string[]): Outcome => ({
+  status: 'manual',
+  id: c.descriptor.id,
+  label: c.descriptor.label,
+  reason: 'no option matches the profile answer',
+  hint: missing.join(', ').slice(0, 120),
+});
+
+/** A multiple choice: tick what the answer names, never untick what is already on. */
+async function applyChoices(control: Control, value: string): Promise<Outcome> {
+  const { picked, missing } = pickMany(control.descriptor.options ?? [], value);
+  if (control.members.length < 2 || picked.length === 0) {
+    return left(control, 'checkboxes follow the consent policy, not a text answer');
+  }
+  for (const option of picked) {
+    // Options were built in member order; a button's own text is empty, its label sits beside it.
+    const box = control.members[(control.descriptor.options ?? []).indexOf(option)];
+    if (!box || !(await setChecked(box, true)))
+      return failed(control, `"${option.label}" did not stay ticked`);
+  }
+  return missing.length > 0
+    ? partial(control, missing)
+    : filled(control, picked.map((o) => o.label).join(', '));
+}
+
+/** <select multiple>: select every option the answer names, keep what is already selected. */
+async function applyMultiSelect(control: Control, value: string): Promise<Outcome> {
+  const select = control.el as HTMLSelectElement;
+  const { picked, missing } = pickMany(control.descriptor.options ?? [], value);
+  if (picked.length === 0) return partial(control, missing.length ? missing : [value]);
+  for (const o of select.options) if (picked.some((p) => p.value === o.value)) o.selected = true;
+  select.dispatchEvent(new Event('input', { bubbles: true }));
+  select.dispatchEvent(new Event('change', { bubbles: true }));
+  const ok = picked.every((p) => [...select.selectedOptions].some((o) => o.value === p.value));
+  if (!ok) return failed(control, 'the page did not keep the selection');
+  return missing.length > 0
+    ? partial(control, missing)
+    : filled(control, picked.map((o) => o.label).join(', '));
 }
 
 async function applyOption(
