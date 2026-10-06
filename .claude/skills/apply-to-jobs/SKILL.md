@@ -160,6 +160,23 @@ it and start the next one immediately**:
   (§ Portals that require an account), or any other step only the user can do;
 - a new unknown that appears mid-form (fields revealed after a postback).
 
+**Before you park, run every unresolved question through this pass.** A question is
+parked only if it survives all of it; one that survives goes in `pending.md` alone,
+never the whole form:
+
+1. `qa[]` and the standing policies, by meaning — consent, availability, 40+ hours,
+   self-assessments (ownership / startup / AI top option, stack rating from `skills.csv`),
+   language policy, compensation derivation. A near-match is a `review`: alias it,
+   don't ask. The same fact must get the same answer on every form (English "fluent"
+   from `qa-zyefnz` on one form is not "ask" on the next).
+2. The form itself — a dropdown the extension could not match (country, English level,
+   currency) is a list *you* read and choose from, not a question for the user.
+3. The facts files — `profile.json`, the CV (`cvBaseHtml`: clients, countries,
+   employers) and `stories.json`.
+4. A personal-reason or experience box (why leaving / looking, what you want next) is
+   drafted from the facts you have (`availability`, `currentEmploymentStatus`, CV) and
+   goes to the user as an ok / not ok — not as a blank question.
+
 Parking means: **do not submit**; leave the vacancy `SAVED`; record in its note
 (and in `runs/<run-id>/<Company>_<vacancyId>/pending.md`) exactly what is needed —
 the question worded as the form words it, or the action, plus every value already
