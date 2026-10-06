@@ -163,7 +163,7 @@ it and start the next one immediately**:
 - a required fact or answer that is not in `profile.json` / `qa[]` / `stories.json`
   (an `unknown` field, a `review` you are not convinced about, a required "why
   this company" box whose reason is the user's pick);
-- an essay draft that needs the user's ok / not ok (§ Essays and "tell us about"
+- an essay draft that needs the user's pick among options (§ Essays and "tell us about"
   questions) — only when no story fits cleanly;
 - a `$SALARY_QUOTE` that exited 3 — "apply at this money at all?";
 - a CAPTCHA, an e-mail-only application, a sign-in the extension could not complete
@@ -185,11 +185,13 @@ never the whole form:
    employers — wherever the user's resume setup keeps it) and `stories.json`.
 4. A personal-reason or experience box (why leaving / looking, what you want next) is
    drafted from the facts you have (`availability`, `currentEmploymentStatus`, CV) and
-   goes to the user as an ok / not ok — not as a blank question. An opinion box
+   goes to the user as 2–3 distinct drafts to pick from — not as a blank question and not
+   as one guess to approve. An opinion box
    ("three sites / tools / products you admire and why") and a pick-one question about
    the user's own approach or preferences (how they handle difficulties, what kind of
-   job they want) are the same: propose the pick or the text, grounded in the CV and
-   `stories.json` (an e-commerce agency → the checkout and cart work), as an ok / not ok.
+   job they want) are the same: offer 2–3 different picks or texts, grounded in the CV and
+   `stories.json` (an e-commerce agency → the checkout and cart work), recommended one
+   first, for the user to choose from.
    A box the form calls optional on first load but rejects as required on submit is
    required — draft it then, do not park the vacancy on it blank.
 
@@ -199,6 +201,12 @@ the question worded as the form words it, or the action, plus every value alread
 prepared so the user finishes in one pass; leave a filled tab open only where the
 form cannot be rebuilt (CAPTCHA), and say so. Then carry on with the next vacancy.
 Never put a guess in a field to get past a parked question.
+
+**A question with no exact answer goes to the user as several distinct options, never
+as one best guess to approve:** every option of a short select / radio group
+(recommended one first), the 3–4 plausible entries of a long list plus "other", 2–3
+genuinely different drafts for free text, 2–3 candidate values with their source for a
+number or date. Put them in `pending.md` too.
 
 **Fill everything you can before parking.** A parked form is a form with one or two
 holes, not an untouched one: every field that resolves is filled, the CV uploaded,
@@ -218,9 +226,10 @@ it must read.
    pause, no question.
 3. **Nothing fits, or the best story fits only partly** (the question asks for
    something the story only touches, a different stack, a different kind of problem)
-   → still write the best draft, fill the rest of the form, and park the vacancy for a
-   single **ok / not ok** from the user, showing the draft and the story it came from.
-   *ok* → submit. *not ok* → the user's comment decides: rewrite, or another story.
+   → still write the best draft, fill the rest of the form, and park the vacancy and offer the user **2–3 distinct drafts** (different stories or
+   angles, not one sentence reworded; recommended one first), each with the story it came
+   from. A pick → submit it. None fits → the user's comment decides: rewrite, or another
+   story.
 4. An optional essay stays empty. A "why do you want to work here" box keeps its own
    rule (Phase 4 step 3): the reason is the user's pick.
 
@@ -668,8 +677,8 @@ Per vacancy, following its ATS file:
    for a small box, but while `shortReviewed` is `false` the user has not
    approved it, so flag it like any drafted sentence. "No story shares a theme"
    means ask or park — never stretch a story to fit. A clean fit is written and
-   submitted; a partial fit or none is drafted anyway and goes to the user for an
-   ok / not ok (§ Essays and "tell us about" questions) — not a blank parked
+   submitted; a partial fit or none is drafted anyway and goes to the user as 2–3 drafts
+   to choose from (§ Essays and "tell us about" questions) — not a blank parked
    question. A question about something the user did that has no story at all is
    a gap: tell the user, and the `import-stories` skill is how it gets filled.
 5. **Screenshot the filled form and keep the screenshots.** Not one glance — a
