@@ -135,6 +135,9 @@ second agent reads the same files instead of a fork of them.
     password, saved before the submit); the agent presses the portal's own buttons and
     never reads or types a password. `credentials.mjs status` answers "is there an
     account?" without a secret.
+  - `scripts/check-server.mjs` — is the autofill plan server up (any HTTP answer = up; it only
+    talks to the extension)? Down means no CV list and no "Save password?"; the apply run
+    checks it before the first browser step.
   - `browser/extract-form.js` — read-only field-schema dump run in the page during
     phase 2. Flags anti-autofill honeypots.
   - `ats/<host>.md` — quirks paid for by a failed submit, keyed by exact host then by

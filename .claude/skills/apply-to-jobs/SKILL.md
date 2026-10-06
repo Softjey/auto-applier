@@ -107,6 +107,13 @@ below.
   applying without recording the status.
 - **A resume is configured.** Run `scripts/check-resume.mjs`; exit 1 means stop and
   point the user at `setup-data-repo` (resume step).
+- **The autofill plan server is running.** Run `scripts/check-server.mjs`; exit 1 means start
+  it (`pnpm dev:server` in `autofill/`, left running in the background — you may start it
+  yourself) and re-check before the first browser step. Without it the Applier extension has
+  no CV list, fills nothing from the profile and **cannot save a password** after a sign-in
+  (found 2026-10-06: a Workday login was never offered "Save password?" because the server
+  was down). A small round **!** bottom-left on a page is the same symptom — re-run the check
+  if it shows up mid-run.
 - If `profile.json`'s structured sections (`personal`, `links`,
   `workAuthorization`, `location`, `compensation`, `availability`) are
   mostly `null`, stop and tell the user to run the `profile-interview`

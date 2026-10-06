@@ -74,6 +74,14 @@ test("check-resume: reports an unconfigured resume as unusable", () => {
   assert.match(r.stdout, /no resume configured/);
 });
 
+test("check-server: reports a stopped server and says how to start it", () => {
+  // port 1 is never listening, so this cannot hit a real running server
+  const r = run("check-server.mjs", "--port=1");
+  assert.equal(r.status, 1);
+  assert.match(r.stdout, /NOT running/);
+  assert.match(r.stdout, /pnpm dev:server/);
+});
+
 test("init-data-repo: --resume-file fills paths.baseResume and refuses a non-pdf", () => {
   const target = join(mkdtempSync(join(tmpdir(), "applier-init-")), "data");
   const bad = run("init-data-repo.mjs", `--dir=${target}`, "--no-git", "--no-pointer", `--resume-file=${join(data, "form.json")}`);
