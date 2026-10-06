@@ -80,3 +80,12 @@ fresh `javascript_tool` focus call. What works there: `el.focus()` + type for
 text, focus the radio + `space` for an unchecked radio, and for one that is
 DOM-checked but rejected on submit, focus it + ArrowUp + ArrowDown. Submit with
 focus on the button + Return. (CreatorIQ, 2026-09-22.)
+
+## The own extension's Name/E-mail can fail on submit (2026-10-01, Attio)
+
+After the extension's Fill form, the page shows name and e-mail, `#_systemfield_name` reads
+back correctly, yet Submit returns "Your form needs corrections — Missing entry for required
+field: Name": the value was written to the DOM, not to React state. Triple-click the box (by
+ref) and `type` the value again for Name and Email; the second submit went through. Do this
+before the first Submit rather than after the error. The Yes/No buttons and radios clicked by
+ref (`find` → `left_click` ref) did register.

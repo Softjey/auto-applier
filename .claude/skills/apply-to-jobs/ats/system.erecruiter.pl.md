@@ -72,3 +72,16 @@ referral.
 
 Navigates to `FormTemplates/ThankYou.aspx` with a thank-you headline. Match on
 the URL, not the text.
+
+**Every postback wipes the text fields — fill the text last (2026-10-01, Axabee).** The CV
+upload, the country change and the region change each reload the form and empty name, e-mail,
+phone, city and the free-text boxes. The extension's Fill form uploads the CV first, so after it
+the contact block is empty and a second press does nothing ("No CV selected"). Order that worked:
+`file_upload` the CV → wait → set country, wait → set region, wait → *then* type every text box
+(name, surname, e-mail, phone, city, salary, start) → Wyślij. Delete-and-re-upload the CV before
+the first submit; the "error sending CV files" banner came back after a submit made with the
+first upload.
+
+**JS `focus()` + `type` and `ref` clicks did not land here; a real coordinate click did.** Take a
+screenshot, click the box by coordinate, then `type`, and read it back by control name. The tab's
+viewport also shrinks/zooms after screenshots on this host; re-screenshot before each click.
