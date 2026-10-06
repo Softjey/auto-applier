@@ -10,6 +10,7 @@
 //   --resume-file  ONE finished resume PDF sent with every application (no tailoring);
 //                  fills paths.baseResume. Use it when there is no resume repo.
 //   --no-git       copy the files but do not `git init`
+//   --no-pointer   do not write <repo>/.data-dir (tests)
 //
 // Refuses to touch a directory that already has a profile.json. Writes
 // <repo>/.data-dir (git-ignored) only when --dir is not the default location.
@@ -35,6 +36,10 @@ if (target === REPO_ROOT || target.startsWith(REPO_ROOT + "/"))
 if (existsSync(join(target, "profile.json"))) fail(`${target} already has a profile.json; not overwriting.`);
 if (!existsSync(templates)) fail(`templates missing at ${templates}`);
 
+const resumeFile = flag("resume-file");
+if (resumeFile && (!existsSync(resolve(resumeFile)) || !/\.pdf$/i.test(resumeFile)))
+  fail(`--resume-file must be an existing .pdf: ${resolve(resumeFile)}`);
+
 function copyTree(from, to) {
   mkdirSync(to, { recursive: true });
   for (const name of readdirSync(from)) {
@@ -59,10 +64,8 @@ if (resumeRepo) {
   writeFileSync(cfgPath, JSON.stringify(cfg, null, 2) + "\n");
 }
 
-const resumeFile = flag("resume-file");
 if (resumeFile) {
   const file = resolve(resumeFile);
-  if (!existsSync(file) || !/\.pdf$/i.test(file)) fail(`--resume-file must be an existing .pdf: ${file}`);
   const cfgPath = join(target, "apply-config.json");
   const cfg = JSON.parse(readFileSync(cfgPath, "utf8"));
   cfg.paths = { ...cfg.paths, baseResume: file };
@@ -75,7 +78,7 @@ if (!has("no-git") && !existsSync(join(target, ".git"))) {
   execFileSync("git", ["commit", "-q", "-m", "chore: initialise auto-applier data repo"], { cwd: target });
 }
 
-if (target !== DEFAULT_DATA_DIR) writeFileSync(DATA_DIR_POINTER, target + "\n");
+if (target !== DEFAULT_DATA_DIR && !has("no-pointer")) writeFileSync(DATA_DIR_POINTER, target + "\n");
 
 console.log(`Data repo ready at ${target}`);
 console.log(target === DEFAULT_DATA_DIR ? "(default location — no pointer needed)" : `Pointer written to ${DATA_DIR_POINTER}`);

@@ -98,6 +98,15 @@ below.
 
 ## Preconditions
 
+- **The OneTap.Work MCP must be connected.** Before anything else call a cheap read
+  (`count_applications_by_status`). If the tool does not exist or errors with a
+  connection/auth failure, stop and tell the user: this skill reads SAVED vacancies from
+  OneTap.Work and records every result there, so there is nothing to do without it. Name
+  the fix — Claude Code: add the OneTap.Work connector in its settings; Codex:
+  `codex mcp login onetap` (`.codex/config.toml` already declares it). Never fall back to
+  applying without recording the status.
+- **A resume is configured.** Run `scripts/check-resume.mjs`; exit 1 means stop and
+  point the user at `setup-data-repo` (resume step).
 - If `profile.json`'s structured sections (`personal`, `links`,
   `workAuthorization`, `location`, `compensation`, `availability`) are
   mostly `null`, stop and tell the user to run the `profile-interview`

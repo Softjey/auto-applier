@@ -14,6 +14,7 @@ Thanks for helping. A few rules keep this repo safe to share:
 
 ```sh
 node .claude/skills/apply-to-jobs/scripts/test-story-themes.mjs
+node .claude/skills/apply-to-jobs/scripts/test-scripts.mjs
 cd autofill && pnpm install && pnpm check   # typecheck, lint, format, vitest
 ```
 

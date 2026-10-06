@@ -46,6 +46,9 @@ that essay questions are answered from. After that:
 - Claude Code with Chrome and the Claude in Chrome extension, or Codex with its
   `browser` plugin.
 - pnpm, only for the `autofill/` extension.
+- macOS or Linux. On Windows use WSL, or enable symlinks first
+  (`git config --global core.symlinks true` and Developer Mode): `.agents/skills/` and
+  `.claude/` link into each other.
 
 ## Your resume
 
@@ -74,6 +77,12 @@ that essay questions are answered from. After that:
 
 Scripts locate your data repo via `$APPLIER_DATA_DIR`, then the path in `.data-dir`, then
 `../auto-applier-data`. See `CLAUDE.md` for the full map.
+
+## Security
+
+The autofill extension talks only to a server on `127.0.0.1` and hands saved portal
+passwords to this extension's pinned id alone; see [SECURITY.md](SECURITY.md) to report a
+problem.
 
 ## License
 

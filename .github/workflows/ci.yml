@@ -15,7 +15,9 @@ jobs:
         with:
           package_json_file: autofill/package.json
       - name: Script tests
-        run: node .claude/skills/apply-to-jobs/scripts/test-story-themes.mjs
+        run: |
+          node .claude/skills/apply-to-jobs/scripts/test-story-themes.mjs
+          node .claude/skills/apply-to-jobs/scripts/test-scripts.mjs
       - name: Install
         working-directory: autofill
         run: pnpm install --frozen-lockfile
