@@ -879,8 +879,12 @@ asks for finished tabs to be closed, say that closing is theirs to do by hand an
 
 After a vacancy's success signal and its `APPLIED` write, that tab is finished:
 reuse it for the next vacancy (`navigate`, no new tab) so finished forms do not
-accumulate. A new tab is only for a **parked** vacancy, and it stays open. A parked
-tab can still be lost (an extension reconnect hands out a new group), so never treat
+accumulate. **A parked vacancy's tab is never navigated away.** The moment a vacancy is
+parked, leave that tab exactly as it is and open the next vacancy in a **new tab**
+(`tabs_create_mcp`); the parked tab stays open with its filled fields for the user.
+If a new tab cannot be opened, stop and tell the user — do not `navigate` the parked
+tab to get past it. The tab you carry on in after a clean `APPLIED` is the one you
+may reuse. A parked tab can still be lost (an extension reconnect hands out a new group), so never treat
 it as the only copy of the work: everything prepared goes into `pending.md` and
 `form.json`, and a parked form is rebuilt from those when its tab is gone.
 
