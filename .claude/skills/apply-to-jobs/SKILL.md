@@ -172,8 +172,8 @@ never the whole form:
    from `qa-zyefnz` on one form is not "ask" on the next).
 2. The form itself — a dropdown the extension could not match (country, English level,
    currency) is a list *you* read and choose from, not a question for the user.
-3. The facts files — `profile.json`, the CV (`cvBaseHtml`: clients, countries,
-   employers) and `stories.json`.
+3. The facts files — `profile.json`, the base CV (clients, countries,
+   employers — wherever the user's resume setup keeps it) and `stories.json`.
 4. A personal-reason or experience box (why leaving / looking, what you want next) is
    drafted from the facts you have (`availability`, `currentEmploymentStatus`, CV) and
    goes to the user as an ok / not ok — not as a blank question. An opinion box

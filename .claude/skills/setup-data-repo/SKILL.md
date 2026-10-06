@@ -71,6 +71,11 @@ Do not assume how it works — it is the user's own repo. Read its `README.md` a
 3. **`resumeFileName`** — the name the PDF should carry when it is uploaded
    (`apply-config.json`).
 
+Then run `node .claude/skills/apply-to-jobs/scripts/check-resume.mjs`; it must say
+`mode: tailored` and, once one is built, find a PDF in `out/SAVED/`. Any other paths in
+`apply-config.json` (render scripts, base HTML) are the user's own notes for the agent,
+not read by the code — record only what you actually need.
+
 Tell the user in two lines what you found and what a run will do with their repo.
 
 With a single `--resume-file` there is nothing to wire: check the file opens and
@@ -95,6 +100,7 @@ for permission on every read and write. Offer to add it once:
 
 ```sh
 node .claude/skills/apply-to-jobs/scripts/profile-qa.mjs list   # "No matching qa entries." is right for a new profile
+node .claude/skills/apply-to-jobs/scripts/check-resume.mjs      # which resume mode works, and whether the paths exist
 git -C <dir> remote -v                                           # empty, or a private remote you created
 ```
 
