@@ -49,7 +49,7 @@ login, or create the account with the Applier extension's **Create account** but
 § Portals that require an account), not with Simplify's "Sign In & Autofill".
 
 
-## Account creation through the Applier extension — verified 2026-10-01 (Allegro, career55.sapsf.eu)
+## Account creation through the Applier extension — verified 2026-10-01 (career55.sapsf.eu)
 
 The registration block sits inside the application form (fields `fbclc_userName`, `fbclc_emailConf`,
 `fbclc_pwd`, `fbclc_pwdConf`, `fbclc_fName`, `fbclc_lName`, `tor__fcellPhone`, `tor__fcity`).
@@ -58,3 +58,29 @@ that whole time — wait, do not click again) and the form's questions it can re
 `30 000 PLN`). The extension's "Needs you" list wrongly includes the language switcher ("English US") — ignore it.
 **The form ends in a reCAPTCHA**, so Apply (which creates the account) is the user's click: park the vacancy
 with the tab open. The saved login stays unconfirmed in `credentials.json` until a sign-in works.
+
+## RMK application form on `career<NN>.sapsf.eu`, filled end to end — verified 2026-10-06
+
+- **CV upload works without the native file dialog.** Click the **"+" icon at the bottom of the
+  "Upload a Resume" tile** by coordinate (a click on the tile's text, or a JS click, opens nothing).
+  A dialog "Select a source for your file upload" appears with an `input[type=file]`; `find` it and
+  `file_upload` the PDF. The tile then shows the file name and date. Do this **before** the captcha:
+  a reCAPTCHA ticked earlier showed "Verification expired" by the time everything else was done.
+- **Every dropdown is a native `<select>`**: the first click only focuses it, the second opens the
+  list; the page re-flows after each answer (error text disappears), so re-screenshot before each
+  click. A long list (country) is scrolled with the mouse wheel inside the open list, then the row
+  is clicked; typing the name only highlights it.
+- **Data-sharing consent selects** ("Do you consent to the processing/sharing of personal data for
+  presenting future job offers?") are required but offer "I do not agree" — pick it, the application
+  does not need them.
+- Typical options: start date = Less than 1 month / 1 / 2 / 3 / More than 3 months; English = A1…C2;
+  source = "Job Board (e.g. pracuj.pl, justjoin.it…)". The employer's own text questions (hybrid
+  model, salary) are plain textareas with a 200-character limit.
+- A right-hand Simplify panel covers the form's right edge; collapse it (the `>` at its top).
+- The reCAPTCHA stays the user's. Once they tick it, press Apply within about two minutes.
+
+## Success signal
+
+The portal redirects to a blank job-application page; the proof is the confirmation e-mail
+("Thank you for submitting your application…") from the employer's recruitment no-reply address —
+read it through the mailbox connector before setting `APPLIED`.
