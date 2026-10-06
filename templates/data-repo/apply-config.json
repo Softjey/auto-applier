@@ -2,8 +2,9 @@
   "$schemaVersion": 1,
   "note": "User-owned configuration for the apply-to-jobs skill. Everything here is specific to ONE person's setup — absolute paths, and the languages their job market's application forms are written in. The skills in the code repo are generic and English-only; this file is what adapts them. Safe to delete: the skills fall back to English-only matching and will ask for the paths they need.",
   "paths": {
-    "note": "Absolute path to the repo that holds and builds the tailored resumes. Its own README and skills say how; nothing about its layout belongs here. Leave null if you do not use one.",
-    "resumeRepo": null
+    "note": "Absolute path to the repo that holds and builds the tailored resumes. Its own README and skills say how; nothing about its layout belongs here. Leave null if you do not use one. If you have no resume repo, point baseResume at ONE finished PDF (absolute path) and it is sent with every application, untailored.",
+    "resumeRepo": null,
+    "baseResume": null
   },
   "resumeFileName": null,
   "formVocabulary": {

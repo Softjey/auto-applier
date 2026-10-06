@@ -126,7 +126,7 @@ second agent reads the same files instead of a fork of them.
     the OneTap.Work application note, every time.
   - `scripts/stories.mjs` — `find` (question → fixed theme list → stories), `show`,
     `list`, `themes`, `coverage`, `validate` over `stories.json`; the theme vocabulary
-    and its question keywords (English + Polish, diacritic-blind) are in
+    and its question keywords (English plus extra languages, diacritic-blind) are in
     `scripts/lib/story-themes.mjs`; `scripts/test-story-themes.mjs` is its regression
     test (run it after touching the keys). There is no importer.
   - `scripts/credentials.mjs`, `scripts/lib/credentials-store.mjs` — the portal-account

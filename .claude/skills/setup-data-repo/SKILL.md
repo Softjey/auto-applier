@@ -28,9 +28,12 @@ node -e 'import("./.claude/skills/apply-to-jobs/scripts/lib/data-dir.mjs").then(
 1. **Where should it live?** Default `../auto-applier-data` (a sibling of this repo,
    found with no configuration). Anywhere outside this repo works; the skill then
    records it in `.data-dir`.
-2. **Do you keep a resume-rendering repo?** The path to it, or none. It fills
-   `apply-config.json`'s `paths.resumeRepo`; without one, tailoring a resume per
-   vacancy is unavailable and it stays `null`.
+2. **How do you want to send a resume?** Three honest answers:
+   - **A resume repo** that tailors one per vacancy → its path (`--resume-repo`). The
+     agent then wires it up, see § 4a.
+   - **One resume for everything** → the path of a finished PDF (`--resume-file`). It
+     goes out untailored with every application; `paths.baseResume`.
+   - **Not yet** → neither flag. The apply run will stop and ask for a resume.
 3. **Should it have a remote?** Only ever a **private** one, and only if they want
    off-machine backup. Never create or add a public remote: the repo will hold a
    phone number, salary expectations, work-authorization status and recordings of
@@ -41,7 +44,7 @@ node -e 'import("./.claude/skills/apply-to-jobs/scripts/lib/data-dir.mjs").then(
 
 ```sh
 node .claude/skills/apply-to-jobs/scripts/init-data-repo.mjs \
-  [--dir=<path>] [--resume-repo=<path>]
+  [--dir=<path>] [--resume-repo=<path> | --resume-file=<path-to.pdf>]
 ```
 
 It copies `templates/data-repo/` (skeleton `profile.json` with every field `null`,
@@ -52,6 +55,26 @@ repo and one that already has a `profile.json`.
 
 If they asked for a remote: `gh repo create <name> --private --source=<dir> --push`
 — after confirming the exact name and that it is private.
+
+## 4a. Wire up a tailored-resume repo (only if they gave one)
+
+Do not assume how it works — it is the user's own repo. Read its `README.md` and
+`.claude/skills/`, then establish, and write down in `apply-config.json`:
+
+1. **Where finished PDFs land.** The autofill extension lists them from
+   `<resumeRepo>/out/SAVED/<Company>_<vacancyId>-<Title>/<any>.pdf`. If the repo uses a
+   different layout, say so to the user and either point `AUTOFILL_RESUME_OUT` at the
+   right folder or adapt its output; do not guess.
+2. **How to build one for a vacancy** (the command or skill that does it) — that is
+   what `apply-to-jobs` Phase 1 step 5 will call. Confirm it works once on a real
+   SAVED vacancy before the first run.
+3. **`resumeFileName`** — the name the PDF should carry when it is uploaded
+   (`apply-config.json`).
+
+Tell the user in two lines what you found and what a run will do with their repo.
+
+With a single `--resume-file` there is nothing to wire: check the file opens and
+move on.
 
 ## 4. Fill the profile
 

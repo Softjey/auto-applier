@@ -3,10 +3,12 @@
 // code repo at it. Deterministic on purpose: the setup-data-repo skill calls it
 // and then drives the interview; nothing here asks a question.
 //
-//   init-data-repo.mjs [--dir=<path>] [--resume-repo=<path>] [--no-git]
+//   init-data-repo.mjs [--dir=<path>] [--resume-repo=<path>] [--resume-file=<pdf>] [--no-git]
 //
 //   --dir          where the data repo goes (default: ../auto-applier-data next to this repo)
 //   --resume-repo  the resume-rendering repo; fills apply-config.json's paths
+//   --resume-file  ONE finished resume PDF sent with every application (no tailoring);
+//                  fills paths.baseResume. Use it when there is no resume repo.
 //   --no-git       copy the files but do not `git init`
 //
 // Refuses to touch a directory that already has a profile.json. Writes
@@ -54,6 +56,16 @@ if (resumeRepo) {
     ...cfg.paths,
     resumeRepo: root,
   };
+  writeFileSync(cfgPath, JSON.stringify(cfg, null, 2) + "\n");
+}
+
+const resumeFile = flag("resume-file");
+if (resumeFile) {
+  const file = resolve(resumeFile);
+  if (!existsSync(file) || !/\.pdf$/i.test(file)) fail(`--resume-file must be an existing .pdf: ${file}`);
+  const cfgPath = join(target, "apply-config.json");
+  const cfg = JSON.parse(readFileSync(cfgPath, "utf8"));
+  cfg.paths = { ...cfg.paths, baseResume: file };
   writeFileSync(cfgPath, JSON.stringify(cfg, null, 2) + "\n");
 }
 

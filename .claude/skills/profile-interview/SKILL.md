@@ -21,8 +21,9 @@ and then hands back to this interview.
 
 1. **Read `profile.json`.** Note which structured fields are already filled;
    you'll skip those unless the user is explicitly correcting one.
-2. **Pre-fill from the CV, don't ask from scratch.** Read the base CV in the resume
-   repo (`paths.resumeRepo` in `apply-config.json`; its README says which file) and pull
+2. **Pre-fill from the CV, don't ask from scratch.** Read the base CV (the resume
+   repo's base file — `paths.resumeRepo` in `apply-config.json`, its README says which — or
+   the PDF at `paths.baseResume`) and pull
    `personal.email`, `personal.phone`, `personal.currentCity`,
    `personal.currentCountry`, `links.linkedin`, `links.github` from its
    contact section. Present these to the user as "I found X — confirm or

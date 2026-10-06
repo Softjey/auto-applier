@@ -63,6 +63,7 @@ never in this skill. Read it at the start of a run.
 
 ```
 config.paths.resumeRepo          the user's resume repo (see Phase 1 step 5)
+config.paths.baseResume          ONE finished resume PDF, used when there is no resume repo
 config.resumeFileName            what to name the PDF copied into runs/
 config.formVocabulary            locale phrasings, merged by lib/field-labels.mjs
 config.browser                   which browser instance to drive (see Preconditions)
@@ -340,7 +341,12 @@ not support.
    at all?", never straight into Phase 4. A figure from source 3 or 4 is passed
    as the band but named honestly in `--source`; never present it as the
    employer's own.
-5. For each surviving vacancy, get the tailored resume from `config.paths.resumeRepo`.
+5. For each surviving vacancy, get the resume.
+   - **No `resumeRepo`, but `paths.baseResume`:** nothing to build — every vacancy uses
+     that one PDF (copy it per vacancy as below; the resume "folder name" in the OneTap
+     note is `base resume`). Skip the rest of this step's tailoring.
+   - **Neither is set:** stop and ask the user for a PDF; never apply without one.
+   - **`resumeRepo`:** get the tailored resume from it.
    **Do not assume how that repo works** — read its `README.md` and its
    `.claude/skills/` first, and follow them. They say where finished resumes live
    (check for an existing one by `vacancyId` before building anything: the user

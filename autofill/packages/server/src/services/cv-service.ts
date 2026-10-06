@@ -11,6 +11,9 @@ interface CvEntry extends CvSummary {
 /** Only vacancies still to apply to. Applied/rejected CVs are history, not candidates. */
 const STATUS_DIRS = ['SAVED'] as const;
 
+/** Id of the single CV a user without a resume repo points `paths.baseResume` at. */
+const BASE_ID = 'base';
+
 /**
  * Tailored CVs live in <resumeRepo>/out/<STATUS>/<Company>_<vacancyId>-<Title>/.
  * Ids are only ever accepted from this listing, never used as paths, so a
@@ -40,8 +43,8 @@ export class CvService {
   private async scan(): Promise<CvEntry[]> {
     const { paths } = await this.resolver.loadConfig();
     const out = this.outDir ?? (paths?.resumeRepo ? join(paths.resumeRepo, 'out') : undefined);
-    if (!out) return [];
     const entries: CvEntry[] = [];
+    if (!out) return this.baseOnly(paths?.baseResume);
     for (const status of STATUS_DIRS) {
       const base = join(out, status);
       const dirs = await readdir(base).catch(() => [] as string[]);
@@ -58,6 +61,15 @@ export class CvService {
         });
       }
     }
+    if (entries.length === 0) return this.baseOnly(paths?.baseResume);
     return entries.sort((a, b) => b.mtimeMs - a.mtimeMs);
+  }
+
+  /** One resume for every vacancy: no tailoring, just the user's own PDF. */
+  private async baseOnly(file?: string): Promise<CvEntry[]> {
+    if (!file) return [];
+    const info = await stat(file).catch(() => null);
+    if (!info?.isFile()) return [];
+    return [{ id: BASE_ID, label: 'Base resume', file, mtimeMs: info.mtimeMs }];
   }
 }

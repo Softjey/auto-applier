@@ -20,7 +20,7 @@ export interface ClassifyResult {
 }
 
 export interface AgentConfig {
-  paths?: { resumeRepo?: string };
+  paths?: { resumeRepo?: string; baseResume?: string };
   resumeFileName?: string;
 }
 

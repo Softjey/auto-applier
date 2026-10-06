@@ -1,7 +1,7 @@
 # autofill
 
 A browser extension plus a local plan server that fills job-application forms on
-sites Simplify does not cover: **Traffit, eRecruiter, justjoin.it**.
+sites Simplify does not cover — one adapter per site in `packages/extension/src/adapters/`.
 It fills what is a _fact in your `profile.json`_ and stops. It never submits, never
 guesses, and never holds your data itself.
 
@@ -95,7 +95,7 @@ pnpm --filter @applier/e2e exec playwright test fixture   # real Chromium + buil
 pnpm --filter @applier/e2e exec playwright test passwords # the password manager, same setup
 LIVE=1 pnpm --filter @applier/e2e test:live           # opt-in: real employer forms, FAKE data, never submitted
 # ONLY=<substring> narrows it to one target; CHROMIUM_PATH=<Chromium binary> reuses one you already have.
-# It serves the Polish form vocabulary from fixtures/apply-config.test.json (phrases only), so Polish forms resolve.
+# It serves a non-English form vocabulary from fixtures/apply-config.test.json (phrases only), so forms in other languages resolve.
 ```
 
 The e2e runs the **built** extension in a real Chromium against the real plan

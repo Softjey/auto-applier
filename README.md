@@ -24,7 +24,7 @@ give that repo a public remote.
 
 ```sh
 mkdir applier && cd applier            # a workspace for this repo and your data repo
-git clone <this repo> auto-applier
+git clone https://github.com/Softjey/auto-applier.git auto-applier
 claude                                 # or: codex — open it in the workspace
 ```
 
@@ -38,8 +38,37 @@ that essay questions are answered from. After that:
   application has to be submitted;
 - *"apply to my saved jobs"* → the four-phase apply run.
 
-Requires Node 22+, the OneTap.Work MCP server, and Chrome with Claude in Chrome (or
-Codex's `browser` plugin). The extension in `autofill/` additionally needs pnpm.
+## Requirements
+
+- Node 22+.
+- A [OneTap.Work](https://onetap.work) account with its MCP server connected: it is
+  where saved vacancies come from and where each application is recorded.
+- Claude Code with Chrome and the Claude in Chrome extension, or Codex with its
+  `browser` plugin.
+- pnpm, only for the `autofill/` extension.
+
+## Your resume
+
+`setup-data-repo` asks how you send a resume, and either answer works:
+
+- **One resume for everything** — point it at a finished PDF; it is sent with every
+  application (`paths.baseResume`).
+- **A resume repo that tailors one per vacancy** — give it the path; the agent reads
+  that repo's README and skills, wires it up, and tells you what a run will do with
+  it. Finished PDFs are expected in `out/SAVED/<Company>_<vacancyId>-<Title>/`.
+
+## Limits worth knowing
+
+- It automates job applications. You are responsible for following the terms of the
+  sites you apply on; it never invents an answer and asks you whenever it does not
+  know one.
+- Per-site support is uneven: `autofill/` has adapters for a handful of ATSes and
+  `.claude/skills/apply-to-jobs/ats/` holds notes for more. Anything else is driven
+  step by step by the agent.
+- Salary handling defaults to PLN; set your own currency in `profile.json`
+  (`compensation.defaultCurrency`) and, for other languages, phrases in
+  `apply-config.json` (`formVocabulary`).
+- Everything personal stays in your private data repo, never here.
 
 ## Where things are found
 
