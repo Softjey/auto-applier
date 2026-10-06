@@ -175,7 +175,13 @@ never the whole form:
    employers) and `stories.json`.
 4. A personal-reason or experience box (why leaving / looking, what you want next) is
    drafted from the facts you have (`availability`, `currentEmploymentStatus`, CV) and
-   goes to the user as an ok / not ok — not as a blank question.
+   goes to the user as an ok / not ok — not as a blank question. An opinion box
+   ("three sites / tools / products you admire and why") and a pick-one question about
+   the user's own approach or preferences (how they handle difficulties, what kind of
+   job they want) are the same: propose the pick or the text, grounded in the CV and
+   `stories.json` (an e-commerce agency → the checkout and cart work), as an ok / not ok.
+   A box the form calls optional on first load but rejects as required on submit is
+   required — draft it then, do not park the vacancy on it blank.
 
 Parking means: **do not submit**; leave the vacancy `SAVED`; record in its note
 (and in `runs/<run-id>/<Company>_<vacancyId>/pending.md`) exactly what is needed —
@@ -827,7 +833,11 @@ account, was it ever confirmed by a sign-in? Then, on the portal's page:
 3. When the page lets you in, the extension confirms the login (or offers "Save password?"
    if a new password was typed — press **Save**). Carry on with the application.
 4. The page shows an error instead? Press **Fill login** once more; if it is still refused the
-   password on file is stale — park the vacancy (§ Parking a vacancy) naming the portal.
+   password on file is stale — park the vacancy (§ Parking a vacancy) naming the portal,
+   and **remove the record** (`credentials.mjs remove --domain=<host>`) unless a sign-in to
+   that host ever succeeded. A password that never worked is not a credential; leaving it
+   makes the next run fill a dead login. Never press "Forgot password" yourself: the user
+   decides whether to reset, or signs in their own way.
 
 **No account** (a sign-up form, or no saved login and the portal is account-gated):
 
