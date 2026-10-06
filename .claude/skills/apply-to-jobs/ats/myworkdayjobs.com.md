@@ -45,8 +45,8 @@ for the asterisk before filling both.
 ## Simplify
 
 Supported. Autofills name/email/phone/address and **all Experience/Education entries from its own
-profile — verify every one against the tailored resume**, don't assume genuine. On Sphera it
-correctly pulled the real work history (the real work history) — accurate, not invented, once the account had prior resume data.
+profile — verify every one against the tailored resume**, don't assume genuine. Once the account
+had prior resume data it pulled the real work history — accurate, not invented.
 
 **Known wrong answers seen**: it answered "Will you now or in the future require sponsorship for
 employment visa status?" → **No** on a role whose real posting location differed from the location

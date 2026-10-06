@@ -247,7 +247,7 @@ A `qa[]` entry speaks in two voices, and the extension must never confuse them:
 
 | Field | Who reads it | What it holds |
 | --- | --- | --- |
-| `answer` | **you** (the agent) | the fact with its how-and-when: `B2B — the compensation anchor is 150 PLN/h; open to UoP if B2B is unavailable`, `Tick it when the form makes it mandatory` |
+| `answer` | **you** (the agent) | the fact with its how-and-when: `B2B — the compensation anchor is <rate> PLN/h; open to UoP if B2B is unavailable`, `Tick it when the form makes it mandatory` |
 | `value` | **a form box** (the extension types it; so do you) | the exact text a person would type: `B2B`, `In 2 weeks`, `3`. `null` means **never typed** — a standing rule only the agent applies |
 | `pick` | a list / radio group | what to look for among the options when that is not `answer` (`3-4 years` where the box takes `3`) |
 
@@ -743,8 +743,8 @@ Per vacancy, following its ATS file:
      the only thing identifying which CV went where, since every PDF has the
      same filename;
    - **the salary line**, `$SALARY_QUOTE`'s own `Note` output, e.g.
-     `Desired salary: 44,000 PLN/month net B2B (band-above-baseline; band:
-     40,000-45,000 PLN/month net B2B; source: vacancy salary field).` — or
+     `Desired salary: 30,000 PLN/month net B2B (band-above-baseline; band:
+     28,000-32,000 PLN/month net B2B; source: vacancy salary field).` — or
      `Desired salary: not asked on the form (band: …, source: …)`.
 
    Add one short caveat line only when the application carries a real risk the

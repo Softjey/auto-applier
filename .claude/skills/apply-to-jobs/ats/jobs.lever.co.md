@@ -9,8 +9,8 @@ Plain server-rendered form at `/<tenant>/<job-uuid>/apply` (LinkedIn Apply lands
 set from JS (`select.value` + a `change` event, `radio.click()`) and read back with the same properties.
 Custom questions are `.application-question` blocks; match on `.application-label`, not on names (they are UUIDs).
 
-**Review what it put in "Current company".** It copied the last employer (a previous employer) into `org` although the
-profile says freelance/ended Aug 2026: clear it (optional) rather than claim a current employer.
+**Review what it put in "Current company".** It may copy the last employer into `org` although the
+profile says that job has ended: clear it (optional) rather than claim a current employer.
 
 **"Current location" often reports "the page did not keep the value"** yet reads back as `Warsaw, POL` and the
 submit went through; it is optional.

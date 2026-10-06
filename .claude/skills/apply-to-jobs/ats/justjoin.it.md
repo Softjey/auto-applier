@@ -51,9 +51,9 @@ ATS has already been submitted means reading the page, not the address bar.
 
 ## The board widget outranks the description text on money
 
-Acme's description said "Rate: 160–200 PLN/h/B2B" while the offer's own
+One offer's description said "Rate: 160–200 PLN/h/B2B" while its own
 salary widget said **200 – 270 PLN Net per hour - B2B** — and OneTap's
-normalised 33,600–45,360 PLN/month matches the widget (×168 h), not the prose.
+normalised 33,600–45,360 PLN/month matched the widget (×168 h), not the prose.
 Read the widget, and note that it also states the period and contract form,
 which OneTap flattens to `period: MONTH` regardless.
 
