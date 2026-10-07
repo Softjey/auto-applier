@@ -73,9 +73,12 @@ async function startServer(): Promise<ChildProcess> {
 interface Fixtures {
   context: BrowserContext;
   page: Page;
+  /** Extra Chromium flags (a spec that needs a hostname mapped to its own local server). */
+  extraArgs: string[];
 }
 
 export const test = base.extend<Fixtures, { server: ChildProcess }>({
+  extraArgs: [[], { option: true }],
   server: [
     async ({}, use) => {
       const server = await startServer();
@@ -84,14 +87,18 @@ export const test = base.extend<Fixtures, { server: ChildProcess }>({
     },
     { scope: 'worker', auto: true },
   ],
-  context: async ({}, use) => {
+  context: async ({ extraArgs }, use) => {
     const dir = await mkdtemp(join(tmpdir(), 'applier-e2e-'));
     const context = await chromium.launchPersistentContext(dir, {
       // Chromium (not Chrome): branded Chrome ignores --load-extension. CHROMIUM_PATH lets a
       // machine reuse a Chromium it already has instead of downloading Playwright's own.
       channel: 'chromium', // new headless: the only headless mode that runs extensions
       ...(process.env['CHROMIUM_PATH'] ? { executablePath: process.env['CHROMIUM_PATH'] } : {}),
-      args: [`--disable-extensions-except=${EXTENSION}`, `--load-extension=${EXTENSION}`],
+      args: [
+        `--disable-extensions-except=${EXTENSION}`,
+        `--load-extension=${EXTENSION}`,
+        ...extraArgs,
+      ],
     });
     await use(context);
     await context.close();

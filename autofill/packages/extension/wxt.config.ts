@@ -16,10 +16,11 @@ export default defineConfig({
   manifest: {
     name: 'Applier Autofill',
     description:
-      'Fills job-application forms from the local profile, and remembers and fills employer-portal logins from the private data repo. Never submits.',
+      'Fills job-application forms from the local profile, and remembers and fills employer-portal logins from the private data repo. Never submits on its own.',
     // Pins the extension id, so the local server can hand passwords to this extension only.
     key: EXTENSION_MANIFEST_KEY,
-    permissions: ['storage', 'alarms'],
+    // `tabs`: the agent's commands open, find and close job-offer tabs by URL.
+    permissions: ['storage', 'alarms', 'tabs'],
     // The service worker is the only thing that talks to the local plan server.
     host_permissions: [`${SERVER_ORIGIN}/*`],
     minimum_chrome_version: '111',

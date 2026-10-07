@@ -33,6 +33,16 @@ export interface SiteAdapter {
   /** Labels that must never be ticked even if the plan says check. */
   neverTick?: RegExp;
   /**
+   * The offer page shows a posting, and the form opens behind a button (justjoin.it's Apply).
+   * Returns that button, or null while it is not on the page yet. Used only when an agent asks
+   * the extension to open the form (autofill_open_and_fill); the panel waits for you to open it.
+   */
+  opener?(doc: Document): HTMLElement | null;
+  /** The button that sends the application, inside the form `scope` found. Agent command only. */
+  submitButton?(root: ParentNode): HTMLElement | null;
+  /** Has the site confirmed the application went through? */
+  submitted?(doc: Document): boolean;
+  /**
    * Uploading the CV makes the site rewrite the form (eRecruiter's postback
    * resets selects). Fill, upload, wait this long, then fill again.
    */

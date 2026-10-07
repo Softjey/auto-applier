@@ -1,6 +1,11 @@
+import type { PageCommand } from '@applier/protocol';
 import {
   BackgroundRequest,
   BuildResponse,
+  ExtNextResponse,
+  type Command,
+  type CommandEnvelope,
+  type FillSummary,
   CredsCheckResponse,
   CredsDraftResponse,
   CredsMatchResponse,
@@ -196,6 +201,156 @@ async function handle(
     case 'pending-clear':
       await clearPending(needTab());
       return { ok: true };
+    case 'spawned':
+      return { url: await spawnedUrl(needTab()) };
+  }
+}
+
+// ── The agent's commands ────────────────────────────────────────────────────────────────────────
+// The plan server queues what the agent asks for over MCP; this worker long-polls it, runs the
+// command in the right tab through that tab's content script, and posts the result back.
+
+/** tab id -> tabs its page opened (an Apply that goes to an external ATS). Memory only. */
+const spawnedBy = new Map<number, number[]>();
+
+async function spawnedUrl(opener: number): Promise<string | null> {
+  for (const id of spawnedBy.get(opener) ?? []) {
+    const tab = await browser.tabs.get(id).catch(() => null);
+    const url = tab?.url || tab?.pendingUrl;
+    if (url && url !== 'about:blank') return url;
+  }
+  return null;
+}
+
+const sleepMs = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
+async function waitComplete(tabId: number, ms: number): Promise<void> {
+  const deadline = Date.now() + ms;
+  while (Date.now() < deadline) {
+    const tab = await browser.tabs.get(tabId);
+    if (tab.status === 'complete') return;
+    await sleepMs(250);
+  }
+}
+
+async function findTab(target: { tab?: number | undefined; url?: string | undefined }) {
+  if (target.tab !== undefined) {
+    await browser.tabs.get(target.tab).catch(() => {
+      throw new Error(`Tab ${target.tab} is gone.`);
+    });
+    return target.tab;
+  }
+  const url = target.url ?? '';
+  const hit = (await browser.tabs.query({})).find((t) => url && t.url?.startsWith(url));
+  if (hit?.id === undefined) throw new Error(`No open tab starts with ${url}.`);
+  return hit.id;
+}
+
+/** Ask a tab's content script. It may not be there yet (a page still loading): retry for a while. */
+async function toPage<T>(tabId: number, message: PageCommand, patientMs = 20_000): Promise<T> {
+  const deadline = Date.now() + patientMs;
+  for (;;) {
+    try {
+      const result = (await browser.tabs.sendMessage(tabId, message)) as
+        BackgroundResult<T> | undefined;
+      if (result) {
+        if (!result.ok) throw new PageError(result.error);
+        return result.data;
+      }
+    } catch (e) {
+      if (e instanceof PageError) throw e;
+      // "Receiving end does not exist": the content script is not injected yet.
+    }
+    if (Date.now() > deadline) {
+      throw new Error(
+        'The page never answered: no Applier adapter runs on it (unsupported site), or it did not finish loading.',
+      );
+    }
+    await sleepMs(300);
+  }
+}
+class PageError extends Error {}
+
+async function runCommand(command: Command): Promise<unknown> {
+  switch (command.op) {
+    case 'open-and-fill': {
+      const tab = await browser.tabs.create({ url: command.url, active: false });
+      const tabId = tab.id;
+      if (tabId === undefined) throw new Error('Chrome opened no tab.');
+      await waitComplete(tabId, 30_000);
+      await toPage(tabId, { type: 'page-ping' });
+      const summary = await toPage<FillSummary>(
+        tabId,
+        {
+          type: 'page-fill',
+          openForm: true,
+          ...(command.cv ? { cv: command.cv } : {}),
+          ...(command.band ? { band: command.band } : {}),
+        },
+        60_000,
+      );
+      if (summary.external) {
+        // The offer applies elsewhere: the agent re-opens that address; the tab it spawned is noise.
+        for (const id of spawnedBy.get(tabId) ?? [])
+          await browser.tabs.remove(id).catch(() => null);
+      }
+      return { tab: tabId, ...summary };
+    }
+    case 'fill': {
+      const tabId = await findTab(command);
+      const summary = await toPage<FillSummary>(
+        tabId,
+        {
+          type: 'page-fill',
+          openForm: false,
+          ...(command.cv ? { cv: command.cv } : {}),
+          ...(command.band ? { band: command.band } : {}),
+        },
+        60_000,
+      );
+      return { tab: tabId, ...summary };
+    }
+    case 'read-form':
+      return toPage(await findTab(command), { type: 'page-read' }, 30_000);
+    case 'submit':
+      return toPage(await findTab(command), { type: 'page-submit', token: command.token }, 30_000);
+    case 'close-tab':
+      await browser.tabs.remove(await findTab(command));
+      return { closed: true };
+  }
+}
+
+async function runEnvelope({ id, command }: CommandEnvelope): Promise<void> {
+  const body = await runCommand(command).then(
+    (data) => ({ id, ok: true as const, data }),
+    (e: unknown) => ({
+      id,
+      ok: false as const,
+      error: e instanceof Error ? e.message : String(e),
+    }),
+  );
+  await call('/ext/result', OkResponse, post(body)).catch(() => null);
+}
+
+let polling = false;
+/**
+ * One long-poll at a time. The server answers within ~20 s with a command or nothing, and each
+ * answer is an event that keeps this worker alive; the alarm restarts the loop if it was killed.
+ */
+async function pollForCommands(): Promise<void> {
+  if (polling) return;
+  polling = true;
+  try {
+    for (;;) {
+      try {
+        const { command } = await call('/ext/next', ExtNextResponse, post({}));
+        if (command) void runEnvelope(command);
+      } catch {
+        await sleepMs(5_000); // server down: try again shortly
+      }
+    }
+  } finally {
+    polling = false;
   }
 }
 
@@ -218,9 +373,18 @@ async function reloadIfRebuilt() {
 export default defineBackground(() => {
   browser.alarms.create('rebuilt-check', { periodInMinutes: 0.5 });
   browser.alarms.onAlarm.addListener((a) => {
-    if (a.name === 'rebuilt-check') void reloadIfRebuilt();
+    if (a.name === 'rebuilt-check') {
+      void reloadIfRebuilt();
+      void pollForCommands();
+    }
   });
   void reloadIfRebuilt();
+  void pollForCommands();
+  browser.tabs.onCreated.addListener((tab) => {
+    if (tab.openerTabId === undefined || tab.id === undefined) return;
+    spawnedBy.set(tab.openerTabId, [...(spawnedBy.get(tab.openerTabId) ?? []), tab.id]);
+  });
+  browser.tabs.onRemoved.addListener((id) => spawnedBy.delete(id));
   browser.runtime.onMessage.addListener((raw: unknown, sender) =>
     handle(raw, sender).then(
       (data): BackgroundResult<unknown> => ({ ok: true, data }),

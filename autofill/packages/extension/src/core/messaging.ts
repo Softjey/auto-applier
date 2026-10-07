@@ -56,3 +56,7 @@ export const chromeCreds: CredsBackend = {
   pendingCommit: () => send({ type: 'pending-commit' }),
   pendingClear: () => send({ type: 'pending-clear' }),
 };
+
+/** The URL of a tab the last click in this page opened, if any (see core/open-form.ts). */
+export const chromeSpawned = async (): Promise<string | null> =>
+  (await send({ type: 'spawned' })).url;
