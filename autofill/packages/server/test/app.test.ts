@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { FieldDescriptor } from '@applier/protocol';
 import { createApp } from '../src/app';
 import type { Resolver } from '../src/legacy/resolver';
+import { CommandBus } from '../src/services/command-bus';
 import { CredsService } from '../src/services/creds-service';
 import { CvService } from '../src/services/cv-service';
 import { PlanService } from '../src/services/plan-service';
@@ -19,6 +20,7 @@ const app = createApp({
   plans: new PlanService(resolver, new SalaryService()),
   cvs: new CvService(resolver),
   creds: new CredsService(),
+  bus: new CommandBus(),
 });
 
 const post = (headers: Record<string, string>, body: unknown) =>

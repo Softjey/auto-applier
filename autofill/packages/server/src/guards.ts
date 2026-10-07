@@ -44,3 +44,18 @@ export const pinnedExtensionOnly =
     }
     await next();
   };
+
+/**
+ * The agent's door (/mcp) drives the user's browser, so it must be unreachable from a web page:
+ *  - loopback Host (DNS rebinding);
+ *  - NO Origin header: every browser fetch to another origin carries one, a CLI client sends none;
+ *  - JSON content type: a page cannot send that cross-origin without a preflight, which we do not answer.
+ */
+export const agentOnly: MiddlewareHandler = async (c, next) => {
+  if (!LOOPBACK_HOSTS.has(new URL(c.req.url).hostname)) return c.json({ error: 'bad host' }, 403);
+  if (c.req.header('origin')) return c.json({ error: 'agents only' }, 403);
+  if (!(c.req.header('content-type') ?? '').startsWith('application/json')) {
+    return c.json({ error: 'application/json only' }, 415);
+  }
+  await next();
+};

@@ -37,6 +37,8 @@ export const BackgroundRequest = z.discriminatedUnion('type', [
   z.object({ type: z.literal('pending-outcome'), success: z.boolean() }),
   z.object({ type: z.literal('pending-commit') }),
   z.object({ type: z.literal('pending-clear') }),
+  // Did a click in this tab just open another tab (an Apply that goes to an external ATS)?
+  z.object({ type: z.literal('spawned') }),
 ]);
 export type BackgroundRequest = z.infer<typeof BackgroundRequest>;
 
@@ -56,6 +58,7 @@ export interface BackgroundResponses {
   'pending-outcome': PendingOutcome;
   'pending-commit': CredsSaveResponse;
   'pending-clear': OkResponse;
+  spawned: { url: string | null };
 }
 
 /** What the page may know about a submitted login: who and where, never the password. */
