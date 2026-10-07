@@ -86,7 +86,8 @@ Three more that decide how fast a run goes (all seen 2026-09-14):
   ```
 
   then `tabs_context_mcp` shows where the tab landed. No `Apply` anchor at all
-  means Easy Apply or a closed posting. Clicking the button instead opens the
+  means Easy Apply or a closed posting. Easy Apply is automatable too: see
+  `ats/linkedin.com.md` (resume upload via a click hook + `file_upload`). Clicking the button instead opens the
   ATS in a tab outside the group.
 - **"Permission denied for this action on this domain" right after a
   cross-domain navigation is usually transient.** Wait ~2 s and retry the same
