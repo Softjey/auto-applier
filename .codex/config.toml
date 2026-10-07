@@ -2,6 +2,11 @@
 url = "https://mcp.onetap.work/mcp"
 tool_timeout_sec = 60
 
+# The Applier extension's own tools (autofill_open_and_fill & co.); needs `pnpm dev:server`.
+[mcp_servers.applier-autofill]
+url = "http://127.0.0.1:7357/mcp"
+tool_timeout_sec = 120
+
 [shell_environment_policy]
 inherit = "core"
 

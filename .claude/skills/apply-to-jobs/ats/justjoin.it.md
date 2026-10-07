@@ -91,3 +91,18 @@ click on Apply times out until the notice is closed or the click is forced.
 
 While the modal is open the app marks the rest of `<body>` `aria-hidden`/inert; anything
 injected into `<body>` (an overlay panel) becomes unreachable. Mount under `<html>`.
+
+## Driven by the extension, not by clicks (2026-10-07)
+
+`autofill_open_and_fill` (SKILL.md § Applier MCP fast path) does all of the above in the
+user's Chrome with no browser tool: it opens the offer in a background tab, presses the
+sidebar/footer Apply (one click, a probe, a second click only when nothing opened, and no
+second click when the first opened another tab — that becomes `external`), fills the modal,
+and `autofill_submit` presses the modal's own button. Programmatic `el.click()` is used, so
+the cookie notice that intercepts pointer events does not matter. Success is the "Your
+application has been sent" text, then `signal: success-text`.
+
+Not yet seen on the live site: that a synthetic click on the modal's submit button is accepted
+the way the coordinate click was (the note at the top says a `find` ref click did nothing). If
+`autofill_submit` ever returns `signal: none` on a form that was valid, record it here and do
+not retry blindly.

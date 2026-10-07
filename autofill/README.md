@@ -2,8 +2,10 @@
 
 A browser extension plus a local plan server that fills job-application forms on
 sites Simplify does not cover — one adapter per site in `packages/extension/src/adapters/`.
-It fills what is a _fact in your `profile.json`_ and stops. It never submits, never
-guesses, and never holds your data itself.
+It fills what is a _fact in your `profile.json`_ and stops. The panel never submits, nothing
+here ever guesses, and the extension never holds your data itself. An agent can also drive it
+without a browser tool (see "Agent commands" below); the only way it presses a site's own submit
+button is an explicit `autofill_submit` call the agent makes after your OK.
 
 ```
 page ── content script ──▶ background worker ──▶ localhost server ──▶ resolve-fields.mjs ──▶ profile.json
@@ -34,6 +36,49 @@ Chrome → `chrome://extensions` → Developer mode → **Load unpacked** →
 `autofill/packages/extension/.output/chrome-mv3`. Open an application form: the
 panel appears bottom-right. Pick the CV (pre-selected when the company matches),
 press **Fill form**, read the **Needs you** list, fill those, press Send yourself.
+
+## Agent commands (MCP) — no browser tool
+
+Driving Chrome with a browser tool (navigate → screenshot → click → read back) is slow. The plan
+server therefore also speaks MCP, and the extension takes the agent's commands directly:
+
+```
+agent ──MCP/HTTP──▶ server /mcp ──queue──▶ server /ext/next ◀──long-poll── background worker
+                                                                                │ tabs.sendMessage
+                                                                                ▼
+                                          result ◀── /ext/result ◀── content script (scan, fill, click)
+```
+
+```sh
+claude mcp add --transport http applier-autofill http://127.0.0.1:7357/mcp   # Claude Code, once
+# Codex: already in .codex/config.toml
+```
+
+| Tool                     | What it does                                                                                                                                                                   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `autofill_status`        | is an extension polling this server? call it first                                                                                                                             |
+| `autofill_open_and_fill` | opens the URL in a background tab, presses the offer's Apply when the form hides behind it (adapter `opener`), fills, attaches the CV. Returns a structured report and a token |
+| `autofill_fill`          | fills the form already showing in a tab (after the agent answered something)                                                                                                   |
+| `autofill_read_form`     | every control as the page shows it now: label, kind, required, value                                                                                                           |
+| `autofill_submit`        | presses the form's own submit button — needs the token of the last fill; refuses an invalid form or a quote under the floor; reports what the page did (`signal`)              |
+| `autofill_close_tab`     | closes a tab it opened                                                                                                                                                         |
+
+**Who may call it.** `/mcp` answers only a client with a loopback `Host`, **no `Origin` header**
+(every browser fetch from a web page carries one) and `Content-Type: application/json` (which a
+page cannot send cross-origin without a preflight we do not answer). A page on the web cannot reach
+it; any program on your machine can, exactly as it can already run Claude Code. The extension's two
+routes (`/ext/next`, `/ext/result`) accept only this extension's pinned id.
+
+**Submitting.** `autofill_submit` is the one place this project presses a site's own submit button.
+It exists only for adapters that define `submitButton` / `submitted` (justjoin.it so far), only with
+the token a fill just returned (one press per fill), and the agent calls it only after the approval
+pause. Keep it out of any "always allow" list: the permission prompt on that single tool is your
+last gate. The adapter reports success by the site's own confirmation text, or `form-gone`; `none`
+means nothing visibly happened and must not be retried blindly.
+
+**Adding an adapter that can do this.** Beyond `scope`/`label`, give it `opener(doc)` (the offer
+page's Apply button, when the form opens behind it), `submitButton(root)` and `submitted(doc)`.
+`core/open-form.ts` handles the swallowed first click and the "Apply opened another tab" case.
 
 ## Password manager
 
@@ -93,6 +138,7 @@ reports the build's mtime; the widget's `data-built` shows which build is live).
 pnpm check                                            # typecheck + lint + format + unit tests
 pnpm --filter @applier/e2e exec playwright test fixture   # real Chromium + built extension + real server
 pnpm --filter @applier/e2e exec playwright test passwords # the password manager, same setup
+pnpm --filter @applier/e2e exec playwright test agent-commands # the MCP path: a real tab opened, filled and submitted by tool calls
 LIVE=1 pnpm --filter @applier/e2e test:live           # opt-in: real employer forms, FAKE data, never submitted
 # ONLY=<substring> narrows it to one target; CHROMIUM_PATH=<Chromium binary> reuses one you already have.
 # It serves a non-English form vocabulary from fixtures/apply-config.test.json (phrases only), so forms in other languages resolve.

@@ -147,7 +147,10 @@ second agent reads the same files instead of a fork of them.
   Simplify does not cover (Traffit, eRecruiter, justjoin.it) from `profile.json`, and
   keeps the user's portal logins (sign-in, sign-up, save-after-login) on every https page.
   TypeScript pnpm workspace; the server imports `resolve-fields.mjs` so the extension
-  and the agent resolve a question the same way. Fills, never submits.
+  and the agent resolve a question the same way. The panel fills and never submits; the
+  server also speaks MCP (`/mcp`, `autofill_*` tools) so the agent can open, fill, read and —
+  on an explicit `autofill_submit` after the user's OK — submit a vacancy without any
+  browser tool (SKILL.md § Applier MCP fast path).
   Meant to be published — see `autofill/README.md`.
 - `templates/data-repo/` — what `setup-data-repo` copies into a new data repo.
 

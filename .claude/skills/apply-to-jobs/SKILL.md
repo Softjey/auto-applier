@@ -309,6 +309,11 @@ Ask the user which SAVED vacancies to process after listing what's available —
 and, in the same message, which **approval mode** (§ Approval mode: every /
 first N / none) — then run Phase 1.
 
+**Where the repo's own Applier extension has an adapter for the vacancy's site
+(today justjoin.it) and its MCP tools are available, Phases 2–4 collapse into one
+or two tool calls with no browser tool at all** — see § Applier MCP fast path.
+Fastest path, so it comes first.
+
 **Where the Simplify Copilot extension is present on the form, Phases 2–4
 collapse into one pass per vacancy** — see § Simplify fast path. It is the
 default whenever the panel shows up; the full Phases 2–4 are for forms it does
@@ -506,6 +511,61 @@ Keep it to actions and questions; no narration. Put the applied/parked/dead
 counts and the run folder above the list. Once the user answers, record it where
 § "Where an answer from the user is recorded" says — facts with `node $PROFILE_QA add ...`,
 stories in `stories.json` — and resume the parked vacancies.
+
+### Applier MCP fast path — the extension does it, no browser tool
+
+The Applier extension (`autofill/`) can be driven by tool calls instead of by clicking
+through Chrome: the plan server exposes MCP tools (`autofill_*`), the extension takes the
+command in the user's own Chrome, runs it in a background tab and hands back a structured
+report. One call replaces the whole navigate → screenshot → click → dump → compare loop,
+and it is the fastest path there is.
+
+**When.** The tools `autofill_status` / `autofill_open_and_fill` exist **and**
+`autofill_status` says `extensionConnected: true` **and** the vacancy's site has an adapter
+(`autofill/packages/extension/src/adapters/` — today justjoin.it also covers its Apply
+button). Any miss → the next path (Simplify, then the full Phases 2–4). It is not an error
+to be without it. One-time setup, per machine: Claude Code `claude mcp add --transport http
+applier-autofill http://127.0.0.1:7357/mcp`; Codex reads `.codex/config.toml`.
+
+Phase 1 is unchanged (liveness, band, tailored resume). Then per vacancy:
+
+1. `autofill_open_and_fill({url: vacancy.link, cv: "<vacancyId>", band})` — `cv` is part of
+   the tailored CV's folder name under `out/SAVED/` (the vacancy id is unique); `band` is the
+   published salary band, omitted when there is none. It opens a background tab, presses the
+   offer's Apply (retrying a swallowed click), fills from `profile.json`/`qa[]`, attaches the
+   CV and answers with `filled`, `manual`, `failed`, `choices`, `belowFloor`, `fields`, `token`.
+2. Read the answer, not a screenshot:
+   - `formOpen: false` and no `external` → the offer is dead or has no form: close it out
+     per Phase 1 step 3 (`NOT_INTERESTED`, never APPLIED). `close_tab`.
+   - `external: <url>` → the offer applies elsewhere: call the tool again with that URL
+     (or fall to the next path if the ATS has no adapter).
+   - `belowFloor: true` → stop, ask the user before anything else (§ Salary).
+   - `failed` → say so; one `autofill_fill` retry, then park the vacancy.
+   - `manual` non-empty → each entry is a question the profile could not answer: apply the
+     usual rule (qa[]/policy → answer; a new fact → park the vacancy, § Parking a vacancy).
+     The tools cannot type into an arbitrary field, so a field you must answer is typed with
+     the browser capability in that tab (find it by URL) and then `autofill_fill` /
+     `autofill_read_form` to verify. An optional free-text box stays empty (Phase 4 step 2).
+   - `choices` → a level or date the extension mapped onto the form's own scale; show them
+     in the approval pause.
+3. `autofill_read_form({tab})` → every control as the page shows it. Check it against
+   `profile.json` and `qa[]` once; it is also the source of `answers.md` (Source column
+   `Applier`).
+4. **Approval pause** (§ Approval mode) exactly as everywhere else: the user sees the filled
+   fields, the CV, the `choices` and the salary decision *before* anything is sent.
+5. `autofill_submit({tab, token})` — **only after the OK**, and never in a batch with other
+   calls. The token ties it to the fill you reviewed; a second press needs a fresh fill. It
+   refuses an invalid form and a quote under the floor by itself. Result:
+   - `signal: "success-text"` → APPLIED immediately (Phase 4 steps 8–9).
+   - `signal: "form-gone"` → likely sent, but the site showed no confirmation text: look at
+     the page once (browser capability) before recording APPLIED.
+   - `signal: "none"` → **do not press again.** Look at the page; it may be slow, or have
+     rejected the form. Record nothing until you know.
+6. `autofill_close_tab`. Evidence (`answers.md`, and a screenshot if the run asks for one)
+   goes in `runs/<run-id>/<Company>_<vacancyId>/` as before.
+
+Leave `autofill_submit` out of any "always allow" setting: the permission prompt on that one
+tool is the user's own last gate, on top of the approval mode.
 
 ### Simplify fast path — Phases 2–4 in one pass where the extension works
 
