@@ -508,7 +508,14 @@ After the last vacancy has been worked — not before — give the user one list
 ```
 
 Keep it to actions and questions; no narration. Put the applied/parked/dead
-counts and the run folder above the list. Once the user answers, record it where
+counts and the run folder above the list.
+
+**Every question to the user goes through `AskUserQuestion`, never as prose** —
+parked vacancies, the salary floor, the start-of-run choices, approval pauses. If they
+don't fit in one call, ask in several calls until all are asked. Options are the real
+answers prepared in advance (§ Parking a vacancy), recommended first.
+
+Once the user answers, record it where
 § "Where an answer from the user is recorded" says — facts with `node $PROFILE_QA add ...`,
 stories in `stories.json` — and resume the parked vacancies.
 
