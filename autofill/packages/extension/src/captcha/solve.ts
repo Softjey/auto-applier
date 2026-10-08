@@ -180,8 +180,35 @@ async function look(tabId: number): Promise<Look> {
 
 type Target = { tabId: number };
 
-const send = (target: Target, method: string, params: Record<string, unknown>): Promise<unknown> =>
-  within(browser.debugger.sendCommand(target, method, params), 3_000, method);
+/**
+ * The debugger session can be dropped behind our back — another DevTools client, the infobar being
+ * dismissed, a navigation — and the next command then fails with "Debugger is not attached to the tab".
+ * Attach again once and repeat the command; a second failure is a real one.
+ */
+const NOT_ATTACHED = /not attached|detached/i;
+
+async function attachDebugger(target: Target): Promise<void> {
+  try {
+    await within(browser.debugger.attach(target, '1.3'), 5_000, 'The debugger');
+  } catch (e) {
+    // Already attached by this extension: nothing to do.
+    if (!(e instanceof Error) || !/already attached/i.test(e.message)) throw e;
+  }
+}
+
+async function send(
+  target: Target,
+  method: string,
+  params: Record<string, unknown>,
+): Promise<unknown> {
+  try {
+    return await within(browser.debugger.sendCommand(target, method, params), 3_000, method);
+  } catch (e) {
+    if (!(e instanceof Error) || !NOT_ATTACHED.test(e.message)) throw e;
+    await attachDebugger(target);
+    return within(browser.debugger.sendCommand(target, method, params), 3_000, method);
+  }
+}
 
 async function moveAlong(target: Target, from: Point, to: Point, size: number, rng: Rng) {
   for (const step of humanPath(from, to, size, rng)) {
@@ -259,7 +286,7 @@ async function attempt(tabId: number, rng: Rng): Promise<CaptchaResult> {
 
   const target = { tabId };
   try {
-    await within(browser.debugger.attach(target, '1.3'), 5_000, 'The debugger');
+    await attachDebugger(target);
   } catch (e) {
     return {
       status: 'failed',
@@ -279,10 +306,19 @@ async function attempt(tabId: number, rng: Rng): Promise<CaptchaResult> {
         ...(win.state === 'minimized' ? { state: 'normal' as const } : {}),
       });
     }
+    // `windows.update` does not raise Chrome over another app on macOS or switch desktops; the
+    // debugger's `Page.bringToFront` activates the whole browser, and focus emulation keeps the page
+    // painting and delivering input while the window settles. Best effort: a failure here only means
+    // the hidden check below decides.
+    await send(target, 'Page.bringToFront', {}).catch(() => undefined);
+    await send(target, 'Emulation.setFocusEmulationEnabled', { enabled: true }).catch(
+      () => undefined,
+    );
     await sleep(600);
     seen = await look(tabId);
-    for (let i = 0; i < 6 && seen.hidden; i++) {
-      await sleep(400);
+    for (let i = 0; i < 8 && seen.hidden; i++) {
+      await send(target, 'Page.bringToFront', {}).catch(() => undefined);
+      await sleep(500);
       seen = await look(tabId);
     }
     if (seen.hidden) {
@@ -327,6 +363,9 @@ async function attempt(tabId: number, rng: Rng): Promise<CaptchaResult> {
       note: `The click did not go through: ${e instanceof Error ? e.message : String(e)}`,
     };
   } finally {
+    await send(target, 'Emulation.setFocusEmulationEnabled', { enabled: false }).catch(
+      () => undefined,
+    );
     await within(browser.debugger.detach(target), 3_000, 'Detach').catch(() => undefined);
   }
 
