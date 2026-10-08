@@ -49,6 +49,10 @@ interface Look {
   challenge: CaptchaKind | null;
   turnstile: boolean;
   viewport: { width: number; height: number };
+  /** The top document is hidden: Chrome's window is minimized or fully covered. */
+  hidden: boolean;
+  /** A checkbox frame exists but its content script does not answer (opened before an update). */
+  unreachable: CaptchaKind | null;
 }
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
@@ -93,11 +97,17 @@ async function place(
   tabId: number,
   all: Frame[],
   frame: Frame,
-): Promise<{ origin: Point; visible: boolean; viewport: Look['viewport'] } | null> {
+): Promise<{
+  origin: Point;
+  visible: boolean;
+  viewport: Look['viewport'];
+  hidden: boolean;
+} | null> {
   let x = 0;
   let y = 0;
   let visible = true;
   let viewport = { width: 0, height: 0 };
+  let hidden = false;
   for (let f = frame; f.parentFrameId !== -1;) {
     const parent = all.find((p) => p.frameId === f.parentFrameId);
     if (!parent) return null;
@@ -110,9 +120,10 @@ async function place(
     y += r.rect.y;
     visible &&= r.visible;
     viewport = r.viewport; // the last one asked is the top frame's
+    hidden = r.hidden;
     f = parent;
   }
-  return { origin: { x, y }, visible, viewport };
+  return { origin: { x, y }, visible, viewport, hidden };
 }
 
 async function look(tabId: number): Promise<Look> {
@@ -122,6 +133,8 @@ async function look(tabId: number): Promise<Look> {
     challenge: null,
     turnstile: false,
     viewport: { width: 0, height: 0 },
+    hidden: false,
+    unreachable: null,
   };
   for (const frame of all) {
     const role = frameRole(frame.url);
@@ -131,15 +144,22 @@ async function look(tabId: number): Promise<Look> {
       continue;
     }
     const where = await place(tabId, all, frame);
-    if (!where) continue;
+    if (!where) {
+      if (role.part === 'checkbox' && !role.invisible) out.unreachable = role.kind;
+      continue;
+    }
     if (where.viewport.width) out.viewport = where.viewport;
+    out.hidden ||= where.hidden;
     if (role.part === 'challenge') {
       if (where.visible) out.challenge = role.kind;
       continue;
     }
     if (role.invisible || !where.visible) continue;
     const w = await ask<CaptchaWidgetReply>(tabId, frame.frameId, { type: 'captcha-widget' });
-    if (!w) continue;
+    if (!w) {
+      out.unreachable = role.kind;
+      continue;
+    }
     out.widgets.push({
       kind: role.kind,
       checked: w.checked,
@@ -222,6 +242,13 @@ async function attempt(tabId: number, rng: Rng): Promise<CaptchaResult> {
   }
   const first = seen.widgets[0];
   if (!first) {
+    if (seen.unreachable) {
+      return {
+        status: 'failed',
+        kind: seen.unreachable,
+        note: 'The captcha frame does not answer: this tab was open before the extension updated. Reload the tab (the form must be filled again) and call again.',
+      };
+    }
     return seen.turnstile
       ? { status: 'none', note: 'Cloudflare Turnstile: it decides by itself, nothing to tick.' }
       : { status: 'none' };
@@ -242,9 +269,29 @@ async function attempt(tabId: number, rng: Rng): Promise<CaptchaResult> {
   }
   try {
     // A person looks at the tab they click in; the debugger's infobar may also shift the page.
-    await browser.tabs.update(tabId, { active: true });
-    await sleep(500);
+    // A hidden page (minimized, or covered by another app on macOS) paints no frames, so Chrome
+    // never delivers — never even acknowledges — a mouse event. Bring the window up first.
+    const tab = await browser.tabs.update(tabId, { active: true });
+    if (tab?.windowId !== undefined) {
+      const win = await browser.windows.get(tab.windowId);
+      await browser.windows.update(tab.windowId, {
+        focused: true,
+        ...(win.state === 'minimized' ? { state: 'normal' as const } : {}),
+      });
+    }
+    await sleep(600);
     seen = await look(tabId);
+    for (let i = 0; i < 6 && seen.hidden; i++) {
+      await sleep(400);
+      seen = await look(tabId);
+    }
+    if (seen.hidden) {
+      return {
+        status: 'failed',
+        kind: todo.kind,
+        note: "Chrome's window stays hidden (minimized, or on another desktop): the page takes no mouse input. Show the window and call again.",
+      };
+    }
     const vw = seen.viewport.width || 1200;
     const vh = seen.viewport.height || 800;
     const mouse = lastMouse.get(tabId) ?? {

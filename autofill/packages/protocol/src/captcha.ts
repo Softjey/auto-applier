@@ -25,6 +25,8 @@ export interface CaptchaIframeReply {
   /** Would a person see it: not display:none / visibility:hidden, has a size. */
   visible: boolean;
   viewport: { width: number; height: number };
+  /** `document.hidden` of this frame: a hidden page (minimized / covered window) takes no input. */
+  hidden: boolean;
 }
 
 export interface CaptchaWidgetReply {

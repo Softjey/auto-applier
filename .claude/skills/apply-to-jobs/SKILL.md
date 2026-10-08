@@ -1005,7 +1005,13 @@ the rule itself.
 | `none` | no box to tick: no captcha, or an invisible one (v3 badge, invisible v2, Turnstile) | press Submit |
 | `solved` / `already-solved` | the box is ticked | press Submit **now** |
 | `challenge` | the widget asks for pictures / audio | park: tab stays open, note says "solve the captcha and press Submit" |
-| `failed` | no tick (see `note`) | call once more; still `failed` → park as for `challenge` |
+| `failed` | no tick (see `note`) | act on the `note` once (below); still `failed` → park as for `challenge` |
+
+Two `failed` notes have a fix: "this tab was open before the extension updated" → reload
+the tab, fill the form again, call again; "Chrome's window stays hidden" → the window is on
+another desktop or will not come up — say so to the user, it is theirs to show. The tool
+brings Chrome's window to the front itself (a hidden page takes no mouse input), so do
+not run it while the user is mid-typing elsewhere without warning them in the run's plan.
 
 **After Submit.** Some forms show a captcha only after the first press (BambooHR's
 "Please confirm you're not a robot to continue"), and an invisible v2 may open a challenge

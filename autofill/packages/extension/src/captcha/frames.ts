@@ -91,7 +91,7 @@ export function iframeReply(doc: Document, childUrl: string): CaptchaIframeReply
   const view = doc.defaultView;
   const viewport = { width: view?.innerWidth ?? 0, height: view?.innerHeight ?? 0 };
   const el = findChildIframe(doc, childUrl);
-  if (!el) return { rect: null, visible: false, viewport };
+  if (!el) return { rect: null, visible: false, viewport, hidden: doc.hidden };
   const r = el.getBoundingClientRect();
   const style = view?.getComputedStyle(el);
   const padLeft = parseFloat(style?.paddingLeft ?? '0') || 0;
@@ -104,7 +104,7 @@ export function iframeReply(doc: Document, childUrl: string): CaptchaIframeReply
   });
   // reCAPTCHA hides its challenge frame with visibility:hidden *and* a -10000px top.
   const visible = isVisible(el) && r.width > 30 && r.height > 30 && r.bottom > -1000;
-  return { rect, visible, viewport };
+  return { rect, visible, viewport, hidden: doc.hidden };
 }
 
 /** This frame is a checkbox widget: the box, and whether it is ticked. */

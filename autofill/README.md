@@ -110,6 +110,12 @@ worker ── webNavigation.getAllFrames ──▶ the widget's frames (anchor /
   near — not on — the centre, after a short settle, held 65–140 ms.
 - **What it reports.** `none` (nothing to tick, also invisible v2/v3 and Turnstile),
   `already-solved`, `solved`, `challenge` (left alone), `failed` (with a `note`).
+- **The window comes up.** A hidden page (a minimized window, or one fully covered by another
+  app on macOS) paints no frames, and Chrome then never delivers — never even acknowledges — a
+  CDP mouse event. So the tab is activated, its window focused (un-minimized), and the click
+  goes ahead only once the page reports `document.hidden === false`.
+- A checkbox frame whose content script does not answer (a tab opened before the extension
+  was reloaded) is `failed` with "reload the tab", not `none`.
 - Permissions this adds: `debugger`, `webNavigation`.
 
 The e2e (`playwright test captcha`) serves stand-in widgets at the real widget URLs, which
