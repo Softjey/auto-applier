@@ -1,5 +1,16 @@
 {
   "env": {
     "MCP_TOOL_TIMEOUT": "60000"
+  },
+  "permissions": {
+    "allow": [
+      "mcp__applier-autofill__autofill_status",
+      "mcp__applier-autofill__autofill_open_and_fill",
+      "mcp__applier-autofill__autofill_fill",
+      "mcp__applier-autofill__autofill_read_form",
+      "mcp__applier-autofill__autofill_captcha",
+      "mcp__applier-autofill__autofill_close_tab",
+      "mcp__claude-in-chrome__*"
+    ]
   }
 }
