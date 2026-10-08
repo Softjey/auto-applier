@@ -992,6 +992,14 @@ tab comes to the front while it works and Chrome shows "Applier Autofill started
 this browser" for a moment — that is the click. On the Applier MCP path
 `autofill_submit` does this step itself.
 
+Call it as the MCP tool, never through `curl` or a script in a shell: Claude Code's auto
+mode judges each such click on an employer's site on its own and blocks it as often as not.
+The run is unattended only when the user has allowed the tool once —
+`/permissions` → Allow → `mcp__applier-autofill__autofill_captcha` (Codex: approve it for the
+session). Without that rule a refused call is not a `failed`: park the vacancy as for
+`challenge` and say in the end-of-run list that the rule is missing. The agent never adds
+the rule itself.
+
 | `status` | What it means | What you do |
 | --- | --- | --- |
 | `none` | no box to tick: no captcha, or an invisible one (v3 badge, invisible v2, Turnstile) | press Submit |

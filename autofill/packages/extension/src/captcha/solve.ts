@@ -53,19 +53,38 @@ interface Look {
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
+/**
+ * Every browser call here gets a deadline. A frame that never answers (frozen, mid-navigation) or a
+ * debugger that never attaches must end in `failed` with the step named — never in silence, which
+ * the agent can only read as "the extension took the command but gave no result".
+ */
+class Stalled extends Error {}
+function within<T>(work: Promise<T>, ms: number, what: string): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const stall = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Stalled(`${what} did not answer in ${ms / 1000} s`)), ms);
+  });
+  return Promise.race([work, stall]).finally(() => clearTimeout(timer));
+}
+const FRAME_MS = 3_000;
+/** Under the MCP tool's 45 s, so the agent always gets an answer. */
+const OVERALL_MS = 38_000;
+
 /** Where the mouse was left in each tab, so the next move starts from there, not from nowhere. */
 const lastMouse = new Map<number, Point>();
 
 async function listFrames(tabId: number): Promise<Frame[]> {
-  const all = (await browser.webNavigation.getAllFrames({ tabId })) ?? [];
+  const all =
+    (await within(browser.webNavigation.getAllFrames({ tabId }), 5_000, 'The frame list')) ?? [];
   return all.map((f) => ({ frameId: f.frameId, parentFrameId: f.parentFrameId, url: f.url }));
 }
 
 async function ask<T>(tabId: number, frameId: number, msg: CaptchaFrameRequest): Promise<T | null> {
   try {
-    return ((await browser.tabs.sendMessage(tabId, msg, { frameId })) as T | undefined) ?? null;
+    const reply = browser.tabs.sendMessage(tabId, msg, { frameId }) as Promise<T | undefined>;
+    return (await within(reply, FRAME_MS, `Frame ${frameId}`)) ?? null;
   } catch {
-    return null; // the frame has no content script (yet), or went away
+    return null; // the frame has no content script (yet), went away, or hangs
   }
 }
 
@@ -142,7 +161,7 @@ async function look(tabId: number): Promise<Look> {
 type Target = { tabId: number };
 
 const send = (target: Target, method: string, params: Record<string, unknown>): Promise<unknown> =>
-  browser.debugger.sendCommand(target, method, params);
+  within(browser.debugger.sendCommand(target, method, params), 3_000, method);
 
 async function moveAlong(target: Target, from: Point, to: Point, size: number, rng: Rng) {
   for (const step of humanPath(from, to, size, rng)) {
@@ -183,12 +202,20 @@ async function press(target: Target, at: Point, rng: Rng) {
 }
 
 const SCROLL_MARGIN = 90;
-const ANSWER_MS = 12_000;
+const ANSWER_MS = 10_000;
 
 /** The first visible, unticked checkbox — measured again, since the page may have moved. */
 const pending = (l: Look): Widget | undefined => l.widgets.find((w) => !w.checked && w.box);
 
 export async function solveCaptcha(tabId: number, rng: Rng = Math.random): Promise<CaptchaResult> {
+  try {
+    return await within(attempt(tabId, rng), OVERALL_MS, 'The captcha step');
+  } catch (e) {
+    return { status: 'failed', note: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+async function attempt(tabId: number, rng: Rng): Promise<CaptchaResult> {
   let seen = await look(tabId);
   if (seen.challenge) {
     return { status: 'challenge', kind: seen.challenge, note: 'A challenge is already open.' };
@@ -205,7 +232,7 @@ export async function solveCaptcha(tabId: number, rng: Rng = Math.random): Promi
 
   const target = { tabId };
   try {
-    await browser.debugger.attach(target, '1.3');
+    await within(browser.debugger.attach(target, '1.3'), 5_000, 'The debugger');
   } catch (e) {
     return {
       status: 'failed',
@@ -253,7 +280,7 @@ export async function solveCaptcha(tabId: number, rng: Rng = Math.random): Promi
       note: `The click did not go through: ${e instanceof Error ? e.message : String(e)}`,
     };
   } finally {
-    await browser.debugger.detach(target).catch(() => undefined);
+    await within(browser.debugger.detach(target), 3_000, 'Detach').catch(() => undefined);
   }
 
   // The widget answers on its own: a tick, or a challenge frame that becomes visible.
