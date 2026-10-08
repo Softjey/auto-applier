@@ -3,7 +3,7 @@ import type { SiteAdapter } from './types';
 /**
  * BambooHR careers (<tenant>.bamboohr.com/careers/<id>) — see ats/bamboohr.com.md. The address
  * block is fully required, Country defaults to the US, Date Available follows the tenant's
- * locale, and a reCAPTCHA gates Submit (the person ticks it; this never does).
+ * locale, and a reCAPTCHA gates Submit (ticked by `autofill_captcha`, never by the fill).
  */
 export const bamboohr: SiteAdapter = {
   id: 'bamboohr',

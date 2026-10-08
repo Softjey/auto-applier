@@ -20,7 +20,9 @@ export default defineConfig({
     // Pins the extension id, so the local server can hand passwords to this extension only.
     key: EXTENSION_MANIFEST_KEY,
     // `tabs`: the agent's commands open, find and close job-offer tabs by URL.
-    permissions: ['storage', 'alarms', 'tabs'],
+    // `webNavigation` + `debugger`: the captcha clicker finds a widget's frames and sends one
+    // real (trusted) mouse click to a visible "I'm not a robot" box (src/captcha/solve.ts).
+    permissions: ['storage', 'alarms', 'tabs', 'webNavigation', 'debugger'],
     // The service worker is the only thing that talks to the local plan server.
     host_permissions: [`${SERVER_ORIGIN}/*`],
     minimum_chrome_version: '111',

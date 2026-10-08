@@ -32,6 +32,8 @@ export const Command = z.discriminatedUnion('op', [
   /** Press the form's own submit button. Only valid with the token the last fill handed back. */
   z.object({ op: z.literal('submit'), ...Target, token: z.string().min(1) }),
   z.object({ op: z.literal('close-tab'), ...Target }),
+  /** Tick a visible "I'm not a robot" checkbox with a real (trusted) mouse; never a challenge. */
+  z.object({ op: z.literal('captcha'), ...Target }),
 ]);
 export type Command = z.infer<typeof Command>;
 
@@ -94,7 +96,10 @@ export interface FormField {
 
 export interface SubmitResult {
   submitted: boolean;
-  /** How success was recognised. `none`: pressed, nothing changed — look at the page, do not retry blindly. */
-  signal: 'success-text' | 'form-gone' | 'none';
+  /**
+   * How success was recognised. `none`: pressed, nothing changed — look at the page, do not retry
+   * blindly. `captcha`: not pressed, a captcha wants more than a tick (see `note`).
+   */
+  signal: 'success-text' | 'form-gone' | 'none' | 'captcha';
   note?: string;
 }

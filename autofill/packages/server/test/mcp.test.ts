@@ -113,6 +113,7 @@ describe('/mcp protocol', () => {
       'autofill_fill',
       'autofill_read_form',
       'autofill_submit',
+      'autofill_captcha',
       'autofill_close_tab',
     ]);
     const submit = list.result.tools.find((t: { name: string }) => t.name === 'autofill_submit');

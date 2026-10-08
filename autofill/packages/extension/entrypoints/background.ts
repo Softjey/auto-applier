@@ -19,8 +19,10 @@ import {
   type BackgroundResult,
   type PendingOutcome,
   type PendingView,
+  type SubmitResult,
 } from '@applier/protocol';
 import type { ZodType } from 'zod';
+import { solveCaptcha } from '../src/captcha/solve';
 import { loadSettings } from '../src/passwords/settings';
 
 async function call<T>(path: string, schema: ZodType<T>, init?: RequestInit): Promise<T> {
@@ -312,8 +314,22 @@ async function runCommand(command: Command): Promise<unknown> {
     }
     case 'read-form':
       return toPage(await findTab(command), { type: 'page-read' }, 30_000);
-    case 'submit':
-      return toPage(await findTab(command), { type: 'page-submit', token: command.token }, 30_000);
+    case 'submit': {
+      const tabId = await findTab(command);
+      // A visible "I'm not a robot" box is ticked first; anything more stops the submit.
+      const captcha = await solveCaptcha(tabId);
+      if (captcha.status === 'challenge' || captcha.status === 'failed') {
+        const result: SubmitResult = {
+          submitted: false,
+          signal: 'captcha',
+          note: `Not pressed: ${captcha.kind ?? 'captcha'} ${captcha.status}. ${captcha.note ?? ''}`.trim(),
+        };
+        return result;
+      }
+      return toPage(tabId, { type: 'page-submit', token: command.token }, 30_000);
+    }
+    case 'captcha':
+      return solveCaptcha(await findTab(command));
     case 'close-tab':
       await browser.tabs.remove(await findTab(command));
       return { closed: true };

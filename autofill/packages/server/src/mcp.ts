@@ -82,12 +82,24 @@ const TOOLS: Tool[] = [
   tool({
     name: 'autofill_submit',
     description:
-      "SUBMITS THE APPLICATION: presses the form's own submit button and waits for the site's success signal. Real and irreversible. Only after the user has approved this vacancy. Needs the token the last fill returned; refuses when the form is invalid or the salary quote is under the floor. `signal: none` means nothing visibly happened: look at the page, never press again blindly.",
+      "SUBMITS THE APPLICATION: presses the form's own submit button and waits for the site's success signal. Real and irreversible. Only after the user has approved this vacancy. Needs the token the last fill returned; refuses when the form is invalid or the salary quote is under the floor. Ticks a visible captcha checkbox first (as autofill_captcha); `signal: captcha` means it was NOT pressed because the captcha wants more than a tick. `signal: none` means nothing visibly happened: look at the page, never press again blindly.",
     input: z.object({ ...Target, token: z.string().min(1) }),
-    timeoutS: 40,
+    timeoutS: 75,
     command: (a): Command => ({
       op: 'submit',
       token: a.token,
+      ...(a.tab !== undefined ? { tab: a.tab } : {}),
+      ...(a.url ? { url: a.url } : {}),
+    }),
+  }),
+  tool({
+    name: 'autofill_captcha',
+    description:
+      'Tick a visible "I\'m not a robot" checkbox (reCAPTCHA v2 or hCaptcha) in a tab of the user\'s Chrome — any tab, also one a browser tool drives — with a real mouse: a curved, human-paced approach (scrolling the wheel first if the box is off screen) and one trusted click. Never touches a picture/audio challenge. Returns `status`: none (nothing to tick: no captcha, or an invisible one), already-solved, solved, challenge (the widget wants more — this needs the person), failed (see `note`). Call it right before Submit: a tick expires after ~2 minutes.',
+    input: z.object(Target),
+    timeoutS: 45,
+    command: (a): Command => ({
+      op: 'captcha',
       ...(a.tab !== undefined ? { tab: a.tab } : {}),
       ...(a.url ? { url: a.url } : {}),
     }),

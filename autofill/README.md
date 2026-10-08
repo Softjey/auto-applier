@@ -61,6 +61,7 @@ claude mcp add --transport http applier-autofill http://127.0.0.1:7357/mcp   # C
 | `autofill_fill`          | fills the form already showing in a tab (after the agent answered something)                                                                                                   |
 | `autofill_read_form`     | every control as the page shows it now: label, kind, required, value                                                                                                           |
 | `autofill_submit`        | presses the form's own submit button — needs the token of the last fill; refuses an invalid form or a quote under the floor; reports what the page did (`signal`)              |
+| `autofill_captcha`       | ticks a visible "I'm not a robot" box (reCAPTCHA v2, hCaptcha) in any tab with a real mouse; stops at a picture/audio challenge — see "Captcha checkbox" below                 |
 | `autofill_close_tab`     | closes a tab it opened                                                                                                                                                         |
 
 **Who may call it.** `/mcp` answers only a client with a loopback `Host`, **no `Origin` header**
@@ -79,6 +80,41 @@ means nothing visibly happened and must not be retried blindly.
 **Adding an adapter that can do this.** Beyond `scope`/`label`, give it `opener(doc)` (the offer
 page's Apply button, when the form opens behind it), `submitButton(root)` and `submitted(doc)`.
 `core/open-form.ts` handles the swallowed first click and the "Apply opened another tab" case.
+
+## Captcha checkbox
+
+Level 1 only: a visible "I'm not a robot" box is ticked; anything the widget asks after that
+(pictures, audio, puzzles) is the person's. `autofill_captcha` works in any tab of the
+browser — also one Simplify filled or a browser tool drives — and `autofill_submit` runs it
+before it presses.
+
+```
+worker ── webNavigation.getAllFrames ──▶ the widget's frames (anchor / bframe, hCaptcha checkbox / challenge)
+   │      captcha.content.ts in every frame: "where is my child iframe?", "where is the box, is it ticked?"
+   └─ chrome.debugger ── Input.dispatchMouseEvent ──▶ wheel to bring it on screen, move, press, release
+```
+
+- **Why the debugger.** A script's `click()` is `isTrusted: false`, which is what these widgets
+  test for, and a content script cannot click inside their cross-origin frames. A CDP mouse
+  event is the same trusted input a real mouse produces. The debugger is attached only for
+  the click (Chrome shows "started debugging this browser" for that moment) and the tab is
+  brought to the front first.
+- **Where.** Each frame's content script reports its child iframe's content box; the worker
+  sums them up the frame chain, so a widget inside an embedded, cross-origin ATS form is
+  found too. The box itself is read inside the widget's frame (`#recaptcha-anchor`,
+  `#checkbox`), and so is the tick (`aria-checked`).
+- **How it moves** (`src/captcha/human-mouse.ts`, pure and unit-tested): wheel notches of
+  ~100 px when the box is off screen; a cubic Bézier with sideways-bent control points; a
+  minimum-jerk speed profile (slow–fast–slow) at ~60 Hz with fading tremor; a duration from
+  Fitts' law; one time in four on a long way, a few-px overshoot and a correction; a press
+  near — not on — the centre, after a short settle, held 65–140 ms.
+- **What it reports.** `none` (nothing to tick, also invisible v2/v3 and Turnstile),
+  `already-solved`, `solved`, `challenge` (left alone), `failed` (with a `note`).
+- Permissions this adds: `debugger`, `webNavigation`.
+
+The e2e (`playwright test captcha`) serves stand-in widgets at the real widget URLs, which
+tick only on a trusted click that lands on the box — the providers' public test keys are
+refused by both of them now.
 
 ## Password manager
 
