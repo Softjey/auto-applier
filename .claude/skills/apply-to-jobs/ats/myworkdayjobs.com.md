@@ -69,3 +69,18 @@ URL query gains `Job_Application_ID=...` and the page shows a "Congratulations! 
 was submitted successfully!" modal. That modal may also offer to create a Workday account
 post-submission ("Password Requirements..." with an email/password form) — this is optional and
 unrelated to the application already being submitted; close it without creating an account.
+
+## Tenant notes added 2026-10-08
+
+- **abcfinancial.wd5 (ABC Fitness)**: account via the Applier extension works; a half-filled draft
+  survives a reconnect — re-open the posting, Apply → Apply Manually, and the stepper resumes. Voluntary
+  Disclosures had a single mandatory privacy consent; Submit confirmed with "Application Submitted".
+  Desired start date is a segmented MM/DD/YYYY box: click the month segment and type `10222026`.
+- **exclusivenetworks.wd103 (Exclusive Networks)**: reached through the employer's own career page, not
+  the Himalayas copy. "How Did You Hear About Us?" is a nested prompt (Social Network → LinkedIn);
+  the Applier panel on the left covers the list, so close it first. Application Questions are
+  free-text boxes (yes/no answered as sentences). Gender has no "prefer not to say" — pick "Not Specified".
+  Workday's own metadata (Hybrid, Krakow) can differ from what the aggregator said.
+- A resume input with no id can still be uploaded: `find` "input type=file" gives a ref for `file_upload`.
+- Dropdown loops in one JS call (several `.click()` + waits) froze the renderer once (45 s timeout);
+  open and pick one dropdown per call.

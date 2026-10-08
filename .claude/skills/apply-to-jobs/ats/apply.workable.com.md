@@ -19,7 +19,7 @@ settling and Simplify still scanning. Reload with `force` (the draft returns), r
 Submit again: it went through. Upload the resume by `file_upload` on the "Replace file"/file ref and
 wait until the filename chip shows before submitting.
 
-**Simplify's scan takes ~60 s here and writes late.** It wrote "Gdańsk, Poland", later "Warsaw, MZ,
+**Simplify's scan takes ~60 s here and writes late.** It wrote "Gdansk, Poland", later "Warsaw, MZ,
 Poland" into the optional Address box, after I had cleared it (not true values; no street address
 policy). Clear Address last, right before Submit.
 

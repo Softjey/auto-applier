@@ -11,7 +11,7 @@ the native setter plus `input`/`change` events renders in the inputs, and the
 extractor reads them back, but the POST to
 `/api/services/Applicant/JobApplyWithEmail` then carries only the consents —
 `PersonalInfo` is missing — and the server answers `{"status":0}` while the page
-shows the generic toast "Wystąpił błąd. Prosimy spróbować później." Type every
+shows the generic toast "An error occurred. Please try again later." Type every
 field for real (click, select-all, type). Inputs are keyed by GUID `id`s that
 change per posting; find them by label.
 
@@ -27,11 +27,10 @@ Order: site terms (mandatory), candidate database / future recruitments
 (mandatory — a user policy decision, see qa[]), special-category data
 declaration (mandatory), marketing (optional, leave off).
 
-**The submit is a `type=button` "APLIKUJ"** at the bottom (a second, hidden
-"Apply" exists); click the visible one. Cookie banner: "Rezygnuję z plików
-cookie".
+**The submit is a `type=button` "Apply" (in Polish)** at the bottom (a second, hidden
+English "Apply" exists); click the visible one. Cookie banner: "I decline cookies".
 
 ## Success signal
 
-Navigates to `/pl/candidate/jobapplysuccess?id=SUCCESS` with "Gratulacje
-<name>! Dziękujemy za przesłanie aplikacji." — match on the URL path.
+Navigates to `/pl/candidate/jobapplysuccess?id=SUCCESS` with a "Congratulations
+<name>! Thank you for submitting your application." message — match on the URL path.

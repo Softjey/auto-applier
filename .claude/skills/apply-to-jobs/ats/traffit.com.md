@@ -87,3 +87,13 @@ that ticks the optional future-recruitment boxes too — never touch it.
 An already-chosen selectize (country defaults to the tenant's) keeps its options only
 in memory: the native `<select>` holds just the chosen `<option>`, so `selectedIndex`
 is 0 even though `select.value` is set. Test `.value`, not `.selectedIndex`.
+
+## Seen 2026-10-08 (scalo.traffit.com, arriving from Indeed)
+
+Indeed's "Apply on company site" is an `<a target=_blank href=…/applystart>`; set `target='_self'` and
+click it so the managed tab follows it to `scalo.traffit.com/public/an/<hash>` (job page), then
+the "submit your application" button → `/public/form/a/<hash>`. The own extension (`autofill_fill`, adapter
+`traffit`) fills name, city, CV, the mandatory consent; the phone field ("+48 123456789" mask)
+did not keep its value — retype it. Required free-text experience questions (React/Electron/Capacitor,
+Go) exist on this tenant even though the label has no asterisk in the digest: the read-back says
+`required: true`.

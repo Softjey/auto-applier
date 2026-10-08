@@ -76,11 +76,11 @@ The consent checkboxes have no readable text near the input and no `<label for>`
 native input's `getBoundingClientRect()` is offset from what you see — a click on the
 reported rect misses. Identify them by DOM order; on the Euvic tenant that is
 **future-recruitment consent (optional, leave)**, **required RODO acknowledgement
-(tick)**, **"Zaznacz wszystkie powyżej" (never)**. Click the *visible* box read off a
+(tick)**, **"select all of the above" (never)**. Click the *visible* box read off a
 fresh screenshot, then confirm with `.checked` and a `zoom`.
 
 ## The reCAPTCHA is per-tenant, not per-ATS
 
 The Link Group tenant gated Apply behind a visible reCAPTCHA v2; the Euvic tenant
 (2026-09-06) had none and submitted straight through to `/job/<id>/thanks`
-("Dziękujemy za wypełnienie formularza!"). Probe for it rather than assuming.
+(a "thank you for filling in the form" message). Probe for it rather than assuming.

@@ -147,7 +147,7 @@ not carry one over; the answer is for this run only. Offer exactly three:
 | **first N** | pause on the first 2–3 vacancies (ask N, default 3); once that many have gone through cleanly, stop pausing for the rest of the run |
 | **none** | never pause; fill, verify, submit and record straight through |
 
-If the user already named a mode in the request ("сам натискай submit", "approve
+If the user already named a mode in the request ("press submit yourself", "approve
 each one"), use it and do not ask again.
 
 In **first N**, keep a counter of vacancies **confirmed without the user asking
@@ -618,7 +618,7 @@ Per vacancy:
    and `qa[]`. Simplify fills from **its own profile, not ours**, so every value
    it wrote is a claim to verify, not a fact. What it has actually got wrong:
    - **A factual yes/no answered wrong**: "Are you authorized to work in the
-     job's location?" → **No**, on a Kraków role for a holder of a Polish work
+     job's location?" → **No**, on a Krakow role for a holder of a Polish work
      permit. Disqualifying, and stated as fact. Read every radio/segmented
      control it touched.
    - **"Complete" with required fields still empty** — Country and City on
@@ -687,7 +687,7 @@ Per vacancy, following its ATS file:
    input group, or inspect the adornment element next to it, before deciding a
    link field has nothing to put in it.
 2. **An optional free-text box stays empty.** "Additional message", "Personal
-   note", "Dodatkowa wiadomość", an optional cover letter — if the form does not
+   note", an optional cover letter — if the form does not
    require it and the posting did not ask for something specific there, write
    nothing. (`narrative` in `field-labels.mjs` only means "prose is the right
    shape *if* the field must be answered".)
@@ -1020,6 +1020,26 @@ once more; `challenge` → park. A captcha is never a reason to retry Submit bli
 
 **Record it.** The captcha is a row in `answers.md` like any field: `reCAPTCHA "I'm not a
 robot" | ticked by autofill_captcha (solved)` — or `challenge — left to the user`.
+
+### Getting past "I can't" — what to try before parking (learned 2026-10-08)
+
+A vacancy parked by an earlier run is not dead. Before leaving one parked again, work this list in order:
+
+1. **Find the real form.** `get_apply_target({vacancyId})` returns the source posting URL. An aggregator copy
+   (Himalayas, HexJobs, Indeed "apply on company site") is not the form: follow it to the employer's own
+   career site or ATS (Exclusive Networks → its Workday tenant found via the employer's `/kariera` page).
+2. **Gates that clear on their own.** A Cloudflare interstitial on Indeed / Himalayas goes away after ~10 s;
+   wait and re-navigate, never click it. A visible reCAPTCHA / hCaptcha box is `autofill_captcha` (§ CAPTCHAs);
+   `failed: Chrome's window stays hidden` means the window must be on screen — say so once, park, move on.
+3. **Account walls are routine** (Taleo, Avature, Workday): Applier **Create account**, then the portal's own button.
+4. **Do not trust prefilled data.** Resume parsers (Taleo) write nonsense names/employers — verify every field.
+5. **A new fact needed → one batched `AskUserQuestion`** with real options (education dates, "no Electron
+   experience"…), then `profile-qa.mjs add` so it is never asked again.
+6. **Park only what is truly the user's:** a voice/video recording, a CAPTCHA challenge, essays about
+   things the user did that no story covers, "current pay" the user does not disclose. Say which, and
+   leave the prepared values in `pending.md`.
+7. A vacancy that is expired on the source (Indeed "expired") → `NOT_INTERESTED`, not parked.
+8. Pay under the floor: the user decides — "not interested" closes it (`NOT_INTERESTED`), "apply anyway" quotes the floor.
 
 ### Things you never do on an employer's form
 

@@ -67,3 +67,13 @@ call; it succeeds on the second attempt.
 
 URL becomes `form/post-apply` and the page confirms the application was sent to
 the named company, plus a confirmation e-mail. Match on the URL.
+
+## Update 2026-10-08
+
+- `get_apply_target({vacancyId})` (OneTap MCP) returns the exact Indeed `viewjob?jk=…` URL — no
+  need to search Indeed for a posting.
+- A posting that Indeed marks as expired (the Ukrainian UI says the posting's validity period on Indeed has ended) is dead: close it
+  as `NOT_INTERESTED`. The Cloudflare gate on `pl.indeed.com` cleared by itself after ~10 s on the
+  second visit; do not interact with it.
+- External postings: the "Apply on company site" anchor opens `…/applystart` in a new tab; set
+  `target='_self'` and click to stay in the managed tab.

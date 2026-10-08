@@ -74,7 +74,7 @@ happened.
 ## Per-employer consents appear inside the modal
 
 Besides the two Just Join IT boxes, an employer may add its own
-`future_consent_accepted` ("przyszłe rekrutacje", or "affiliated entities").
+`future_consent_accepted` ("future recruitments", or "affiliated entities").
 Every one seen so far is optional — check `required` and leave it unticked.
 
 ## The modal is a `<form>`, not a dialog (seen by the autofill extension, 2026-09-30)
