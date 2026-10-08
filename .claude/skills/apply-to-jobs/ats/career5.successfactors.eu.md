@@ -56,8 +56,9 @@ The registration block sits inside the application form (fields `fbclc_userName`
 The extension's **Create account** fills all of them in ~25 s on the real page (the panel says "Working…"
 that whole time — wait, do not click again) and the form's questions it can resolve (salary box →
 `30 000 PLN`). The extension's "Needs you" list wrongly includes the language switcher ("English US") — ignore it.
-**The form ends in a reCAPTCHA**, so Apply (which creates the account) is the user's click: park the vacancy
-with the tab open. The saved login stays unconfirmed in `credentials.json` until a sign-in works.
+**The form ends in a reCAPTCHA**: `autofill_captcha`, then Apply (which creates the account) at once; only a
+challenge parks the vacancy with the tab open. The saved login stays unconfirmed in `credentials.json` until a
+sign-in works.
 
 ## RMK application form on `career<NN>.sapsf.eu`, filled end to end — verified 2026-10-06
 
@@ -77,7 +78,7 @@ with the tab open. The saved login stays unconfirmed in `credentials.json` until
   source = "Job Board (e.g. pracuj.pl, justjoin.it…)". The employer's own text questions (hybrid
   model, salary) are plain textareas with a 200-character limit.
 - A right-hand Simplify panel covers the form's right edge; collapse it (the `>` at its top).
-- The reCAPTCHA stays the user's. Once they tick it, press Apply within about two minutes.
+- The reCAPTCHA is the very last step: `autofill_captcha`, then Apply within about two minutes.
 
 ## Success signal
 

@@ -150,7 +150,9 @@ second agent reads the same files instead of a fork of them.
   and the agent resolve a question the same way. The panel fills and never submits; the
   server also speaks MCP (`/mcp`, `autofill_*` tools) so the agent can open, fill, read and —
   on an explicit `autofill_submit` after the user's OK — submit a vacancy without any
-  browser tool (SKILL.md § Applier MCP fast path).
+  browser tool (SKILL.md § Applier MCP fast path). `autofill_captcha` ticks a visible
+  "I'm not a robot" box in any tab with a real (debugger-sent) mouse and stops at a
+  challenge (SKILL.md § CAPTCHAs, `src/captcha/`).
   Meant to be published — see `autofill/README.md`.
 - `templates/data-repo/` — what `setup-data-repo` copies into a new data repo.
 

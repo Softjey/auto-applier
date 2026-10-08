@@ -49,13 +49,11 @@ The note above says `mm/dd/yyyy`; the Polish tenant's placeholder read
 
 ## reCAPTCHA gates the submit
 
-A reCAPTCHA v2 checkbox sits directly above "Submit Application". Clicking it is
-a hard limit, so leave the filled form in its tab and the prepared values in the
-note; the user ticks and submits from there (done on 2026-09-06 — "Thank You.
-Your application was submitted successfully"). The token expires after about two
-minutes, so a tick and a Submit have to happen in the same breath: do not ask
-the user to tick and then go away to do something else. Until the confirmation
-page is on screen the vacancy is **SAVED**, never `APPLIED`.
+A reCAPTCHA v2 checkbox sits directly above "Submit Application". Tick it with
+`autofill_captcha` as the last step and press Submit straight after (SKILL.md § CAPTCHAs);
+the token expires after about two minutes. Success is "Thank You. Your application was
+submitted successfully" (seen 2026-09-06). A picture challenge → park with the tab open.
+Until the confirmation page is on screen the vacancy is **SAVED**, never `APPLIED`.
 
 ## Custom questions
 
@@ -75,5 +73,5 @@ but **Postal Code `00001` and Province `MZ`** (policy says `_` and
 Fix the first two, clear the date. It leaves the honeypot alone.
 
 A **visible reCAPTCHA checkbox** appears only after the first Submit click
-("Please confirm you're not a robot to continue") — a hard stop. Leave the
-filled tab for the user.
+("Please confirm you're not a robot to continue"). `autofill_captcha`, then Submit once
+more; a challenge → leave the filled tab for the user.

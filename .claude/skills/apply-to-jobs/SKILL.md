@@ -173,8 +173,11 @@ it and start the next one immediately**:
 - an essay draft that needs the user's pick among options (§ Essays and "tell us about"
   questions) — only when no story fits cleanly;
 - a `$SALARY_QUOTE` that exited 3 — "apply at this money at all?";
-- a CAPTCHA, an e-mail-only application, a sign-in the extension could not complete
-  (§ Portals that require an account), or any other step only the user can do;
+- a CAPTCHA that wants more than a tick — a picture / audio challenge, or a box
+  `autofill_captcha` could not tick (§ CAPTCHAs); a plain "I'm not a robot" box is
+  yours and never parks anything —, an e-mail-only application, a sign-in the extension
+  could not complete (§ Portals that require an account), or any other step only the
+  user can do;
 - a new unknown that appears mid-form (fields revealed after a postback).
 
 **Before you park, run every unresolved question through this pass.** A question is
@@ -206,7 +209,7 @@ Parking means: **do not submit**; leave the vacancy `SAVED`; record in its note
 (and in `runs/<run-id>/<Company>_<vacancyId>/pending.md`) exactly what is needed —
 the question worded as the form words it, or the action, plus every value already
 prepared so the user finishes in one pass; leave a filled tab open only where the
-form cannot be rebuilt (CAPTCHA), and say so. Then carry on with the next vacancy.
+form cannot be rebuilt (a CAPTCHA challenge), and say so. Then carry on with the next vacancy.
 Never put a guess in a field to get past a parked question.
 
 **A question with no exact answer goes to the user as several distinct options, never
@@ -503,7 +506,7 @@ After the last vacancy has been worked — not before — give the user one list
 ```
 <Company> — <role> (<vacancyId>)
   • <question as the form words it> — <what you need: a fact, a choice, yes/no>
-  • <manual step, e.g. "solve the CAPTCHA in the open tab" / "the portal rejected the generated password twice — set one yourself">
+  • <manual step, e.g. "the CAPTCHA asks for pictures — solve it and press Submit in the open tab" / "the portal rejected the generated password twice — set one yourself">
   • <salary: band X from <source>, floor Y — apply at that money? yes/no>
 ```
 
@@ -562,8 +565,11 @@ Phase 1 is unchanged (liveness, band, tailored resume). Then per vacancy:
    fields, the CV, the `choices` and the salary decision *before* anything is sent.
 5. `autofill_submit({tab, token})` — **only after the OK**, and never in a batch with other
    calls. The token ties it to the fill you reviewed; a second press needs a fresh fill. It
-   refuses an invalid form and a quote under the floor by itself. Result:
+   refuses an invalid form and a quote under the floor by itself, and ticks a visible
+   captcha checkbox before pressing (§ CAPTCHAs). Result:
    - `signal: "success-text"` → APPLIED immediately (Phase 4 steps 8–9).
+   - `signal: "captcha"` → **not pressed**: the captcha wants a challenge solved (or could
+     not be ticked — `note` says which). Park the vacancy with the tab open (§ CAPTCHAs).
    - `signal: "form-gone"` → likely sent, but the site showed no confirmation text: look at
      the page once (browser capability) before recording APPLIED.
    - `signal: "none"` → **do not press again.** Look at the page; it may be slow, or have
@@ -637,8 +643,9 @@ Per vacancy:
    the run** (§ Parking a vacancy). Leave the form unsubmitted, set the note on
    `SAVED` naming the exact question(s), move on, and they go into the
    end-of-run action list. Same for a required "why this company" box (the
-   reason is the user's pick) and for a CAPTCHA (leave the filled tab open for
-   the user, say so in the note, open a new tab for the next vacancy).
+   reason is the user's pick) and for a CAPTCHA challenge (§ CAPTCHAs: tick the box
+   first; only a challenge leaves the filled tab open for the user, said so in the
+   note, and a new tab for the next vacancy).
 7. **Verify, submit, record** — one read-back of required fields and the CV chip
    right before Submit (Phase 4 step 1's verify rules), then Phase 4 steps 8–9:
    the success signal, **APPLIED immediately**, `answers.md` with a Source
@@ -803,7 +810,8 @@ Per vacancy, following its ATS file:
    vacancy, or first N and the counter is still below N — see § Approval mode;
    never in mode none): show the screenshot plus vacancy, PDF, key answers and
    any drafted text, and wait.
-8. Submit. Wait for a real success indicator — the one named in the ATS file,
+8. Submit. If the form carries a captcha, `autofill_captcha` first, then Submit straight
+   away (§ CAPTCHAs). Wait for a real success indicator — the one named in the ATS file,
    not "the button stopped being clickable". Record it the same way, as
    `runs/<run-id>/<Company>_<vacancyId>/submitted.gif`, so the run holds both
    what was sent and the page that confirmed it.
@@ -859,7 +867,7 @@ Per vacancy, following its ATS file:
      "NOT_INTERESTED", notes: "<date>: <what the page said, verbatim> — not
      applied."})`.
    - **The posting is alive but blocked for you** (a sign-in or sign-up the
-     extension could not finish, a CAPTCHA, an e-mail-only application) — leave it `SAVED` with a note
+     extension could not finish, a CAPTCHA challenge, an e-mail-only application) — leave it `SAVED` with a note
      saying exactly what is needed and, when the form was filled before the
      block appeared, every value that was prepared, so the user finishes it in
      one pass rather than starting over.
@@ -953,12 +961,51 @@ account, was it ever confirmed by a sign-in? Then, on the portal's page:
    **Letters & digits only** and submit again. Two refusals → park it.
 5. **E-mail verification** after sign-up is yours too, with the mailbox connector
    (§ Finishing an application that verifies by e-mail). Then sign in as above.
-6. A CAPTCHA at any step is still the user's alone — park the vacancy and say so.
+6. A CAPTCHA at any step (sign-up, sign-in, the form) is handled as in § CAPTCHAs: tick a
+   visible box with `autofill_captcha`, then press the portal's button; only a challenge
+   parks the vacancy.
 
 You **never read, type, log or echo a password yourself**: the extension holds it, the page
 receives it, and `credentials.mjs` prints one only on an explicit `get`/`add` for the user.
 One password per site, ever — never reuse one across portals. Take the login (the profile
 e-mail) from the extension; never invent a username.
+
+### CAPTCHAs — tick the box, stop at a challenge
+
+A captcha no longer parks a vacancy by itself. The Applier extension ticks a visible
+"I'm not a robot" box (reCAPTCHA v2, hCaptcha) the way a person does: it scrolls the page
+with the mouse wheel if the box is off screen, moves the pointer there along a curved,
+human-paced path and clicks once — a real, trusted click sent through Chrome's debugger,
+in any tab of the user's Chrome (a Simplify form, a hand-filled form, a portal sign-up),
+and in any embedded frame. It never touches a picture or audio challenge. Most of the time
+the user's own browser passes on the tick alone; when the widget wants more, that is the
+one case the user gets.
+
+**When.** Right before Submit — after every field is filled, verified and approved. A tick
+expires after about two minutes, so tick last and press Submit straight after it, without
+other work in between. The same at a portal's Sign up / Sign in button.
+
+**How.** `autofill_captcha({url: "<the tab's URL>"})` (or `{tab}` from
+`autofill_open_and_fill`). It needs `autofill_status` → `extensionConnected: true`; without
+the extension, the old rule applies: park the vacancy with the filled tab open. The Chrome
+tab comes to the front while it works and Chrome shows "Applier Autofill started debugging
+this browser" for a moment — that is the click. On the Applier MCP path
+`autofill_submit` does this step itself.
+
+| `status` | What it means | What you do |
+| --- | --- | --- |
+| `none` | no box to tick: no captcha, or an invisible one (v3 badge, invisible v2, Turnstile) | press Submit |
+| `solved` / `already-solved` | the box is ticked | press Submit **now** |
+| `challenge` | the widget asks for pictures / audio | park: tab stays open, note says "solve the captcha and press Submit" |
+| `failed` | no tick (see `note`) | call once more; still `failed` → park as for `challenge` |
+
+**After Submit.** Some forms show a captcha only after the first press (BambooHR's
+"Please confirm you're not a robot to continue"), and an invisible v2 may open a challenge
+then. When the page did not confirm, call `autofill_captcha` again: `solved` → press Submit
+once more; `challenge` → park. A captcha is never a reason to retry Submit blindly.
+
+**Record it.** The captcha is a row in `answers.md` like any field: `reCAPTCHA "I'm not a
+robot" | ticked by autofill_captcha (solved)` — or `challenge — left to the user`.
 
 ### Things you never do on an employer's form
 
@@ -969,8 +1016,10 @@ the tab to the user, with the vacancy left un-APPLIED:
   Applier extension's **Create account** button (§ Portals that require an account), which
   uses the profile e-mail and a generated, never-reused password, and ticks only the terms
   and privacy boxes the account needs — never marketing, newsletters or talent-pool boxes.
-- Solve, click or bypass a CAPTCHA or bot-detection challenge, or sign in to a
-  job board to get past one.
+- Solve a CAPTCHA **challenge** (pictures, audio, puzzles), bypass bot detection any
+  other way, or sign in to a job board to get past one. The one exception is a visible
+  "I'm not a robot" checkbox, ticked **only through `autofill_captcha`** (§ CAPTCHAs) —
+  never with the browser tool's click, never via the widget's audio button.
 - Tick any consent broader than this single application — future recruitment,
   marketing, newsletters — even when it is pre-ticked by the page. Verify it is
   still unticked immediately before submitting; a mis-aimed click on a

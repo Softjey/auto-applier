@@ -40,12 +40,11 @@ URL becomes `/job/<uuid>/thanks`.
 
 Below the consents sits a reCAPTCHA v2 "I'm not a robot" checkbox. Pressing
 Apply without it re-renders the page with "Field is required" under the widget
-and submits nothing. Clicking a CAPTCHA is a hard limit for this agent, so fill the whole form, leave
-the tab open, write the answer sheet, and leave the vacancy **SAVED** with a
-note listing every prepared value. The user ticks the box and presses Apply from
-there — that worked on 2026-09-06 and landed on the `/thanks` page — after which
-it becomes `APPLIED`. Never set `APPLIED` before the confirmation page is
-actually on screen.
+and submits nothing. Fill the whole form, write the answer sheet, then `autofill_captcha` and Apply at
+once (SKILL.md § CAPTCHAs) — a tick then Apply landed on the `/thanks` page on
+2026-09-06. A picture challenge → leave the tab open and the vacancy **SAVED**
+with every prepared value in the note. Never set `APPLIED` before the
+confirmation page is actually on screen.
 
 ## Field order seen on the linkgroup tenant
 

@@ -4,12 +4,12 @@ Reached from an aggregator's "apply on the company site" control — opens the 7
 job page in a new tab inside the group. Three-step wizard behind the page's
 `Apply now`.
 
-## ⚠️ Ends in a visible reCAPTCHA — cannot be finished unattended
+## Ends in a visible reCAPTCHA
 
-Step 3 carries an "I'm not a robot" checkbox widget above `Submit`. Solving or
-clicking it is off-limits. Fill everything else, tick the terms box, then hand
-the tab to the user for two clicks: the captcha and `Submit`. Do NOT mark the
-vacancy APPLIED until they confirm.
+Step 3 carries an "I'm not a robot" checkbox widget above `Submit`. Fill everything
+else, tick the terms box, then `autofill_captcha` and `Submit` at once (SKILL.md
+§ CAPTCHAs). A picture challenge → hand the tab to the user. Do NOT mark the vacancy
+APPLIED before the success page.
 
 ## Quirks
 
@@ -43,4 +43,5 @@ captcha.
 
 ## Success signal
 
-Not reachable unattended — see the reCAPTCHA note above. Confirm with the user.
+Not recorded yet — the captcha used to stop every run here. Write down what the
+page shows after the first unattended submit.

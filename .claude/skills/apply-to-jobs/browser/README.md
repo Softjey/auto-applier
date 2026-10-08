@@ -163,10 +163,13 @@ rather than assuming the write landed.
 
 ## When a CAPTCHA appears
 
-Ticking a reCAPTCHA is a hard limit (see `SKILL.md` § Things you never do). The
-vacancy stays `SAVED`, and the OneTap note carries every value that was
-prepared so the user can finish it in one pass. Filling the form first and
-discovering the CAPTCHA at Submit is fine — nothing was sent.
+Never click a captcha with this runtime's own click: that is a synthetic, untrusted event
+and the widget answers it with a challenge. A visible "I'm not a robot" box is ticked by
+`autofill_captcha({url})` — the Applier extension's real mouse — right before Submit
+(`SKILL.md` § CAPTCHAs). Only `challenge` / `failed` leaves the vacancy `SAVED`, with the
+filled tab open and every prepared value in the OneTap note so the user finishes it in one
+pass. Filling the form first and discovering the CAPTCHA at Submit is fine — nothing was
+sent.
 
 ## Keeping the screenshots (Phase 4 step 5)
 

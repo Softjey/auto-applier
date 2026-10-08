@@ -254,7 +254,7 @@ function main() {
   let blocking = 0;
   for (const form of report) {
     console.log(`\n=== ${form.host} — ${form.path}`);
-    if (form.hasRecaptcha) console.log("  ! page carries a reCAPTCHA — stop if it ever demands solving");
+    if (form.hasRecaptcha) console.log("  ! page carries a reCAPTCHA — tick it with autofill_captcha right before Submit; stop only at a challenge");
     const by = (s) => form.fields.filter((f) => f.status === s);
     const show = (title, list, withWhy) => {
       if (!list.length) return;
