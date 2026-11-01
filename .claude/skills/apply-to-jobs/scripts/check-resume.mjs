@@ -25,8 +25,10 @@ if (resumeRepo) {
     ok = false;
   } else {
     const saved = join(resumeRepo, "out", "SAVED");
-    const pdfs = (isDir(saved) ? readdirSync(saved) : []).filter((d) =>
-      readdirSync(join(saved, d)).some((f) => /\.pdf$/i.test(f)),
+    const pdfs = (isDir(saved) ? readdirSync(saved) : []).filter(
+      (d) =>
+        isDir(join(saved, d)) &&
+        readdirSync(join(saved, d)).some((f) => /\.pdf$/i.test(f)),
     );
     say(`mode: tailored — ${resumeRepo}`);
     say(
