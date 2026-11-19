@@ -70,7 +70,9 @@ and then hands back to this interview.
      types open to.
    - **Languages** — level per language (native / fluent / professional /
      conversational / basic — ask the user's own words, don't invent a
-     framework).
+     framework). Then ask whether they know the CEFR level (A1–C2) for each
+     non-native one: forms ask for it in that scale, and a level the user never
+     gave is a level you cannot pick. Record it only if they state it.
 5. **Write structured answers directly into `data/profile.json`** with Edit —
    this is low-volume, one-time data, safe to hand-edit (unlike `qa[]`,
    which is machine-managed — never hand-edit that array).
@@ -97,6 +99,27 @@ and then hands back to this interview.
    - hybrid/onsite willingness
    - total years of professional experience (reuse the number from step 3)
    - background-check consent
+   Then the screening questions that, left unseeded, stopped real runs on one
+   vacancy after another. Ask them in one batch and record only what the user
+   states:
+   - highest completed education, and one in progress with its expected year
+   - contract types they accept (employment contract, B2B, either)
+   - consent boxes: which ones to tick (the required ones only, or also the
+     standard data-processing one) — a `policy` entry
+   - on-call duty, business travel (how many days per week or month at most)
+     and office days per week for hybrid roles
+   - a criminal-record or clean-record declaration: the user's own statement,
+     never inferred from the absence of anything on file
+   - relationships with a company's employees ("do you have any relatives or
+     close relations working at X?"): a `policy` entry with the user's general
+     answer (`--canonical=employee_relationships`), plus one `employer-specific`
+     entry per company where the answer is different, with the company in the
+     topic (`--canonical=employee_relationships:<Company>`). Ask for that list
+     of companies explicitly; "no" to the general question does not cover a
+     company they did not think of
+   - how they use AI tools at work, as a short answer a form box can take
+   - years of hands-on experience with each main technology of their stack,
+     where it differs from the total
    Use `profile-qa.mjs find "<question>"` first to make sure you're not
    about to add something the `add` command's own dedupe check would
    already catch — but the command refuses near-duplicates itself
