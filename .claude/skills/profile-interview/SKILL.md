@@ -70,7 +70,20 @@ and then hands back to this interview.
      types open to.
    - **Languages** — level per language (native / fluent / professional /
      conversational / basic — ask the user's own words, don't invent a
-     framework).
+     framework). Then ask whether they know the CEFR level (A1–C2) for each
+     non-native one: forms ask for it in that scale, and a level the user never
+     gave is a level you cannot pick. Record it only if they state it.
+   - **How to present them** — three standing rules, each a `policy` entry
+     with `--no-value`:
+     - which links may go on a form: a stale portfolio or an old profile is
+       one the user wants left out, so ask about each link found in step 2
+       instead of using every one;
+     - skills to mention only when a question asks about that area (a skill
+       they have used but are not strong in); free-text answers leave them out
+       otherwise;
+     - a knock-out question they would fail (a missing year of experience, a
+       required skill): answer truthfully and let the employer decide, or park
+       the vacancy for them to decide first.
 5. **Write structured answers directly into `profile.json`** with Edit —
    this is low-volume, one-time data, safe to hand-edit (unlike `qa[]`,
    which is machine-managed — never hand-edit that array).
@@ -97,6 +110,25 @@ and then hands back to this interview.
    - hybrid/onsite willingness
    - total years of professional experience (reuse the number from step 3)
    - background-check consent
+   Then the screening questions that, left unseeded, stopped real runs on one
+   vacancy after another. Ask them in one batch and record only what the user
+   states:
+   - highest completed education, and one in progress with its expected year
+   - contract types they accept (employment contract, B2B, either)
+   - consent boxes: which ones to tick (the required ones only, or also the
+     standard data-processing one) — a `policy` entry
+   - on-call duty, business travel (how many days per week or month at most)
+     and office days per week for hybrid roles
+   - a criminal-record or clean-record declaration: the user's own statement,
+     never inferred from the absence of anything on file
+   - relationships with a company's employees ("do you have any relatives or
+     close relations working at X?"): a `policy` entry with the user's general
+     answer, plus one `employer-specific` entry per company where the answer is
+     different. Ask for that list of companies explicitly; "no" to the general
+     question does not cover a company they did not think of
+   - how they use AI tools at work, as a short answer a form box can take
+   - years of hands-on experience with each main technology of their stack,
+     where it differs from the total
    Use `profile-qa.mjs find "<question>"` first to make sure you're not
    about to add something the `add` command's own dedupe check would
    already catch — but the command refuses near-duplicates itself
@@ -163,7 +195,8 @@ Use it any time: a new country's work-authorization question comes up
 mid-application and the user wants it seeded proactively for next time,
 a salary expectation changes, a notice period changes after a new job
 starts, etc. When updating an existing `qa[]` entry's answer rather than
-adding a new fact, edit it directly with Edit (or delete + re-add) —
-`profile-qa.mjs` has no `update` command by design, since changing an
+adding a new fact, remove it and add it again (`profile-qa.mjs remove <id>`, then
+`add` with the same `--canonical`); never edit the array by hand, as step 5 and the
+data repo's `CLAUDE.md` say. `profile-qa.mjs` has no `update` command by design, since changing an
 existing fact is rare enough to not need its own CLI surface. The one exception is the
 form-facing text: `profile-qa.mjs set-value <id> --value="…"` (or `--no-value`, `--pick`).

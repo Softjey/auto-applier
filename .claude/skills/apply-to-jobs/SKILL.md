@@ -118,6 +118,11 @@ below.
   `workAuthorization`, `location`, `compensation`, `availability`) are
   mostly `null`, stop and tell the user to run the `profile-interview`
   skill first — don't try to muddle through with an empty profile.
+- **Ask for every missing standard answer before the first vacancy.** Check the
+  topics `profile-interview` step 6 seeds (`profile-qa.mjs find "<topic>"` for each)
+  and the structured fields it fills. Whatever is missing goes to the user as one
+  list in the start-of-run questions, recorded as they answer. The user should never
+  have to ask what you need; anything still missing is parked per vacancy as usual.
 - Read `$BROWSER_GUIDE` and confirm your runtime actually has all five
   browser capabilities it lists. Missing one is a stop, not something to work
   around.
@@ -188,7 +193,10 @@ never the whole form:
    self-assessments (ownership / startup / AI top option, stack rating from `skills.csv`),
    language policy, compensation derivation. A near-match is a `review`: alias it,
    don't ask. The same fact must get the same answer on every form (English "fluent"
-   from `qa-zyefnz` on one form is not "ask" on the next).
+   from `qa-zyefnz` on one form is not "ask" on the next). A general answer the user
+   gave about every company (relationships with employees, a clean record) answers
+   this form too, unless an `employer-specific` entry names this employer: that one
+   wins, and a name you are not sure matches is a question, not a match.
 2. The form itself — a dropdown the extension could not match (country, English level,
    currency) is a list *you* read and choose from, not a question for the user.
 3. The facts files — `profile.json`, the base CV (clients, countries,
@@ -504,14 +512,21 @@ After the last vacancy has been worked — not before — give the user one list
 **grouped by vacancy**, of everything that needs them. For each parked vacancy:
 
 ```
-<Company> — <role> (<vacancyId>)
+<Company> — <role> (<vacancyId>) — <vacancy.link>
   • <question as the form words it> — <what you need: a fact, a choice, yes/no>
   • <manual step, e.g. "the CAPTCHA asks for pictures — solve it and press Submit in the open tab" / "the portal rejected the generated password twice — set one yourself">
   • <salary: band X from <source>, floor Y — apply at that money? yes/no>
 ```
 
 Keep it to actions and questions; no narration. Put the applied/parked/dead
-counts and the run folder above the list.
+counts and the run folder above the list. The link is the vacancy's OneTap.Work
+`link`, verbatim, so the user can open it without searching.
+
+**Every vacancy the run did not apply to is on the list** — parked ones, and the
+ones never reached (the queue was cut short, a limit was hit, the user stopped the
+run), each with why and what happens next. Write the same list to
+`runs/<run-id>/remaining.md`, so the user never has to ask which vacancies are
+still open.
 
 **Every question to the user goes through `AskUserQuestion`, never as prose** —
 parked vacancies, the salary floor, the start-of-run choices, approval pauses. If they
@@ -736,6 +751,8 @@ Per vacancy, following its ATS file:
      and the tailored resume, then re-read with the posting closed.
    - **No salary and no links** in a box that did not ask for them; they are in
      the CV.
+   - **A skill the user's policy says to mention only when asked stays out** of
+     every free-text answer unless the question is about that area.
    - **Salary fields get what a person would type**: a number-only input gets
      `30000`, a short text input gets `30000 netto B2B`. `$SALARY_QUOTE`'s
      `Note` line is for the OneTap note, never for the form.
