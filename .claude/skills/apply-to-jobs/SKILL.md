@@ -512,14 +512,21 @@ After the last vacancy has been worked — not before — give the user one list
 **grouped by vacancy**, of everything that needs them. For each parked vacancy:
 
 ```
-<Company> — <role> (<vacancyId>)
+<Company> — <role> (<vacancyId>) — <vacancy.link>
   • <question as the form words it> — <what you need: a fact, a choice, yes/no>
   • <manual step, e.g. "the CAPTCHA asks for pictures — solve it and press Submit in the open tab" / "the portal rejected the generated password twice — set one yourself">
   • <salary: band X from <source>, floor Y — apply at that money? yes/no>
 ```
 
 Keep it to actions and questions; no narration. Put the applied/parked/dead
-counts and the run folder above the list.
+counts and the run folder above the list. The link is the vacancy's OneTap.Work
+`link`, verbatim, so the user can open it without searching.
+
+**Every vacancy the run did not apply to is on the list** — parked ones, and the
+ones never reached (the queue was cut short, a limit was hit, the user stopped the
+run), each with why and what happens next. Write the same list to
+`runs/<run-id>/remaining.md`, so the user never has to ask which vacancies are
+still open.
 
 **Every question to the user goes through `AskUserQuestion`, never as prose** —
 parked vacancies, the salary floor, the start-of-run choices, approval pauses. If they
