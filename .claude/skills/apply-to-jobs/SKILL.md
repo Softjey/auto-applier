@@ -188,7 +188,10 @@ never the whole form:
    self-assessments (ownership / startup / AI top option, stack rating from `skills.csv`),
    language policy, compensation derivation. A near-match is a `review`: alias it,
    don't ask. The same fact must get the same answer on every form (English "fluent"
-   from `qa-zyefnz` on one form is not "ask" on the next).
+   from `qa-zyefnz` on one form is not "ask" on the next). A general answer the user
+   gave about every company (relationships with employees, a clean record) answers
+   this form too, unless an `employer-specific` entry names this employer: that one
+   wins, and a name you are not sure matches is a question, not a match.
 2. The form itself — a dropdown the extension could not match (country, English level,
    currency) is a list *you* read and choose from, not a question for the user.
 3. The facts files — `profile.json`, the base CV (clients, countries,
