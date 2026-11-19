@@ -197,7 +197,8 @@ Use it any time: a new country's work-authorization question comes up
 mid-application and the user wants it seeded proactively for next time,
 a salary expectation changes, a notice period changes after a new job
 starts, etc. When updating an existing `qa[]` entry's answer rather than
-adding a new fact, edit it directly with Edit (or delete + re-add) —
-`profile-qa.mjs` has no `update` command by design, since changing an
-existing fact is rare enough to not need its own CLI surface. The one exception is the
-form-facing text: `profile-qa.mjs set-value <id> --value="…"` (or `--no-value`, `--pick`).
+adding a new fact, remove it and add it again (`profile-qa.mjs remove <id>`, then
+`add` with the same `--canonical`); never edit the array by hand, as step 5 says.
+`profile-qa.mjs` has no `update` command by design, since changing an existing fact
+is rare enough to not need its own CLI surface. The one exception is the form-facing
+text: `profile-qa.mjs set-value <id> --value="…"` (or `--no-value`, `--pick`).
