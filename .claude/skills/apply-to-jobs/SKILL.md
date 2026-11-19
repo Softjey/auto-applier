@@ -112,6 +112,11 @@ below.
   `workAuthorization`, `location`, `compensation`, `availability`) are
   mostly `null`, stop and tell the user to run the `profile-interview`
   skill first — don't try to muddle through with an empty profile.
+- **Ask for every missing standard answer before the first vacancy.** Check the
+  topics `profile-interview` step 6 seeds (`profile-qa.mjs find "<topic>"` for each)
+  and the structured fields it fills. Whatever is missing goes to the user as one
+  list in the start-of-run questions, recorded as they answer. The user should never
+  have to ask what you need; anything still missing is parked per vacancy as usual.
 - Read `$BROWSER_GUIDE` and confirm your runtime actually has all five
   browser capabilities it lists. Missing one is a stop, not something to work
   around.
