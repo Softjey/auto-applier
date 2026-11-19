@@ -736,6 +736,8 @@ Per vacancy, following its ATS file:
      and the tailored resume, then re-read with the posting closed.
    - **No salary and no links** in a box that did not ask for them; they are in
      the CV.
+   - **A skill the user's policy says to mention only when asked stays out** of
+     every free-text answer unless the question is about that area.
    - **Salary fields get what a person would type**: a number-only input gets
      `30000`, a short text input gets `30000 netto B2B`. `$SALARY_QUOTE`'s
      `Note` line is for the OneTap note, never for the form.

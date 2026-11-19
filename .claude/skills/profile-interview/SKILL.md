@@ -73,6 +73,17 @@ and then hands back to this interview.
      framework). Then ask whether they know the CEFR level (A1–C2) for each
      non-native one: forms ask for it in that scale, and a level the user never
      gave is a level you cannot pick. Record it only if they state it.
+   - **How to present them** — three standing rules, each a `policy` entry
+     with `--no-value`:
+     - which links may go on a form: a stale portfolio or an old profile is
+       one the user wants left out, so ask about each link found in step 2
+       instead of using every one;
+     - skills to mention only when a question asks about that area (a skill
+       they have used but are not strong in); free-text answers leave them out
+       otherwise;
+     - a knock-out question they would fail (a missing year of experience, a
+       required skill): answer truthfully and let the employer decide, or park
+       the vacancy for them to decide first.
 5. **Write structured answers directly into `data/profile.json`** with Edit —
    this is low-volume, one-time data, safe to hand-edit (unlike `qa[]`,
    which is machine-managed — never hand-edit that array).
