@@ -27,3 +27,7 @@ policy). Clear Address last, right before Submit.
 
 **Free-text screening questions are plain text inputs** ("level of English", "available to start"):
 `B2` / `In 2 weeks`, from the profile.
+
+## Seen 2026-11-06
+
+Date fields take MM/DD/YYYY (06.11.2026 was read as June 11). Retype as 11/06/2026.

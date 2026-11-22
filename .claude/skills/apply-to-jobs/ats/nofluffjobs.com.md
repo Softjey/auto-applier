@@ -45,3 +45,14 @@ before any page renders. The user's own Chrome loads it fine. Not worth working 
 inspect this site in the user's browser. Also: an offer whose Apply button carries the
 external-link icon (Devire's) is **not** the in-page modal — a click there did not open
 one, so treat such an offer as an external apply until seen otherwise.
+
+## Seen 2026-11-06 (TPConnects offer)
+
+The Apply button needs a second try: the first click can show nothing for several
+seconds; clicking it by element ref opened the modal. Name, e-mail, LinkedIn and
+GitHub were prefilled by the extension; the phone box was empty. `file_upload`
+must target the **second** file input (the one with no id) and then `input`/`change`
+dispatched; the first input (`#file`) accepts the file but the drop zone never shows
+"File selected". The consent text is informational only (no required checkbox);
+"Which language do you know?" is a required checkbox group; tick from `profile.languages`. The data administrator named in the
+consent can be a recruiting agency, not the company on the offer.
