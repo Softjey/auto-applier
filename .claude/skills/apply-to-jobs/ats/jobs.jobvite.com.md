@@ -32,3 +32,7 @@ select with continent-level options (America / Asia / Europe / Others).
 ## Success signal
 
 Not yet observed — the 2026-09-04 run stopped before SEND APPLICATION.
+
+## Observed 2026-10-26 (Xperi, tenant tivo)
+
+Success: URL `/job/<id>/applyConfirmation`, page "Application Sent!". The I ACCEPT button sits at the bottom of the long privacy notice; `scrollIntoView` it, then click. The resume file input is `#file-input-0` inside the "Add Resume" dialog; `find` it, `file_upload` works and a chip with the filename appears.

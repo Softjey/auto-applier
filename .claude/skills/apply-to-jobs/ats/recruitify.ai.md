@@ -84,3 +84,10 @@ fresh screenshot, then confirm with `.checked` and a `zoom`.
 The Link Group tenant gated Apply behind a visible reCAPTCHA v2; the Euvic tenant
 (2026-09-06) had none and submitted straight through to `/job/<id>/thanks`
 (a "thank you for filling in the form" message). Probe for it rather than assuming.
+
+## Seen 2026-11-06 (linkgroup tenant)
+
+The site header's mega menu opens on hover and then stays over the page, so coordinate
+clicks and typing hit nothing. Use native value setter + `input`/`change`/`blur` events for
+the text boxes, `file_upload` by ref for the CV, and `.click()` on the first checkbox.
+The reCAPTCHA is still there: fill everything, leave the tab open and hand the tick to the user.

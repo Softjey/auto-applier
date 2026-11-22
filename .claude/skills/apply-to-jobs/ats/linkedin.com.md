@@ -55,3 +55,10 @@ are found by exact innerText through shadow roots; coordinate clicks also work
 
 Dialog turns into "Your application was sent to <company>!" and the URL loses the
 tracking query. Record it as the evidence screenshot, then mark APPLIED.
+
+## Seen 2026-11-06
+
+A job page can show "Not currently accepting applications" with no Apply control: treat
+it as a dead posting (ARCHIVED). `file_upload` into the Easy Apply input is not enough:
+dispatch `input` and `change` on the input, and check the review step shows the right CV
+(a preselected resume can be a previous vacancy's upload).
