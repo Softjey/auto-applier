@@ -10,3 +10,5 @@ linkedin/session.json
 # Points at the private data repo; written by init_data_repo.py
 .data-dir
 .DS_Store
+
+/evals/results/
