@@ -1,0 +1,932 @@
+{
+ "fetched_at": "2026-11-20T09:00:00+00:00",
+ "complete": true,
+ "queries_done": 14,
+ "queries_total": 14,
+ "queries_pending": [],
+ "total_seen": 27,
+ "already_judged": 0,
+ "dropped_as_stale": 0,
+ "new_count": 27,
+ "not_yet_fetched": 0,
+ "judged_since_snapshot": 0,
+ "requested": 27,
+ "ok": 27,
+ "failed": 0,
+ "jobs": [
+  {
+   "job_id": "4489148185",
+   "link": "https://www.linkedin.com/jobs/view/4489148185",
+   "title": "Senior Software Engineer - Frontend - Consumer",
+   "company": "Ink Foundation",
+   "company_link": null,
+   "location": "Poland",
+   "posted_text": "12 hours ago",
+   "applicants": "35 applicants",
+   "description": "Building the Future of Open Finance\n\nPayward - the parent company behind Kraken, NinjaTrader, Breakout, xStocks, Payward Services and CF Benchmarks - has spent the last 15 years building one of the most modern and globally accessible financial infrastructure platforms in the industry, built to advance an open, global financial system.\n\nThe team\n\nFounded in 2011, Kraken is one of the world's longest-standing crypto platforms, trusted by over 10 million individuals and institutions across the globe. It offers spot trading, margin, futures, staking, and OTC services, with products built for both individual investors and institutional clients.\n\nThe Consumer team owns the Kraken app experience used by millions of traders and crypto newcomers worldwide, the product that turns someone's first crypto curiosity into a long-term relationship with Kraken. We build the interfaces people actually use to buy, sell, manage their portfolio, and interact with their assets. Our stack is React on web and React Native on mobile, and we ship fast, measure everything, and iterate based on real user behaviour. We work agile, globally distributed, and we care as much about why we build something as how we build it.\n\nWe're looking for a world-class Senior Frontend Engineer to join our product-minded engineering team: we care about customer problems, measurable outcomes, frontend craft, and fast iteration. We work across web and mobile surfaces, partner closely with Product, Design, Data, and Platform teams, and use experimentation, observability, and user behaviour to guide what we build next.\n\nThe opportunity\n\n- Design, develop, and maintain high-quality consumer-facing features across web (React) and mobile (React Native), owning the full experience from concept to production monitoring.\n- Own the full lifecycle of product work, from discovery and technical design through release, monitoring, experimentation, and iteration.\n- Drive A/B testing and experimentation strategies forming hypotheses, designing experiments, analysing results, and iterating based on data.\n- Partner with Product, Design, Data, and Mobile engineers to create coherent experiences across Kraken’s consumer surfaces.\n- Make opinionated technical decisions on framework and architecture choices (we want engineers who have strong views on things like TanStack Router vs Next.js App Router and can back them up with real experience).\n- Set the standard for high-quality code — functional correctness, accessibility, performance, and testability are non-negotiables.\n- Mentor engineers across seniority levels and contribute to a culture of craft and continuous improvement.\n- Lead and collaborate on complex cross-platform initiatives, driving alignment across web and mobile surfaces.\n- Stay ahead of the curve on React ecosystem tooling, React Server Components, concurrent features, streaming, and bring those insights back to the team.\n- Work AI-natively, we use AI tools across the full SDLC and expect engineers to have a structured, opinionated workflow, not just autocomplete.\n\nWhat You Bring\n\n- 6+ years of professional software development experience with a strong focus on consumer-facing web and/or mobile products.\n- Deep expertise in TypeScript and the React ecosystem, you have opinions about state management, data fetching patterns, and component architecture, and you can articulate the trade-offs.\n- Production experience with React Native and cross-platform mobile development, including App Store and Google Play release pipelines.\n- Experience with Next.js — specifically familiarity with App Router, React Server Components, and the client/server boundary decisions that come with them.\n- Hands-on experience with A/B testing, feature flags, and experimentation frameworks (LaunchDarkly, Optimizely, or similar).\n- Experience with WebSockets or Server-Sent Events for real-time UI updates.\n- Strong testing culture Jest, React Testing Library, Playwright or Cypress, and the judgement to know when to use each.\n- Familiarity with modern build tooling (Vite, Webpack, CI/CD pipelines) and performance profiling.\n- Experience in fintech, crypto, payments, or other high-trust consumer products where correctness and user confidence matter.\n- Strong written and verbal English, you can write a clear RFC, give direct feedback in a PR review, and explain a technical trade-off to a non-technical stakeholder.\n- An active AI-assisted development workflow, Cursor, Claude Code, Copilot, or equivalent with the engineering rigour to review and own what gets produced.\n\nUnless a specific application deadline is stated in the job posting, applications are accepted on an ongoing basis.\n\nPlease note, applicants are permitted to redact or remove information on their resume that identifies age, date of birth, or dates of attendance at or graduation from an educational institution.\n\nWe consider qualified applicants with criminal histories for employment on our team, assessing candidates in a manner consistent with the requirements of the San Francisco Fair Chance Ordinance.\n\nOur commitment\n\nPayward is powered by people from around the world and we celebrate the diverse talents, backgrounds, contributions, and unique perspectives that everyone brings to the table. We hire based on merit, seeking out people with the right abilities, knowledge, and skills for the job. We encourage you to apply for roles where you don't fully meet the listed requirements, especially if you're passionate or knowledgeable about crypto.\n\nWe may ask candidates to complete job-related skills or work-style assessments as part of our hiring process. These assessments evaluate competencies relevant to the role and are applied consistently across candidates for similar positions. Results are considered alongside experience and interviews, and are not the sole basis for any employment decision.\n\nAs an equal opportunity employer, we don't tolerate discrimination or harassment of any kind, whether based on race, ethnicity, age, gender identity, citizenship, religion, sexual orientation, disability, pregnancy, veteran status, or any other protected characteristic as outlined by federal, state, or local laws.\n\nStay connected\n\nFollow us on Twitter\n\nLearn on the Kraken Blog\n\nConnect on LinkedIn\n\nCandidate Privacy Notice",
+   "criteria": {
+    "Seniority level": "Not Applicable",
+    "Employment type": "Full-time",
+    "Industries": "Blockchain Services"
+   },
+   "seniority": "Not Applicable",
+   "employment_type": "Full-time",
+   "industries": "Blockchain Services",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-11-09",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/React",
+    "remote-poland/Frontend",
+    "remote-poland/Node.js"
+   ]
+  },
+  {
+   "job_id": "4488864847",
+   "link": "https://www.linkedin.com/jobs/view/4488864847",
+   "title": "Software Engineer (Node.js, Javascript/Typescript)",
+   "company": "ALTEN",
+   "company_link": null,
+   "location": "Poland",
+   "posted_text": "9 minutes ago",
+   "applicants": "Be among the first 25 applicants",
+   "description": "WHO ARE WE?\n\nWE ARE A WORLD LEADER IN ENGINEERING AND IT SERVICES.\n\nAt ALTEN, we see our specialists as architects – today’s designers of tomorrow’s world.\n\nAs a leader in Engineering and IT Services, we support companies in their technological and sustainable transformation.\n\nOVER 57,400 EMPLOYEES IN 30+ COUNTRIES, TO SUPPORT MORE THAN 6,500 CLIENTS WORLDWIDE.\n\nWe operate in all sectors: Aeronautics, Space, Defence, Security & Naval, Automotive, Rail & Mobility, Energy & Environment, Life Sciences & Health, Industrial Equipment & Electronics, Telecoms, Banking, Finance & Insurance, Retail, Services & Medias, Public Services & Government.\n\nWe carry out complex and highly technical projects throughout the value chain of the most prestigious companies worldwide.\n\nOur motto: Building Tomorrow’s World Today!\n\nKey Responsibilities:\n\n- Develop, maintain, and enhance backend applications using Node.js.\n- Participate in all stages of the software development lifecycle, including requirements analysis, implementation, testing, deployment, maintenance, and continuous improvement.\n- Work as part of a self-organized Agile team responsible for building, owning, and operating the service.\n- Design and implement scalable, high-performance cloud-based solutions.\n- Collaborate closely with Product Managers and business stakeholders to translate requirements into effective technical solutions.\n- Participate in code reviews and ensure high code quality by following software engineering best practices.\n- Contribute to the implementation and optimization of CI/CD processes.\n- Support the migration, modernization, and continuous improvement of existing services and applications.\n\nThe ideal candidate for this position will have:\n\n- BSc or MSc degree in Computer Science, Mathematics, or a related technical field.\n- Minimum 4 years of experience in cloud application development using Node.js.\n- Strong proficiency in JavaScript and TypeScript.\n- Hands-on experience designing and developing backend applications and services.\n- Experience working in an Agile environment.\n- Excellent written and verbal communication skills in English (minimum B2 level).\nNice to Have\n\n- Experience with CI/CD pipelines and DevOps practices.\n- Experience with AWS cloud services.\n- Programming experience with Python.\n- Programming experience with C#.\n- Experience using Git or other distributed version control systems.\n- Experience migrating applications or services between different technology stacks and programming languages.\n- Knowledge of modern cloud-native architectures and software design patterns.\n\nWe offer\n\nWe offer a full-time employment contract\n\n- Location –Poland; work model – remote\n- Stable and long-term cooperation\n- Well-defined career path at the European leader in engineering & IT consulting\n- Opportunity to relocate and work in different ALTEN Polska branches\n- After completion of the project, opportunity to engage in a subsequent one within the company\n- Introduction and cooperation with dedicated Competences Manager\n\nBenefits\n\n- Medicover medical care\n- Medicover dental care\n- Medicover Benefits platform\n- Medicover Sport card\n- Referral Program\n- Layette for a newborn employee’s child\n- Group life insurance\n- Pension scheme\n\nWe also offer cooperation based on a B2B or Contract of mandate (UZ).\n\nWe also guarantee:\n\n- Access to professional certifications with our technology partners (e.g. Google, ISTQB)\n- Access to relevant industry events\n- Access to the Knowledge Sharing Program\n- Access to Referral program\n\nJoin our team and let’s build tomorrow’s world today!\n\nNOTICE: We kindly inform you that we will contact the selected candidates.\n\nBy clicking the \"Send\" button, you agree to the processing of your personal data included in the recruitment application by Alten Polska sp. z o.o., based in Warsaw, for the purpose of conducting the recruitment process for the position specified in the job advertisement. You can withdraw your consent at any time by contacting us at ALTEN_PL_RODO@alten.com, which will result in the termination of the recruitment process and your application not being considered in future recruitments.\n\nYou can find the full information regarding the processing of your personal data at:\n\nhttps://docs.altenpolska.pl/do_pobrania/Klauzula_informacyjna_dla_potencjalnych_pracownikow.pdf",
+   "criteria": {
+    "Seniority level": "Associate",
+    "Employment type": "Full-time",
+    "Industries": "IT Services and IT Consulting and Software Development"
+   },
+   "seniority": "Associate",
+   "employment_type": "Full-time",
+   "industries": "IT Services and IT Consulting and Software Development",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-11-09",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/Next.js",
+    "remote-poland/JavaScript",
+    "remote-poland/Node.js"
+   ]
+  },
+  {
+   "job_id": "4481575442",
+   "link": "https://www.linkedin.com/jobs/view/4481575442",
+   "title": "Senior Full Stack Engineer (React + Java/Node.js)",
+   "company": "ALTEN",
+   "company_link": null,
+   "location": "Poland",
+   "posted_text": "2 weeks ago",
+   "applicants": "83 applicants",
+   "description": "Senior Full Stack Engineer (React + Java/Node.js)\n\n100% remote\n\nKIM JESTEŚMY?\n\nALTEN – Światowy lider usług inżynieryjnych i IT\n\nGrupa ALTEN, założona w 1988 roku we Francji, jest wiodącym partnerem technologicznym, obsługującym największych klientów na świecie. W 2023 roku osiągnęła przychody przekraczające 4,07 miliarda euro i zatrudnia ponad 57 000 pracowników, w tym 88% inżynierów i ekspertów IT. ALTEN Polska działa od 13 lat, wspierając innowacje, badania i rozwój oraz systemy IT swoich klientów. Posiada biura w Krakowie, Warszawie, Wrocławiu, Gdańsku i Poznaniu. Obsługuje kluczowe branże, takie jak lotnicza, kosmiczna, przemysłowa, motoryzacyjna, kolejowa, energetyczna, finansowa, telekomunikacyjna i sprzedażowa. Zakres ekspertyzy: analiza biznesowa, cyberbezpieczeństwo, sztuczna inteligencja, analiza danych i rozwiązania chmurowe, rozwój aplikacji, testowanie oprogramowania, zarządzanie projektami, oprogramowanie wbudowane, zarządzanie jakością, industrializacja, transformacja cyfrowa oraz inżynieria przemysłowa.\n\nWięcej informacji na http://www.altenpolska.pl\n\nPoszukiwany: Senior Full Stack Engineer (React + Java/Node.js)\n\nDo globalnego zespołu produktowego poszukujemy Senior Full Stack Engineera, który będzie rozwijać nowoczesną platformę SaaS wykorzystywaną przez największe organizacje na świecie. To rola dla osoby, która dobrze odnajduje się zarówno po stronie frontendu, jak i backendu, a jednocześnie lubi pracować nad złożonymi produktami enterprise. Na co dzień będziesz tworzyć portale administracyjne, dashboardy operacyjne oraz rozwiązania wspierające zarządzanie procesami i konfiguracją platformy w środowisku chmurowym.\n\nKLUCZOWE ZADANIA:\n\n- Projektowanie i rozwój nowoczesnych aplikacji webowych w oparciu o React i TypeScript\n- Budowa portali administracyjnych, dashboardów oraz narzędzi wspierających operacje biznesowe\n- Tworzenie i rozwój usług backendowych oraz REST API\n- Integracja aplikacji z systemami wewnętrznymi i zewnętrznymi\n- Praca w architekturze mikroserwisowej\n- Współpraca przy projektowaniu nowych funkcjonalności i decyzjach architektonicznych\n- Dbanie o jakość kodu poprzez code review oraz testy jednostkowe\n- Optymalizacja wydajności, bezpieczeństwa i dostępności aplikacji\n- Współpraca z zespołami produktowymi i inżynieryjnymi w międzynarodowym środowisku\n\nWYMAGANIA:\n\n- Minimum 5 lat doświadczenia w tworzeniu aplikacji Full Stack\n- Praktyczne doświadczenie z React, TypeScript oraz JavaScript\n- Znajomość Java (Spring Boot) lub Node.js\n- Doświadczenie w tworzeniu i integracji REST API\n- Dobra znajomość architektury mikroserwisowej\n- Doświadczenie w pracy z bazami danych relacyjnymi (PostgreSQL, MySQL lub Oracle)\n- Znajomość środowisk chmurowych: AWS, Azure lub GCP\n- Doświadczenie z Dockerem oraz Kubernetes\n- Znajomość CI/CD i systemów kontroli wersji (Git)\n- Rozumienie zagadnień związanych z bezpieczeństwem aplikacji oraz uwierzytelnianiem użytkowników (OAuth2, OIDC, SAML, RBAC)\n- Bardzo dobra znajomość języka angielskiego\n\nOferujemy umowę o pracę na pełen etat\n\n• Lokalizacja – Polska; model pracy – 100% remote\n\n• Stabilną i długoterminową współpracę\n\n• Jasno zdefiniowaną ścieżkę kariery u europejskiego lidera w doradztwie inżynieryjnym i IT\n\n• Możliwość relokacji w ramach lokalnych oddziałów ALTEN Polska\n\n• Po zakończeniu projektu możliwość zaangażowania w kolejny w ramach firmy\n\n• Wdrożenie oraz współpracę z dedykowanym Competences Managerem\n\nBenefity\n\n• Opieka medyczna Medicover\n\n• Opieka stomatologiczna Medicover\n\n• Platforma Medicover Benefits\n\n• Karta sportowa Medicover\n\n• Program poleceń\n\n• Wyprawka dla nowonarodzonego dziecka pracownika\n\n• Ubezpieczenie grupowe na życie\n\n• Program emerytalny\n\nOferujemy również współpracę na podstawie B2B lub umowy zlecenia (UZ).\n\nGwarantujemy także:\n\n• Dostęp do profesjonalnych certyfikacji u naszych partnerów technologicznych (np. Google, ISTQB)\n\n• Dostęp do branżowych wydarzeń\n\n• Dostęp do programu wymiany wiedzy (Knowledge Sharing Program)\n\n• Dostęp do programu poleceń",
+   "criteria": {
+    "Seniority level": "Associate",
+    "Employment type": "Full-time",
+    "Industries": "IT Services and IT Consulting"
+   },
+   "seniority": "Associate",
+   "employment_type": "Full-time",
+   "industries": "IT Services and IT Consulting",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-10-20",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/Next.js",
+    "remote-poland/JavaScript",
+    "remote-poland/React",
+    "remote-poland/Frontend",
+    "remote-poland/Full-stack",
+    "remote-poland/Node.js"
+   ]
+  },
+  {
+   "job_id": "4488870325",
+   "link": "https://www.linkedin.com/jobs/view/4488870325",
+   "title": "Senior Full Stack Developer",
+   "company": "Luxoft Poland",
+   "company_link": null,
+   "location": "Wroclaw Metropolitan Area",
+   "posted_text": "20 hours ago",
+   "applicants": "Be among the first 25 applicants",
+   "description": "🔵Project Description:\n\nWe're looking for a senior Full-Stack Developer (Java + React) to join our client's team and help build a new AI-enabled application platform. The team works with modern AI-assisted tools such as GitHub Copilot and generative AI, and cares about clean code, agile methods and high-quality delivery. The client is in the investment banking industry, and the platform supports collateral and margin management.\n\n🔵Responsibilities:\n\nDesign, develop and maintain scalable back-end services and APIs using Java (Spring Boot)\n\nBuild responsive, high-performance front-end applications using React and TypeScript\n\nUse AI-assisted development tools such as GitHub Copilot to speed up delivery while keeping quality and security high\n\nDesign and integrate generative AI features into business applications, including prompt engineering, LLM integration and evaluation of model outputs\n\nDefine and consume RESTful APIs, and communicate requirements and constraints clearly across teams\n\nAdvise and guide the team on architecture, design decisions and best practices, including the responsible use of AI tools\n\nMentor developers and raise the team's technical level through code reviews and pair programming\n\nTranslate business and product requirements into robust end-to-end technical solutions\n\nApply clean code principles and help improve engineering standards, tooling and CI/CD pipelines\n\nWrite and maintain automated tests (unit, integration, end-to-end) on both front end and back end\n\nTake an active part in agile ceremonies (Scrum/Kanban), including refinement, planning, reviews and retrospectives\n\nWork closely with QA, product managers, architects and business stakeholders to deliver high-quality work that fits business needs\n\nSupport and improve existing applications in a fast-paced, enterprise investment-banking environment\n\n🔵Mandatory Skills Description:\n\nAt least 8 years of professional software development experience, including long-term projects\n\nStrong hands-on experience with Java (Java 11+) and Spring / Spring Boot\n\nStrong hands-on experience with React, TypeScript/JavaScript, HTML and CSS\n\nProven experience delivering full-stack features end to end, from UI to back-end services and the database\n\nHands-on experience with GitHub Copilot or similar AI coding assistants in daily development\n\nPractical knowledge of generative AI and prompt engineering, including integrating LLM APIs (e.g. OpenAI, Azure OpenAI) into applications\n\nFamiliarity with CI/CD pipelines and Git-based workflows\n\nClean coding skills\n\nExcellent problem-solving skills\n\nFamiliarity with agile practices (Scrum, Kanban, etc.)\n\nGood communication skills and the ability to state requirements clearly to other teams\n\n🔵Nice-to-Have Skills Description:\n\nExperience in automated testing (JUnit, Jest, React Testing Library or similar)\n\nExperience in investment banking or capital markets\n\nExposure to RAG architectures, vector databases or AI agent frameworks\n\nWorking knowledge of Unix/Linux and shell scripting\n\n🔵Languages:\n\nEnglish: C1 Advanced\n\n🔵Our Benefits:\n\n💼 Employment & Compensation\n\n- Stable employment based on an employment contract\n- Copyright-based remuneration for Developers, resulting in a higher net salary\n🏥 Health & Well-being\n\n- LuxMed private health and dental care\n- Life and travel insurance\n- MyBenefit program (sports card, well-being initiatives, and more)\n- Employee Assistance Program for you and your family, including psychological consultations, coaching sessions, and support in personal matters\n🚗 Everyday Convenience\n\n- Car rental options\n🎓 Learning & Development\n\n- Access to the LuxTalent platform, offering webinars, training sessions, and certified courses\n🌍 Career Growth & Mobility\n\n- Internal Mobility Program, enabling rotation between projects, locations, and accounts\n…and much more!",
+   "criteria": {
+    "Seniority level": "Mid-Senior level",
+    "Employment type": "Full-time",
+    "Industries": "IT Services and IT Consulting"
+   },
+   "seniority": "Mid-Senior level",
+   "employment_type": "Full-time",
+   "industries": "IT Services and IT Consulting",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-11-09",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/JavaScript",
+    "remote-poland/React",
+    "remote-poland/Frontend",
+    "remote-poland/Full-stack",
+    "remote-poland/Node.js"
+   ]
+  },
+  {
+   "job_id": "4488839696",
+   "link": "https://www.linkedin.com/jobs/view/4488839696",
+   "title": "Frontend Angular Developer",
+   "company": "Motorola Solutions",
+   "company_link": null,
+   "location": "Cracow, Małopolskie, Poland",
+   "posted_text": "23 hours ago",
+   "applicants": "65 applicants",
+   "description": "Company Overview\n\nAt Motorola Solutions, we believe that everything starts with our people. We’re a global close-knit community, united by the relentless pursuit to help keep people safer everywhere. We build and connect technologies to help protect people, property and places. Our solutions foster the collaboration that’s critical for safer communities, safer schools, safer hospitals, safer businesses, and ultimately, safer nations. Connect with a career that matters, and help us build a safer future.\n\nDepartment Overview\n\nThe Evidence Software department at Motorola Solutions is a leading provider of Digital Asset and Evidence Management Solutions. Our team is responsible for end-to-end software development, including design, implementation, testing, delivery, and maintenance of software leveraged by public safety and enterprise applications worldwide.\n\nJob Description\n\nAs a Frontend Developer in our team, you will play a key role in designing, modernizing, and maintaining state-of-the-art web applications. While Angular is our core frontend framework, you will bring high flexibility and adaptability across different technologies, driving architectural excellence, performance, and resilience.\n\n- Architect, build, and optimize responsive, high-performance web applications that deliver exceptional user experiences.\n- Maintain and modernize existing Marionette.js application, ensuring its ongoing reliability, security, and functional value.\n- Partner closely with cross-functional team members to design and implement robust, scalable frontend solutions.\n- Take ownership of complex frontend technical challenges, guiding them independently from concept to full resolution.\n- Adapt dynamically to changing requirements and seamlessly integrate with adjacent technologies across the software stack.\n- Write and execute comprehensive unit, integration, and end-to-end tests to guarantee high quality and code resilience.\n- Engage actively in code reviews, sharing constructive feedback and fostering continuous technical improvement.\n- Stay ahead of modern frontend development trends, tools, and best practices to keep our stack innovative and efficient.\n\nBasic Requirements\n\n- 3 to 5 years of hands-on commercial experience crafting high-impact frontend or full-stack software solutions.\n- Deep expertise in Angular, paired with an open, versatile mindset and eagerness to adapt to other modern frontend frameworks.\n- Valuable exposure to backend development, modern DevOps practices, or software build systems that helps you see the bigger technical picture.\n- A collaborative and proactive mindset with strong analytical problem-solving skills to overcome complex technical challenges.\n- Solid mastery of HTML5, CSS3, and JavaScript/TypeScript building blocks.\n- Proven experience working with RESTful APIs and modern asynchronous programming concepts.\n- A keen eye for UI/UX principles and passion for turning sleek designs into seamless user experiences.\n- Confidence navigating modern version control systems, especially Git.\n\nNice to Have\n\n- Experience with modern end-to-end and frontend testing frameworks such as Playwright, Jasmine, Karma, or Cypress.\n- Experience with build tools and continuous integration environments (e.g., Webpack, Gulp, Jenkins).\n- A security-conscious mindset, knowledgeable in mitigating vulnerabilities like XSS and CSRF.\n- Commitment to accessibility standards (WCAG) to build web applications that are inclusive and accessible for everyone.\n\nWhat We Offer\n\nIn return for your expertise, we’ll support you in this new challenge with coaching & development every step of the way. Also, to reward your work, you’ll get the following:\n\n- Contract of Employment (UoP)\n- Private medical coverage, Multisport\n- Life insurance (two annual incomes),\n- Employee Stock Purchase Plan – 15% discount for buying Motorola’s Stock units,\n- Employee Pension Plan – 3,5 % of the month’s salary gross, which goes to the retirement account\n- IP Tax Relief (up to 80%)\n- Yearly salary increase (depends on individual performance)\n- Yearly bonus (depends on company performance)\n- Flexible working hours (usually the day starts between 7-10),\n- 8 hours working day (30 minutes lunch break included).\n- Hybrid work mode (one to two times from the KRK office per week)\n\nTravel Requirements\n\nNone\n\nRelocation Provided\n\nNone\n\nPosition Type\n\nExperienced\n\nReferral Payment Plan\n\nNo\n\nCompany\n\nMotorola Solutions Systems Polska Sp.z.o.o\n\nEEO Statement\n\nMotorola Solutions is an Equal Opportunity Employer. All qualified applicants will receive consideration for employment without regard to race, color, religion or belief, sex, sexual orientation, gender identity, national origin, disability, veteran status or any other legally-protected characteristic.\n\nWe are proud of our people-first and community-focused culture, empowering every Motorolan to be their most authentic self and to do their best work to deliver on the promise of a safer world. If you’d like to join our team but feel that you don’t quite meet all of the preferred skills, we’d still love to hear why you think you’d be a great addition to our team.",
+   "criteria": {
+    "Seniority level": "Not Applicable",
+    "Employment type": "Full-time",
+    "Industries": "Telecommunications"
+   },
+   "seniority": "Not Applicable",
+   "employment_type": "Full-time",
+   "industries": "Telecommunications",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-11-09",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/JavaScript",
+    "remote-poland/Frontend"
+   ]
+  },
+  {
+   "job_id": "4488872397",
+   "link": "https://www.linkedin.com/jobs/view/4488872397",
+   "title": "Tester Automatyzujący / Testerka Automatyzująca",
+   "company": "Bank Millennium",
+   "company_link": null,
+   "location": "Warsaw, Mazowieckie, Poland",
+   "posted_text": "19 hours ago",
+   "applicants": "Be among the first 25 applicants",
+   "description": "Twój zakres zadań:\n\n- Tworzenie, aktualizowanie i uruchamianie testów automatycznych\n- Planowanie procesu testowego, monitorowanie oraz raportowanie wyników testów\n- Tworzenie i rozwój frameworku testów automatycznych\n- Bliska współpraca z programistami, analitykami i testerami\n- Podnoszenie jakości oprogramowania poprzez implementowanie własnych rozwiązań\n\nNasze oczekiwania:\n\n- Komercyjne doświadczenie w TypeScript\n- Co najmniej 2-letnie doświadczenie w roli testera automatyzującego\n- Bardzo dobra znajomość biblioteki do automatyzacji testów webowych - Playwright\n- Znajomość systemu kontroli wersji (GIT) oraz doświadczenie z narzędziami CI/CD (Jenkins)\n- Znajomość narzędzi wspierających proces testowania (JIRA, Xray)\n- Komunikatywność i zaangażowanie\n- Umiejętność analitycznego myślenia, dokładność i dobra organizacja pracy\n- Chęć nauki, podnoszenia kompetencji, dzielenia się wiedzą oraz doświadczeniem\n- Dobra znajomość języka angielskiego (min. B2)\n- Znajomość zagadnień z zakresu testowania oprogramowania oraz ISTQB\nMile widziane:\n\n- Doświadczenie w pracy w instytucjach finansowych lub banku\n- Wykształcenie wyższe lub w trakcie studiów na kierunku informatycznym lub pokrewnym\n\nOferujemy:\n\n- Stałe zatrudnienie w oparciu o umowę o pracę, wynagrodzenie zasadnicze i system premii półrocznych\n- Prywatną opiekę medyczną\n- Co kwartał nowe środki do wykorzystania na platformie MyBenefit np. na kartę sportową, bilety do kina, bony zakupowe lub vouchery\n- Dostęp do platformy wellbeingowej Mindgram obejmującej wsparcie psychologiczne, rozwój osobisty i narzędzia dbania o dobrostan\n- Pracę w modelu hybrydowym z biurem w Warszawie (okolice stacji Metro Pole Mokotowskie)\n- Zniżki dla pracowników w kawiarni Green Cafe Nero w budynku Centrali\n- Możliwość zaangażowania się w inicjatywy wolontariackie organizowane przez Bank: Our People Save the Planet, Świąteczne Aukcje Charytatywne\n\nCenimy otwartość - dlatego szczegółowy przebieg rekrutacji, w tym moment, w którym poznasz proponowane wynagrodzenie i jego elementy, znajdziesz na Kariera - Bank Millennium po wybraniu interesującego Cię obszaru. Dzięki temu wiesz, czego się spodziewać na każdym etapie.\n\nRealizując wymogi określone w art. 24 ust. 6 ustawy z dnia 14 czerwca 2024 r. o ochronie sygnalistów, Bank Millennium posiada procedurę dotyczącą zgłaszania Informacji o naruszeniu prawa (zgłoszenia wewnętrzne). Szczegóły znajdziesz tutaj: Informacja dla sygnalistów",
+   "criteria": {
+    "Seniority level": "Associate",
+    "Employment type": "Full-time",
+    "Industries": "Banking"
+   },
+   "seniority": "Associate",
+   "employment_type": "Full-time",
+   "industries": "Banking",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-11-09",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/React",
+    "warsaw/Typescript",
+    "warsaw/JavaScript",
+    "warsaw/React"
+   ]
+  },
+  {
+   "job_id": "4487652788",
+   "link": "https://www.linkedin.com/jobs/view/4487652788",
+   "title": "Client Technology - DevX Principal Engineer - Tech Lead",
+   "company": "EY",
+   "company_link": null,
+   "location": "Wrocław, Dolnośląskie, Poland",
+   "posted_text": "13 hours ago",
+   "applicants": "Be among the first 25 applicants",
+   "description": "Role: DevOps Principal Engineer – Tech Lead\n\nLocation: Katowice / Wrocław - hybrid\n\nRole Overview\n\nThe DevOps Principal Engineer – Tech Lead provides senior technical leadership across cloud engineering, automation, and DevOps practices. The role blends hands-on engineering excellence with leadership responsibility to deliver scalable, secure, and resilient DevOps solutions across global, multi-region environments.\n\nThe Principal Engineer collaborates with architects, product owners, QA, Security, and global engineering teams to define standards, guide solution design, and mature DevOps capabilities across the program.\n\nKey Responsibilities\n\n- Technology Leadership & Solution Design\n- Architect and implement DevOps solutions including CI/CD, containerization, IaC, and cloud‑native designs in Azure.\n- Design multi‑stage CI/CD pipelines for complex applications with automation‑first, zero‑touch principles.\n- Lead Helm chart design, Kubernetes manifests, and release templates for enterprise deployments.\n- Drive AKS strategy: lifecycle, security, networking, scaling, and multi‑region resiliency.\n- Ensure alignment with EY reference architectures, governance, and security controls.\n- Evaluate and select DevOps and automation tooling to improve reliability and delivery velocity.\n- Lead modernization from classic/legacy pipelines to YAML and GitHub Actions.\n- Delivery Oversight & Engineering Excellence\n- Oversee backlog execution, ensuring automated build, test, and deployment processes.\n- Drive consistent delivery of DevOps capabilities aligned to defined standards.\n- Lead configuration management and environment alignment for multi‑region deployments.\n- Lead troubleshooting and root‑cause analysis of complex deployment or automation incidents.\n- Advance DevOps maturity through measurable improvements in delivery and reliability metrics.\n- Governance, Standards & Best Practices\n- Promote automation‑first, GitOps, secure SDLC, YAML pipelines, and shift‑left.\n- Implement mandatory scanning, secrets management, dependency governance, and hardening.\n- Define standards for branching, versioning, Helm packaging, release governance, and promotions.\n- Ensure compliance with EY security requirements using SonarQube, AquaSec, Mend.\n- Establish RBAC, audit trails, and governance across Azure, AKS, and CI/CD.\n- Collaboration & Stakeholder Engagement\n- Serve as senior DevOps authority for architecture, cybersecurity, QA, and product teams.\n- Drive cross‑team decision‑making with clear communication and proactive risk escalation.\n- Work with engineering leads to embed DevOps practices and self‑service capabilities.\n- Documentation & Team Development\n- Maintain high‑quality documentation across architecture, CI/CD, runbooks, and dependencies.\n- Mentor engineers and promote DevOps maturity across the organization.\n- Deliver training on CI/CD, Kubernetes, automation, and DevOps best practices.\n\nMust‑Have Skills & Experience\n\nCloud & Infrastructure (Azure) – Expert\n\n- 5–10 years hands‑on Azure experience.\n- Deep AKS expertise including cluster design, networking, security, RBAC, multi‑region deployments.\n- Strong knowledge of Azure Networking, App Gateway/WAF, App Service, Functions, Logic Apps, Storage, Azure SQL, Traffic Manager, Key Vault, Service Bus, Monitoring suite.\n\nDevOps, CI/CD & Automation – Expert\n\n- GitHub / ADO: branching, YAML pipelines, release governance.\n- Advanced CI/CD design including platform migrations.\n- Docker and multi‑stage Dockerfiles; image optimization.\n- Helm expertise (required).\n- Terraform or Bicep (preferred); ARM templates.\n- Ansible/Ansible Tower (plus).\n\nKubernetes & Orchestration – Expert\n\n- Deployments, ingress, config maps, secrets, RBAC, network policies.\n- HPA/VPA scaling; GitOps tooling (Flux/ArgoCD) preferred.\n- Helm Charts expertise (required).\n- Service mesh experience (Istio/Linkerd) desired.\n\nSecurity & Compliance – Advanced\n\n- Experience with SonarQube, Mend, AquaSec.\n- Secrets management with Key Vault or Vault.\n- Container security and vulnerability management.\n\nProgramming & Scripting – Proficient\n\n- C#, Python, or NodeJS (for understanding application build/test requirements)\n- Strong scripting in PowerShell, Bash or Python.\n- Strong YAML proficiency for CI/CD and Kubernetes.\n\nAPI & Integration – Proficient\n\n- REST APIs and integration patterns.\n- Automation via Azure, GitHub, and Kubernetes APIs.\n\nObservability & Monitoring – Proficient\n\n- Azure Monitor, App Insights, Grafana, Prometheus.\n- Logging and analytics with Log Analytics.\n- SRE practices including SLOs, SLIs, error budgets.\n\nAI Knowledge (Plus)\n\n- Experience with GitHub Copilot, AI agents, automation opportunities.\n- Understanding of AI/ML ops or OpenAI integration (plus).\n\nPreferred Qualifications\n\nCertifications\n\n- Microsoft Certified: Azure DevOps Engineer Expert\n- Microsoft Certified: Azure Administrator\n- Certified Kubernetes Administrator (CKA) or Certified Kubernetes Application Developer (CKAD)\n\nExperience\n\n- Leading global teams across time zones.\n- Large‑scale CI/CD modernization\n- SRE and observability implementation.\n- FinOps and cloud cost optimization.",
+   "criteria": {
+    "Seniority level": "Associate",
+    "Employment type": "Full-time",
+    "Industries": "Professional Services"
+   },
+   "seniority": "Associate",
+   "employment_type": "Full-time",
+   "industries": "Professional Services",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-11-09",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/Typescript"
+   ]
+  },
+  {
+   "job_id": "4486046036",
+   "link": "https://www.linkedin.com/jobs/view/4486046036",
+   "title": "Principal Solution Architect (Enabling Functions - Colleague)",
+   "company": "Tesco Technology",
+   "company_link": null,
+   "location": "Cracow, Małopolskie, Poland",
+   "posted_text": "6 days ago",
+   "applicants": "Be among the first 25 applicants",
+   "description": "About the role\n\nAt Tesco, technology is at the heart of\neverything we do – powering the way millions of colleagues and customers live,\nwork, and shop. We are looking for a Principal Solution Architect to\njoin our Enabling Functions - Colleague technology team, which plays a\nkey role in delivering intuitive, reliable, and innovative solutions for our\n300,000+ colleagues globally.\n\nAs a Principal Solution Architect, you’ll lead\nthe design and implementation of strategic systems that enable our HR, Payroll,\nLearning & Development, and Workforce Management platforms – ensuring every\ncolleague experience is simple, efficient, and empowering.\n\nYou will be responsible for\n\n- Technical\nLeadership: Drive architecture and design across\nmultiple systems, ensuring scalable, secure, and maintainable software\nsolutions.\n\n- Cross-functional\nCollaboration: Partner with product managers,\narchitects, and business stakeholders to understand colleague needs and\nshape technology roadmaps accordingly.\n\n- Innovation:\nIntroduce new tools, frameworks, and approaches that enhance development\nspeed, quality, and performance across the colleague tech space.\n\n- Team\nEmpowerment: Mentor and guide software engineers and\ntech leads across squads; promote engineering best practices and\ncontinuous improvement.\n\n- System\nOwnership: Lead the evolution of core colleague\nplatforms, including integrations with internal services and third-party\nsystems.\n\n- Operational\nExcellence: Ensure high system availability,\nperformance, and data integrity through robust DevOps practices and\nincident management.\n\nYou will need\n\nExperience and Skills:\n\n- 10+ years in software development with proven experience in a senior or principal engineering role.\n- Strong hands-on expertise in JavaScript / TypeScript, React, Node.Js\n- Strong understanding of microservices architecture, RESTful APIs, event-driven systems, and distributed computing.\n- Experience working with cloud platforms (preferably Azure), Docker, Kubernetes.\n- Hands-on knowledge of CI/CD pipelines, test automation, and infrastructure-as-code.\n- Proven experience designing and building scalable mobile and web applications with a\nfocus on usability, performance, and responsiveness.\n- Demonstrated ability to operate effectively in large, enterprise environments.\n- Familiarity with enterprise HR or colleague-focused systems is a plus (e.g., Oracle HCM, Zellis).\n\nSoft Skills:\n\n- Passion\nfor building technology that improves the colleague experience.\n\n- Strong\ncommunication and stakeholder engagement skills.\n\n- Strategic\nthinker with a pragmatic, delivery-focused mindset.\n\n- Comfortable\nnavigating ambiguity and driving change across complex environments.\n\nUnsure if you fit all the criteria? Apply and give us the chance to evaluate your potential – you could be the perfect fit!\n\nWhats in it for you?\nSalary:\nUoP: 36 000 - 47 000 PLN gross/month\nHybrid working\nWe know life looks a little different for each of us. That’s why at Tesco, we always welcome chats about different flexible working options. Some people are at the start of their careers, some want the freedom to do the things they love. Others are going through life-changing moments like becoming a carer, adapting to parenthood, or something else. So, talk to us throughout your application about how we can support.\nThis role requires you to be based in or near Kraków, as you will spend 60% (3 days) of your week collaborating with colleagues at our office locations or local sites and the rest remotely.\nOur benefits\nTesco is a diverse and exciting employer, dedicated to being #aplacetogeton, providing career-defining opportunities to all of our colleagues. If you choose to join our business, we will provide you with:\n- Up to 45% yearly salary bonus – based on both individual and business performance\n- Car allowance\n- Permanent contract from the go – as a sign of our trust in your abilities\n- Tax-deductible expenses (IP)\n- Private healthcare (LuxMed)\n- Cafeteria & Multisport\n- Additional 4 days of paid leave to support your well-being and family life\n- Increase in annual leave (from 20 to 25 days) for those not yet eligible for the full holiday entitlement\n- Learning opportunities – certified technical training and a learning platform (Udemy)\n- Back-to-school day – 1 day off for parents of primary school children\n- Fertility leave – up to 2 weeks of paid leave for IVF treatment\n- Sports activities with a personal trainer in the office\n- Referral bonus\n- MacBook as your work tool\nIf that sounds exciting, then we'd love to hear from you!\nAbout Us\nOur colleagues work with one goal in mind, helping to make every day a little better for our customers, colleagues and communities all over the world. No two customers are the same, neither are our colleagues.\nAt Tesco, we champion a balance that lets you thrive both in and out of work. Spend 60% of your week collaborating with colleagues at our office locations or local sites and the rest remotely. Whether you're just kicking off your career, juggling passions, or navigating big life events, we're here to support you.\nTesco is committed to celebrating diversity and everyone is welcome at Tesco. As a Disability Confident Employer, we’re committed to providing a fully inclusive and accessible recruitment process, allowing candidates the opportunity to thrive and inform us of any reasonable adjustments they may require.\nWant to get to know us better? Watch our team talk about our culture – YouTube\nWhat our colleagues like the most at Tesco:\n- We develop our own products\n- We make an impact; large scale of operation\n- Accountability and respect are given to us\n- We cooperate and support each other\n- There are great colleagues who are divided into small teams here\n- We can develop and learn new things\nDiscover how our colleagues shape Tesco’s tomorrow.",
+   "criteria": {
+    "Seniority level": "Not Applicable",
+    "Employment type": "Full-time",
+    "Industries": "Retail"
+   },
+   "seniority": "Not Applicable",
+   "employment_type": "Full-time",
+   "industries": "Retail",
+   "salary_text": null,
+   "salary_hints": [
+    "UoP: 36 000 - 47 000 PLN gross/month"
+   ],
+   "ok": true,
+   "posted_at": "2026-11-03",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/Typescript",
+    "remote-poland/JavaScript",
+    "remote-poland/React",
+    "remote-poland/Frontend",
+    "remote-poland/Node.js"
+   ]
+  },
+  {
+   "job_id": "4483281539",
+   "link": "https://www.linkedin.com/jobs/view/4483281539",
+   "title": "Forward Deployed Construction Engineer (Poland)",
+   "company": "Brickanta",
+   "company_link": null,
+   "location": "Warsaw, Mazowieckie, Poland",
+   "posted_text": "2 weeks ago",
+   "applicants": "Be among the first 25 applicants",
+   "description": "Inżynier budownictwa ds. wdrożeń u klienta (K/M)\n\nPart-time to start\n\n- Remote, Poland (onboarding in Stockholm)\n- Construction × AI\n\nFluent English is required for this role: it’s our working language across the company. Wersja polska na końcu dokumentu.\n\nAbout Brickanta\n\nBrickanta is the AI-native agentic platform for construction. Hundreds of AI agents take on the administrative heavy lifting across bidding, procurement, compliance and quality assurance, so builders finish projects on time and on budget.\n\nWe’re backed by Y Combinator, have raised over $8M from Northzone, Anton Osika and Mario Götze, and already work with some of the largest contractors and developers in the industry. We’re an early team and growing fast, operating like an elite sports team: maximum freedom paired with maximum responsibility. You own your work, you document what matters, and you win and lose as a team.\n\nHaving built the platform with builders in the Nordics, we’re now taking it across Europe. Poland is one of our first markets, and this is one of our first roles on the ground.\n\nThe role\n\nMost enterprise AI dies in the proof of concept. Forward deployed engineering is how we avoid that: you sit inside the customer’s workflow — on site, in the bid room, in the procurement process — and build until the work actually gets done differently.\n\nIn a new market, that also means teaching our agents how construction works here. An answer can look plausible and still be wrong in the way that matters on a real project: a FIDIC contract clause read the wrong way, a bill of quantities (przedmiar) that doesn’t match the cost estimate, a requirement in the tender specification (SWZ) that gets missed. Your job is to spot that and turn the judgment into evals our systems can measure.\n\nThis is not consulting and it is not a demo role. You ship product: take a real bottleneck at a real contractor, build the agent workflow that removes it, prove the outcome in numbers, and bring what you learned back into the core platform.\n\nWhat you’ll own\n\nDeployments\n\nOwn named accounts in Poland end to end: understand the workflow, configure and extend our agents against their real documents and data, and get them into daily use.\n\nEvaluation and ground truth\n\nRun our agents against real Polish workflows and judge the outputs on correctness, completeness and practical usefulness, not on whether they sound convincing. Turn edge cases and production failures into repeatable evals: reference outputs, scoring rubrics, failure taxonomies and expert-reviewed datasets.\n\nBuilding in the field\n\nWrite code. Integrations, data pipelines, prompts, eval harnesses, automated graders and occasionally a whole new feature: whatever it takes to make the workflow work at that customer. Work out what needs human judgment, then engineer the rest away.\n\nMeasurable outcomes\n\nDefine what success means before you start, then prove it: hours saved, bids won, risks caught. Measurable results rather than technical milestones.\n\nFeeding the product\n\nCapture what only shows up in production here, from SWZ documents and przedmiary to how tendering and procurement really run, and turn it into datasets, reusable building blocks and roadmap. Each deployment in Poland should make the next one faster.\n\nWho we’re looking for\n\nSome combination of construction depth, technical depth and a liking for customers. The unusual profile matters more than the perfect CV.\n\nBackground\n\n- Real exposure to construction in Poland: site work, site or works management, cost estimating (kosztorysowanie), tenders, procurement or quality control.\n- Experience building and shipping software (Python and/or TypeScript, APIs, data pipelines, SQL), or the raw ingredients and the drive to get there quickly.\n- Strong analytical ability and a serious interest in modern AI systems. We operate as an AI-first company.\n- Experience working directly with customers, or a clear appetite for it.\n- Fluent English, since it’s our working language, and native Polish. No Swedish needed.\n\nMindset\n\n- You go to where the work happens — site visits, bid rooms, procurement meetings — instead of guessing from a backlog.\n- Extremely detail-oriented: you work through many cases without letting the quality bar drift.\n- Curious about why systems fail, not just whether they fail.\n- High ownership: you find the problem, build the fix and follow it into production.\n- You write clearly. At Brickanta, writing creates clarity and everything important gets documented, which matters even more when the team is in another country.\n- Comfortable with ambiguity and with being the only engineer in the room.\n\nGrowth path\n\nThis seat is built to grow with the Polish market. You join part-time about three months into our launch in Poland, as the first customers go live, with the aim of going full-time as the market grows. From there the role grows with it: running the first deployments yourself, then hiring and leading a forward deployed team in Poland, and over time owning Brickanta’s technical presence in the country alongside our local commercial lead.\n\nFew people get to build and scale an AI company in a new market from the start, with a funded product and team behind them. That is the opportunity here: take Poland from first pilots to its leading contractors and developers, with responsibility, compensation and equity that grow as the market does. If you would rather go deep than broad, the path also runs inward to core AI, evals and platform engineering.\n\nSnapshot\n\nLocation\n\nRemote in Poland, with regular time on site at customers. You start with onboarding at our HQ in Stockholm alongside the team, then come back regularly. Travel and accommodation are covered.\n\nStart\n\nFirst half of 2027, about three months into our launch in Poland. Part-time to start (or a similar flexible setup), with the aim of going full-time as the market grows.\n\nLevel\n\nMid to senior. We care more about what you’ve built, on site or in code, than about years.\n\nComp\n\nCompetitive salary and equity — you’re early enough for it to matter.\n\nInżynier budownictwa ds. wdrożeń u klienta (K/M)\n\nNiepełny etat\n\n- Zdalnie z Polski (onboarding w Sztokholmie)\n- Budownictwo × AI\n\nTo polska wersja ogłoszenia. Angielski jest w tej roli niezbędny, bo to nasz język roboczy w całej firmie.\n\nO firmie Brickanta\n\nBrickanta to agentowa platforma AI-native dla budownictwa. Setki agentów AI przejmują najcięższą część pracy administracyjnej przy ofertowaniu, zakupach, zgodności z przepisami i zapewnianiu jakości, dzięki czemu firmy budowlane kończą projekty na czas i w budżecie.\n\nWspiera nas Y Combinator, pozyskaliśmy ponad 8 mln USD od Northzone, Antona Osiki i Mario Götzego, a już dziś pracujemy z jednymi z największych wykonawców i deweloperów w branży. Jesteśmy młodym, szybko rosnącym zespołem i działamy jak drużyna sportowa na najwyższym poziomie: maksimum swobody i maksimum odpowiedzialności. Każdy odpowiada za swoją pracę, dokumentuje to, co ważne, a wygrywamy i przegrywamy jako zespół.\n\nPo zbudowaniu platformy razem z firmami budowlanymi w krajach nordyckich wprowadzamy ją teraz w całej Europie. Polska jest jednym z naszych pierwszych rynków, a to jedno z pierwszych stanowisk, które obsadzamy na miejscu.\n\nRola\n\nWiększość korporacyjnych projektów AI umiera na etapie proof of concept. Forward deployed engineering to nasz sposób, żeby tego uniknąć: pracujesz w samym środku procesów klienta – na budowie, w dziale ofertowania, w procesie zakupowym – i budujesz, dopóki praca naprawdę nie zacznie wyglądać inaczej.\n\nNa nowym rynku oznacza to też uczenie naszych agentów, jak się buduje tutaj. Odpowiedź może wyglądać wiarygodnie, a mimo to być błędna dokładnie tam, gdzie ma to znaczenie w prawdziwym projekcie: źle odczytana klauzula kontraktu FIDIC, przedmiar, który nie zgadza się z kosztorysem, pominięty wymóg z SWZ. Twoim zadaniem jest to wychwycić i zamienić tę ocenę w ewaluacje (evals), które nasze systemy potrafią mierzyć.\n\nTo nie jest doradztwo ani rola od demo. Dostarczasz produkt: bierzesz realne wąskie gardło w realnej firmie budowlanej, budujesz przepływ pracy agentów, który je usuwa, udowadniasz efekt liczbami i przenosisz zdobytą wiedzę z powrotem do platformy.\n\nZa co odpowiadasz\n\nWdrożenia\n\nOdpowiadasz za konkretnych klientów w Polsce od początku do końca: rozumiesz ich procesy, konfigurujesz i rozwijasz naszych agentów na ich prawdziwych dokumentach i danych, i sprawiasz, że korzystają z nich na co dzień.\n\nEwaluacja i dane referencyjne\n\nTestujesz naszych agentów na prawdziwych polskich procesach i oceniasz wyniki pod kątem poprawności, kompletności i praktycznej użyteczności, a nie tego, jak przekonująco brzmią. Przypadki brzegowe i błędy z realnego użycia zamieniasz w powtarzalne evale: odpowiedzi wzorcowe, kryteria oceny, taksonomie błędów i zbiory danych zweryfikowane przez ekspertów.\n\nBudowanie w terenie\n\nPiszesz kod. Integracje, pipeline’y danych, prompty, środowiska ewaluacyjne, automatyczne systemy oceny, a czasem zupełnie nową funkcję – wszystko, czego trzeba, żeby proces działał u danego klienta. Rozumiesz, co wymaga ludzkiej oceny, a resztę automatyzujesz.\n\nMierzalne efekty\n\nZanim zaczniesz, definiujesz, czym jest sukces, a potem go udowadniasz: zaoszczędzone godziny, wygrane przetargi, wychwycone ryzyka. Mierzalne wyniki zamiast technicznych kamieni milowych.\n\nWiedza z powrotem do produktu\n\nZbierasz to, co wychodzi dopiero w realnym użyciu tutaj, od SWZ i przedmiarów po to, jak naprawdę wyglądają przetargi i zakupy, i zamieniasz to w zbiory danych, komponenty wielokrotnego użytku i roadmapę. Każde wdrożenie w Polsce powinno przyspieszać kolejne.\n\nKogo szukamy\n\nSzukamy połączenia znajomości budownictwa, głębi technicznej i chęci do pracy z klientami. Nietypowy profil liczy się bardziej niż idealne CV.\n\nDoświadczenie\n\n- Realne doświadczenie w budownictwie w Polsce: praca na budowie, kierowanie budową lub robotami, kosztorysowanie, przetargi, zakupy albo kontrola jakości.\n- Doświadczenie w tworzeniu i wdrażaniu oprogramowania (Python i/lub TypeScript, API, pipeline’y danych, SQL) albo solidne podstawy i determinacja, żeby szybko tam dojść.\n- Silne zdolności analityczne i poważne zainteresowanie nowoczesnymi systemami AI. Działamy jako firma AI-first.\n- Doświadczenie w bezpośredniej pracy z klientami albo wyraźna chęć do niej.\n- Biegły angielski, bo to nasz język roboczy, i polski na poziomie natywnym. Szwedzki nie jest potrzebny.\n\nNastawienie\n\n- Idziesz tam, gdzie dzieje się praca – wizyty na budowie, dział ofert, spotkania zakupowe – zamiast zgadywać na podstawie backlogu.\n- Ogromna dbałość o szczegóły: przerabiasz wiele przypadków, nie obniżając poprzeczki jakości.\n- Ciekawość, dlaczego systemy zawodzą, a nie tylko czy zawodzą.\n- Wysokie poczucie odpowiedzialności: znajdujesz problem, budujesz rozwiązanie i doprowadzasz je do produkcji.\n- Piszesz jasno. W firmie Brickanta pisanie porządkuje myślenie, a wszystko, co ważne, jest dokumentowane, co ma jeszcze większe znaczenie, gdy zespół jest w innym kraju.\n- Dobrze odnajdujesz się w niejasnych sytuacjach i jako jedyna osoba techniczna w pokoju.\n\nŚcieżka rozwoju\n\nTo stanowisko jest pomyślane tak, żeby rosło razem z polskim rynkiem. Dołączasz na niepełny etat mniej więcej trzy miesiące po starcie naszego wejścia do Polski, gdy pierwsi klienci zaczynają korzystać z platformy, z myślą o przejściu na pełny etat, gdy rynek urośnie. Od tego momentu rola rozwija się razem z nim: najpierw osobiście prowadzisz pierwsze wdrożenia, potem rekrutujesz i prowadzisz polski zespół forward deployed, a z czasem odpowiadasz za techniczną obecność firmy Brickanta w kraju, razem z naszym lokalnym liderem sprzedaży.\n\nNiewielu osobom trafia się okazja, by od początku budować i skalować firmę AI na nowym rynku, z finansowanym produktem i zespołem za plecami. Na tym polega ta szansa: przeprowadzić Polskę od pierwszych pilotaży do największych wykonawców i deweloperów w kraju, z odpowiedzialnością, wynagrodzeniem i udziałami, które rosną razem z rynkiem. Jeśli wolisz iść w głąb niż wszerz, ścieżka prowadzi też do rdzenia produktu: core AI, ewaluacji i inżynierii platformy.\n\nW skrócie\n\nLokalizacja\n\nPraca zdalna w Polsce, z regularnym czasem na budowach u klientów. Zaczynasz od onboardingu w naszej centrali w Sztokholmie razem z zespołem, a potem regularnie tam wracasz. Podróż i zakwaterowanie pokrywamy my.\n\nStart\n\nPierwsza połowa 2027 roku, około trzech miesięcy po starcie w Polsce. Na początek niepełny etat (lub podobna elastyczna forma), z myślą o przejściu na pełny etat, gdy rynek urośnie.\n\nPoziom\n\nMid lub senior. Bardziej niż lata doświadczenia liczy się to, co masz na koncie, na budowie albo w kodzie.\n\nWynagrodzenie\n\nKonkurencyjne wynagrodzenie i udziały (equity) – dołączasz na tyle wcześnie, że to ma znaczenie.",
+   "criteria": {
+    "Seniority level": "Not Applicable",
+    "Employment type": "Full-time",
+    "Industries": "Software Development"
+   },
+   "seniority": "Not Applicable",
+   "employment_type": "Full-time",
+   "industries": "Software Development",
+   "salary_text": "<h3 class=\"compensation__heading\">Base pay range</h3> <div class=\"salary compensation__salary\"> $1.00/yr - $130,000.00/yr",
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-10-27",
+   "expected_workplace": [
+    "HYBRID",
+    "ONSITE"
+   ],
+   "location_group": "warsaw",
+   "queries": [
+    "warsaw/JavaScript",
+    "warsaw/Full-stack"
+   ]
+  },
+  {
+   "job_id": "4474819637",
+   "link": "https://www.linkedin.com/jobs/view/4474819637",
+   "title": "Fullstack Engineer",
+   "company": "Asana",
+   "company_link": null,
+   "location": "Warsaw, Mazowieckie, Poland",
+   "posted_text": "1 week ago",
+   "applicants": "80 applicants",
+   "description": "The Product team builds features end-to-end. From designing our data models to implementing the subtle interaction behaviors that differentiate good software from great software. We work closely with UI designers and are supported by our infrastructure team. We aim to delight users with both large new features and smaller, daily product enhancements—thanks to our continuous deployment architecture. We want to create a superlative user experience, down to the smallest details.\n\nAsana’s ecosystem includes a wide range of powerful apps that extend its capabilities and integrate it seamlessly into our users’ workflows. These apps help establish Asana as the shared collaboration infrastructure our customers use to get things done, spanning the full breadth of domains and departments. The Functional Integrations team in the Platform Area owns integrating Asana with the most valuable function-specific (think Operations, Marketing, or IT) tools, enabling experts on those teams to effectively share and communicate their work to the company as a whole.\n\nWe’re looking for full-stack engineers who care deeply about customers and are passionate about building products that improve the way millions of teams work together. As a member of the team developing the software of a product-led company, you won’t just code — you will be an integral part of the entire product development process, from conception to post-launch reflection.\n\nThis role is based in our Warsaw office with an office-centric hybrid schedule. The standard in-office days are Monday, Tuesday, and Thursday. Most Asanas have the option to work from home on Wednesdays. Working from home on Fridays depends on the type of work you do, and your recruiter can share more about the in-office requirements.\n\nOur employees in Poland are employed under a contract of employment.\n\nWhat You’ll Achieve\n\n- As a full-stack engineer, you get to build and own a broad swath of the product: everything from creating a compelling user interface down to creating efficient, flexible, and scalable back-end processing logic\n- Participate in every step of the product development process with an open and curious team, working cross-functionally with a product manager, designer, user researcher, and data scientist\n- Develop clean, beautiful code and leave it better than you found it\n- Experience growth and development through opportunities to stretch and learn\n- Be an early employee in our growing Warsaw office, contributing to a culture that keeps Asana's workplace balanced, performant, inclusive, transparent, and aligned with our values\n\nAbout You\n\n- 6 or more years of full-stack experience working in large, well-maintained codebases building user-facing products (integration development preferred), with professional experience in Javascript/Typescript (React and Node.js) or Scala\n- Excellent communication skills for collaborating with cross-functional partners (e.g. PM, design) and cross-timezone with partner teams\n- Sound autonomous judgment when balancing moving quickly with producing quality, long-term maintainable code\n- Passionate about creating a superlative user experience and attentive to details\n- Appreciate productivity and care deeply about helping teams collaborate more effectively and efficiently, including your own\n- Excited to be a part of an inclusive culture where everyone brings the aspects of themselves to the workplace that they need to thrive\n- Demonstrates curiosity about AI tools and emerging technologies, with a willingness to learn and leverage them to enhance productivity, collaboration, or decision-making.\n\nAt Asana, we're committed to building teams that include a variety of backgrounds, perspectives, and skills, as this is critical to helping us achieve our mission. If you're interested in this role and don't meet every listed requirement, we still encourage you to apply.\n\nWhat We’ll Offer\n\nFor this role, the estimated base salary range is between 31,900 PLN - 36,250 PLN (gross monthly). The actual base salary will vary based on various factors, including market and individual qualifications objectively assessed during the interview process. The listed range above is a guideline, and the base salary range for this role may be modified.\n\nIn addition to base salary, your compensation package may include additional components such as equity, sales incentive pay (for most sales roles), and benefits. If you're interviewing for this role, speak with your Talent Acquisition Partner to learn more about the total compensation and benefits for this role.\n\nWe strive to provide equitable and competitive benefits packages that support our employees worldwide and include:\n\n- Generous, transparent and fair compensation system\n- Contract of Employment (and the option of 50% tax deductible costs for author’s rights usage in respect of applicable roles )\n- Health insurance with dental and travel coverage (Lux Med)\n- Meals reimbursement on the days that you work from the office\n- Career growth budget\n- Home office setup budget\n- Gym/Fitness reimbursement\n- Fertility healthcare and family-forming support with Carrot\n- Mental Health Support in Modern Health\n- Group life insurance\n- MacBooks with all necessary accessories\n\n#warsaw\n\nAbout Us\n\nAsana is a leading platform for human + AI collaboration. Millions of teams around the world rely on Asana to achieve their most important goals, faster. Asana has been named to Fortune's Best Workplaces for 7+ years and recognized by Fast Company, Forbes, and Gartner for excellence in workplace culture and innovation. We offer an exceptional office-centric culture while adopting the best elements of hybrid models to ensure that every one of our global team members can work together effortlessly. With 13+ offices all over the world, we are always looking for individuals who care about building technology that drives positive change in the world and a culture where everyone feels that they belong.\n\nWe believe in supporting people to do their best work and thrive. Our goal is to ensure that Asana upholds an environment where all people feel that they are respected and valued, whether they are applying for an open position or working at the company. We provide equal employment opportunities to all applicants without regard to race, color, religion, age, sex, national origin, disability status, genetics, protected veteran status, sexual orientation, gender identity or expression, or any other characteristic protected by law.\n\nJoin Asana’s Talent Network to stay up to date on job opportunities and life at Asana.",
+   "criteria": {
+    "Seniority level": "Not Applicable",
+    "Employment type": "Full-time",
+    "Industries": "Software Development"
+   },
+   "seniority": "Not Applicable",
+   "employment_type": "Full-time",
+   "industries": "Software Development",
+   "salary_text": null,
+   "salary_hints": [
+    "For this role, the estimated base salary range is between 31,900 PLN - 36,250 PLN (gross monthly). The actual base salary will vary based on various factors, including market and individual qualifications objectively assessed during the int"
+   ],
+   "ok": true,
+   "posted_at": "2026-10-29",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/Next.js",
+    "remote-poland/Typescript",
+    "remote-poland/JavaScript",
+    "remote-poland/React",
+    "remote-poland/Frontend",
+    "remote-poland/Full-stack",
+    "remote-poland/Node.js",
+    "warsaw/Next.js",
+    "warsaw/Typescript",
+    "warsaw/JavaScript",
+    "warsaw/React",
+    "warsaw/Frontend",
+    "warsaw/Full-stack",
+    "warsaw/Node.js"
+   ]
+  },
+  {
+   "job_id": "4487058710",
+   "link": "https://www.linkedin.com/jobs/view/4487058710",
+   "title": "Programista Full Stack",
+   "company": "SOLID.Jobs",
+   "company_link": null,
+   "location": "Cracow, Małopolskie, Poland",
+   "posted_text": "11 hours ago",
+   "applicants": "Be among the first 25 applicants",
+   "description": "Fullstack Development Engineer\n\n20200-23500 PLN miesięcznie (B2B)\n\nInfolet\n\nCzym będziesz się zajmować?\n\nProject\n\nJoin an international technology team developing a product analytics and telemetry platform. The solution enables application teams to collect and analyse behavioural and performance data, monitor user journeys, measure product adoption and improve user satisfaction.\n\nYou will be part of a newly formed team responsible for developing and supporting solutions throughout the entire software delivery lifecycle.\n\nYou will\n\n- Participate in software architecture design and technical decision-making\n- Develop scalable solutions using best practices and design patterns\n- Analyse business and technical requirements, identify potential improvements and recommend appropriate solutions\n- Create clear and comprehensive technical documentation\n- Develop application prototypes to validate concepts and proposed designs\n- Manage changes throughout the Service Management lifecycle\n- Contribute to automation and continuous improvement of service management processes\n- Collaborate with internal stakeholders to understand their needs and deliver appropriate technical solutions\n- Support products throughout their lifecycle, including development, testing, release, and ongoing maintenance\n\nKogo poszukujemy?\n\nMust have\n\n- At least 5 years of professional experience in backend development\n- Strong experience with Node.js and Web APIs\n- Good knowledge of database design and SQL, preferably with PostgreSQL\n- Understanding of the Software Development Lifecycle (SDLC)\n- Experience working with Git\n- Strong problem-solving skills and attention to detail\n- Good communication and interpersonal skills\n- Fluent in English and Polish\nNice to have\n\n- Experience with Go\n- Knowledge of JavaScript frameworks, particularly React or Angular 2+\n- Knowledge of HTML5 and CSS\n- Experience supporting production environments\n- Understanding of Service Management processes and related practices\n\nCzego wymagamy?\n\nZnajomości:\n\n- Node.js\n- Web API\n- SQL\n- PostgreSQL\n- Git\n- Systems development life cycle\nJęzyki:\n\n- Polski\n- Angielski\n\nJakie warunki i benefity otrzymasz?\n\n- 120-140 PLN godzinowo (B2B)\n- B2B - Elastyczne godziny pracy (100%)\n- 14500-17000 PLN miesięcznie (Umowa o pracę)\n- Umowa o pracę - Elastyczne godziny pracy (100%)\n- Praca zdalna: Hybrydowo\n- Szkolenia wewnętrzne\n- Pakiet medyczny, Ubezpieczenie, Pakiet sportowy\n- Kawa / Herbata\n- Parking rowerowy\n\nGdzie będziesz pracował?\n\nMiłkowskiego, Kraków lub hybrydowo\n\nKim jesteśmy?\n\nOd 20 lat wspieramy liderów IT, dostarczając technologie, ekspertów i pełne wsparcie operacyjne - w tym legalizację pobytu i pracy międzynarodowych specjalistów IT Do naszych projektów poszukujemy specjalistów Java, JavaScript, C embedded, C++, PHP, specjalistów od mobile, testerów oprogramowania, administratorów sieci i systemów i wielu innych.",
+   "criteria": {
+    "Seniority level": "Associate",
+    "Employment type": "Full-time",
+    "Industries": "IT Services and IT Consulting"
+   },
+   "seniority": "Associate",
+   "employment_type": "Full-time",
+   "industries": "IT Services and IT Consulting",
+   "salary_text": null,
+   "salary_hints": [
+    "20200-23500 PLN miesięcznie (B2B)",
+    "- 120-140 PLN godzinowo (B2B)",
+    "- 14500-17000 PLN miesięcznie (Umowa o pracę)"
+   ],
+   "ok": true,
+   "posted_at": "2026-11-03",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/JavaScript",
+    "remote-poland/Frontend",
+    "remote-poland/Full-stack",
+    "remote-poland/Node.js"
+   ]
+  },
+  {
+   "job_id": "4487171898",
+   "link": "https://www.linkedin.com/jobs/view/4487171898",
+   "title": "Front-end Software Developer (React/TypeScript)-EN",
+   "company": "CAE",
+   "company_link": null,
+   "location": "Cracow, Małopolskie, Poland",
+   "posted_text": "16 hours ago",
+   "applicants": "57 applicants",
+   "description": "⠀\n\nFlightscape is a high technology company, at the leading edge of digital immersion, providing solutions to make the world a safer place. Our flight services business delivers software solutions to more than 150 airline customers.  \n\nJoin the engine that is changing Fligthscape, pointing towards the next horizon of growth through digital innovations to support our customers in their success. \n\nAirlines and business aircraft operators face pressures like few others. In a heavily regulated, competitive, ultra-visible industry, they require a suite of digital tools to efficiently plan their operations and deploy their people while optimizing their performance, compliance, and customer satisfaction.\n\nYour Role\n\nFront-end Software Engineer to develop the Unified Task Board web application. Best fit for Unified Task Board team would be a highly motivated individual with focus on quality and willingness to discover new technology.\n\nMain Responsibilities\n\n- Designs and develops efficient front-end systems\n- Creates unit and integration tests\n- Works closely with team to understand and resolve problems\n- Assists in development of technical documentation\n- Deploys software tools, processes, and metrics\n- Identifies areas for modification and opportunities for improvement of the application\n- Participates in knowledge sharing\n\nNecessary Skills & Requirements\n\n- 3 or more years’ experience in programming\n- Experience in developing web applications using React and TypeScript (good understanding of hooks, state management, routing, async)\n- Knowledge of CSS\n- Experience with at lease one library for stamen management (redux, zustand)\n- Experience with RestAPI, OpenAPI\n- Experience with Node.js, NPM\n- Experience in CI/CD tools such as AzureDevops, TeamCity or Jenkins\n- Experience with dev tools (GIT)\n- Experience in form development (react-hook-form, formic) and validation (zod, yup)\n- Knowledge of data fetching and caching\n- Willingness to learn and accommodate new business knowledge (airlines industry)\n- Experience with designs systems (MUI)\n\nNice To Have Skills & Requirements\n\n- Experience in building micro-frontends\n- Experience with playwright\n- Basics of designing API (OpenAPI specifications, BE/FE contracts)\n\nBenefits\n\n- MyBenefit\n- Multisport\n- Private Medical Care – LuxMed\n- Travel Insurance - available in conjunction with a Private Medical Care – LuxMed\n- Life Insurance – UNUM\n- Employee Assistance Program (EAP)\n- Employee Stock Purchase Plan (ESPP)\n- Employee Referral Program\n- Eyeglasses Reimbursement\n- LinkedIn Learning\n- Bereavement leave\n- Volunteer leave\n- Maternal allowance supplement for 10 weeks in the first year after birth or adoption\n- Employee Capital Plans 1,5% (PPK)\n- Tax-deductible costs\n\nBase Pay Range\n\nOur total rewards package includes base pay and benefits, with final compensation determined by experience, skill, location, and internal equity.\n\nBase salary range: PLN 11 300 - PLN 14 000 gross per month\n\nAbout CAE\n\nAt CAE, our mission is clear: to help make the world a safer place. For nearly 80 years, we’ve driven innovation in simulation, training, and mission readiness to support critical operations worldwide. By leveraging advanced technologies, we empower our customers to operate smarter, faster, and more sustainably. Join a purpose-driven organization where bold ideas are encouraged, collaboration drives progress, and your growth fuels our shared success.\n\nStay informed about recruitment scams. Learn how to identify legitimate CAE communications and avoid fraudulent offers. [Learn more →]\n\nPosition Type\n\nRegular\n\nEqual Opportunity & Accommodations\n\nCAE is committed to providing equal opportunities to all applicants, regardless of race, nationality, color, religion, sex, gender identity or expression, sexual orientation, disability, neurodiversity, veteran status, age, or other characteristics protected by law. We encourage applicants who may not meet every qualification to apply. Reasonable accommodations are available—contact your recruiter or email CAECarrieres-Careers@cae.com if needed.\n\nData Privacy\n\nPrivacy Statement | CAE\n\nAs part of our process, we may use AI‑supported tools to help review applications, with human decision‑making at every step. CAE thanks all applicants for their interest. However, only those whose background and experience match the requirements of the role will be contacted.",
+   "criteria": {
+    "Seniority level": "Not Applicable",
+    "Employment type": "Full-time",
+    "Industries": "Aviation and Aerospace Component Manufacturing"
+   },
+   "seniority": "Not Applicable",
+   "employment_type": "Full-time",
+   "industries": "Aviation and Aerospace Component Manufacturing",
+   "salary_text": null,
+   "salary_hints": [
+    "Base salary range: PLN 11 300 - PLN 14 000 gross per month"
+   ],
+   "ok": true,
+   "posted_at": "2026-11-09",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/React",
+    "remote-poland/Frontend"
+   ]
+  },
+  {
+   "job_id": "4487178826",
+   "link": "https://www.linkedin.com/jobs/view/4487178826",
+   "title": "Software Developer",
+   "company": "Drillin",
+   "company_link": null,
+   "location": "Poland",
+   "posted_text": "15 hours ago",
+   "applicants": "124 applicants",
+   "description": "About Drillin\n\nDrillin is an Estonian software and AI engineering company. We build AI agents, custom platforms, mobile apps and system integrations for businesses: agents that plan a bakery's daily production, automate 20-year-old ERP systems, and turn construction drawings into structured data. Our team of 12+ engineers works with 10+ clients, and we are now building our team in Poland.\n\nThe role\n\nYou will be one of our first engineers in Poland. You will build software that real businesses run on, from the first prototype to production: web platforms, mobile apps, integrations with business systems, and AI agents. You will work closely with our team in Estonia, talk directly with clients, and help shape how Drillin grows in Poland.\n\nWhat you'll do\n\n- Build web applications and backends in TypeScript, Node.js and Python\n\n- Integrate with third-party APIs: accounting, payments, e-commerce, IoT devices, legacy systems\n\n- Build features with LLMs and AI agents together with our AI team\n\n- Use AI coding tools (Claude Code, Cursor, Codex) every day, and review their output with care\n\n- Write tests, review code and keep production systems reliable\n\n- Join client calls to understand what they actually need\n\nWhat we're looking for\n\n- 3+ years of professional software development (mid or senior)\n\n- Strong TypeScript and Node.js, or Python; React or Vue on the frontend\n\n- Experience with SQL databases (PostgreSQL) and REST APIs\n\n- You care about working software in production, not just code that compiles\n\n- Fluent English; Polish is a plus for working with local clients\n\nNice to have\n\n- Experience with LLM APIs, agents or AI features in production\n\n- Mobile development (Ionic, Capacitor, React Native)\n\n- Cloud and DevOps: GCP, AWS, Firebase, Docker\n\nWhat we offer\n\n- 15,000–22,000 PLN/month net on a B2B contract, depending on experience\n\n- A chance to be part of the founding team in Poland\n\n- Varied projects for real clients, from AI agents to mobile apps\n\n- An AI-first way of working with the latest tools paid for\n\n- Flexible hours, remote work from anywhere in Poland\n\nHow to apply\n\nApply via LinkedIn. A GitHub link or something you've built is more interesting to us than a cover letter.",
+   "criteria": {
+    "Seniority level": "Entry level",
+    "Employment type": "Full-time",
+    "Industries": "Technology, Information and Internet"
+   },
+   "seniority": "Entry level",
+   "employment_type": "Full-time",
+   "industries": "Technology, Information and Internet",
+   "salary_text": null,
+   "salary_hints": [
+    "- 15,000–22,000 PLN/month net on a B2B contract, depending on experience"
+   ],
+   "ok": true,
+   "posted_at": "2026-11-09",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/React",
+    "remote-poland/Frontend",
+    "remote-poland/Node.js"
+   ]
+  },
+  {
+   "job_id": "4487566644",
+   "link": "https://www.linkedin.com/jobs/view/4487566644",
+   "title": "Senior Front-end Engineer with React",
+   "company": "Sigma IT Poland",
+   "company_link": null,
+   "location": "Wrocław, Dolnośląskie, Poland",
+   "posted_text": "4 days ago",
+   "applicants": "Over 200 applicants",
+   "description": "Description\n\nHolisticon Connect is a division within NEXER GROUP - a custom software development company. We started in Poland in 2017 and are now a team of over 140 people. We have the opportunity to work with world-renowned brands from Scandinavia, the UK, and Western Europe. Our goal is to grow stronger, in competence rather than in numbers. If you like what we do, check out our offer, maybe we will have the pleasure of meeting you! 😊\n\nWe are looking for Senior Front-end Engineer with React to join a project centered around a globally recognized platform for process orchestration and workflow automation. The solution helps large organizations coordinate business processes across applications, services, human tasks, and AI agents, enabling them to operate more efficiently and scale their digital transformation efforts. You'll work on a mature SaaS solution trusted by leading international companies and used in business-critical environments.\n\nWe offer a choice of employment form: B2B or Employment Contract\n\n- UoP: 23 500 – 25 000 PLN gross/month\n- B2B: 170 – 180 PLN net/hour + VAT\n\nYou Might Be The Perfect Match If You Are/have\n\n- Strong experience with React;\n- Experience building complex web applications and SaaS products using HTML5, CSS3 and Javascript;\n- Experience with AI-assisted development tools (e.g., Claude Code);\n- Understanding of BPMN-based applications or willingness to learn workflow-oriented business domains;\n- Familiarity with Node.js and /or Vue.js is nice to have;\n- Familiarity with UI/UX principles is a plus;\n- Experience with cloud providers (e.g., GCP, AWS, or similar);\n- Experience with enterprise SaaS products would be an advantage;\n- Fluent Polish and English, both written and spoken;\n- Located in Poland for at least 5 years.\n\nBy Joining Us, You Gain The Following\n\n- Opportunity to work on exciting, international projects in cutting-edge industries like Automotive, Biotech, IoT;\n- Possibility to develop in cloud technologies;\n- Becoming part of a team that believes that the next step to a promising future is to put your heart into it and make it happen;\n- Respect for your private life so you don't have to work overtime or on weekends;\n- Team Events budget to socialize outside of work;\n- Company Events to celebrate smaller and bigger successes (Summer Party, Programmer's Day, and trips abroad – so far we've been in South Africa, Are, and Barcelona).\n\nPerks And Benefits\n\n- Fully remote work or in our office in Wrocław;\n- Benefits such as Luxmed, Multisport, and life insurance in Nationale Nederlanden;\n- Attractive referral system (9,5k for senior, 6k for mid, 2,5k for junior);\n- Personal Training Budget with additional paid hours;\n- Passion Day - an extra day off for your hobby to spend as you please;\n- Flexible working hours with no micro-management approach. Our core hours are 9-15, the rest of the working time is up to you;\n- We provide high-quality work equipment + 2 additional monitors and accessories.\n\nIf you apply for this position and match our expectations, then:\n\n- You will be invited to an HR Screening with our IT Recruiter.\n- You will meet with a client.\n\nSubmit your application online in one easy step! Apply now!",
+   "criteria": {
+    "Seniority level": "Not Applicable",
+    "Employment type": "Full-time",
+    "Industries": "IT Services and IT Consulting"
+   },
+   "seniority": "Not Applicable",
+   "employment_type": "Full-time",
+   "industries": "IT Services and IT Consulting",
+   "salary_text": null,
+   "salary_hints": [
+    "- UoP: 23 500 – 25 000 PLN gross/month",
+    "- B2B: 170 – 180 PLN net/hour + VAT",
+    "- Attractive referral system (9,5k for senior, 6k for mid, 2,5k for junior);"
+   ],
+   "ok": true,
+   "posted_at": "2026-11-04",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/Next.js",
+    "remote-poland/JavaScript",
+    "remote-poland/React",
+    "remote-poland/Frontend"
+   ]
+  },
+  {
+   "job_id": "4487456514",
+   "link": "https://www.linkedin.com/jobs/view/4487456514",
+   "title": "JavaScript Developer intern",
+   "company": "Softnauts - AI Software Development Company",
+   "company_link": null,
+   "location": "Cracow, Małopolskie, Poland",
+   "posted_text": "2 hours ago",
+   "applicants": "Be among the first 25 applicants",
+   "description": "Are you interested in a JavaScript internship? Are you looking for a way to launch your career? Our Software House has an offer for you! Softanuts has been developing web and mobile applications for over a decade. Each team member contributes equally to the collective growth of the company.\n\nWe specialize in developing personalized systems, games, and applications with complex functions. Learn more about us at Software House Krakow.\n\nWe are currently looking for a person for the position of JavaScript intern. We offer you a 3-month-long paid vacancy as a front-end team member.\n\nIf you are looking for an IT team where you will:\n\n- create innovative digital products from scratch,\n- take an active part in maintaining ongoing projects,\n- take part in the development of our internal products,\n\nthe JavaScript internship position in our company is perfect for you :)\n\nJavaScript Intern - Our Requirements\n\n- Education in computer science or another relevant field\n- Experience in programming in JavaScript\n- Willingness to learn and acquire new skills and knowledge\n- English language knowledge at B2 level\n\nJavaScript Internship - What We Have To Offer\n\n- A fascinating position in innovative, international ventures.\n\nAs a software company, we have the opportunity to work with partners around the world.\n\n- Full team support\n\nWe use Agile methodology in our company. With that in mind, we want our employees to feel at ease. As a JavaScript intern, you will receive proper induction and support from your colleagues. That way, you always keep pace with the projects. Regular stand-ups will keep you abreast of everything going on in the team.\n\n- Attractive salary\n\nYou can complete a JavaScript internship with us based on an employment contract or B2B.\n\n- Flexible working hours\n\nWhat time should you start your daily work? The choice is yours! The JavaScript internship at Softnauts starts freely between 7 am and 11 am.\n\n- JavaScript intern - benefits\n\nYou can count on a Multisport card and private medical care - because we want our employees to be in the best shape possible.\n\n- Snacks and drinks\n\nDelicious coffee, aromatic tea, tasty toast... Feel at home.\n\n- MacBooks and other work-related accessories\n\nDo you have your lost solutions and tools when working with JavaScript? You'll complete your internship with us exactly the way you prefer. Let us know - we will equip you accordingly.\n\n- JavaScript - remote internship\n\nDo you prefer to work in the comfort of your own home? Either way - no problem!\n\n- Space to relax\n\nJavaScript internship is also an opportunity to meet our team! Take advantage of our PS5 or join a board games night.\n\nJavaScript Intern - Is This The Job For You?\n\nYou can trust the Friendly Recruitment Coalition to provide a transparent and friendly recruitment process. We are confident that we can deliver on these promises.",
+   "criteria": {
+    "Seniority level": "Not Applicable",
+    "Employment type": "Internship",
+    "Industries": "IT Services and IT Consulting"
+   },
+   "seniority": "Not Applicable",
+   "employment_type": "Internship",
+   "industries": "IT Services and IT Consulting",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-11-10",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/Frontend"
+   ]
+  },
+  {
+   "job_id": "4457563820",
+   "link": "https://www.linkedin.com/jobs/view/4457563820",
+   "title": "Senior Software Engineer, Growth",
+   "company": "Apollo.io",
+   "company_link": null,
+   "location": "Poland",
+   "posted_text": "14 hours ago",
+   "applicants": "Over 200 applicants",
+   "description": "Apollo.io is the leading go-to-market solution for revenue teams, trusted by over 500,000 companies and millions of users globally, from rapidly growing startups to some of the world's largest enterprises. Founded in 2015, the company is one of the fastest growing companies in SaaS, raising approximately $250 million to date and valued at $1.6 billion. Apollo.io provides sales and marketing teams with easy access to verified contact data for over 210 million B2B contacts and 35 million companies worldwide, along with tools to engage and convert these contacts in one unified platform. By helping revenue professionals find the most accurate contact information and automating the outreach process, Apollo.io turns prospects into customers. Apollo raised a series D in 2023 and is backed by top-tier investors, including Sequoia Capital, Bain Capital Ventures, and more, and counts the former President and COO of Hubspot, JD Sherman, among its board members.\n\n- This is a Permanent role (\"Umowa o pracę\") and not a B2B contract**\n\nAs a Senior Software Engineer on the Growth team, you will be a critical part of our growing company, working at the intersection of engineering, product, marketing, and data science to accelerate product growth through rapid experimentation, data analysis, and scalable technical solutions. You’ll implement and drive best practices in technology, architecture, and process while optimizing funnels, automating growth loops, and shipping features that drive measurable impact.\n\nYou’ll have the chance to work in an open and collaborative environment, receive and give hands-on mentorship, and have opportunities to grow and accelerate your career. You love both learning and teaching, enjoy working cross-functionally to solve hard problems, and strive for quality — obsessing over automation, performance, and squashing any bugs that sneak through.\n\nOur tech stack: Ruby/RoR, React.js, TypeScript, Redux, Node.js, Python, MongoDB, Elasticsearch, Ansible, Terraform, Grafana, Kibana, Docker, Kubernetes, AWS/GCP, GitHub Actions.\n\nDaily Adventures and Responsibilities\n\n- Develop and execute engineering strategies that enable rapid experimentation and data-driven decision-making\n- Collaborate cross-functionally with Product, Design, Marketing, Data Science, and Engineering to optimize key growth metrics and contribute to core product initiatives\n- Architect and build scalable systems that support growth initiatives, such as onboarding flows, personalization engines, and viral loops\n- Implement A/B testing and data instrumentation to ensure accurate tracking and measurement of experiments\n- Leverage automation and machine learning to optimize user engagement, reduce churn, and personalize user experiences\n- Produce clean, well-structured, well-documented code and implement pixel-perfect designs that work across browsers, per spec\n- Help maintain code quality, organization, automation, and continuous delivery\n- Ensure technical excellence through best practices in performance optimization, security, and scalability\n- Effectively communicate development progress or blockers to the product lead, engineering manager, and other stakeholders\n- Work effectively as part of a large global team; attend and engage in stand-ups, team meetings, and manager 1:1s\n- Give and receive constructive feedback and praise\n\nCompetencies\n\n- Proactively acts without being told what to do; identifies areas of improvement and drives best practices to deliver high-quality, performant, scalable solutions\n- Takes ownership over everything shipped\n- Communicates effectively, clearly, and concisely — technical and non-technical, written and verbal — and actively listens to ensure understanding\n- Helps teammates overcome obstacles, resolve blockers, and complete work; shares credit where due\n- Actively seeks out and acts on feedback as a tool for growth\n- Confident in owning their role and bringing creative ideas to users\n- Excellent leadership and stakeholder management skills\n- Comfort with ambiguity and a bias toward action; obsession with metrics (LTV, CAC, retention) and rapid iteration\n\nSkills & Relevant Experience\n\n- Proven experience leveraging AI tools to enhance software development (code generation, debugging, productivity optimization), with fluency integrating AI-driven solutions into your workflow and a willingness to stay current with emerging AI technologies\n- BS in Computer Science, or equivalent\n- Minimum 8 years of industry experience in frontend or full-stack development, building large-scale applications\n- Proficiency in JavaScript (ES6)/TypeScript, React, Redux, HTML, CSS, and at least one backend language (Ruby/RoR, Python, or Node.js)\n- Experience with cloud infrastructure (AWS/GCP) and REST APIs\n- Experience with analytics tools (Amplitude, Mixpanel, Google Analytics) and A/B testing platforms (e.g., Optimizely, LaunchDarkly, Segment)\n- Familiarity with growth frameworks (e.g., Pirate Metrics, viral loops)\n- Strong UX and product sense, with the ability to negotiate the right MVP\n- Strong attention to detail; interest in building UI with performance, accessibility, and scalability in mind\n\nNice-to-Haves\n\n- Experience with growth at a startup or scaling product\n- Knowledge of SEO, CRM tools (Braze, HubSpot), or marketing automation\n\nWe are AI Native\n\nApollo.io is an AI-native company built on a culture of continuous improvement. We’re on the front lines of driving productivity for our customers—and we expect the same mindset from our team. If you're energized by finding smarter, faster ways to get things done using AI and automation, you'll thrive here.\n\nWhy You’ll Love Working at Apollo\n\nAt Apollo, we’re driven by a shared mission: to help our customers unlock their full revenue potential. That’s why we take extreme ownership of our work, move with focus and urgency, and learn voraciously to stay ahead.\n\nWe invest deeply in your growth, ensuring you have the resources, support, and autonomy to own your role and make a real impact. Collaboration is at our core—we’re all for one, meaning you’ll have a team across departments ready to help you succeed. We encourage bold ideas and courageous action, giving you the freedom to experiment, take smart risks, and drive big wins.\n\nIf you’re looking for a place where your work matters, where you can push boundaries, and where your career can thrive—Apollo is the place for you.\n\nLearn more here!",
+   "criteria": {
+    "Seniority level": "Not Applicable",
+    "Employment type": "Full-time",
+    "Industries": "Software Development"
+   },
+   "seniority": "Not Applicable",
+   "employment_type": "Full-time",
+   "industries": "Software Development",
+   "salary_text": null,
+   "salary_hints": [
+    "Apollo.io is the leading go-to-market solution for revenue teams, trusted by over 500,000 companies and millions of users globally, from rapidly growing startups to some of the world's largest enterprises. Founded in 2015, the company is on"
+   ],
+   "ok": true,
+   "posted_at": "2026-11-08",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/Next.js",
+    "remote-poland/Typescript",
+    "remote-poland/JavaScript"
+   ]
+  },
+  {
+   "job_id": "4435224681",
+   "link": "https://www.linkedin.com/jobs/view/4435224681",
+   "title": "Senior SAP HCM Frontend Developer with German",
+   "company": "DXC Technology",
+   "company_link": null,
+   "location": "Warsaw, Mazowieckie, Poland",
+   "posted_text": "1 day ago",
+   "applicants": "Be among the first 25 applicants",
+   "description": "Job Description\n\nDXC Technology (NYSE: DXC) is the world’s leading independent, end-to-end IT services company, helping clients harness the power of innovation to thrive on change. Created by the merger of CSC and the Enterprise Services business of Hewlett Packard Enterprise, DXC Technology serves nearly 6,000 private and public sector clients across 70 countries.\n\nRole Overview\n\nWe are looking for a Senior SAP HCM Frontend with German working proficiency to join our BizDevOps team. This is a technical development and engineering role. You will design, write, test, and maintain code for SAP HCM systems.\n\nYour primary focus will be full-stack development - building frontend SAP Fiori/UI5 applications.\n\nYou will also provide technical support, debugging, and code adjustments for SAP HCM Payroll (PY) and Time Management (TM).\n\nOccasional travel (up to 5 times per year).\n\nWe are looking for a proactive, solution-oriented individual who is passionate about helping organizations optimize their human resources processes.\n\nTechnical Responsibilities\n\n- Develop and deploy custom web applications using SAPUI5 and JavaScript. Extend and modify standard SAP Fiori applications, and configure the SAP Fiori Launchpad, tiles, and target mappings.\n- Develop and maintain technical interfaces connecting SAP HCM with external platforms, such as SAP SuccessFactors and other software.\n- Apply technical adjustments to payroll code, wage type logic configurations, and system parameters, including updates for year-end processing activities.\n- Set up, automate, and monitor SAP background jobs and execution streams (using Streamworks). Prepare technical test scenarios, execute regression, and interface tests, and manage deployments within an Agile/DevOps pipeline using Jira and Confluence.\n\nRequirements\n\n- Minimum 5 years of experience in SAP software development.\n- Practical knowledge of SAPUI5, JavaScript.\n- Technical understanding of database tables, clusters, and data models within SAP Personnel Administration (PA), Organizational Management (OM), Payroll (PY) and Time Management (TM). Functional knowledge in some of these SAP HCM modules is an advantage.\n- Practical experience using Jira and Confluence within an Agile/BizDevOps team setup.\n- Working proficiency in German (written and spoken).\n\nPreferred Qualifications\n\n- SAP certifications in SAP Fiori/UI5 Development.\n- Experience building integrations using SAP Cloud Integration (CPI) or SuccessFactors APIs.\n\nWhat We Offer\n\n- End-to-end involvement from bid to project completion\n- Continuous learning through advanced presales enablement programs and SAP certifications\n- Exposure to cutting-edge SAP technologies and innovation labs\n- Flexible work model (offices: Warsaw, Krakow, Wroclaw, Gdansk) and people-centric culture\n- Substantial medical insurance package provided in cooperation with the biggest medical services provider in Poland\n- Life insurance package\n- Multisport Card\n- Advancement opportunities within the organization (a variety of interesting projects with the array of technologies and tools)\n- Unlimited access to DXC University with courses from a bunch of external partners for the best learner's experience (e.g. Udemy)\n- DXC Partner courses and certifications (Microsoft, SAP, ServiceNow, AWS, Google, Dell Technologies, IBM, Microfocus, Salesforce, Red Hat, Vmware, Workday)\n- Employee Referral Program - financial bonus for the referrer for successful candidate recommendation\n- Opportunity to join the numerous charity and ecology-related events organized by our CSR Team (Corporate Social Responsibility)\n- Dixi Cool activities: trips, sports and wellness events, discounts for cultural events\n- Employee Recognition Program with points assigned by colleagues for the recognized employees (exchangeable for prizes)\n- Employee Assistance Program (providing 24/7 support for employees and their families in difficult life situations)\n\nThank you for taking time reviewing our job ad. If you believe this is the right match for you, please do not hesitate to apply. We are eager to learn more about you!\n\nAt DXC Technology, we believe strong connections and community are key to our success. Our work model prioritizes in-person collaboration while offering flexibility to support wellbeing, productivity, individual work styles, and life circumstances. We’re committed to fostering an inclusive environment where everyone can thrive.\n\nRecruitment fraud is a scheme in which fictitious job opportunities are offered to job seekers typically through online services, such as false websites, or through unsolicited emails claiming to be from the company. These emails may request recipients to provide personal information or to make payments as part of their illegitimate recruiting process. DXC does not make offers of employment via social media networks and DXC never asks for any money or payments from applicants at any point in the recruitment process, nor ask a job seeker to purchase IT or other equipment on our behalf. More information on employment scams is available here.",
+   "criteria": {
+    "Seniority level": "Not Applicable",
+    "Employment type": "Full-time",
+    "Industries": "IT Services and IT Consulting"
+   },
+   "seniority": "Not Applicable",
+   "employment_type": "Full-time",
+   "industries": "IT Services and IT Consulting",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-11-08",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/JavaScript",
+    "remote-poland/React",
+    "remote-poland/Frontend",
+    "remote-poland/Full-stack",
+    "warsaw/JavaScript",
+    "warsaw/React",
+    "warsaw/Frontend",
+    "warsaw/Full-stack"
+   ]
+  },
+  {
+   "job_id": "4484807408",
+   "link": "https://www.linkedin.com/jobs/view/4484807408",
+   "title": "Regular Frontend Developer/ka",
+   "company": "Interia.pl Group",
+   "company_link": null,
+   "location": "Cracow, Małopolskie, Poland",
+   "posted_text": "1 week ago",
+   "applicants": "157 applicants",
+   "description": "Miejsce pracy: KrakówTryb pracy: Zdalnie\n\nAktualnie poszukujemy osoby, która będzie uczestniczyła w rozwoju portalu oraz ekosystemu CMS przeznaczonego do zarządzania treściami, wspierającego pracę wydawców i redaktorów serwisów Grupy Interia.pl.\n\nJak wygląda nasz zespół?\n\nZespół składa się z developerów PHP i JS. Tworzymy i rozwijamy usługi i aplikacje związane z portalem www.interia.pl i jego serwisami, a także CMS do zarządzania treściami, wspierający pracę wydawców i redaktorów serwisów Interia.pl.\n\nZadania, Jakie Postawimy Przed Tobą\n\n- pisanie czystego, efektywnego i ponownie używalnego kodu\n- uczestnictwo w procesie tworzenia oprogramowania od projektu do wdrożenia\n- utrzymywanie i aktualizowanie istniejących aplikacji\n- pisanie testów jednostkowych i integracyjnych\n- współpraca z innymi członkami zespołu, w tym backend developerami i projektantami UX/UI\n\nNasze Wymagania\n\n- znajomość JavaScript (ES6+) oraz TypeScript\n- praktyczne doświadczenie w budowaniu aplikacji w React.js i Next.js\n- doświadczenie w integracji z REST API (lub GraphQL) oraz znajomość narzędzi do zarządzania stanem i cache'owania danych\n- dobre praktyki programowania, wzorce projektowe, w tym DRY, SOLID i clean code\n- umiejętność dbania o jakość kodu poprzez pisanie testów\n- biegłość w pracy z Git oraz aktywne uczestnictwo w Code Review\n- zrozumienie zagadnień wydajnościowych (Core Web Vitals) i podstaw SEO w kontekście aplikacji frontendowych\n\nOferujemy\n\n- współpracę B2B\n- możliwość rozwoju technologicznego oraz wpływu na dobór technologii, narzędzi oraz rozwiązań\n- rozwój w innych technologiach niż PHP\n- pracę w dowolnym modelu: stacjonarnym, hybrydowym lub zdalnym\n- pracę w firmie o ugruntowanej pozycji rynkowej - w jednym z największych wydawców internetowych w Polsce, będącej częścią największej grupy medialnej w naszym kraju\n- dostęp do szkoleń i konferencji\n- cykliczne spotkania Dev Tank, bo stawiamy na dzielenie się wiedzą i rozwój\n- pakiet benefitów Grupy Polsat Plus (prywatna opieka medyczna, karta Multisport, grupowe ubezpieczenie na życie) oraz integracyjne eventy\n- niekorporacyjną, swobodną i kreatywną atmosferę - start-up’owy klimat w połączeniu z możliwościami i stabilnością dużej firmy",
+   "criteria": {
+    "Seniority level": "Not Applicable",
+    "Employment type": "Full-time",
+    "Industries": "Technology, Information and Internet"
+   },
+   "seniority": "Not Applicable",
+   "employment_type": "Full-time",
+   "industries": "Technology, Information and Internet",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-10-30",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/JavaScript",
+    "remote-poland/React",
+    "remote-poland/Frontend"
+   ]
+  },
+  {
+   "job_id": "4489116536",
+   "link": "https://www.linkedin.com/jobs/view/4489116536",
+   "title": "Website Growth Engineer",
+   "company": "ElevenLabs",
+   "company_link": null,
+   "location": "Poland",
+   "posted_text": "15 hours ago",
+   "applicants": "25 applicants",
+   "description": "About ElevenLabs\n\nElevenLabs is an AI research and product company transforming how we interact with technology.\n\nWe launched in January 2023 with the first human-like AI voice model. Today, we serve millions of users and thousands of businesses - from fast-growing startups to large enterprises like Deutsche Telekom and Meta. Our investors are some of the world's most prominent, including Andreessen Horowitz, ICONIQ Growth and Sequoia. We've raised $781M in funding and our last valuation was $22B - multiples of 11, always.\n\nWe Have Expanded From Voice Into Three Main Platforms\n\n- ElevenAgents enables businesses to deliver seamless and intelligent customer experiences, with the integrations, testing, monitoring, and reliability necessary to deploy voice and chat agents at scale.\n- ElevenCreative empowers creators and marketers to generate and edit speech, music, image, and video across 70+ languages.\n- ElevenAPI gives developers access to our leading AI audio foundational models.\n\nEverything we do is the result of the creativity and commitment of our team - builders doing the best work of their lives. We are researchers, engineers, and operators. IOI medalists and ex-founders. If you want to work hard and create lasting positive impact, we want to hear from you.\n\nHow we work\n\n- High-velocity: Rapid experimentation, lean autonomous teams, and minimal bureaucracy.\n- Impact not job titles: We don’t have job titles. Instead, it’s about the impact you have. No task is above or beneath you.\n- AI first: We use AI to move faster with higher-quality results. We do this across the whole company—from engineering to growth to operations.\n- Excellence everywhere: Everything we do should match the quality of our AI models.\n- Global team: We prioritize your talent, not your location.\n\nWhat we offer\n\n- Innovative culture: You’ll be part of a generational opportunity to define the trajectory of AI, surrounded by a team pushing the boundaries of what’s possible.\n- Growth paths: Joining ElevenLabs means joining a dynamic team with countless opportunities to drive impact - beyond your immediate role and responsibilities.\n- Learning & development: ElevenLabs proactively supports professional development through an annual discretionary stipend.\n- Social travel: We also provide an annual discretionary stipend to meet up with colleagues each year, however you choose.\n- Annual team offsite: Each year, we bring your entire team together in a new location - past offsites have included Croatia, Italy and Cancún\n- Co-working: If you’re not located near one of our main hubs, we offer a monthly co-working stipend.\n\nAbout The Role\n\nElevenLabs is building the most advanced AI audio platform in the world. Millions of creators, developers, and businesses use our products, and our website is one of the company’s most important sources of new users and subscriptions.\n\nWe are looking for a Growth Engineer to work at the intersection of engineering, product, data, and business. You will build and optimize the experiences that help users discover ElevenLabs, understand its value, and become active customers.\n\nThis is a highly autonomous role focused on measurable outcomes. You will identify growth opportunities, form hypotheses, build and launch experiments, analyze the results, and decide what to do next. You will work across conversion-rate optimization, organic search, programmatic pages, onboarding, web performance, and experimentation infrastructure.\n\nOrganic search and our website are major drivers of new signups and subscriptions at ElevenLabs. Engineers on this team have the opportunity to generate significant business impact through rapid experimentation, improvements to high-traffic pages, and systems that scale successful ideas across thousands or millions of search intents.\n\nThe right person is a strong product-minded engineer who enjoys moving quickly, working with data, and owning problems from initial idea through implementation and measurable impact. You should be equally comfortable analyzing a funnel, discussing an experiment with design, building the solution, and evaluating whether it worked.\n\nWhat You Will Do\n\n- Identify and build opportunities to improve acquisition, activation, conversion, retention, and revenue\n- Own growth experiments from hypothesis through implementation, instrumentation, launch, analysis, and iteration\n- Build and improve high-traffic product pages, landing pages, onboarding experiences, and programmatic page systems\n- Improve technical SEO, crawlability, structured data, internal linking, page quality, and website performance\n- Collaborate with design, SEO, product, data, marketing, and frontend engineering to turn successful experiments into scalable systems\n\nRequirements\n\n- Strong experience building production web applications using React, TypeScript, and modern web technologies\n- Experience independently taking projects from an initial idea through launch and measurable impact\n- Strong product judgment, with the ability to identify friction, form hypotheses, and prioritize opportunities\n- Experience working with analytics, funnels, experimentation, SQL, and product or business metrics\n- Comfortable operating with high autonomy, shipping quickly, and collaborating across engineering, design, product, data, and marketing\n\nBonus\n\n- Experience working as a Growth Engineer, Product Engineer, startup founder, or early-stage engineer\n- Experience building programmatic SEO systems or scaling large numbers of landing pages\n- Experience with technical SEO, experimentation platforms, feature flags, or A/B testing\n- Experience improving onboarding, activation, monetization, referral, or sharing flows\n- A portfolio of side projects, products, automations, or experiments you have launched\n\nGrowth potential\n\nRole\n\nWe believe in hiring the best talent in the world to make an impact in the right role at the right time. At ElevenLabs, strong performance creates opportunities for growth. Here are some of the career paths you can expect after excelling in this role:\n\n- Own a major acquisition, activation, or monetization area across ElevenLabs\n- Lead the strategy and technical direction for organic growth, conversion, or experimentation\n- Build and lead a larger Growth Engineering function\n- Expand into broader product engineering or growth leadership\n- Take ownership of company-level growth metrics and cross-functional growth initiatives\n\nLocation\n\nThis role is remote and can be executed from the US East Coast or Europe, with sufficient working-hour overlap with the broader team.\n\nYou may also work from one of our offices, including London, New York, Madrid, Warsaw, and other ElevenLabs locations.\n\nWe are an equal opportunity employer and do not discriminate on the basis of race, religion, national origin, gender, sexual orientation, age, veteran status, disability or other legally protected statuses.",
+   "criteria": {
+    "Seniority level": "Not Applicable",
+    "Employment type": "Full-time",
+    "Industries": "Research Services"
+   },
+   "seniority": "Not Applicable",
+   "employment_type": "Full-time",
+   "industries": "Research Services",
+   "salary_text": null,
+   "salary_hints": [
+    "We launched in January 2023 with the first human-like AI voice model. Today, we serve millions of users and thousands of businesses - from fast-growing startups to large enterprises like Deutsche Telekom and Meta. Our investors are some of "
+   ],
+   "ok": true,
+   "posted_at": "2026-11-09",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/React",
+    "remote-poland/Frontend",
+    "remote-poland/Full-stack"
+   ]
+  },
+  {
+   "job_id": "4481252375",
+   "link": "https://www.linkedin.com/jobs/view/4481252375",
+   "title": "Platform Engineer",
+   "company": "Sigma IT Poland",
+   "company_link": null,
+   "location": "Wrocław, Dolnośląskie, Poland",
+   "posted_text": "3 weeks ago",
+   "applicants": "36 applicants",
+   "description": "Holisticon Connect is a division within NEXER GROUP - a custom software development company. We started in Poland in 2017 and are now a team of over 140 people. We have the opportunity to work with world-renowned brands from Scandinavia, the UK, and Western Europe. Our goal is to grow stronger, in competence rather than in numbers. If you like what we do, check out our offer, maybe we will have the pleasure of meeting you! 😊\n\nWe are looking for an experienced Platform Engineer to join an international project for a Swedish multinational company operating in the hygiene and medical products industry. You will contribute to the development and enhancement of an Integration Hub built around Azure API Management (APIM) and Backstage, helping transform it into an internal developer platform that enables teams to easily discover, understand, and consume APIs. This role combines API management, developer portal engineering, automation, and platform ownership, offering an opportunity to influence technical solutions and drive continuous platform improvements.\n\nWe offer a choice of employment form: B2B or Employment Contract:\n\n- UoP: 15 300 – 19 500 PLN gross/month\n- B2B: 130 – 165 PLN net/hour + VAT\n\nYour Responsibilities\n\n- Configure, maintain, and enhance Azure API Management, including API onboarding, backend integrations, routing, and gateway policies;\n- Implement and maintain API authentication, authorization, and traffic management controls;\n- Establish monitoring, observability, and troubleshooting practices for API traffic and platform health;\n- Develop and customize Backstage as the main entry point for the Integration Hub, improving usability, navigation, and branding;\n- Manage API documentation, ownership information, catalog metadata, and integrations across systems;\n- Develop or extend Backstage plugins and integrations to support platform requirements;\n- Implement automated validation and linting of API specifications and enforce API quality and documentation standards;\n- Integrate validation processes into CI/CD pipelines and automate deployments and configuration management using Infrastructure-as-Code;\n- Troubleshoot issues across API gateways, developer portals, catalogs, and cloud infrastructure;\n- Prepare technical documentation and onboarding materials for developers;\n- Gather developer feedback, drive continuous improvements, and contribute to technical decisions and the platform roadmap.\n\nYou Might Be The Perfect Match If You Are/have\n\n- Strong hands-on experience with Azure API Management or an equivalent API management platform;\n- Experience developing or extending Backstage or a similar Internal Developer Platform;\n- Solid understanding of REST APIs, OpenAPI specifications, and API lifecycle management;\n- Strong development skills in TypeScript/JavaScript, including Node.js and React;\n- Experience with API security concepts, including OAuth 2.0, OpenID Connect, and JWT;\n- Experience with Git-based development, CI/CD pipelines, and automation;\n- Familiarity with Infrastructure-as-Code tools such as Terraform or Bicep;\n- Ability to troubleshoot across application, integration, infrastructure, and cloud environments;\n- Strong communication skills and the ability to collaborate with technical stakeholders\n- Good command of English.\n\nMoreover, We Appreciate Skills In These Areas\n\n- Experience developing Backstage plugins and integrating API catalogs;\n- Familiarity with API linting tools such as Spectral;\n- Knowledge of Azure Identity, Networking, and Observability services;\n- Experience with Docker and Kubernetes;\n- Understanding of Internal Developer Platforms and self-service architecture.\n\nBy Joining Us, You Gain The Following\n\n- Opportunity to work on exciting, international projects in cutting-edge industries like Automotive, Biotech, IoT;\n- Possibility to develop in cloud technologies;\n- Becoming part of a team that believes that the next step to a promising future is to put your heart into it and make it happen;\n- Respect for your private life so you don't have to work overtime or on weekends;\n- Team Events budget to socialize outside of work;\n- Company Events to celebrate smaller and bigger successes (Summer Party, Programmer's Day, and trips abroad – so far we've been in South Africa, Are, and Barcelona).\n\nPerks And Benefits\n\n- Fully remote work or in our office in Wrocław;\n- Benefits such as Luxmed, Multisport, and life insurance in Nationale Nederlanden;\n- Attractive referral system (9,5k for senior, 6k for mid, 2,5k for junior);\n- Personal Training Budget with additional paid hours;\n- Passion Day - an extra day off for your hobby to spend as you please;\n- Flexible working hours with no micro-management approach. Our core hours are 9-15, the rest of the working time is up to you;\n- We provide high-quality work equipment + 2 additional monitors and accessories.\n\nIf you apply for this position and match our expectations, then:\n\n- You will be invited to an HR Screening with our IT Recruiter.\n- You will have a technical interview.\n- You will meet with a client.\n\nSubmit your application online in one easy step! Apply now!\n\nYou Will Earn\n\n- UoP: 15 300 – 19 500 PLN gross/month\n- B2B: 130 – 165 PLN net/hour + VAT",
+   "criteria": {
+    "Seniority level": "Mid-Senior level",
+    "Employment type": "Full-time",
+    "Industries": "IT Services and IT Consulting"
+   },
+   "seniority": "Mid-Senior level",
+   "employment_type": "Full-time",
+   "industries": "IT Services and IT Consulting",
+   "salary_text": null,
+   "salary_hints": [
+    "- UoP: 15 300 – 19 500 PLN gross/month",
+    "- B2B: 130 – 165 PLN net/hour + VAT",
+    "- Attractive referral system (9,5k for senior, 6k for mid, 2,5k for junior);"
+   ],
+   "ok": true,
+   "posted_at": "2026-10-19",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/React",
+    "remote-poland/Node.js"
+   ]
+  },
+  {
+   "job_id": "4488895930",
+   "link": "https://www.linkedin.com/jobs/view/4488895930",
+   "title": "AI Developer",
+   "company": "Jacobs",
+   "company_link": null,
+   "location": "Cracow, Małopolskie, Poland",
+   "posted_text": "16 hours ago",
+   "applicants": "Be among the first 25 applicants",
+   "description": "At Jacobs, we're challenging today to reinvent tomorrow by solving the world's most critical problems for thriving cities, resilient environments, mission-critical outcomes, operational advancement, scientific discovery and cutting-edge manufacturing, turning abstract ideas into realities that transform the world for good.\n\nYour impact\n\nWe're looking for an AI developer with strong software engineering skills, deep proficiency in AI-assisted coding tools, and hands-on experience building and deploying AI-powered applications to support AI solutions across the business for both government and private-sector clients. The ideal candidate will be a skilled software developer who can rapidly build, iterate, and ship AI-powered tools and applications. They should be highly proficient with AI coding assistants (Claude, OpenAI Codex, Cursor), experienced with agentic AI frameworks and orchestration patterns, and comfortable working across the full stack. In addition, the ideal candidate will possess a degree in computer science, AI, data science, engineering, or similar domain areas, as well as previous experience in consulting.\n\nThe chosen candidate will become a member of the Digital and Data team at Jacobs, helping drive innovation in technical project work for our clients in collaboration with subject matter experts, technologists, engineers, data scientists, project managers, and more.\n\nKey Responsibilities\n\n- Design, develop, and deploy AI-powered applications and tools using Python, TypeScript/JavaScript, and modern AI frameworks (LangChain, LangGraph, CrewAI, or similar)\n- Build and configure MCP (Model Context Protocol) servers and integrations to connect AI models with enterprise data sources, APIs, and tooling\n- Develop RAG pipelines, agentic workflows, and AI-assisted automation solutions for internal and client-facing projects\n- Leverage AI-assisted development tools (Claude, Codex, Cursor, GitHub Copilot) to accelerate delivery and maintain high code quality\n- Collaborate cross-functionally with subject matter experts, data engineers, and project managers to translate business requirements into production-ready AI solutions\n- Architect and implement full-stack solutions including front-end interfaces (React, HTML/CSS/JS), back-end APIs, and cloud-hosted AI services\n- Evaluate, integrate, and maintain AI platforms, APIs, and toolchains as the technology landscape evolves\n- Contribute to technical presentations, demos, and documentation for both internal teams and external clients\n- Participate in knowledge sharing, code reviews, and mentoring across teams and domains\n- Stay current with rapidly evolving AI tools, models, and best practices; proactively bring new capabilities to the team\n\nHere's what you'll need\n\n- 3-5 years of experience in software development, with at least 1-2 years focused on AI/ML application development\n- Bachelor's degree in computer science, software engineering, AI, data science, or similar domain\n- Demonstrated proficiency building applications with AI/LLM APIs and frameworks (eg. Anthropic Claude API, OpenAI API, LangChain/LangGraph, Model Context Protocol)\n- Strong proficiency in Python and JavaScript/TypeScript; working knowledge of SQL\n- Experience with containerization (Docker), version control (GitHub), and CI/CD pipelines\n- Proven ability to use AI-assisted coding tools (Claude, Codex, Cursor, GitHub Copilot) to accelerate development workflows\n- Ability to travel as necessary to meet project and client requirements\n\nNice to have\n\n- Bachelor's or Master's degree in computer science, AI, software engineering, or similar domain\n- Experience in the AEC industry\n- Experience designing and building agentic AI systems, including multi-step orchestration, tool use, and human-in-the-loop patterns using frameworks such as LangGraph, CrewAI, PydanticAI, or similar\n- Experience developing and deploying RESTful APIs and backend services using frameworks such as FastAPI, Flask, or Express\n- Hands-on experience building RAG pipelines, including document ingestion, chunking strategies, embedding models, vector stores (Pinecone, Weaviate, pgvector, etc.), and retrieval optimization\n- Technical proficiency with cloud platforms and data infrastructure such as Microsoft Azure, Microsoft Fabric, Palantir Foundry, Palantir AIP, Google Cloud, Amazon Web Services, and database technologies (data lakes, vector databases, etc.)\n\nWe offer\n\n- Rewarding employment - full-time employment with a salary that matches your qualifications\n- Hybrid work model - candidates are required to work from our Kraków or Warsaw office at least two days per week. The remaining working days may be performed remotely from home\n- Flexible hours - start your day anytime between 730 and 1000 AM\n- Comprehensive benefits, including Lux Med medical care, psychological support, life insurance, My Benefit cafeteria system, Multisport card co-financing, and a car/bike park sharing system\n- Co-financed holidays - enjoy \"Wczasy pod Gruszą\" for a well-deserved break\n- Global projects - engage in exciting international projects\n- Inclusive networks - join our diverse employee networks like Women's Network, OneWorld, PRISM, Careers Network, Green Team, SpeakUp, Collectively, and more\n- Continuous learning - participate in our Graduate Development Program, Learners’ Community, and self-learning platforms\n\nWe know that if we are inclusive, we’re more connected, and we’re more creative. We accept people for who they are. Find out more about life at Jacobs.\n\nAs a Disability Confident employer, we will interview all disabled applicants who meet the criteria for a vacancy. If you require further support or reasonable adjustments with regards to the recruitment process (for example, you require the application form in a different format), please contact the team recruitmentpoland@jacobs.com\n\nYour application experience is important to us, and we’re keen to adapt to make every interaction even better. If you require further support or reasonable adjustments with regards to the recruitment process (for example, you require the application form in a different format), please contact the team via Careers Support.",
+   "criteria": {
+    "Seniority level": "Not Applicable",
+    "Employment type": "Full-time",
+    "Industries": "Business Consulting and Services"
+   },
+   "seniority": "Not Applicable",
+   "employment_type": "Full-time",
+   "industries": "Business Consulting and Services",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-11-09",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/React",
+    "remote-poland/Frontend",
+    "remote-poland/Full-stack",
+    "remote-poland/Node.js"
+   ]
+  },
+  {
+   "job_id": "4489106539",
+   "link": "https://www.linkedin.com/jobs/view/4489106539",
+   "title": "AI Developer",
+   "company": "Jacobs",
+   "company_link": null,
+   "location": "Warsaw, Mazowieckie, Poland",
+   "posted_text": "16 hours ago",
+   "applicants": "Be among the first 25 applicants",
+   "description": "At Jacobs, we're challenging today to reinvent tomorrow by solving the world's most critical problems for thriving cities, resilient environments, mission-critical outcomes, operational advancement, scientific discovery and cutting-edge manufacturing, turning abstract ideas into realities that transform the world for good.\n\nYour impact\n\nWe're looking for an AI developer with strong software engineering skills, deep proficiency in AI-assisted coding tools, and hands-on experience building and deploying AI-powered applications to support AI solutions across the business for both government and private-sector clients. The ideal candidate will be a skilled software developer who can rapidly build, iterate, and ship AI-powered tools and applications. They should be highly proficient with AI coding assistants (Claude, OpenAI Codex, Cursor), experienced with agentic AI frameworks and orchestration patterns, and comfortable working across the full stack. In addition, the ideal candidate will possess a degree in computer science, AI, data science, engineering, or similar domain areas, as well as previous experience in consulting.\n\nThe chosen candidate will become a member of the Digital and Data team at Jacobs, helping drive innovation in technical project work for our clients in collaboration with subject matter experts, technologists, engineers, data scientists, project managers, and more.\n\nKey Responsibilities\n\n- Design, develop, and deploy AI-powered applications and tools using Python, TypeScript/JavaScript, and modern AI frameworks (LangChain, LangGraph, CrewAI, or similar)\n- Build and configure MCP (Model Context Protocol) servers and integrations to connect AI models with enterprise data sources, APIs, and tooling\n- Develop RAG pipelines, agentic workflows, and AI-assisted automation solutions for internal and client-facing projects\n- Leverage AI-assisted development tools (Claude, Codex, Cursor, GitHub Copilot) to accelerate delivery and maintain high code quality\n- Collaborate cross-functionally with subject matter experts, data engineers, and project managers to translate business requirements into production-ready AI solutions\n- Architect and implement full-stack solutions including front-end interfaces (React, HTML/CSS/JS), back-end APIs, and cloud-hosted AI services\n- Evaluate, integrate, and maintain AI platforms, APIs, and toolchains as the technology landscape evolves\n- Contribute to technical presentations, demos, and documentation for both internal teams and external clients\n- Participate in knowledge sharing, code reviews, and mentoring across teams and domains\n- Stay current with rapidly evolving AI tools, models, and best practices; proactively bring new capabilities to the team\n\nHere's what you'll need\n\n- 3-5 years of experience in software development, with at least 1-2 years focused on AI/ML application development\n- Bachelor's degree in computer science, software engineering, AI, data science, or similar domain\n- Demonstrated proficiency building applications with AI/LLM APIs and frameworks (eg. Anthropic Claude API, OpenAI API, LangChain/LangGraph, Model Context Protocol)\n- Strong proficiency in Python and JavaScript/TypeScript; working knowledge of SQL\n- Experience with containerization (Docker), version control (GitHub), and CI/CD pipelines\n- Proven ability to use AI-assisted coding tools (Claude, Codex, Cursor, GitHub Copilot) to accelerate development workflows\n- Ability to travel as necessary to meet project and client requirements\n\nNice to have\n\n- Bachelor's or Master's degree in computer science, AI, software engineering, or similar domain\n- Experience in the AEC industry\n- Experience designing and building agentic AI systems, including multi-step orchestration, tool use, and human-in-the-loop patterns using frameworks such as LangGraph, CrewAI, PydanticAI, or similar\n- Experience developing and deploying RESTful APIs and backend services using frameworks such as FastAPI, Flask, or Express\n- Hands-on experience building RAG pipelines, including document ingestion, chunking strategies, embedding models, vector stores (Pinecone, Weaviate, pgvector, etc.), and retrieval optimization\n- Technical proficiency with cloud platforms and data infrastructure such as Microsoft Azure, Microsoft Fabric, Palantir Foundry, Palantir AIP, Google Cloud, Amazon Web Services, and database technologies (data lakes, vector databases, etc.)\n\nWe offer\n\n- Rewarding employment - full-time employment with a salary that matches your qualifications\n- Hybrid work model - candidates are required to work from our Kraków or Warsaw office at least two days per week. The remaining working days may be performed remotely from home\n- Flexible hours - start your day anytime between 730 and 1000 AM\n- Comprehensive benefits, including Lux Med medical care, psychological support, life insurance, My Benefit cafeteria system, Multisport card co-financing, and a car/bike park sharing system\n- Co-financed holidays - enjoy \"Wczasy pod Gruszą\" for a well-deserved break\n- Global projects - engage in exciting international projects\n- Inclusive networks - join our diverse employee networks like Women's Network, OneWorld, PRISM, Careers Network, Green Team, SpeakUp, Collectively, and more\n- Continuous learning - participate in our Graduate Development Program, Learners’ Community, and self-learning platforms\n\nWe know that if we are inclusive, we’re more connected, and we’re more creative. We accept people for who they are. Find out more about life at Jacobs.\n\nAs a Disability Confident employer, we will interview all disabled applicants who meet the criteria for a vacancy. If you require further support or reasonable adjustments with regards to the recruitment process (for example, you require the application form in a different format), please contact the team recruitmentpoland@jacobs.com\n\nYour application experience is important to us, and we’re keen to adapt to make every interaction even better. If you require further support or reasonable adjustments with regards to the recruitment process (for example, you require the application form in a different format), please contact the team via Careers Support.",
+   "criteria": {
+    "Seniority level": "Not Applicable",
+    "Employment type": "Full-time",
+    "Industries": "Business Consulting and Services"
+   },
+   "seniority": "Not Applicable",
+   "employment_type": "Full-time",
+   "industries": "Business Consulting and Services",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-11-09",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/React",
+    "remote-poland/Frontend",
+    "remote-poland/Full-stack",
+    "remote-poland/Node.js",
+    "warsaw/Next.js",
+    "warsaw/Typescript",
+    "warsaw/JavaScript",
+    "warsaw/React",
+    "warsaw/Frontend",
+    "warsaw/Full-stack",
+    "warsaw/Node.js"
+   ]
+  },
+  {
+   "job_id": "4487932898",
+   "link": "https://www.linkedin.com/jobs/view/4487932898",
+   "title": "Software Engineer II (Poland)",
+   "company": "Sezzle",
+   "company_link": null,
+   "location": "Polańczyk, Podkarpackie, Poland",
+   "posted_text": "15 hours ago",
+   "applicants": "Be among the first 25 applicants",
+   "description": "About Sezzle{{{{~}}}}\n\nWith a mission to financially empower the next generation, Sezzle is revolutionizing the shopping experience beyond payments, blending cutting-edge tech with seamless, interest-free installment plans that make shopping smarter and more accessible. We’re not just transforming payments; we’re redefining how people discover, interact with, and purchase the things they love while driving real impact on merchant sales through increased conversions and higher order values. As we continue to shape the future of fintech and retail, we’re building an innovative, dynamic team passionate about creating more than just a transaction but a truly unique shopping journey. If you’re excited about pushing boundaries in tech and delivering a game-changing experience for consumers and merchants alike, come join us at Sezzle and help create the future of shopping!\n\nInterview Process\n\nWe believe transparency is important at Sezzle. Regularly providing feedback while setting expectations is part of our culture starting with the interview process. Advancement through each step is not guaranteed.\n\n- Application submitted (you are here)\n- Wonderlic test (30-40 min)\n- Coding assessment ({{{{~}}}}1.5 hours)\n- Interview with recruiters (30 min)\n- Interview with engineers (1 hour)\n- Interview with engineering leadership (30-45 min)\n- Offer!\n\nAbout the Role{{{{~}}}}\n\nWe are seeking a talented and motivated Software Engineer II who is best in class with a high IQ plus a high EQ. This role presents an exciting opportunity to thrive in a dynamic, fast-paced environment within a rapidly growing team, with abundant prospects for career advancement. As a Software Engineer II, you will be responsible for solving our most challenging problems along with a highly-motivated team. In this role, you will work closely with other engineers across multiple teams to provide high-quality, scalable, and innovative products.\n\nYour day-to-day responsibilities will include partnering with other engineers to design, develop, and deliver new features. As your skills grow so will the size and scope of the projects which you’ll be involved in. Sezzle has a strong culture for promotion with defined paths through Engineering that matches all levels. You’ll be working as part of a full-stack Engineering team which has varied disciplines.\n\nKey Role Responsibilities{{{{~}}}}\n\n- Build and maintain new innovative product features focused on actively learning new areas of the product\n- Collaborate with owners for different product features to gain insight and offer constructive suggestions for improvements\n- Be an active participant in design/architecture discussions sharing your ideas while building the next generation of features for the Sezzle platform\n- Hands-on with our codebase and a contributor to code reviews\n- Mentor other engineers who are starting along their career path\n- Work with the team to continuously build and deploy scalable solutions\n- Assist in planning, estimations, and completion for projects brought up by the team stakeholders\n\nMinimum Requirements{{{{~}}}}\n\n- Experience solving technical problems as part of a team\n- Demonstrated experience working with Claude or equivalent large language model tools is required; candidates must be comfortable leveraging AI to enhance productivity, research, and communication.\n- Bachelor's degree in Computer Science, Engineering, or a related technical field.\n- Familiarity with modern Frontend Development, with React experience preferred\n- Ability to solve problems with backend-focused languages like Go or similar compiled statically typed language\n- Intermediate understanding of relational databases like MySQL\n\nPreferred Knowledge and Skills{{{{~}}}}\n\n- Knowledgeable in writing automated tests for applications (unit, integration, end-to-end)\n- Familiar with the basic principles and design of RESTful APIs\n- Basic knowledge of a Microservice Architecture\n- Close familiarity with software engineering tools, software development methodology, and release processes\n\nAbout You{{{{~}}}}\n\n- You have relentlessly high standards - many people may think your standards are unreasonably high. You are continually raising the bar and driving those around you to deliver great results. You make sure that defects do not get sent down the line and that problems are fixed so they stay fixed.\n- You’re not bound by convention - your success—and much of the fun—lies in developing new ways to do things\n- You need action - speed matters in business. Many decisions and actions are reversible and do not need extensive study. We value calculated risk-taking.\n- You earn trust - you listen attentively, speak candidly, and treat others respectfully.\n- You have backbone; disagree, then commit - you can respectfully challenge decisions when you disagree, even when doing so is uncomfortable or exhausting. You have conviction and are tenacious. You do not compromise for the sake of social cohesion. Once a decision is determined, you commit wholly.\n- You deliver results - you focus on the key inputs and deliver them with the right quality and in a timely fashion. Despite setbacks, you rise to the occasion and never settle.\n\nSezzle’s Technology Stack{{{{~}}}}\n\n- Languages{{{{~}}}} Golang, Typescript, Python\n- Frontend{{{{~}}}} Typescript - React and React Native\n- Backend{{{{~}}}} Golang\n- Database{{{{~}}}} MySQL, Postgres, Elasticsearch\n- DevOps & Cloud{{{{~}}}} AWS, Kubernetes\n- Version Control{{{{~}}}} Git\n- CI/CD{{{{~}}}} Gitlab\n- Testing{{{{~}}}} Developer-driven, focus on automated unit, integration, and end-to-end tests\n- Sezzle is focused on using open source, and we build what we can before buying!\n\nWhat Makes Working at Sezzle Awesome?\n\nAt Sezzle, we are more than just brilliant engineers, passionate data enthusiasts, out-of-the-box thinkers, and determined innovators; we are skilled musicians, yogis, cyclists, chefs, golfers, dog-lovers, and rock-climbers. We believe in surrounding ourselves with not only the best and the brightest individuals, but those that are unique and purpose-driven in all that they do. Our culture is not defined by a certain set of perks designed to give the illusion of the traditional startup culture, but rather, it is the visible example living in every employee that we hire.\n\n#Full-time",
+   "criteria": {
+    "Seniority level": "Mid-Senior level",
+    "Employment type": "Full-time",
+    "Industries": "Financial Services"
+   },
+   "seniority": "Mid-Senior level",
+   "employment_type": "Full-time",
+   "industries": "Financial Services",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-11-09",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/React",
+    "remote-poland/Frontend",
+    "remote-poland/Full-stack"
+   ]
+  },
+  {
+   "job_id": "4344348207",
+   "link": "https://www.linkedin.com/jobs/view/4344348207",
+   "title": "Software Engineer II (Poland)",
+   "company": "Sezzle",
+   "company_link": null,
+   "location": "Poland",
+   "posted_text": "5 days ago",
+   "applicants": "Over 200 applicants",
+   "description": "About Sezzle:\n\nWith a mission to financially empower the next generation, Sezzle is revolutionizing the shopping experience beyond payments, blending cutting-edge tech with seamless, interest-free installment plans that make shopping smarter and more accessible. We’re not just transforming payments; we’re redefining how people discover, interact with, and purchase the things they love while driving real impact on merchant sales through increased conversions and higher order values. As we continue to shape the future of fintech and retail, we’re building an innovative, dynamic team passionate about creating more than just a transaction but a truly unique shopping journey. If you’re excited about pushing boundaries in tech and delivering a game-changing experience for consumers and merchants alike, come join us at Sezzle and help create the future of shopping!\n\nInterview Process\n\nWe believe transparency is important at Sezzle. Regularly providing feedback while setting expectations is part of our culture starting with the interview process. Advancement through each step is not guaranteed.\n\n- Application submitted (you are here)\n- Wonderlic test (30-40 min)\n- Coding assessment (:1.5 hours)\n- Interview with recruiters (30 min)\n- Interview with engineers (1 hour)\n- Interview with engineering leadership (30-45 min)\n- Offer!\n\nAbout the Role:\n\nWe are seeking a talented and motivated Software Engineer II who is best in class with a high IQ plus a high EQ. This role presents an exciting opportunity to thrive in a dynamic, fast-paced environment within a rapidly growing team, with abundant prospects for career advancement. As a Software Engineer II, you will be responsible for solving our most challenging problems along with a highly-motivated team. In this role, you will work closely with other engineers across multiple teams to provide high-quality, scalable, and innovative products.\n\nYour day-to-day responsibilities will include partnering with other engineers to design, develop, and deliver new features. As your skills grow so will the size and scope of the projects which you’ll be involved in. Sezzle has a strong culture for promotion with defined paths through Engineering that matches all levels. You’ll be working as part of a full-stack Engineering team which has varied disciplines.\n\nKey Role Responsibilities:\n\n- Build and maintain new innovative product features focused on actively learning new areas of the product\n- Collaborate with owners for different product features to gain insight and offer constructive suggestions for improvements\n- Be an active participant in design/architecture discussions sharing your ideas while building the next generation of features for the Sezzle platform\n- Hands-on with our codebase and a contributor to code reviews\n- Mentor other engineers who are starting along their career path\n- Work with the team to continuously build and deploy scalable solutions\n- Assist in planning, estimations, and completion for projects brought up by the team stakeholders\n\nMinimum Requirements:\n\n- Experience solving technical problems as part of a team\n- Demonstrated experience working with Claude or equivalent large language model tools is required; candidates must be comfortable leveraging AI to enhance productivity, research, and communication.\n- Bachelor's degree in Computer Science, Engineering, or a related technical field.\n- Familiarity with modern Frontend Development, with React experience preferred\n- Ability to solve problems with backend-focused languages like Go or similar compiled statically typed language\n- Intermediate understanding of relational databases like MySQL\n\nPreferred Knowledge and Skills:\n\n- Knowledgeable in writing automated tests for applications (unit, integration, end-to-end)\n- Familiar with the basic principles and design of RESTful APIs\n- Basic knowledge of a Microservice Architecture\n- Close familiarity with software engineering tools, software development methodology, and release processes\n\nAbout You:\n\n- You have relentlessly high standards - many people may think your standards are unreasonably high. You are continually raising the bar and driving those around you to deliver great results. You make sure that defects do not get sent down the line and that problems are fixed so they stay fixed.\n- You’re not bound by convention - your success—and much of the fun—lies in developing new ways to do things\n- You need action - speed matters in business. Many decisions and actions are reversible and do not need extensive study. We value calculated risk-taking.\n- You earn trust - you listen attentively, speak candidly, and treat others respectfully.\n- You have backbone; disagree, then commit - you can respectfully challenge decisions when you disagree, even when doing so is uncomfortable or exhausting. You have conviction and are tenacious. You do not compromise for the sake of social cohesion. Once a decision is determined, you commit wholly.\n- You deliver results - you focus on the key inputs and deliver them with the right quality and in a timely fashion. Despite setbacks, you rise to the occasion and never settle.\n\nSezzle’s Technology Stack:\n\n- Languages: Golang, Typescript, Python\n- Frontend: Typescript - React and React Native\n- Backend: Golang\n- Database: MySQL, Postgres, Elasticsearch\n- DevOps & Cloud: AWS, Kubernetes\n- Version Control: Git\n- CI/CD: Gitlab\n- Testing: Developer-driven, focus on automated unit, integration, and end-to-end tests\n- Sezzle is focused on using open source, and we build what we can before buying!\n\nWhat Makes Working at Sezzle Awesome?\n\nAt Sezzle, we are more than just brilliant engineers, passionate data enthusiasts, out-of-the-box thinkers, and determined innovators; we are skilled musicians, yogis, cyclists, chefs, golfers, dog-lovers, and rock-climbers. We believe in surrounding ourselves with not only the best and the brightest individuals, but those that are unique and purpose-driven in all that they do. Our culture is not defined by a certain set of perks designed to give the illusion of the traditional startup culture, but rather, it is the visible example living in every employee that we hire.\n\n#Full-time",
+   "criteria": {
+    "Seniority level": "Not Applicable",
+    "Employment type": "Full-time",
+    "Industries": "Financial Services"
+   },
+   "seniority": "Not Applicable",
+   "employment_type": "Full-time",
+   "industries": "Financial Services",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-11-04",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/Next.js",
+    "remote-poland/JavaScript"
+   ]
+  },
+  {
+   "job_id": "4489438570",
+   "link": "https://www.linkedin.com/jobs/view/4489438570",
+   "title": "Senior Frontend React JS Developer",
+   "company": "MPower Plus",
+   "company_link": null,
+   "location": "Wrocław, Dolnośląskie, Poland",
+   "posted_text": "4 minutes ago",
+   "applicants": "Be among the first 25 applicants",
+   "description": "Exp level:\n\n• Minimum 8 years of hands-on front-end development experience, preferably within banking or financial services.\n\n• Strong proficiency in React, TypeScript and JavaScript. Mandatory\n\n• Hands-on experience with GraphQL, such as Apollo Client, and REST API integration, including debugging communication between browser applications and back-end services. Mandatory\n\n• Experience with modern front-end build tools, particularly Vite. Mandatory\n\n• Strong understanding of Git branching, version control and release workflows. Mandatory\n\n• Comfortable working with cloud-based development environments and containerized deployments.",
+   "criteria": {
+    "Seniority level": "Mid-Senior level",
+    "Employment type": "Contract",
+    "Industries": "IT Services and IT Consulting"
+   },
+   "seniority": "Mid-Senior level",
+   "employment_type": "Contract",
+   "industries": "IT Services and IT Consulting",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-11-10",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/React",
+    "remote-poland/Frontend"
+   ]
+  },
+  {
+   "job_id": "4488124777",
+   "link": "https://www.linkedin.com/jobs/view/4488124777",
+   "title": "Senior Frontend ReactJS Developer",
+   "company": "Infinity Quest",
+   "company_link": null,
+   "location": "Wroclaw Metropolitan Area",
+   "posted_text": "3 days ago",
+   "applicants": "61 applicants",
+   "description": "Job Description:\n\nKey Responsibilities\n\n- Develop and maintain features within React-based portfolio reporting applications, including saved report packages, report generation and search functionality.\n- Modernize existing applications by migrating them to Vite and an enterprise design system.\n- Support the migration of legacy ExtJS applications and screens to React.\n- Build, integrate and troubleshoot GraphQL and REST APIs between front-end applications and back-end microservices.\n- Diagnose issues such as slow or failing API queries, incorrect request payloads and front-end performance problems.\n- Deploy UI builds to QA environments, manage release branches, and support regression testing and production releases.\n- Work closely with back-end developers, QA teams, release management and product owners to deliver business and regulatory improvements.\n- Contribute to Agile development, Test Driven Development and DevOps practices.\nYour Team\n\nYou will be part of a globally distributed Portfolio Performance Reporting team responsible for applications that support portfolio returns, asset allocation, holdings and client reporting.\n\nThe team works collaboratively across front-end development, back-end engineering, data, QA, product and application support functions, with a strong focus on application quality, stability and continuous improvement.\n\nYour Expertise\n\n- Bachelor's or Master's degree, preferably in Computer Science or a related discipline.\n- Minimum 8 years of hands-on front-end development experience, preferably within banking or financial services.\n- Strong proficiency in React, TypeScript and JavaScript. Mandatory\n- Hands-on experience with GraphQL, such as Apollo Client, and REST API integration, including debugging communication between browser applications and back-end services. Mandatory\n- Experience with modern front-end build tools, particularly Vite. Mandatory\n- Strong understanding of Git branching, version control and release workflows. Mandatory\n- Experience migrating legacy front-end applications, such as ExtJS, to React. Preferred\n- Experience working with enterprise UI/design systems. Preferred\n- Familiarity with data-heavy UI frameworks such as AG Grid. Preferred\n- Experience troubleshooting front-end performance issues and memory leaks.\n- Knowledge of wealth management, portfolio reporting, performance returns, holdings or financial reporting would be an advantage.\n- Comfortable working with cloud-based development environments and containerized deployments.\n- Good understanding of Agile, Test Driven Development and DevOps practices.\n- Strong analytical and problem-solving skills with attention to detail.\n- Strong communication skills and ability to work with senior stakeholders and globally distributed teams.\n- Collaborative approach to problem-solving and working within diverse, cross-functional teams.\nKey Skills\n\nMandatory: React | TypeScript | JavaScript | GraphQL | REST APIs | Vite | Git | Front-End Development\n\nPreferred: ExtJS Migration | AG Grid | Apollo Client | Enterprise Design Systems | Microservices | DevOps | Wealth Management | Portfolio Reporting",
+   "criteria": {
+    "Seniority level": "Mid-Senior level",
+    "Employment type": "Contract",
+    "Industries": "Software Development"
+   },
+   "seniority": "Mid-Senior level",
+   "employment_type": "Contract",
+   "industries": "Software Development",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-11-06",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/Next.js",
+    "remote-poland/JavaScript",
+    "remote-poland/React",
+    "remote-poland/Frontend"
+   ]
+  },
+  {
+   "job_id": "4479293726",
+   "link": "https://www.linkedin.com/jobs/view/4479293726",
+   "title": "Programista Ruby On Rail",
+   "company": "ALTEN",
+   "company_link": null,
+   "location": "Poland",
+   "posted_text": "3 weeks ago",
+   "applicants": "72 applicants",
+   "description": "WHO ARE WE?\n\nWE ARE A WORLD LEADER IN ENGINEERING AND IT SERVICES.\n\nAt ALTEN, we see our specialists as architects – today’s designers of tomorrow’s world.\n\nAs a leader in Engineering and IT Services, we support companies in their technological and sustainable transformation.\n\nOVER 57,400 EMPLOYEES IN 30+ COUNTRIES, TO SUPPORT MORE THAN 6,500 CLIENTS WORLDWIDE.\n\nWe operate in all sectors: Aeronautics, Space, Defence, Security & Naval, Automotive, Rail & Mobility, Energy & Environment, Life Sciences & Health, Industrial Equipment & Electronics, Telecoms, Banking, Finance & Insurance, Retail, Services & Medias, Public Services & Government.\n\nWe carry out complex and highly technical projects throughout the value chain of the most prestigious companies worldwide.\n\nOur motto: Building Tomorrow’s World Today!\n\nWe are looking for Senior Full-Stack Software Engineer (Backend-Weighted)\n\nKey responsibilities:\n\n- Deliver end-to-end features across events applications, owning the code from design to deployment, monitoring, and fixes.\n- Break down requirements with the Product Manager into deliverable increments and flag potential risks early.\n- Own data modeling, query optimization, indexing, and migrations, ensuring performance as data volumes grow.\n- Manage integrations with Salesforce, payment providers, asynchronous messaging, and real-time client delivery channels.\n- Design, debug, and troubleshoot cross-system flows, ensuring reliability and data consistency.\n- Deploy, monitor, and maintain production systems, including observability, alerting, and platform upgrades.\n\nRequirements;\n\n- 8+ years of professional software engineering experience, with a focus on autonomous problem-solving in ambiguous, cross-system environments.\n- Expert-level backend development in modern stacks (Ruby, Ruby on Rails)\n- Front-end development skills (Angular)\n- Mastery of relational databases, including modeling, storage, querying, and performance optimization (indexing, migrations).\n- Experience hosting and operating web applications in production, including releases, observability, and incident response.\n- Strong engineering mindset: CI/CD, automated testing, linting, and code review as standard practice.\n\nWe offer\n\nWe offer a full-time employment contract\n\n• Location – Poland; work model – remote\n\n• Stable and long-term cooperation\n\n• Well-defined career path at the European leader in engineering & IT consulting\n\n• Opportunity to relocate and work in different ALTEN Polska branches\n\n• After completion of the project, opportunity to engage in a subsequent one within the company\n\n• Introduction and cooperation with dedicated Competences Manager\n\nBenefits\n\n• Medicover medical care\n\n• Medicover dental care\n\n• Medicover Benefits platform\n\n• Medicover Sport card\n\n• Referral Program\n\n• Layette for a newborn employee’s child\n\n• Group life insurance\n\n• Pension scheme\n\nWe also offer cooperation based on a B2B or Contract of mandate (UZ).\n\nWe also guarantee:\n\n• Access to professional certifications with our technology partners (e.g. Google, ISTQB)\n\n• Access to relevant industry events\n\n• Access to the Knowledge Sharing Program\n\n• Access to Referral program\n\nBy clicking on the \"Send\" button, you agree to the processing of your personal data contained in the recruitment application by Alten Polska sp. z o.o. with its registered office in Warsaw for the purpose of recruitment for the position indicated in the advertisement. You can withdraw your consent at any time by contacting us at ALTEN_PL_RODO@alten.com, which means that the recruitment process is completed and your candidacy will not be taken into account in future recruitments.\n\nFull information on the processing of your personal data can be found here",
+   "criteria": {
+    "Seniority level": "Associate",
+    "Employment type": "Full-time",
+    "Industries": "IT Services and IT Consulting"
+   },
+   "seniority": "Associate",
+   "employment_type": "Full-time",
+   "industries": "IT Services and IT Consulting",
+   "salary_text": null,
+   "salary_hints": [],
+   "ok": true,
+   "posted_at": "2026-10-14",
+   "expected_workplace": [
+    "REMOTE"
+   ],
+   "location_group": "remote-poland",
+   "queries": [
+    "remote-poland/Frontend",
+    "remote-poland/Full-stack"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,245 @@
+{
+ "total": 9,
+ "maxExactCount": 100,
+ "vacancies": [
+  {
+   "id": "cmfhfalci4q4w9zspqrv1wh8g",
+   "title": "AI Developer",
+   "companyName": "Jacobs",
+   "cities": [
+    {
+     "id": 1356073,
+     "name": "Cracow"
+    }
+   ],
+   "workplaceType": null,
+   "experienceLevels": [],
+   "employmentTypes": [
+    "FULL_TIME"
+   ],
+   "publishedAt": "2026-11-09T08:00:00.000Z",
+   "salary": null,
+   "keywords": [],
+   "descriptionText": "At Jacobs, we're challenging today to reinvent tomorrow by solving the world's most critical problems for thriving cities, resilient environments, mission-critical outcomes, operational advancement, scientific discovery and cutting-edge manufacturing, turning abstract ideas into realities that transform the world for good.\n\nYour impact\n\nWe're looking for an AI developer with strong software engineering skills, deep proficiency in AI-assisted coding tools, and hands-on experience building and deploying AI-powered applications to support AI solutions across the business for both government and private-sector clients. The ideal candidate will be a skilled software developer who can rapidly build, iterate, and ship AI-powered tools and applications. They should be highly proficient with AI coding assistants (Claude, OpenAI Codex, Cursor), experienced with agentic AI frameworks and orchestration patterns, and comfortable working across the full stack. In addition, the ideal candidate will possess a degree in computer science, AI, data science, engineering, or similar domain areas, as well as previous experience in consulting.\n\nThe chosen candidate will become a member of the Digital and Data team at Jacobs, helping drive innovation in technical project work for our clients in collaboration with subject matter experts, technologists, engineers, data scientists, project managers, and more.\n\nKey Responsibilities\n\n- Design, develop, and deploy AI-powered applications and tools using Python, TypeScript/JavaScript, and modern AI frameworks (LangChain, LangGraph, CrewAI, or similar)\n- Build and configure MCP (Model Context Protocol) servers and integrations to connect AI models with enterprise data sources, APIs, and tooling\n- Develop RAG pipelines, agentic workflows, and AI-assisted automation solutions for internal and client-facing projects\n- Leverage AI-assisted development tools (Claude, Codex, Cursor, GitHub Copilot) to accelerate delivery and maintain high code quality\n- Collaborate cross-functionally with subject matter experts, data engineers, and project managers to translate business requirements into production-ready AI solutions\n- Architect and implement full-stack solutions including front-end interfaces (React, HTML/CSS/JS), back-end APIs, and cloud-hosted AI services\n- Evaluate, integrate, and maintain AI platforms, APIs, and toolchains as the technology landscape evolves\n- Contribute to technical presentations, demos, and documentation for both internal teams and external clients\n- Participate in knowledge sharing, code reviews, and mentoring across teams and domains\n- Stay current with rapidly evolving AI tools, models, and best practices; proactively bring new capabilities to the team\n\nHere's what you'll need\n\n- 3-5 years of experience in software development, with at least 1-2 years focused on AI/ML application development\n- Bachelor's degree in computer science, software engineering, AI, data science, or similar domain\n- Demonstrated proficiency building applications with AI/LLM APIs and frameworks (eg. Anthropic Claude API, OpenAI API, LangChain/LangGraph, Model Context Protocol)\n- Strong proficiency in Python and JavaScript/TypeScript; working knowledge of SQL\n- Experience with containerization (Docker), version control (GitHub), and CI/CD pipelines\n- Proven ability to use AI-assisted coding tools (Claude, Codex, Cursor, GitHub Copilot) to accelerate development workflows\n- Ability to travel as necessary to meet project and client requirements\n\nNice to have\n\n- Bachelor's or Master's degree in computer science, AI, software engineering, or similar domain\n- Experience in the AEC industry\n- Experience designing and building agentic AI systems, including multi-step orchestration, tool use, and human-in-the-loop patterns using frameworks such as LangGraph, CrewAI, PydanticAI, or similar\n- Experience developing and deploying RESTful APIs and backend services using frameworks such as FastAPI, Flask, or Express\n- Hands-on experience building RAG pipelines, including document ingestion, chunking strategies, embedding models, vector stores (Pinecone, Weaviate, pgvector, etc.), and retrieval optimization\n- Technical proficiency with cloud platforms and data infrastructure such as Microsoft Azure, Microsoft Fabric, Palantir Foundry, Palantir AIP, Google Cloud, Amazon Web Services, and database technologies (data lakes, vector databases, etc.)\n\nWe offer\n\n- Rewarding employment - full-time employment with a salary that matches your qualifications\n- Hybrid work model - candidates are required to work from our Kraków or Warsaw office at least two days per week. The remaining working days may be performed remotely from home\n- Flexible hours - start your day anytime between 730 and 1000 AM\n- Comprehensive benefits, including Lux Med medical care, psychological support, life insurance, My Benefit cafeteria system, Multisport card co-financing, and a car/bike park sharing system\n- Co-financed holidays - enjoy \"Wczasy pod Gruszą\" for a well-deserved break\n- Global projects - engage in exciting international projects\n- Inclusive networks - join our diverse employee networks like Women's Network, OneWorld, PRISM, Careers Network, Green Team, SpeakUp, Collectively, and more\n- Continuous learning - participate in our Graduate Development Program, Learners’ Community, and self-learning platforms\n\nWe know that if we are inclusive, we’re more connected, and we’re more creative. We accept people for who they are. Find out more about life at Jacobs.\n\nAs a Disability Confident employer, we will interview all disabled applicants who meet the criteria for a vacancy. If you require further support or reasonable adjustments with regards to the recruitment process (for example, you require the application form in a different format), please contact the team recruitmentpoland@jacobs.com\n\nYour application experience is important to us, and we’re keen to adapt to make every interaction even better. If you require further support or reasonable adjustments with regards to the recruitment process (for example, you require the application form in a different format), please contact the team via Careers Support.",
+   "link": "https://onetap.work/job/ai-developer-cmfhfalci4q4w9zspqrv1wh8g/",
+   "status": null,
+   "source": {
+    "kind": "SITEMAP_JOB_POSTING_INDEXING",
+    "sitemapJobPostingIndexingSourceData": {
+     "name": "LinkedIn"
+    }
+   }
+  },
+  {
+   "id": "cmjr8uo8shll7qt06vpknvqux",
+   "title": "AI Developer",
+   "companyName": "Jacobs",
+   "cities": [
+    {
+     "id": 11206991,
+     "name": "Warsaw"
+    }
+   ],
+   "workplaceType": null,
+   "experienceLevels": [],
+   "employmentTypes": [
+    "FULL_TIME"
+   ],
+   "publishedAt": "2026-11-09T08:00:00.000Z",
+   "salary": null,
+   "keywords": [],
+   "descriptionText": "At Jacobs, we're challenging today to reinvent tomorrow by solving the world's most critical problems for thriving cities, resilient environments, mission-critical outcomes, operational advancement, scientific discovery and cutting-edge manufacturing, turning abstract ideas into realities that transform the world for good.\n\nYour impact\n\nWe're looking for an AI developer with strong software engineering skills, deep proficiency in AI-assisted coding tools, and hands-on experience building and deploying AI-powered applications to support AI solutions across the business for both government and private-sector clients. The ideal candidate will be a skilled software developer who can rapidly build, iterate, and ship AI-powered tools and applications. They should be highly proficient with AI coding assistants (Claude, OpenAI Codex, Cursor), experienced with agentic AI frameworks and orchestration patterns, and comfortable working across the full stack. In addition, the ideal candidate will possess a degree in computer science, AI, data science, engineering, or similar domain areas, as well as previous experience in consulting.\n\nThe chosen candidate will become a member of the Digital and Data team at Jacobs, helping drive innovation in technical project work for our clients in collaboration with subject matter experts, technologists, engineers, data scientists, project managers, and more.\n\nKey Responsibilities\n\n- Design, develop, and deploy AI-powered applications and tools using Python, TypeScript/JavaScript, and modern AI frameworks (LangChain, LangGraph, CrewAI, or similar)\n- Build and configure MCP (Model Context Protocol) servers and integrations to connect AI models with enterprise data sources, APIs, and tooling\n- Develop RAG pipelines, agentic workflows, and AI-assisted automation solutions for internal and client-facing projects\n- Leverage AI-assisted development tools (Claude, Codex, Cursor, GitHub Copilot) to accelerate delivery and maintain high code quality\n- Collaborate cross-functionally with subject matter experts, data engineers, and project managers to translate business requirements into production-ready AI solutions\n- Architect and implement full-stack solutions including front-end interfaces (React, HTML/CSS/JS), back-end APIs, and cloud-hosted AI services\n- Evaluate, integrate, and maintain AI platforms, APIs, and toolchains as the technology landscape evolves\n- Contribute to technical presentations, demos, and documentation for both internal teams and external clients\n- Participate in knowledge sharing, code reviews, and mentoring across teams and domains\n- Stay current with rapidly evolving AI tools, models, and best practices; proactively bring new capabilities to the team\n\nHere's what you'll need\n\n- 3-5 years of experience in software development, with at least 1-2 years focused on AI/ML application development\n- Bachelor's degree in computer science, software engineering, AI, data science, or similar domain\n- Demonstrated proficiency building applications with AI/LLM APIs and frameworks (eg. Anthropic Claude API, OpenAI API, LangChain/LangGraph, Model Context Protocol)\n- Strong proficiency in Python and JavaScript/TypeScript; working knowledge of SQL\n- Experience with containerization (Docker), version control (GitHub), and CI/CD pipelines\n- Proven ability to use AI-assisted coding tools (Claude, Codex, Cursor, GitHub Copilot) to accelerate development workflows\n- Ability to travel as necessary to meet project and client requirements\n\nNice to have\n\n- Bachelor's or Master's degree in computer science, AI, software engineering, or similar domain\n- Experience in the AEC industry\n- Experience designing and building agentic AI systems, including multi-step orchestration, tool use, and human-in-the-loop patterns using frameworks such as LangGraph, CrewAI, PydanticAI, or similar\n- Experience developing and deploying RESTful APIs and backend services using frameworks such as FastAPI, Flask, or Express\n- Hands-on experience building RAG pipelines, including document ingestion, chunking strategies, embedding models, vector stores (Pinecone, Weaviate, pgvector, etc.), and retrieval optimization\n- Technical proficiency with cloud platforms and data infrastructure such as Microsoft Azure, Microsoft Fabric, Palantir Foundry, Palantir AIP, Google Cloud, Amazon Web Services, and database technologies (data lakes, vector databases, etc.)\n\nWe offer\n\n- Rewarding employment - full-time employment with a salary that matches your qualifications\n- Hybrid work model - candidates are required to work from our Kraków or Warsaw office at least two days per week. The remaining working days may be performed remotely from home\n- Flexible hours - start your day anytime between 730 and 1000 AM\n- Comprehensive benefits, including Lux Med medical care, psychological support, life insurance, My Benefit cafeteria system, Multisport card co-financing, and a car/bike park sharing system\n- Co-financed holidays - enjoy \"Wczasy pod Gruszą\" for a well-deserved break\n- Global projects - engage in exciting international projects\n- Inclusive networks - join our diverse employee networks like Women's Network, OneWorld, PRISM, Careers Network, Green Team, SpeakUp, Collectively, and more\n- Continuous learning - participate in our Graduate Development Program, Learners’ Community, and self-learning platforms\n\nWe know that if we are inclusive, we’re more connected, and we’re more creative. We accept people for who they are. Find out more about life at Jacobs.\n\nAs a Disability Confident employer, we will interview all disabled applicants who meet the criteria for a vacancy. If you require further support or reasonable adjustments with regards to the recruitment process (for example, you require the application form in a different format), please contact the team recruitmentpoland@jacobs.com\n\nYour application experience is important to us, and we’re keen to adapt to make every interaction even better. If you require further support or reasonable adjustments with regards to the recruitment process (for example, you require the application form in a different format), please contact the team via Careers Support.",
+   "link": "https://onetap.work/job/ai-developer-cmjr8uo8shll7qt06vpknvqux/",
+   "status": null,
+   "source": {
+    "kind": "SITEMAP_JOB_POSTING_INDEXING",
+    "sitemapJobPostingIndexingSourceData": {
+     "name": "LinkedIn"
+    }
+   }
+  },
+  {
+   "id": "cm58n6nz7955377yq9vmwezhk",
+   "title": "Senior Frontend React JS Developer",
+   "companyName": "MPower Plus",
+   "cities": [
+    {
+     "id": 16698408,
+     "name": "Wrocław"
+    }
+   ],
+   "workplaceType": null,
+   "experienceLevels": [],
+   "employmentTypes": [],
+   "publishedAt": "2026-11-10T08:00:00.000Z",
+   "salary": null,
+   "keywords": [],
+   "descriptionText": "Exp level:\n\n• Minimum 8 years of hands-on front-end development experience, preferably within banking or financial services.\n\n• Strong proficiency in React, TypeScript and JavaScript. Mandatory\n\n• Hands-on experience with GraphQL, such as Apollo Client, and REST API integration, including debugging communication between browser applications and back-end services. Mandatory\n\n• Experience with modern front-end build tools, particularly Vite. Mandatory\n\n• Strong understanding of Git branching, version control and release workflows. Mandatory\n\n• Comfortable working with cloud-based development environments and containerized deployments.",
+   "link": "https://onetap.work/job/senior-frontend-react-js-developer-cm58n6nz7955377yq9vmwezhk/",
+   "status": null,
+   "source": {
+    "kind": "SITEMAP_JOB_POSTING_INDEXING",
+    "sitemapJobPostingIndexingSourceData": {
+     "name": "LinkedIn"
+    }
+   }
+  },
+  {
+   "id": "cmcnlt847ndsc7u0c4rjpauk7",
+   "title": "Senior Frontend ReactJS Developer",
+   "companyName": "Infinity Quest",
+   "cities": [
+    {
+     "id": 13432963,
+     "name": "Wroclaw Metropolitan Area"
+    }
+   ],
+   "workplaceType": null,
+   "experienceLevels": [],
+   "employmentTypes": [],
+   "publishedAt": "2026-11-06T08:00:00.000Z",
+   "salary": null,
+   "keywords": [],
+   "descriptionText": "Job Description:\n\nKey Responsibilities\n\n- Develop and maintain features within React-based portfolio reporting applications, including saved report packages, report generation and search functionality.\n- Modernize existing applications by migrating them to Vite and an enterprise design system.\n- Support the migration of legacy ExtJS applications and screens to React.\n- Build, integrate and troubleshoot GraphQL and REST APIs between front-end applications and back-end microservices.\n- Diagnose issues such as slow or failing API queries, incorrect request payloads and front-end performance problems.\n- Deploy UI builds to QA environments, manage release branches, and support regression testing and production releases.\n- Work closely with back-end developers, QA teams, release management and product owners to deliver business and regulatory improvements.\n- Contribute to Agile development, Test Driven Development and DevOps practices.\nYour Team\n\nYou will be part of a globally distributed Portfolio Performance Reporting team responsible for applications that support portfolio returns, asset allocation, holdings and client reporting.\n\nThe team works collaboratively across front-end development, back-end engineering, data, QA, product and application support functions, with a strong focus on application quality, stability and continuous improvement.\n\nYour Expertise\n\n- Bachelor's or Master's degree, preferably in Computer Science or a related discipline.\n- Minimum 8 years of hands-on front-end development experience, preferably within banking or financial services.\n- Strong proficiency in React, TypeScript and JavaScript. Mandatory\n- Hands-on experience with GraphQL, such as Apollo Client, and REST API integration, including debugging communication between browser applications and back-end services. Mandatory\n- Experience with modern front-end build tools, particularly Vite. Mandatory\n- Strong understanding of Git branching, version control and release workflows. Mandatory\n- Experience migrating legacy front-end applications, such as ExtJS, to React. Preferred\n- Experience working with enterprise UI/design systems. Preferred\n- Familiarity with data-heavy UI frameworks such as AG Grid. Preferred\n- Experience troubleshooting front-end performance issues and memory leaks.\n- Knowledge of wealth management, portfolio reporting, performance returns, holdings or financial reporting would be an advantage.\n- Comfortable working with cloud-based development environments and containerized deployments.\n- Good understanding of Agile, Test Driven Development and DevOps practices.\n- Strong analytical and problem-solving skills with attention to detail.\n- Strong communication skills and ability to work with senior stakeholders and globally distributed teams.\n- Collaborative approach to problem-solving and working within diverse, cross-functional teams.\nKey Skills\n\nMandatory: React | TypeScript | JavaScript | GraphQL | REST APIs | Vite | Git | Front-End Development\n\nPreferred: ExtJS Migration | AG Grid | Apollo Client | Enterprise Design Systems | Microservices | DevOps | Wealth Management | Portfolio Reporting",
+   "link": "https://onetap.work/job/senior-frontend-reactjs-developer-cmcnlt847ndsc7u0c4rjpauk7/",
+   "status": null,
+   "source": {
+    "kind": "SITEMAP_JOB_POSTING_INDEXING",
+    "sitemapJobPostingIndexingSourceData": {
+     "name": "LinkedIn"
+    }
+   }
+  },
+  {
+   "id": "cm6uv38nia3ri9cqvrvnpr83t",
+   "title": "Programista Ruby On Rail",
+   "companyName": "ALTEN",
+   "cities": [],
+   "workplaceType": null,
+   "experienceLevels": [],
+   "employmentTypes": [
+    "FULL_TIME"
+   ],
+   "publishedAt": "2026-10-14T08:00:00.000Z",
+   "salary": null,
+   "keywords": [],
+   "descriptionText": "WHO ARE WE?\n\nWE ARE A WORLD LEADER IN ENGINEERING AND IT SERVICES.\n\nAt ALTEN, we see our specialists as architects – today’s designers of tomorrow’s world.\n\nAs a leader in Engineering and IT Services, we support companies in their technological and sustainable transformation.\n\nOVER 57,400 EMPLOYEES IN 30+ COUNTRIES, TO SUPPORT MORE THAN 6,500 CLIENTS WORLDWIDE.\n\nWe operate in all sectors: Aeronautics, Space, Defence, Security & Naval, Automotive, Rail & Mobility, Energy & Environment, Life Sciences & Health, Industrial Equipment & Electronics, Telecoms, Banking, Finance & Insurance, Retail, Services & Medias, Public Services & Government.\n\nWe carry out complex and highly technical projects throughout the value chain of the most prestigious companies worldwide.\n\nOur motto: Building Tomorrow’s World Today!\n\nWe are looking for Senior Full-Stack Software Engineer (Backend-Weighted)\n\nKey responsibilities:\n\n- Deliver end-to-end features across events applications, owning the code from design to deployment, monitoring, and fixes.\n- Break down requirements with the Product Manager into deliverable increments and flag potential risks early.\n- Own data modeling, query optimization, indexing, and migrations, ensuring performance as data volumes grow.\n- Manage integrations with Salesforce, payment providers, asynchronous messaging, and real-time client delivery channels.\n- Design, debug, and troubleshoot cross-system flows, ensuring reliability and data consistency.\n- Deploy, monitor, and maintain production systems, including observability, alerting, and platform upgrades.\n\nRequirements;\n\n- 8+ years of professional software engineering experience, with a focus on autonomous problem-solving in ambiguous, cross-system environments.\n- Expert-level backend development in modern stacks (Ruby, Ruby on Rails)\n- Front-end development skills (Angular)\n- Mastery of relational databases, including modeling, storage, querying, and performance optimization (indexing, migrations).\n- Experience hosting and operating web applications in production, including releases, observability, and incident response.\n- Strong engineering mindset: CI/CD, automated testing, linting, and code review as standard practice.\n\nWe offer\n\nWe offer a full-time employment contract\n\n• Location – Poland; work model – remote\n\n• Stable and long-term cooperation\n\n• Well-defined career path at the European leader in engineering & IT consulting\n\n• Opportunity to relocate and work in different ALTEN Polska branches\n\n• After completion of the project, opportunity to engage in a subsequent one within the company\n\n• Introduction and cooperation with dedicated Competences Manager\n\nBenefits\n\n• Medicover medical care\n\n• Medicover dental care\n\n• Medicover Benefits platform\n\n• Medicover Sport card\n\n• Referral Program\n\n• Layette for a newborn employee’s child\n\n• Group life insurance\n\n• Pension scheme\n\nWe also offer cooperation based on a B2B or Contract of mandate (UZ).\n\nWe also guarantee:\n\n• Access to professional certifications with our technology partners (e.g. Google, ISTQB)\n\n• Access to relevant industry events\n\n• Access to the Knowledge Sharing Program\n\n• Access to Referral program\n\nBy clicking on the \"Send\" button, you agree to the processing of your personal data contained in the recruitment application by Alten Polska sp. z o.o. with its registered office in Warsaw for the purpose of recruitment for the position indicated in the advertisement. You can withdraw your consent at any time by contacting us at ALTEN_PL_RODO@alten.com, which means that the recruitment process is completed and your candidacy will not be taken into account in future recruitments.\n\nFull information on the processing of your personal data can be found here",
+   "link": "https://onetap.work/job/programista-ruby-on-rail-cm6uv38nia3ri9cqvrvnpr83t/",
+   "status": null,
+   "source": {
+    "kind": "SITEMAP_JOB_POSTING_INDEXING",
+    "sitemapJobPostingIndexingSourceData": {
+     "name": "LinkedIn"
+    }
+   }
+  },
+  {
+   "id": "cmk0jljbl85fgce1ioishiz6q",
+   "title": "Software Engineer (Node.js, Javascript/Typescript)",
+   "companyName": "ALTEN",
+   "cities": [],
+   "workplaceType": null,
+   "experienceLevels": [],
+   "employmentTypes": [
+    "FULL_TIME"
+   ],
+   "publishedAt": "2026-11-09T08:00:00.000Z",
+   "salary": null,
+   "keywords": [],
+   "descriptionText": "WHO ARE WE?\n\nWE ARE A WORLD LEADER IN ENGINEERING AND IT SERVICES.\n\nAt ALTEN, we see our specialists as architects – today’s designers of tomorrow’s world.\n\nAs a leader in Engineering and IT Services, we support companies in their technological and sustainable transformation.\n\nOVER 57,400 EMPLOYEES IN 30+ COUNTRIES, TO SUPPORT MORE THAN 6,500 CLIENTS WORLDWIDE.\n\nWe operate in all sectors: Aeronautics, Space, Defence, Security & Naval, Automotive, Rail & Mobility, Energy & Environment, Life Sciences & Health, Industrial Equipment & Electronics, Telecoms, Banking, Finance & Insurance, Retail, Services & Medias, Public Services & Government.\n\nWe carry out complex and highly technical projects throughout the value chain of the most prestigious companies worldwide.\n\nOur motto: Building Tomorrow’s World Today!\n\nKey Responsibilities:\n\n- Develop, maintain, and enhance backend applications using Node.js.\n- Participate in all stages of the software development lifecycle, including requirements analysis, implementation, testing, deployment, maintenance, and continuous improvement.\n- Work as part of a self-organized Agile team responsible for building, owning, and operating the service.\n- Design and implement scalable, high-performance cloud-based solutions.\n- Collaborate closely with Product Managers and business stakeholders to translate requirements into effective technical solutions.\n- Participate in code reviews and ensure high code quality by following software engineering best practices.\n- Contribute to the implementation and optimization of CI/CD processes.\n- Support the migration, modernization, and continuous improvement of existing services and applications.\n\nThe ideal candidate for this position will have:\n\n- BSc or MSc degree in Computer Science, Mathematics, or a related technical field.\n- Minimum 4 years of experience in cloud application development using Node.js.\n- Strong proficiency in JavaScript and TypeScript.\n- Hands-on experience designing and developing backend applications and services.\n- Experience working in an Agile environment.\n- Excellent written and verbal communication skills in English (minimum B2 level).\nNice to Have\n\n- Experience with CI/CD pipelines and DevOps practices.\n- Experience with AWS cloud services.\n- Programming experience with Python.\n- Programming experience with C#.\n- Experience using Git or other distributed version control systems.\n- Experience migrating applications or services between different technology stacks and programming languages.\n- Knowledge of modern cloud-native architectures and software design patterns.\n\nWe offer\n\nWe offer a full-time employment contract\n\n- Location –Poland; work model – remote\n- Stable and long-term cooperation\n- Well-defined career path at the European leader in engineering & IT consulting\n- Opportunity to relocate and work in different ALTEN Polska branches\n- After completion of the project, opportunity to engage in a subsequent one within the company\n- Introduction and cooperation with dedicated Competences Manager\n\nBenefits\n\n- Medicover medical care\n- Medicover dental care\n- Medicover Benefits platform\n- Medicover Sport card\n- Referral Program\n- Layette for a newborn employee’s child\n- Group life insurance\n- Pension scheme\n\nWe also offer cooperation based on a B2B or Contract of mandate (UZ).\n\nWe also guarantee:\n\n- Access to professional certifications with our technology partners (e.g. Google, ISTQB)\n- Access to relevant industry events\n- Access to the Knowledge Sharing Program\n- Access to Referral program\n\nJoin our team and let’s build tomorrow’s world today!\n\nNOTICE: We kindly inform you that we will contact the selected candidates.\n\nBy clicking the \"Send\" button, you agree to the processing of your personal data included in the recruitment application by Alten Polska sp. z o.o., based in Warsaw, for the purpose of conducting the recruitment process for the position specified in the job advertisement. You can withdraw your consent at any time by contacting us at ALTEN_PL_RODO@alten.com, which will result in the termination of the recruitment process and your application not being considered in future recruitments.\n\nYou can find the full information regarding the processing of your personal data at:\n\nhttps://docs.altenpolska.pl/do_pobrania/Klauzula_informacyjna_dla_potencjalnych_pracownikow.pdf",
+   "link": "https://onetap.work/job/software-engineer-node-js-javascript-typescript-cmk0jljbl85fgce1ioishiz6q/",
+   "status": null,
+   "source": {
+    "kind": "SITEMAP_JOB_POSTING_INDEXING",
+    "sitemapJobPostingIndexingSourceData": {
+     "name": "LinkedIn"
+    }
+   }
+  },
+  {
+   "id": "cmhguc92nydhcv2gf80sgjpdb",
+   "title": "Senior Full Stack Engineer (React + Java/Node.js)",
+   "companyName": "ALTEN",
+   "cities": [],
+   "workplaceType": null,
+   "experienceLevels": [],
+   "employmentTypes": [
+    "FULL_TIME"
+   ],
+   "publishedAt": "2026-10-20T08:00:00.000Z",
+   "salary": null,
+   "keywords": [],
+   "descriptionText": "Senior Full Stack Engineer (React + Java/Node.js)\n\n100% remote\n\nKIM JESTEŚMY?\n\nALTEN – Światowy lider usług inżynieryjnych i IT\n\nGrupa ALTEN, założona w 1988 roku we Francji, jest wiodącym partnerem technologicznym, obsługującym największych klientów na świecie. W 2023 roku osiągnęła przychody przekraczające 4,07 miliarda euro i zatrudnia ponad 57 000 pracowników, w tym 88% inżynierów i ekspertów IT. ALTEN Polska działa od 13 lat, wspierając innowacje, badania i rozwój oraz systemy IT swoich klientów. Posiada biura w Krakowie, Warszawie, Wrocławiu, Gdańsku i Poznaniu. Obsługuje kluczowe branże, takie jak lotnicza, kosmiczna, przemysłowa, motoryzacyjna, kolejowa, energetyczna, finansowa, telekomunikacyjna i sprzedażowa. Zakres ekspertyzy: analiza biznesowa, cyberbezpieczeństwo, sztuczna inteligencja, analiza danych i rozwiązania chmurowe, rozwój aplikacji, testowanie oprogramowania, zarządzanie projektami, oprogramowanie wbudowane, zarządzanie jakością, industrializacja, transformacja cyfrowa oraz inżynieria przemysłowa.\n\nWięcej informacji na http://www.altenpolska.pl\n\nPoszukiwany: Senior Full Stack Engineer (React + Java/Node.js)\n\nDo globalnego zespołu produktowego poszukujemy Senior Full Stack Engineera, który będzie rozwijać nowoczesną platformę SaaS wykorzystywaną przez największe organizacje na świecie. To rola dla osoby, która dobrze odnajduje się zarówno po stronie frontendu, jak i backendu, a jednocześnie lubi pracować nad złożonymi produktami enterprise. Na co dzień będziesz tworzyć portale administracyjne, dashboardy operacyjne oraz rozwiązania wspierające zarządzanie procesami i konfiguracją platformy w środowisku chmurowym.\n\nKLUCZOWE ZADANIA:\n\n- Projektowanie i rozwój nowoczesnych aplikacji webowych w oparciu o React i TypeScript\n- Budowa portali administracyjnych, dashboardów oraz narzędzi wspierających operacje biznesowe\n- Tworzenie i rozwój usług backendowych oraz REST API\n- Integracja aplikacji z systemami wewnętrznymi i zewnętrznymi\n- Praca w architekturze mikroserwisowej\n- Współpraca przy projektowaniu nowych funkcjonalności i decyzjach architektonicznych\n- Dbanie o jakość kodu poprzez code review oraz testy jednostkowe\n- Optymalizacja wydajności, bezpieczeństwa i dostępności aplikacji\n- Współpraca z zespołami produktowymi i inżynieryjnymi w międzynarodowym środowisku\n\nWYMAGANIA:\n\n- Minimum 5 lat doświadczenia w tworzeniu aplikacji Full Stack\n- Praktyczne doświadczenie z React, TypeScript oraz JavaScript\n- Znajomość Java (Spring Boot) lub Node.js\n- Doświadczenie w tworzeniu i integracji REST API\n- Dobra znajomość architektury mikroserwisowej\n- Doświadczenie w pracy z bazami danych relacyjnymi (PostgreSQL, MySQL lub Oracle)\n- Znajomość środowisk chmurowych: AWS, Azure lub GCP\n- Doświadczenie z Dockerem oraz Kubernetes\n- Znajomość CI/CD i systemów kontroli wersji (Git)\n- Rozumienie zagadnień związanych z bezpieczeństwem aplikacji oraz uwierzytelnianiem użytkowników (OAuth2, OIDC, SAML, RBAC)\n- Bardzo dobra znajomość języka angielskiego\n\nOferujemy umowę o pracę na pełen etat\n\n• Lokalizacja – Polska; model pracy – 100% remote\n\n• Stabilną i długoterminową współpracę\n\n• Jasno zdefiniowaną ścieżkę kariery u europejskiego lidera w doradztwie inżynieryjnym i IT\n\n• Możliwość relokacji w ramach lokalnych oddziałów ALTEN Polska\n\n• Po zakończeniu projektu możliwość zaangażowania w kolejny w ramach firmy\n\n• Wdrożenie oraz współpracę z dedykowanym Competences Managerem\n\nBenefity\n\n• Opieka medyczna Medicover\n\n• Opieka stomatologiczna Medicover\n\n• Platforma Medicover Benefits\n\n• Karta sportowa Medicover\n\n• Program poleceń\n\n• Wyprawka dla nowonarodzonego dziecka pracownika\n\n• Ubezpieczenie grupowe na życie\n\n• Program emerytalny\n\nOferujemy również współpracę na podstawie B2B lub umowy zlecenia (UZ).\n\nGwarantujemy także:\n\n• Dostęp do profesjonalnych certyfikacji u naszych partnerów technologicznych (np. Google, ISTQB)\n\n• Dostęp do branżowych wydarzeń\n\n• Dostęp do programu wymiany wiedzy (Knowledge Sharing Program)\n\n• Dostęp do programu poleceń",
+   "link": "https://onetap.work/job/senior-full-stack-engineer-react-java-node-js-cmhguc92nydhcv2gf80sgjpdb/",
+   "status": null,
+   "source": {
+    "kind": "SITEMAP_JOB_POSTING_INDEXING",
+    "sitemapJobPostingIndexingSourceData": {
+     "name": "LinkedIn"
+    }
+   }
+  },
+  {
+   "id": "cmcv383c5i6ce2n8eksni6ew6",
+   "title": "Senior Front-end Engineer with React",
+   "companyName": "Sigma IT Poland",
+   "cities": [
+    {
+     "id": 16698408,
+     "name": "Wrocław"
+    }
+   ],
+   "workplaceType": null,
+   "experienceLevels": [],
+   "employmentTypes": [
+    "FULL_TIME"
+   ],
+   "publishedAt": "2026-11-04T08:00:00.000Z",
+   "salary": {
+    "min": 23500,
+    "max": 25000,
+    "currency": "PLN",
+    "period": "MONTH"
+   },
+   "keywords": [],
+   "descriptionText": "Description\n\nHolisticon Connect is a division within NEXER GROUP - a custom software development company. We started in Poland in 2017 and are now a team of over 140 people. We have the opportunity to work with world-renowned brands from Scandinavia, the UK, and Western Europe. Our goal is to grow stronger, in competence rather than in numbers. If you like what we do, check out our offer, maybe we will have the pleasure of meeting you! 😊\n\nWe are looking for Senior Front-end Engineer with React to join a project centered around a globally recognized platform for process orchestration and workflow automation. The solution helps large organizations coordinate business processes across applications, services, human tasks, and AI agents, enabling them to operate more efficiently and scale their digital transformation efforts. You'll work on a mature SaaS solution trusted by leading international companies and used in business-critical environments.\n\nWe offer a choice of employment form: B2B or Employment Contract\n\n- UoP: 23 500 – 25 000 PLN gross/month\n- B2B: 170 – 180 PLN net/hour + VAT\n\nYou Might Be The Perfect Match If You Are/have\n\n- Strong experience with React;\n- Experience building complex web applications and SaaS products using HTML5, CSS3 and Javascript;\n- Experience with AI-assisted development tools (e.g., Claude Code);\n- Understanding of BPMN-based applications or willingness to learn workflow-oriented business domains;\n- Familiarity with Node.js and /or Vue.js is nice to have;\n- Familiarity with UI/UX principles is a plus;\n- Experience with cloud providers (e.g., GCP, AWS, or similar);\n- Experience with enterprise SaaS products would be an advantage;\n- Fluent Polish and English, both written and spoken;\n- Located in Poland for at least 5 years.\n\nBy Joining Us, You Gain The Following\n\n- Opportunity to work on exciting, international projects in cutting-edge industries like Automotive, Biotech, IoT;\n- Possibility to develop in cloud technologies;\n- Becoming part of a team that believes that the next step to a promising future is to put your heart into it and make it happen;\n- Respect for your private life so you don't have to work overtime or on weekends;\n- Team Events budget to socialize outside of work;\n- Company Events to celebrate smaller and bigger successes (Summer Party, Programmer's Day, and trips abroad – so far we've been in South Africa, Are, and Barcelona).\n\nPerks And Benefits\n\n- Fully remote work or in our office in Wrocław;\n- Benefits such as Luxmed, Multisport, and life insurance in Nationale Nederlanden;\n- Attractive referral system (9,5k for senior, 6k for mid, 2,5k for junior);\n- Personal Training Budget with additional paid hours;\n- Passion Day - an extra day off for your hobby to spend as you please;\n- Flexible working hours with no micro-management approach. Our core hours are 9-15, the rest of the working time is up to you;\n- We provide high-quality work equipment + 2 additional monitors and accessories.\n\nIf you apply for this position and match our expectations, then:\n\n- You will be invited to an HR Screening with our IT Recruiter.\n- You will meet with a client.\n\nSubmit your application online in one easy step! Apply now!",
+   "link": "https://onetap.work/job/senior-front-end-engineer-with-react-cmcv383c5i6ce2n8eksni6ew6/",
+   "status": null,
+   "source": {
+    "kind": "SITEMAP_JOB_POSTING_INDEXING",
+    "sitemapJobPostingIndexingSourceData": {
+     "name": "LinkedIn"
+    }
+   }
+  },
+  {
+   "id": "cmoxc7kv0z6sjh0jf08w6fuxr",
+   "title": "Software Developer",
+   "companyName": "Drillin",
+   "cities": [],
+   "workplaceType": null,
+   "experienceLevels": [],
+   "employmentTypes": [
+    "FULL_TIME"
+   ],
+   "publishedAt": "2026-11-09T08:00:00.000Z",
+   "salary": {
+    "min": 15000,
+    "max": 22000,
+    "currency": "PLN",
+    "period": "MONTH"
+   },
+   "keywords": [],
+   "descriptionText": "About Drillin\n\nDrillin is an Estonian software and AI engineering company. We build AI agents, custom platforms, mobile apps and system integrations for businesses: agents that plan a bakery's daily production, automate 20-year-old ERP systems, and turn construction drawings into structured data. Our team of 12+ engineers works with 10+ clients, and we are now building our team in Poland.\n\nThe role\n\nYou will be one of our first engineers in Poland. You will build software that real businesses run on, from the first prototype to production: web platforms, mobile apps, integrations with business systems, and AI agents. You will work closely with our team in Estonia, talk directly with clients, and help shape how Drillin grows in Poland.\n\nWhat you'll do\n\n- Build web applications and backends in TypeScript, Node.js and Python\n\n- Integrate with third-party APIs: accounting, payments, e-commerce, IoT devices, legacy systems\n\n- Build features with LLMs and AI agents together with our AI team\n\n- Use AI coding tools (Claude Code, Cursor, Codex) every day, and review their output with care\n\n- Write tests, review code and keep production systems reliable\n\n- Join client calls to understand what they actually need\n\nWhat we're looking for\n\n- 3+ years of professional software development (mid or senior)\n\n- Strong TypeScript and Node.js, or Python; React or Vue on the frontend\n\n- Experience with SQL databases (PostgreSQL) and REST APIs\n\n- You care about working software in production, not just code that compiles\n\n- Fluent English; Polish is a plus for working with local clients\n\nNice to have\n\n- Experience with LLM APIs, agents or AI features in production\n\n- Mobile development (Ionic, Capacitor, React Native)\n\n- Cloud and DevOps: GCP, AWS, Firebase, Docker\n\nWhat we offer\n\n- 15,000–22,000 PLN/month net on a B2B contract, depending on experience\n\n- A chance to be part of the founding team in Poland\n\n- Varied projects for real clients, from AI agents to mobile apps\n\n- An AI-first way of working with the latest tools paid for\n\n- Flexible hours, remote work from anywhere in Poland\n\nHow to apply\n\nApply via LinkedIn. A GitHub link or something you've built is more interesting to us than a cover letter.",
+   "link": "https://onetap.work/job/software-developer-cmoxc7kv0z6sjh0jf08w6fuxr/",
+   "status": null,
+   "source": {
+    "kind": "SITEMAP_JOB_POSTING_INDEXING",
+    "sitemapJobPostingIndexingSourceData": {
+     "name": "LinkedIn"
+    }
+   }
+  }
+ ],
+ "nextCursor": null
+}
