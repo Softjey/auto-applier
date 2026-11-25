@@ -1,0 +1,231 @@
+{
+ "tools": [
+  {
+   "name": "get_my_filters",
+   "description": "Get the user's saved vacancy search preferences. Call this FIRST before search_vacancies.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "name": "search_vacancies",
+   "description": "Search for job vacancies with filters. Returns { total, maxExactCount, vacancies[], nextCursor }. Every result carries its complete job description as plain text in `descriptionText`, so never call get_vacancy for a vacancy that came back from this search. Pass useSavedFilters=true to apply the user's saved search. `link` is the vacancy page on onetap.work — the only URL to give the user.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "useSavedFilters": {
+      "type": "boolean"
+     },
+     "applicationStatus": {
+      "type": "string",
+      "enum": [
+       "NONE",
+       "SAVED"
+      ]
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "cursor": {
+      "type": "string"
+     },
+     "keywords": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "datePosted": {
+      "type": "string"
+     },
+     "remoteWorkplace": {
+      "type": "object",
+      "properties": {
+       "enabled": {
+        "type": "boolean"
+       },
+       "citiesIds": {
+        "type": "array",
+        "items": {
+         "type": "integer"
+        }
+       },
+       "countryIsos": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      }
+     },
+     "hybridWorkplace": {
+      "type": "object",
+      "properties": {
+       "enabled": {
+        "type": "boolean"
+       },
+       "citiesIds": {
+        "type": "array",
+        "items": {
+         "type": "integer"
+        }
+       },
+       "countryIsos": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      }
+     },
+     "onsiteWorkplace": {
+      "type": "object",
+      "properties": {
+       "enabled": {
+        "type": "boolean"
+       },
+       "citiesIds": {
+        "type": "array",
+        "items": {
+         "type": "integer"
+        }
+       },
+       "countryIsos": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "get_my_applications",
+   "description": "Get the user's vacancy application records with filtering and search. Each application includes id, status, notes, vacancyId, timestamps and a vacancy summary (title, companyName, link, expiresAt, salary, source). The response carries `total`. Free-text `query` searches title, company name and notes.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "NOT_INTERESTED",
+       "SAVED",
+       "APPLIED",
+       "REJECTED",
+       "TEST_TASK",
+       "INTERVIEW",
+       "OFFER_MADE",
+       "HIRED",
+       "ARCHIVED"
+      ]
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "page": {
+      "type": "integer",
+      "minimum": 1
+     },
+     "activityStatus": {
+      "type": "string",
+      "enum": [
+       "active",
+       "expired",
+       "all"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "name": "bulk_update_applications",
+   "description": "Move up to 50 vacancies through the application pipeline in one call. Upserts per vacancy. Each item carries its own notes. Returns { applications } with the full record for every item.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "items"
+    ],
+    "properties": {
+     "items": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "items": {
+       "type": "object",
+       "required": [
+        "vacancyId",
+        "status"
+       ],
+       "properties": {
+        "vacancyId": {
+         "type": "string"
+        },
+        "status": {
+         "type": "string",
+         "enum": [
+          "NOT_INTERESTED",
+          "SAVED",
+          "APPLIED",
+          "REJECTED",
+          "TEST_TASK",
+          "INTERVIEW",
+          "OFFER_MADE",
+          "HIRED",
+          "ARCHIVED"
+         ]
+        },
+        "notes": {
+         "type": "string",
+         "maxLength": 1000
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "update_application_status",
+   "description": "Set the pipeline status of one vacancy, with notes.",
+   "inputSchema": {
+    "type": "object",
+    "required": [
+     "vacancyId",
+     "status"
+    ],
+    "properties": {
+     "vacancyId": {
+      "type": "string"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "NOT_INTERESTED",
+       "SAVED",
+       "APPLIED",
+       "REJECTED",
+       "TEST_TASK",
+       "INTERVIEW",
+       "OFFER_MADE",
+       "HIRED",
+       "ARCHIVED"
+      ]
+     },
+     "notes": {
+      "type": "string"
+     }
+    }
+   }
+  }
+ ]
+}
