@@ -1,0 +1,41 @@
+schema_version: "1.1"
+name: resume-blocks-apollo-8-years
+description: "A senior full-stack role asking for 8+ years: the Summary stays silent on years and the gap is reported."
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    адаптируй резюме под эту вакансию, текст в vacancy.md
+  model: claude-sonnet-5-5
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Write, Edit, Bash, Glob, Grep, Skill, ToolSearch]
+runs: 1
+graders:
+  - type: tool_used
+    name: resume-blocks-fired
+    tool: Skill
+    input_match: 'career-profile:resume-blocks"'
+  - type: regex
+    name: no-years-in-summary
+    pattern: '\*\*Summary:\*\*(?:(?!\*\*Skills)[\s\S])*?\d+\+?\s*(?:years|yrs)'
+    match: not_contains
+  - type: regex
+    name: years-gap-reported
+    pattern: '\b8\b[\s\S]{0,120}?(?:years?|yrs|лет|года)'
+    flags: i
+  - type: regex
+    name: summary-40-75-words
+    pattern: '\*\*Summary:\*\*\s+(?:\S+\s+){40,75}\*\*Skills:\*\*'
+  - type: regex
+    name: summary-no-first-person
+    pattern: '\*\*Summary:\*\*(?:(?!\*\*Skills)[\s\S])*?\b(?:I|my|me)\b'
+    match: not_contains
+  - type: regex
+    name: ruby-not-in-skills
+    pattern: '\*\*Skills:\*\*(?:(?!\n\s*\n)[\s\S])*?\bRuby\b'
+    match: not_contains
+  - type: regex
+    name: kubernetes-not-in-skills
+    pattern: '\*\*Skills:\*\*(?:(?!\n\s*\n)[\s\S])*?\bKubernetes\b'
+    match: not_contains
