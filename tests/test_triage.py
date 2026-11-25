@@ -6,7 +6,6 @@ import tempfile
 import unittest
 from types import SimpleNamespace
 
-import paths
 import triage
 
 

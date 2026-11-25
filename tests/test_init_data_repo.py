@@ -7,7 +7,6 @@ import tempfile
 import unittest
 from unittest import mock
 
-import paths
 import data_dir
 import init_data_repo
 

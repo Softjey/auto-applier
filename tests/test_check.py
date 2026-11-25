@@ -1,6 +1,5 @@
 import unittest
 
-import paths
 import check
 
 TEXT = (

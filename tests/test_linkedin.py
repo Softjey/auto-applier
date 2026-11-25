@@ -1,6 +1,5 @@
 import unittest
 
-import paths
 import linkedin
 
 CARD = """
