@@ -1,0 +1,22 @@
+schema_version: "1.1"
+name: skill-choice-pdf-ru
+description: "Asking for a PDF of a finished resume starts resume-pdf, not resume-render."
+execution:
+  prompt: |
+    сделай pdf из out/Acme-Senior-Frontend-Engineer/Daniel_Nowak_CV.html, отправлю рекрутеру
+  model: claude-sonnet-5-5
+  max_turns: 6
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Skill, ToolSearch]
+runs: 1
+graders:
+  - type: tool_used
+    name: resume-pdf-fired
+    tool: Skill
+    input_match: 'career-profile:resume-pdf"'
+  - type: tool_used
+    name: no-render
+    tool: Skill
+    input_match: 'career-profile:resume-render"'
+    min: 0
+    max: 0
