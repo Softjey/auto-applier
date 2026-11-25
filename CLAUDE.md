@@ -35,9 +35,9 @@ generic knowledge only. Everything about one person lives in a separate private
   needs a logged-in session. `LINKEDIN.md` records what the guest search
   honours and what it ignores.
 - `templates/data-repo/` — the skeleton of the data repo.
-- `tests/` — stdlib `unittest`, no network and no data repo needed. Run
-  `python3 -m unittest discover -s tests` before committing a change to a
-  script.
+- `tests/` — pytest (run through `uv`), no network and no data repo needed.
+  Run `uv run pytest` before committing a change to a script. The scripts
+  themselves stay stdlib-only; pytest is a dev dependency in `pyproject.toml`.
 - `.agents/skills/` — symlinks to `.claude/skills/`, for agents that read that
   folder.
 
