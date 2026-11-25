@@ -27,3 +27,6 @@ skills.csv.tmp
 **/.env.local
 
 .DS_Store
+
+# claude plugin eval reports
+/evals/results/
