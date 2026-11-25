@@ -35,9 +35,15 @@ generic knowledge only. Everything about one person lives in a separate private
   needs a logged-in session. `LINKEDIN.md` records what the guest search
   honours and what it ignores.
 - `templates/data-repo/` — the skeleton of the data repo.
-- `tests/` — stdlib `unittest`, no network and no data repo needed. Run
-  `python3 -m unittest discover -s tests` before committing a change to a
-  script.
+- `tests/` — pytest (run through `uv`), no network and no data repo needed.
+  Run `uv run pytest` before committing a change to a script. The scripts
+  themselves stay stdlib-only; pytest is a dev dependency in `pyproject.toml`.
+- `evals/` — agent evals run with `claude plugin eval` against the fictional
+  candidate in `fixtures/persona/` and a mocked onetap. `evals/README.md` says
+  what they cover, how to run them and how to write a case. The onetap mocks
+  are generated from `fixtures/persona/inputs/`: never edit them by hand, change
+  the fixture and run `python3 evals/build_mocks.py`. After changing a skill,
+  `gates.md` or the persona's `criteria.md`, re-run the evals it touches.
 - `.agents/skills/` — symlinks to `.claude/skills/`, for agents that read that
   folder.
 

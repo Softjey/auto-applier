@@ -1,0 +1,118 @@
+{
+  "$schemaVersion": 1,
+  "personal": {
+    "fullName": "Daniel Nowak",
+    "firstName": "Daniel",
+    "lastName": "Nowak",
+    "email": "daniel.nowak@candidate.onetap.work",
+    "phone": "+48 512 000 471",
+    "currentCity": "Kraków",
+    "currentCountry": "Poland",
+    "citizenship": "Polish",
+    "dateOfBirth": null,
+    "maritalStatus": null
+  },
+  "links": {
+    "linkedin": "https://www.linkedin.com/in/daniel-nowak-krk",
+    "github": "https://github.com/dnowak-dev",
+    "portfolio": null,
+    "other": []
+  },
+  "workAuthorization": {
+    "citizenship": "Polish",
+    "residencePermitCountry": null,
+    "residencePermitType": null,
+    "note": "Country-specific answers ('are you authorized to work in X') live in qa[], tag work_authorization:<country>. This block is background only — never answer a country-specific question directly from here."
+  },
+  "location": {
+    "willingToRelocate": false,
+    "remotePreference": "Hybrid preferred: up to 3 office days a week in Kraków; fully remote from Poland is fine. No relocation.",
+    "note": "Country-specific relocation answers live in qa[], tag relocation:<country>."
+  },
+  "compensation": {
+    "defaultCurrency": "PLN",
+    "expectedMin": 21000,
+    "expectedMax": 25000,
+    "period": "month",
+    "note": "ANCHOR = expectedMin/expectedMax in defaultCurrency. Every other currency or contract form is DERIVED from it by the rules in compensation.derivation — do not escalate a new currency to the user, compute it and state the arithmetic at the confirmation pause.",
+    "hourlyRate": 150,
+    "alternates": [],
+    "derivation": {
+      "anchor": "21000-25000 PLN/month B2B net",
+      "hoursPerMonth": 168,
+      "currency": {
+        "rule": "Divide the anchor by the central-bank mid rate for the target currency, then round.",
+        "rateSource": null,
+        "lastChecked": null,
+        "lastRates": {},
+        "worked": {}
+      },
+      "contractForm": {
+        "rule": null,
+        "worked": null,
+        "uopGrossFactor": 1
+      },
+      "note": "Recheck the FX rate whenever it is older than a few days. Keep worked examples so a reviewer can see how a number on a submitted form was reached."
+    },
+    "strategy": {
+      "note": "Numbers salary-quote.mjs computes from. The rules are in apply-to-jobs SKILL.md § Money and in the script; edit numbers here, rules there.",
+      "basis": "b2b-net PLN/month",
+      "baseline": 25000,
+      "floor": 21000,
+      "premium": {
+        "quote": 30000,
+        "appliesTo": "Staff / Lead / Principal and fully US-remote roles"
+      },
+      "rounding": {
+        "monthlyPln": 100,
+        "hourlyPln": 5,
+        "monthlyForeign": 100,
+        "annualForeign": 1000
+      }
+    }
+  },
+  "availability": {
+    "noticePeriod": "1 month",
+    "earliestStartDate": "2027-01-01",
+    "employmentTypesOpenTo": [
+      "B2B",
+      "UoP"
+    ],
+    "currentEmploymentStatus": "Employed full-time on B2B at ElevenLabs; 1-month notice."
+  },
+  "experience": {
+    "yearsOfCommercialExperience": 6,
+    "yearsAsOf": "2026-11",
+    "currentTitle": "Senior Frontend Engineer",
+    "seniorityLevel": "Senior",
+    "note": "Compute using the resume repo's own rule for this: the earliest commercial software dev role in EXPERIENCE from the base CV. Never hardcode this number."
+  },
+  "languages": [
+    {
+      "language": "Polish",
+      "level": "Native"
+    },
+    {
+      "language": "English",
+      "level": "C1"
+    }
+  ],
+  "eeo": {
+    "policy": "decline",
+    "note": "Personal and demographic questions (race, gender, marital status, veteran status, disability, pronouns) — when required and an opt-out exists ('Prefer not to say' or equivalent), pick it; no question to the user. Optional ones stay empty. Escalate only if mandatory with no opt-out and no qa[] answer."
+  },
+  "languagesDisclosurePolicy": "List Polish and English only.",
+  "projects": [],
+  "qa": [],
+  "education": [
+    {
+      "institution": "AGH University of Krakow",
+      "degree": "Bachelor",
+      "field": "Computer Science",
+      "start": "2019",
+      "end": "2023",
+      "status": "completed",
+      "note": null
+    }
+  ]
+}

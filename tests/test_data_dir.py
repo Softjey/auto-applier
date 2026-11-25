@@ -3,7 +3,6 @@ import tempfile
 import unittest
 from unittest import mock
 
-import paths
 import data_dir
 
 

@@ -15,7 +15,8 @@ It is a set of agent skills (Claude Code, Codex) plus a few small Python scripts
 | `.claude/skills/applications-check/` | is this job already known: duplicated in the batch, or already in your pipeline |
 | `.claude/skills/setup-job-triage/` | creates your private data repo and walks you through filling it |
 | `templates/data-repo/` | the skeleton of that data repo |
-| `tests/` | stdlib `unittest`, no network |
+| `tests/` | pytest via `uv`, no network |
+| `evals/`, `fixtures/persona/` | agent evals: real runs of the skills against a fictional candidate and a mocked onetap |
 
 ## Your data stays out of this repo
 
@@ -119,10 +120,16 @@ found, scripts stop and say how to create one. See `CLAUDE.md` for the full map.
 ## Tests
 
 ```sh
-python3 -m unittest discover -s tests
+uv run pytest
 ```
 
-They need no network and no data repo.
+They need no network and no data repo. The scripts stay stdlib-only; pytest is a dev
+dependency, installed by `uv` on first run.
+
+These check the scripts. The agent itself is checked by the evals in `evals/`: real
+Claude runs of the skills against a fictional candidate, with onetap mocked. They cost
+real usage and are not run in CI. What they cover and how to run them is in
+[`evals/README.md`](evals/README.md).
 
 ## Security
 
