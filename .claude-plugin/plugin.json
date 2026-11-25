@@ -1,0 +1,6 @@
+{
+  "name": "career-profile",
+  "version": "0.0.0",
+  "description": "Tailor a resume to one vacancy from rated skills, render it and print it to PDF.",
+  "skills": "./.claude/skills/"
+}
