@@ -1,0 +1,213 @@
+{
+ "tools": [
+  {
+   "name": "get_my_applications",
+   "description": "Get the user's vacancy application records with filtering and search. Returns applications the user has created (saved, applied, rejected, etc.) along with vacancy summary for each: id, status, notes, vacancyId, timestamps, and a vacancy summary (title, companyName, link, expiresAt, salary, source). The vacancy's `link` is its page on onetap.work and the only URL to give the user. Offset pagination (page/limit); the response carries `total`.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "activityStatus": {
+      "type": "string",
+      "enum": [
+       "active",
+       "expired",
+       "all"
+      ]
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+     },
+     "page": {
+      "type": "integer",
+      "minimum": 1
+     },
+     "query": {
+      "type": "string",
+      "maxLength": 255
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "NOT_INTERESTED",
+       "SAVED",
+       "APPLIED",
+       "REJECTED",
+       "TEST_TASK",
+       "INTERVIEW",
+       "OFFER_MADE",
+       "HIRED",
+       "ARCHIVED"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "name": "get_vacancy",
+   "description": "Get full details of a specific vacancy by ID or onetap.work URL. Returns: id, title, companyName, link, descriptionText, salary ({ min, max, currency, period } or null), cities, workplaceType[], experienceLevels[], employmentTypes[], publishedAt, expiresAt, source info, and the user's application status. `link` is the only URL to give the user.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "vacancyId": {
+      "type": "string"
+     },
+     "vacancyUrl": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  {
+   "name": "get_apply_target",
+   "description": "Get the external address where an application for this vacancy is actually submitted. Returns { vacancyId, title, companyName, url, kind, pageUrl }: kind='direct' means url is the employer's application form; kind='source' means url is the original job-board posting, where you still have to find the apply control yourself. FOR YOUR NAVIGATION ONLY: never print `url` in your reply, never turn it into a link, never hand it to the user. Everything you show the user points at `pageUrl`.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "vacancyId": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "vacancyId"
+    ]
+   }
+  },
+  {
+   "name": "count_applications_by_status",
+   "description": "Count the user's applications grouped by pipeline status. Every status is a key of the result, zero-filled.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "activityStatus": {
+      "type": "string",
+      "enum": [
+       "active",
+       "expired",
+       "all"
+      ]
+     },
+     "query": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  {
+   "name": "update_application_status",
+   "description": "Create or update the user's application record for ONE vacancy (upsert). Use NOT_INTERESTED to dismiss, ARCHIVED to shelve.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "vacancyId": {
+      "type": "string"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "NOT_INTERESTED",
+       "SAVED",
+       "APPLIED",
+       "REJECTED",
+       "TEST_TASK",
+       "INTERVIEW",
+       "OFFER_MADE",
+       "HIRED",
+       "ARCHIVED"
+      ]
+     },
+     "notes": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "maxLength": 1000
+     }
+    },
+    "required": [
+     "vacancyId",
+     "status"
+    ]
+   }
+  },
+  {
+   "name": "bulk_update_applications",
+   "description": "Move up to 50 vacancies through the application pipeline in one call. Each item carries its own notes.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "items": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "items": {
+       "type": "object",
+       "properties": {
+        "vacancyId": {
+         "type": "string"
+        },
+        "status": {
+         "type": "string",
+         "enum": [
+          "NOT_INTERESTED",
+          "SAVED",
+          "APPLIED",
+          "REJECTED",
+          "TEST_TASK",
+          "INTERVIEW",
+          "OFFER_MADE",
+          "HIRED",
+          "ARCHIVED"
+         ]
+        },
+        "notes": {
+         "type": "string",
+         "maxLength": 1000
+        }
+       },
+       "required": [
+        "vacancyId",
+        "status"
+       ]
+      }
+     }
+    },
+    "required": [
+     "items"
+    ]
+   }
+  },
+  {
+   "name": "search_vacancies",
+   "description": "Search for job vacancies with filters. Returns { total, maxExactCount, vacancies[], nextCursor }; every result carries its full descriptionText. Keywords are OR'd full-text terms.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "keywords": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "limit": {
+      "type": "integer"
+     },
+     "applicationStatus": {
+      "type": "string",
+      "enum": [
+       "NONE",
+       "SAVED"
+      ]
+     },
+     "useSavedFilters": {
+      "type": "boolean"
+     },
+     "cursor": {
+      "type": "string"
+     }
+    }
+   }
+  }
+ ]
+}

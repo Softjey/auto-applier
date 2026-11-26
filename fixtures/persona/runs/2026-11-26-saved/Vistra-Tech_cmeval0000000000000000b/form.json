@@ -1,0 +1,84 @@
+{
+  "host": "vistra-tech.recruitee.com",
+  "url": "https://vistra-tech.recruitee.com/o/senior-frontend-engineer/c/new",
+  "recaptcha": false,
+  "fields": [
+    {
+      "label": "First Name*",
+      "kind": "text",
+      "required": true,
+      "key": "first_name"
+    },
+    {
+      "label": "Last Name*",
+      "kind": "text",
+      "required": true,
+      "key": "last_name"
+    },
+    {
+      "label": "Email*",
+      "kind": "text",
+      "required": true,
+      "key": "email"
+    },
+    {
+      "label": "Phone*",
+      "kind": "tel",
+      "required": true,
+      "key": "phone"
+    },
+    {
+      "label": "LinkedIn Profile*",
+      "kind": "text",
+      "required": true
+    },
+    {
+      "label": "Attach",
+      "kind": "file",
+      "required": false,
+      "key": "resume"
+    },
+    {
+      "label": "Do you have the right to work in Poland?*",
+      "kind": "combobox",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "label": "Do you hold a valid category B driving licence?*",
+      "kind": "combobox",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "label": "Are you willing to relocate to Berlin?*",
+      "kind": "combobox",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "label": "How many years of commercial experience do you have with React?*",
+      "kind": "combobox",
+      "required": true,
+      "options": [
+        "0-2 years",
+        "3-4 years",
+        "5+ years"
+      ]
+    },
+    {
+      "label": "Expected monthly salary (PLN, B2B net)*",
+      "kind": "text",
+      "required": true
+    }
+  ]
+}

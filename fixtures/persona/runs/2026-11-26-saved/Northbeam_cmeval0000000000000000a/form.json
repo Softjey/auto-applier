@@ -1,0 +1,124 @@
+{
+  "host": "job-boards.greenhouse.io",
+  "url": "https://job-boards.greenhouse.io/northbeam/jobs/7712001",
+  "recaptcha": false,
+  "fields": [
+    {
+      "label": "First Name*",
+      "kind": "text",
+      "required": true,
+      "key": "first_name"
+    },
+    {
+      "label": "Last Name*",
+      "kind": "text",
+      "required": true,
+      "key": "last_name"
+    },
+    {
+      "label": "Email*",
+      "kind": "text",
+      "required": true,
+      "key": "email"
+    },
+    {
+      "label": "Phone*",
+      "kind": "tel",
+      "required": true,
+      "key": "phone"
+    },
+    {
+      "label": "LinkedIn Profile*",
+      "kind": "text",
+      "required": true
+    },
+    {
+      "label": "Attach",
+      "kind": "file",
+      "required": false,
+      "key": "resume"
+    },
+    {
+      "label": "Are you authorized to work in the European Union?*",
+      "kind": "combobox",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "label": "Will you now or in the future require visa sponsorship to work in Poland?*",
+      "kind": "combobox",
+      "required": true,
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "label": "What is your notice period?*",
+      "kind": "textarea",
+      "required": true
+    },
+    {
+      "label": "Preferred contract type*",
+      "kind": "combobox",
+      "required": true,
+      "options": [
+        "B2B",
+        "UoP (employment contract)",
+        "Either"
+      ]
+    },
+    {
+      "label": "What is your level of English?*",
+      "kind": "combobox",
+      "required": true,
+      "options": [
+        "B1",
+        "B2",
+        "C1",
+        "C2",
+        "Native"
+      ]
+    },
+    {
+      "label": "What are your salary expectations (PLN net per month, B2B)?*",
+      "kind": "text",
+      "required": true
+    },
+    {
+      "label": "How did you hear about us?*",
+      "kind": "combobox",
+      "required": true,
+      "options": [
+        "LinkedIn",
+        "Job board",
+        "Referral",
+        "Other"
+      ]
+    },
+    {
+      "label": "Gender*",
+      "kind": "combobox",
+      "required": true,
+      "options": [
+        "Male",
+        "Female",
+        "Non-binary",
+        "Prefer not to say"
+      ]
+    },
+    {
+      "label": "I consent to the processing of my personal data for this recruitment process.*",
+      "kind": "checkbox",
+      "required": true
+    },
+    {
+      "label": "I consent to the processing of my personal data for future recruitment processes.",
+      "kind": "checkbox",
+      "required": false
+    }
+  ]
+}

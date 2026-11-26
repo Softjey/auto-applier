@@ -1,0 +1,409 @@
+{
+  "$schemaVersion": 1,
+  "personal": {
+    "fullName": "Daniel Nowak",
+    "firstName": "Daniel",
+    "lastName": "Nowak",
+    "email": "daniel.nowak@candidate.onetap.work",
+    "phone": "+48 512 000 471",
+    "currentCity": "Kraków",
+    "currentCountry": "Poland",
+    "citizenship": "Polish",
+    "dateOfBirth": null,
+    "maritalStatus": null
+  },
+  "links": {
+    "linkedin": "https://www.linkedin.com/in/daniel-nowak-krk",
+    "github": "https://github.com/dnowak-dev",
+    "portfolio": null,
+    "other": []
+  },
+  "workAuthorization": {
+    "citizenship": "Polish",
+    "residencePermitCountry": null,
+    "residencePermitType": null,
+    "note": "Country-specific answers ('are you authorized to work in X') live in qa[], tag work_authorization:<country>. This block is background only — never answer a country-specific question directly from here."
+  },
+  "location": {
+    "willingToRelocate": false,
+    "remotePreference": "Hybrid preferred: up to 3 office days a week in Kraków; fully remote from Poland is fine. No relocation.",
+    "note": "Country-specific relocation answers live in qa[], tag relocation:<country>."
+  },
+  "compensation": {
+    "defaultCurrency": "PLN",
+    "expectedMin": 21000,
+    "expectedMax": 25000,
+    "period": "month",
+    "note": "ANCHOR = expectedMin/expectedMax in defaultCurrency. Every other currency or contract form is DERIVED from it by the rules in compensation.derivation — do not escalate a new currency to the user, compute it and state the arithmetic at the confirmation pause.",
+    "hourlyRate": 150,
+    "alternates": [],
+    "derivation": {
+      "anchor": "21000-25000 PLN/month B2B net",
+      "hoursPerMonth": 168,
+      "currency": {
+        "rule": "Divide the anchor by the central-bank mid rate for the target currency, then round.",
+        "rateSource": null,
+        "lastChecked": "2026-11-01",
+        "lastRates": {
+          "EUR": 4.3,
+          "USD": 3.7
+        },
+        "worked": {}
+      },
+      "contractForm": {
+        "rule": null,
+        "worked": null,
+        "uopGrossFactor": 1
+      },
+      "note": "Recheck the FX rate whenever it is older than a few days. Keep worked examples so a reviewer can see how a number on a submitted form was reached."
+    },
+    "strategy": {
+      "note": "Numbers salary-quote.mjs computes from. The rules are in apply-to-jobs SKILL.md § Money and in the script; edit numbers here, rules there.",
+      "basis": "b2b-net PLN/month",
+      "baseline": 25000,
+      "floor": 21000,
+      "premium": {
+        "quote": 30000,
+        "appliesTo": "Staff / Lead / Principal and fully US-remote roles"
+      },
+      "rounding": {
+        "monthlyPln": 100,
+        "hourlyPln": 5,
+        "monthlyForeign": 100,
+        "annualForeign": 1000
+      }
+    }
+  },
+  "availability": {
+    "noticePeriod": "1 month",
+    "earliestStartDate": "2027-01-01",
+    "employmentTypesOpenTo": [
+      "B2B",
+      "UoP"
+    ],
+    "currentEmploymentStatus": "Employed full-time on B2B at ElevenLabs; 1-month notice."
+  },
+  "experience": {
+    "yearsOfCommercialExperience": 6,
+    "yearsAsOf": "2026-11",
+    "currentTitle": "Senior Frontend Engineer",
+    "seniorityLevel": "Senior",
+    "note": "Compute using the resume repo's own rule for this: the earliest commercial software dev role in EXPERIENCE from the base CV. Never hardcode this number."
+  },
+  "languages": [
+    {
+      "language": "Polish",
+      "level": "Native"
+    },
+    {
+      "language": "English",
+      "level": "C1"
+    }
+  ],
+  "eeo": {
+    "policy": "decline",
+    "note": "Personal and demographic questions (race, gender, marital status, veteran status, disability, pronouns) — when required and an opt-out exists ('Prefer not to say' or equivalent), pick it; no question to the user. Optional ones stay empty. Escalate only if mandatory with no opt-out and no qa[] answer."
+  },
+  "languagesDisclosurePolicy": "List Polish and English only.",
+  "projects": [],
+  "qa": [
+    {
+      "id": "work-authorization-poland",
+      "canonicalTopic": "work_authorization:Poland",
+      "question": "Are you legally authorized to work in Poland?",
+      "aliases": [
+        "Do you have the right to work in Poland?"
+      ],
+      "answer": "Yes — Polish citizen, no permit needed.",
+      "value": "Yes",
+      "kind": "fact",
+      "tags": [
+        "work_authorization"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0
+    },
+    {
+      "id": "sponsorship-poland",
+      "canonicalTopic": "sponsorship:Poland",
+      "question": "Will you now or in the future require visa sponsorship to work in Poland?",
+      "aliases": [],
+      "answer": "No — Polish citizen.",
+      "value": "No",
+      "kind": "fact",
+      "tags": [
+        "work_authorization"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0
+    },
+    {
+      "id": "work-authorization-eu",
+      "canonicalTopic": "work_authorization:EU",
+      "question": "Are you authorized to work in the European Union?",
+      "aliases": [],
+      "answer": "Yes — Polish citizen, EU citizen.",
+      "value": "Yes",
+      "kind": "fact",
+      "tags": [
+        "work_authorization"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0
+    },
+    {
+      "id": "notice-period",
+      "canonicalTopic": "notice_period",
+      "question": "What is your notice period?",
+      "aliases": [
+        "When can you start?",
+        "Availability to start"
+      ],
+      "answer": "1 month; earliest start 2027-01-01.",
+      "value": "1 month",
+      "kind": "fact",
+      "tags": [
+        "availability"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0
+    },
+    {
+      "id": "contract-type",
+      "canonicalTopic": "contract",
+      "question": "Preferred contract type?",
+      "aliases": [
+        "Form of employment"
+      ],
+      "answer": "B2B preferred; UoP is fine.",
+      "value": "B2B",
+      "kind": "fact",
+      "tags": [
+        "compensation"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0,
+      "pick": "B2B"
+    },
+    {
+      "id": "english-level",
+      "canonicalTopic": "language:English",
+      "question": "What is your level of English?",
+      "aliases": [
+        "English proficiency"
+      ],
+      "answer": "C1 — daily work language for 4 years.",
+      "value": "C1",
+      "kind": "fact",
+      "tags": [
+        "languages"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0,
+      "pick": "C1"
+    },
+    {
+      "id": "react-years",
+      "canonicalTopic": "years:React",
+      "question": "How many years of commercial experience do you have with React?",
+      "aliases": [],
+      "answer": "6 years (since 2020).",
+      "value": "6",
+      "kind": "fact",
+      "tags": [
+        "experience"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0,
+      "pick": "5+ years"
+    },
+    {
+      "id": "typescript-years",
+      "canonicalTopic": "years:TypeScript",
+      "question": "How many years of commercial experience do you have with TypeScript?",
+      "aliases": [],
+      "answer": "5 years (since 2021).",
+      "value": "5",
+      "kind": "fact",
+      "tags": [
+        "experience"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0,
+      "pick": "5+ years"
+    },
+    {
+      "id": "worked-for-elevenlabs",
+      "canonicalTopic": "previous_employer:ElevenLabs",
+      "question": "Have you previously worked for ElevenLabs?",
+      "aliases": [],
+      "answer": "Yes — currently employed there since 2024.",
+      "value": "Yes",
+      "kind": "employer-specific",
+      "tags": [
+        "employment_history"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0
+    },
+    {
+      "id": "remote-hybrid",
+      "canonicalTopic": "work_mode",
+      "question": "Are you open to hybrid work in Kraków?",
+      "aliases": [],
+      "answer": "Yes — up to 3 office days a week in Kraków; fully remote from Poland also fine. No relocation.",
+      "value": "Yes",
+      "kind": "fact",
+      "tags": [
+        "location"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0
+    },
+    {
+      "id": "relocation-germany",
+      "canonicalTopic": "relocation:Germany",
+      "question": "Are you willing to relocate to Germany?",
+      "aliases": [],
+      "answer": "No.",
+      "value": "No",
+      "kind": "fact",
+      "tags": [
+        "relocation"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0
+    },
+    {
+      "id": "over-40-hours",
+      "canonicalTopic": "overtime_policy",
+      "question": "Are you willing to work more than 40 hours a week when needed?",
+      "aliases": [],
+      "answer": "Policy: answer yes.",
+      "value": "Yes",
+      "kind": "policy",
+      "tags": [
+        "policy"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0
+    },
+    {
+      "id": "data-processing-consent",
+      "canonicalTopic": "consent:recruitment",
+      "question": "I consent to the processing of my personal data for this recruitment process.",
+      "aliases": [],
+      "answer": "Policy: always tick the recruitment-process consent; tick future-recruitment consent only when optional is not available.",
+      "value": "Yes",
+      "kind": "policy",
+      "tags": [
+        "consent"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0
+    },
+    {
+      "id": "future-recruitment-consent",
+      "canonicalTopic": "consent:future_recruitment",
+      "question": "I consent to the processing of my personal data for future recruitment processes.",
+      "aliases": [],
+      "answer": "Policy: leave unticked when optional; tick only when the form will not submit without it.",
+      "value": null,
+      "kind": "policy",
+      "tags": [
+        "consent"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0
+    },
+    {
+      "id": "how-did-you-hear",
+      "canonicalTopic": "source",
+      "question": "How did you hear about us?",
+      "aliases": [],
+      "answer": "Job board (onetap.work / LinkedIn); pick 'Job board' or 'LinkedIn' where offered.",
+      "value": "LinkedIn",
+      "kind": "policy",
+      "tags": [
+        "policy"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0,
+      "pick": "LinkedIn"
+    },
+    {
+      "id": "ai-tools-usage",
+      "canonicalTopic": "self_assessment:ai_tools",
+      "question": "How often do you use AI coding assistants in your daily work?",
+      "aliases": [],
+      "answer": "Daily — Claude Code and GitHub Copilot.",
+      "value": "Daily",
+      "kind": "fact",
+      "tags": [
+        "self_assessment"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0,
+      "pick": "Daily"
+    },
+    {
+      "id": "pronouns",
+      "canonicalTopic": "pronouns",
+      "question": "What are your pronouns?",
+      "aliases": [],
+      "answer": "Leave blank. Standing policy: optional identity questions are left empty.",
+      "value": null,
+      "kind": "policy",
+      "tags": [
+        "eeo"
+      ],
+      "source": "persona",
+      "createdAt": "2026-11-01",
+      "lastUsed": "2026-11-01",
+      "timesUsed": 0
+    }
+  ],
+  "education": [
+    {
+      "institution": "AGH University of Krakow",
+      "degree": "Bachelor",
+      "field": "Computer Science",
+      "start": "2017",
+      "end": "2021",
+      "status": "completed",
+      "note": null
+    }
+  ]
+}

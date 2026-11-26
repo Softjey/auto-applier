@@ -1,0 +1,67 @@
+{
+  "host": "apply.workable.com",
+  "url": "https://apply.workable.com/lumen-health/j/5A1B2C3D4E/apply/",
+  "recaptcha": false,
+  "fields": [
+    {
+      "label": "First Name*",
+      "kind": "text",
+      "required": true,
+      "key": "first_name"
+    },
+    {
+      "label": "Last Name*",
+      "kind": "text",
+      "required": true,
+      "key": "last_name"
+    },
+    {
+      "label": "Email*",
+      "kind": "text",
+      "required": true,
+      "key": "email"
+    },
+    {
+      "label": "Phone*",
+      "kind": "tel",
+      "required": true,
+      "key": "phone"
+    },
+    {
+      "label": "LinkedIn Profile*",
+      "kind": "text",
+      "required": true
+    },
+    {
+      "label": "Attach",
+      "kind": "file",
+      "required": false,
+      "key": "resume"
+    },
+    {
+      "label": "When can you start?*",
+      "kind": "text",
+      "required": true
+    },
+    {
+      "label": "Tell us about a time you significantly improved the performance of a web application.*",
+      "kind": "textarea",
+      "required": true
+    },
+    {
+      "label": "Describe a time you handled a production security incident. What did you do?*",
+      "kind": "textarea",
+      "required": true
+    },
+    {
+      "label": "Why do you want to join Lumen Health?",
+      "kind": "textarea",
+      "required": false
+    },
+    {
+      "label": "Expected salary*",
+      "kind": "text",
+      "required": true
+    }
+  ]
+}
