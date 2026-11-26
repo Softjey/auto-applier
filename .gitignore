@@ -1,9 +1,13 @@
 node_modules/
+dist/
+*.tsbuildinfo
+.venv/
+__pycache__/
 .DS_Store
 *.tmp
 
 # The private data repo: data/ is a clone or a symlink, never committed. The rest
-# are the files of the layout before data/, so they cannot be committed either.
+# are the files of the layouts before data/, so they cannot be committed either.
 /data
 /profile.json
 /stories.json
@@ -11,7 +15,22 @@ node_modules/
 /apply-config.json
 /runs/
 /triage/
+/skills.csv
+/CV_Base.html
+/resume-config.json
+/out
 /.claude/settings.local.json
 
-# claude plugin eval reports
+# HAR captures: large, and they carry session tokens from a logged-in browser.
+*.har
+
+# Script secrets (the onetap session cookie of organize-by-status).
+**/.env.local
+
+# skills-rating working files
+skills.csv.bak
+skills.csv.tmp
+
+# claude plugin eval reports, and the marker of the copy evals/run.sh makes
 /evals/results/
+.eval-copy
