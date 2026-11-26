@@ -22,7 +22,8 @@ It is a set of agent skills (Claude Code, Codex) plus a few small Python scripts
 
 This repo holds code and generic knowledge only. Your criteria, your saved LinkedIn
 search, the ledger of every job you have judged and the run reports live in a **separate
-private repo** next to it (`../job-triage-data`). Never give that repo a public remote:
+private repo**, reached as `data/` at the root of this one: cloned there, or a symlink to
+wherever you keep it. `data/` is git-ignored. Never give that repo a public remote:
 it holds your salary floor, your company decisions and a record of every job you
 rejected.
 
@@ -47,9 +48,9 @@ keeper dropped as already known is reported to you, never dropped silently.
 ## Getting started
 
 ```sh
-mkdir triage && cd triage              # a workspace for this repo and your data repo
 git clone <this repo's URL> job-triage
-claude                                 # or: codex — open it in the workspace
+cd job-triage
+claude                                 # or: codex
 ```
 
 Then ask: **"set me up"**. The `setup-job-triage` skill creates your private data repo
@@ -93,9 +94,8 @@ and every case you have already settled. Start from the template and keep it hon
 
 ## Where things are found
 
-Scripts locate your data repo via `$JOB_TRIAGE_DATA_DIR`, then the path in `.data-dir`
-at the root of this repo (git-ignored), then `../job-triage-data`. With none of them
-found, scripts stop and say how to create one. See `CLAUDE.md` for the full map.
+Your data is always `data/` at the root of this repo. Without it, scripts stop and say
+how to create it. See `CLAUDE.md` for the full map.
 
 ## Limits worth knowing
 

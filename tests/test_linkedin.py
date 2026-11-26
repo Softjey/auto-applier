@@ -102,7 +102,7 @@ class LedgerTest(unittest.TestCase):
     def test_reading_the_ledger_without_a_data_dir_is_an_error(self):
         from unittest import mock
         with mock.patch.object(linkedin.data_dir, "find_data_dir", return_value=None), \
-                mock.patch.object(linkedin.data_dir, "candidates", return_value=["/nowhere"]):
+                mock.patch.object(linkedin.data_dir, "location", return_value="/nowhere"):
             with self.assertRaises(SystemExit):
                 linkedin.load_ledger()
 

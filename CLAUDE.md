@@ -16,8 +16,8 @@ generic knowledge only. Everything about one person lives in a separate private
   question about a single posting.
 - `.claude/skills/job-triage/triage.py` — normalises every source into one
   batch to judge, and routes the verdicts back to the right call.
-- `.claude/skills/job-triage/data_dir.py` and `init_data_repo.py` — where the
-  data repo is, and how to create one from `templates/data-repo/`.
+- `.claude/skills/job-triage/data_dir.py` and `init_data_repo.py` — the path of
+  `data/` for the scripts, and how to create it from `templates/data-repo/`.
 - `.claude/skills/setup-job-triage/SKILL.md` — the guided setup: create the data
   repo, fill `criteria.md`, generate the LinkedIn search. Run it on a fresh clone.
 - `.claude/skills/applications-check/SKILL.md` — whether a job is already
@@ -49,13 +49,12 @@ generic knowledge only. Everything about one person lives in a separate private
 
 ## Where the data lives
 
-A private data repo, found by the first of:
-
-1. `$JOB_TRIAGE_DATA_DIR`
-2. the path written in `.data-dir` at the root of this repo (git-ignored)
-3. a sibling folder named `<this repo's folder>-data`
-
-Create one with `python3 .claude/skills/job-triage/init_data_repo.py [--dir PATH]`.
+`data/` at the root of this repo: the candidate's private data repo, cloned
+there or symlinked from elsewhere. It is git-ignored and never committed here.
+Create one with `python3 .claude/skills/job-triage/init_data_repo.py [--dir PATH]`
+(`--dir` puts it elsewhere, links `data` to it and adds the folder to
+`.claude/settings.local.json` → `permissions.additionalDirectories`).
+Search inside it with an explicit `data/`: `grep -r X .` does not follow the symlink.
 It holds:
 
 - `criteria.md` — what the candidate accepts and rejects, why, and every case
@@ -69,7 +68,15 @@ It holds:
   rejections, which are deliberately not written to onetap.
 - `linkedin/session.json` — the browser cookies the write half needs.
   Git-ignored, and the only credential in the project.
-- `triage/` — one report per run.
+- `triage/` — one Markdown report per run, named `<date>-vacancies.md`.
+
+Rules for that data:
+
+- The data repo is private. Never give it a public remote.
+- `criteria.md` decides every verdict; update it in the same session when the
+  candidate corrects one.
+- `linkedin/ledger.json` is written by `linkedin.py record`, not by hand.
+- `linkedin/session.json` is a credential: never print it, never commit it.
 
 ## Working here
 

@@ -7,8 +7,9 @@ __pycache__/
 # The LinkedIn session for save/dismiss: real account cookies, never committed.
 linkedin/session.json
 
-# Points at the private data repo; written by init_data_repo.py
-.data-dir
+# The private data repo: a clone or a symlink, never committed.
+/data
 .DS_Store
 
 /evals/results/
+.eval-copy

@@ -8,13 +8,12 @@ description: Triage vacancies from every source — the onetap.work feed and Lin
 Sort vacancies into `SAVED` and `NOT_INTERESTED` the way the candidate would,
 and record why.
 
-Read `gates.md` in this skill directory and the candidate's `criteria.md` in the
-data repo before making any verdict. `gates.md` is how a vacancy is judged;
+Read `gates.md` in this skill directory and the candidate's `data/criteria.md`
+before making any verdict. `gates.md` is how a vacancy is judged;
 `criteria.md` holds the candidate's rules, the precedents, and the reasoning
-behind both. The data repo is found by `data_dir.py`
-(`python3 -c 'import data_dir; print(data_dir.require_data_dir())'` from this
-directory), and `init_data_repo.py` creates one when there is none. This file is
-the procedure.
+behind both. `data/` at the repo root is the candidate's private data repo (a
+clone or a symlink); when it is missing, run the `setup-job-triage` skill. This
+file is the procedure.
 
 **One judgement, many sources.** `criteria.md` decides regardless of where a
 posting came from. What differs per source is only how vacancies are fetched
@@ -460,9 +459,8 @@ least loaded so they finish together.
 Spawn every agent in **one** message (Agent tool, `general-purpose`), one per
 entry of `manifest.json` → `agents`, each with this brief:
 
-> Read `.claude/skills/job-triage/gates.md` and `<data dir>/criteria.md` in full
-> first — together they decide every verdict. (Substitute the absolute data dir
-> before sending the brief.) Then read each of these files in full: <its chunks>, in <dir>. For
+> Read `.claude/skills/job-triage/gates.md` and `data/criteria.md` in full
+> first — together they decide every verdict. Then read each of these files in full: <its chunks>, in <dir>. For
 > each `chunk_NNN.txt` write `v_NNN.json` beside it: a JSON array, one object
 > per posting, in the shape of step 6 of `.claude/skills/job-triage/SKILL.md` —
 > `ref`, `verdict` (`SAVED`, `NOT_INTERESTED`, `UNDECIDED` with a `question`,

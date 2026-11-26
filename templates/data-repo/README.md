@@ -1,8 +1,7 @@
 # Job triage — my data
 
-Private data for the `job-triage` code repository. The code finds this folder
-through `JOB_TRIAGE_DATA_DIR`, a `.data-dir` file in the code repo, or a sibling
-folder named `<code repo>-data`.
+Private data for the `job-triage` code repository. The code reads it as `data/`
+at its root: clone this repo there, or symlink `data` to it.
 
 | Path | What it is |
 |---|---|
