@@ -21,7 +21,8 @@ and then hands back to this interview.
 1. **Read `data/profile.json`.** Note which structured fields are already filled;
    you'll skip those unless the user is explicitly correcting one.
 2. **Pre-fill from the CV, don't ask from scratch.** Read the base CV (the resume
-   repo's base file — `paths.resumeRepo` in `data/apply-config.json`, its README says which — or
+   repo's base file — `data/CV_Base.html` when `paths.resumeRepo` in `data/apply-config.json`
+   is `data/` itself, otherwise that repo's README says which — or
    the PDF at `paths.baseResume`) and pull
    `personal.email`, `personal.phone`, `personal.currentCity`,
    `personal.currentCountry`, `links.linkedin`, `links.github` from its
@@ -34,8 +35,8 @@ and then hands back to this interview.
    not ask the user for a number, do not hardcode one. Open the same base CV,
    find the EXPERIENCE section, and take the start year of the *earliest entry
    that is genuinely commercial software development*. Pre-career and
-   adjacent-field roles do not count; the resume repo's own skills
-   document where that line falls, so read them rather than deciding
+   adjacent-field roles do not count; the `resume-blocks` skill (or the
+   resume repo's own skills) documents where that line falls, so read them rather than deciding
    independently — the two skills disagreeing about the number is
    worse than either answer. `experience.yearsOfCommercialExperience` = current
    year minus that start year; record `experience.yearsAsOf` as today's date so

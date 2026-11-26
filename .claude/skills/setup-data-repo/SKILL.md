@@ -31,8 +31,9 @@ ls -la data/profile.json profile.json
    makes `data` a symlink to it and allows that folder once in
    `.claude/settings.local.json`.
 2. **How do you want to send a resume?** Three honest answers:
-   - **A resume repo** that tailors one per vacancy → its path (`--resume-repo`). The
-     agent then wires it up, see § 4a.
+   - **A resume tailored per vacancy** (the default) → this repo's own resume skills,
+     with the base CV and skill ratings in `data/`: pass `--resume-repo=<absolute path of
+     data/>`, see § 4a. Another repo that tailors resumes works the same way, with its path.
    - **One resume for everything** → the path of a finished PDF (`--resume-file`). It
      goes out untailored with every application; `paths.baseResume`.
    - **Not yet** → neither flag. The apply run will stop and ask for a resume.
@@ -59,10 +60,14 @@ links `data` to it and adds the folder to `permissions.additionalDirectories` in
 If they asked for a remote: `gh repo create <name> --private --source=data --push`
 — after confirming the exact name and that it is private.
 
-## 4a. Wire up a tailored-resume repo (only if they gave one)
+## 4a. Wire up tailored resumes (only if they chose them)
 
-Do not assume how it works — it is the user's own repo. Read its `README.md` and
-`.claude/skills/`, then establish, and write down in `data/apply-config.json`:
+With this repo's own skills, `paths.resumeRepo` is `data/` itself: `resume-render` writes
+to `data/out/<Company>-<Position>/`, `organize-by-status` sorts that into
+`data/out/SAVED/…`, and the user puts their `skills.csv`, `CV_Base.html` and
+`resume-config.json` in `data/` (examples are in the template). With another repo, do not
+assume how it works — read its `README.md` and `.claude/skills/`. Either way, establish,
+and write down in `data/apply-config.json`:
 
 1. **Where finished PDFs land.** The autofill extension lists them from
    `<resumeRepo>/out/SAVED/<Company>_<vacancyId>-<Title>/<any>.pdf`. If the repo uses a

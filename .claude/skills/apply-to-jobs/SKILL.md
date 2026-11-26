@@ -58,7 +58,7 @@ non-English vocabulary of the local job market — lives in **`data/apply-config
 never in this skill. Read it at the start of a run.
 
 ```
-config.paths.resumeRepo          the user's resume repo (see Phase 1 step 5)
+config.paths.resumeRepo          where tailored resumes are built: data/ itself, or another repo (Phase 1 step 5)
 config.paths.baseResume          ONE finished resume PDF, used when there is no resume repo
 config.resumeFileName            what to name the PDF copied into runs/
 config.formVocabulary            locale phrasings, merged by lib/field-labels.mjs
@@ -375,8 +375,10 @@ not support.
      that one PDF (copy it per vacancy as below; the resume "folder name" in the OneTap
      note is `base resume`). Skip the rest of this step's tailoring.
    - **Neither is set:** stop and ask the user for a PDF; never apply without one.
-   - **`resumeRepo`:** get the tailored resume from it.
-   **Do not assume how that repo works** — read its `README.md` and its
+   - **`resumeRepo`:** get the tailored resume from it. When it is this repo's
+   `data/`, the resume skills are this repo's own — `resume-blocks` → `resume-render`
+   → `resume-pdf`, finished resumes under `data/out/` — so follow those skills.
+   For any other repo, **do not assume how it works** — read its `README.md` and its
    `.claude/skills/` first, and follow them. They say where finished resumes live
    (check for an existing one by `vacancyId` before building anything: the user
    usually tailors ahead of a run, and a second render leaves two divergent PDFs)
