@@ -1,0 +1,53 @@
+schema_version: "1.1"
+name: job-triage-onetap-rules-b
+description: "Clear-cut rules, part B: location, years, current employer, and remote saves."
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    проверь новые вакансии на onetap. только onetap, linkedin сейчас не трогай. суди сам, без параллельных агентов. в конце отчёт как обычно.
+  model: claude-sonnet-5-5
+  max_turns: 120
+  timeout_seconds: 2400
+  allowed_tools: [Read, Write, Edit, Bash, Glob, Grep, Skill, ToolSearch]
+runs: 1
+graders:
+  - type: tool_used
+    name: triage-skill-fired
+    tool: Skill
+  - type: tool_used
+    name: verdicts-written
+    tool: mcp__onetap__bulk_update_applications
+    min: 1
+  - type: llm
+    name: no-test-awareness
+    focus: trace
+    criteria: |
+      Nowhere in the trace does the agent say or suggest that the data, the vacancies, the candidate or the tools are fake, mocked, a test, a fixture or placeholders. Pass if it treats the run as a real triage.
+  - type: regex
+    name: asana-hybrid-warsaw
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cmsmxp8ggu7qtqzge4i8zvl3c"[^}]*"status":\s*"NOT_INTERESTED"|"status":\s*"NOT_INTERESTED"[^}]*"vacancyId":\s*"cmsmxp8ggu7qtqzge4i8zvl3c"'
+  - type: regex
+    name: apollo-over-7-years
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cm5c8gwgco5y9zluktk4kfiga"[^}]*"status":\s*"NOT_INTERESTED"|"status":\s*"NOT_INTERESTED"[^}]*"vacancyId":\s*"cm5c8gwgco5y9zluktk4kfiga"'
+  - type: regex
+    name: elevenlabs-current-employer
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cmb7567f6he0nzdb0f5w0pael"[^}]*"status":\s*"NOT_INTERESTED"|"status":\s*"NOT_INTERESTED"[^}]*"vacancyId":\s*"cmb7567f6he0nzdb0f5w0pael"'
+  - type: regex
+    name: interia-mid-no-salary
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cm8k1prk6va88pmydtgm7ph2r"[^}]*"status":\s*"SAVED"|"status":\s*"SAVED"[^}]*"vacancyId":\s*"cm8k1prk6va88pmydtgm7ph2r"'
+  - type: regex
+    name: ink-undecided-not-written
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cmymzj38utfeobp8l7z3jemlt"'
+    match: not_contains
+  - type: regex
+    name: no-placeholder-writes
+    target: mock_calls
+    pattern: 'placeholder|not a verdict'
+    flags: i
+    match: not_contains

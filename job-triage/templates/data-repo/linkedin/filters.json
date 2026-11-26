@@ -1,0 +1,31 @@
+{
+  "_comment": "The saved LinkedIn search. LinkedIn's guest API has no saved search, so this file is it. How it expands and what LinkedIn honours: .claude/skills/job-triage/sources/LINKEDIN.md. Regenerate from onetap with: python3 .claude/skills/job-triage/sources/linkedin.py sync-filters <get_my_filters dump>.",
+  "backend": "guest",
+  "defaults": {
+    "timePosted": ["r1209600"],
+    "sortBy": "DD"
+  },
+  "default_country": "",
+  "keywords": [],
+  "exclude_keywords": {
+    "_why": "Keywords kept out of the search even when onetap still lists them. Measure a keyword before adding it here: requests spent, postings no other keyword found, keepers among those."
+  },
+  "locations": [
+    {
+      "name": "example-remote",
+      "label": "Country (remote)",
+      "workplace": ["REMOTE"],
+      "geoId": ""
+    },
+    {
+      "name": "example-city",
+      "label": "City",
+      "workplace": ["HYBRID", "ONSITE"],
+      "location": "City, Country"
+    }
+  ],
+  "geo_ids": {
+    "_comment": "onetap city or country name to LinkedIn geoId, used by sync-filters. Unknown names fall back to a plain location string, which works."
+  },
+  "sync": {}
+}

@@ -1,0 +1,60 @@
+schema_version: "1.1"
+name: job-triage-onetap-rules-a
+description: "Clear-cut rules, part A: stack, role, salary, seniority and language rejections plus a Kraków hybrid save."
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    проверь новые вакансии на onetap. только onetap, linkedin сейчас не трогай. суди сам, без параллельных агентов. в конце отчёт как обычно.
+  model: claude-sonnet-5-5
+  max_turns: 120
+  timeout_seconds: 2400
+  allowed_tools: [Read, Write, Edit, Bash, Glob, Grep, Skill, ToolSearch]
+runs: 1
+graders:
+  - type: tool_used
+    name: triage-skill-fired
+    tool: Skill
+  - type: tool_used
+    name: verdicts-written
+    tool: mcp__onetap__bulk_update_applications
+    min: 1
+  - type: llm
+    name: no-test-awareness
+    focus: trace
+    criteria: |
+      Nowhere in the trace does the agent say or suggest that the data, the vacancies, the candidate or the tools are fake, mocked, a test, a fixture or placeholders. Pass if it treats the run as a real triage.
+  - type: regex
+    name: luxoft-java-react
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cma9wqla98tdbv1pvdumk03h3"[^}]*"status":\s*"NOT_INTERESTED"|"status":\s*"NOT_INTERESTED"[^}]*"vacancyId":\s*"cma9wqla98tdbv1pvdumk03h3"'
+  - type: regex
+    name: motorola-angular-only
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cmh9us5ijf6d08j5d8cyexn09"[^}]*"status":\s*"NOT_INTERESTED"|"status":\s*"NOT_INTERESTED"[^}]*"vacancyId":\s*"cmh9us5ijf6d08j5d8cyexn09"'
+  - type: regex
+    name: millennium-qa
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cmpvs4eh9dkeuzkpin0sebjs5"[^}]*"status":\s*"NOT_INTERESTED"|"status":\s*"NOT_INTERESTED"[^}]*"vacancyId":\s*"cmpvs4eh9dkeuzkpin0sebjs5"'
+  - type: regex
+    name: cae-salary-below-floor
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cm1t3hks9fql950yg6v3em5ds"[^}]*"status":\s*"NOT_INTERESTED"|"status":\s*"NOT_INTERESTED"[^}]*"vacancyId":\s*"cm1t3hks9fql950yg6v3em5ds"'
+  - type: regex
+    name: softnauts-intern
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cm5dvyoq652sctzorx7jm7yh3"[^}]*"status":\s*"NOT_INTERESTED"|"status":\s*"NOT_INTERESTED"[^}]*"vacancyId":\s*"cm5dvyoq652sctzorx7jm7yh3"'
+  - type: regex
+    name: dxc-german
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cmvlmit9tr7qr7w2mntt9r1u4"[^}]*"status":\s*"NOT_INTERESTED"|"status":\s*"NOT_INTERESTED"[^}]*"vacancyId":\s*"cmvlmit9tr7qr7w2mntt9r1u4"'
+  - type: regex
+    name: solid-krakow-hybrid-band
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cmzul54ylh1achajd9arei7mn"[^}]*"status":\s*"SAVED"|"status":\s*"SAVED"[^}]*"vacancyId":\s*"cmzul54ylh1achajd9arei7mn"'
+  - type: regex
+    name: no-placeholder-writes
+    target: mock_calls
+    pattern: 'placeholder|not a verdict'
+    flags: i
+    match: not_contains
