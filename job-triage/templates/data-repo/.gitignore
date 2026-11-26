@@ -1,6 +1,0 @@
-.DS_Store
-*.tmp
-*.har
-__pycache__/
-
-linkedin/session.json

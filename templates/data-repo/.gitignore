@@ -1,2 +1,9 @@
 .DS_Store
 *.tmp
+*.har
+__pycache__/
+skills.csv.bak
+.env.local
+
+linkedin/session.json
+triage/wip/

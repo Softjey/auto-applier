@@ -1,8 +1,0 @@
-.DS_Store
-*.tmp
-skills.csv.bak
-
-out/*
-!out/.gitkeep
-
-.env.local
