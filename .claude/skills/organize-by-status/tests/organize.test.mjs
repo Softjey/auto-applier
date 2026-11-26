@@ -5,7 +5,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { findAllVacancyFolders, findVacancyFolders } from '../.claude/skills/organize-by-status/find-vacancy-folders.mjs';
+import { findAllVacancyFolders, findVacancyFolders } from '../find-vacancy-folders.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../..');
 const SCRIPT = join(ROOT, '.claude/skills/organize-by-status/organize.mjs');

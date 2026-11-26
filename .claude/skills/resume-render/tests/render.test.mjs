@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import {
   PLACEHOLDERS, checkStructure, escapeHtml, fill, locate, outputPath, parseBlocks,
   readCvName, renderSkills, skillsLine, slug, validate,
-} from '../.claude/skills/resume-render/render.mjs';
+} from '../render.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../..');
 const SCRIPT = join(ROOT, '.claude/skills/resume-render/render.mjs');
