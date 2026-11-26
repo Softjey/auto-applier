@@ -155,6 +155,8 @@ second agent reads the same files instead of a fork of them.
   challenge (SKILL.md § CAPTCHAs, `src/captcha/`).
   Meant to be published — see `autofill/README.md`.
 - `templates/data-repo/` — what `setup-data-repo` copies into a new data repo.
+- `evals/`, `fixtures/persona/` — agent evals (`claude plugin eval`) against a fictional
+  candidate; run them with `evals/run.sh`, see `evals/README.md`. Not part of CI.
 
 ## The system's core rule
 
