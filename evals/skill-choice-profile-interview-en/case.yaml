@@ -1,0 +1,22 @@
+schema_version: "1.1"
+name: skill-choice-profile-interview-en
+description: "Updating structured facts starts profile-interview, not import-stories."
+execution:
+  prompt: |
+    update my job application profile: my notice period is now 2 weeks and I moved to Wroclaw
+  model: claude-sonnet-5-5
+  max_turns: 6
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Skill, ToolSearch]
+runs: 1
+graders:
+  - type: tool_used
+    name: profile-interview-fired
+    tool: Skill
+    input_match: 'auto-applier:profile-interview"'
+  - type: tool_used
+    name: no-import-stories
+    tool: Skill
+    input_match: 'auto-applier:import-stories"'
+    min: 0
+    max: 0

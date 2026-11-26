@@ -1,0 +1,22 @@
+schema_version: "1.1"
+name: skill-choice-apply-ru
+description: "A request to apply to saved jobs starts apply-to-jobs, not the read-only triage."
+execution:
+  prompt: |
+    подайся на мои сохранённые вакансии
+  model: claude-sonnet-5-5
+  max_turns: 6
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Skill, ToolSearch]
+runs: 1
+graders:
+  - type: tool_used
+    name: apply-to-jobs-fired
+    tool: Skill
+    input_match: 'auto-applier:apply-to-jobs"'
+  - type: tool_used
+    name: no-apply-method-triage
+    tool: Skill
+    input_match: 'auto-applier:apply-method-triage"'
+    min: 0
+    max: 0

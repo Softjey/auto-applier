@@ -1,0 +1,22 @@
+schema_version: "1.1"
+name: skill-choice-method-triage-en
+description: "Sorting saved jobs by how hard they are to apply to starts apply-method-triage, not an apply run."
+execution:
+  prompt: |
+    group my saved jobs by how they have to be applied to, don't apply to anything yet
+  model: claude-sonnet-5-5
+  max_turns: 6
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Skill, ToolSearch]
+runs: 1
+graders:
+  - type: tool_used
+    name: apply-method-triage-fired
+    tool: Skill
+    input_match: 'auto-applier:apply-method-triage"'
+  - type: tool_used
+    name: no-apply-to-jobs
+    tool: Skill
+    input_match: 'auto-applier:apply-to-jobs"'
+    min: 0
+    max: 0
