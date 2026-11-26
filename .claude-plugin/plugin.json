@@ -1,0 +1,6 @@
+{
+  "name": "auto-applier",
+  "version": "0.0.0",
+  "description": "Apply to saved OneTap.Work vacancies from the user's own profile, never inventing an answer.",
+  "skills": "./.claude/skills/"
+}

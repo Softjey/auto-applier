@@ -12,3 +12,6 @@ node_modules/
 /runs/
 /triage/
 /.claude/settings.local.json
+
+# claude plugin eval reports
+/evals/results/
