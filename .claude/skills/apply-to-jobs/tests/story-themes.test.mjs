@@ -1,11 +1,10 @@
-#!/usr/bin/env node
 // Question → theme regression test for lib/story-themes.mjs. Run after touching
-// the vocabulary:  node .claude/skills/apply-to-jobs/scripts/test-story-themes.mjs
+// the vocabulary:  pnpm test
 // Add a row whenever a real form question fell through (English or Polish).
 
-import test from "node:test";
+import { test } from "vitest";
 import assert from "node:assert/strict";
-import { themesFor, looksLikeAbout, THEMES } from "./lib/story-themes.mjs";
+import { themesFor, looksLikeAbout, THEMES } from "../scripts/lib/story-themes.mjs";
 
 const CASES = [
   ["Describe a time you disagreed with a teammate", "conflict"],
