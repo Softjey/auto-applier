@@ -71,7 +71,7 @@ feature.
 there is deliberately no copy of them here:
 
 ```sh
-grep -h "matchPatterns" <code repo>/autofill/packages/extension/src/adapters/*.ts
+grep -h "matchPatterns" <code repo>/apps/autofill/packages/extension/src/adapters/*.ts
 ```
 
 Each adapter lists the URL patterns it is injected on (`matchPatterns`) and a
