@@ -21,16 +21,20 @@ test.
 ## Running
 
 ```sh
-claude plugin eval . --no-publish --trust-plugin --ablation none --scaffold \
-  --runs 2 -j 3 --allow-tools Write Edit Bash Glob Grep
+evals/run.sh --runs 2 -j 1
 ```
+
+`run.sh` copies the repo to a temp folder without `data/` and runs `claude plugin eval`
+there with the flags every case needs; extra arguments go through.
 
 - `--case 'skill-choice-*'` runs one group. Skill-choice cases are cheap (four turns);
   a triage case is a full triage run.
 - `--scaffold` is required for the triage cases: it copies the persona into the sandbox.
-- The triage cases also need a git-ignored `.data-dir` at the repo root containing
-  `~/cwd/job-triage-data`, so the skill finds the persona's data inside the sandbox.
-  It is never read in real runs, because that path does not exist outside the sandbox.
+- The triage cases put the persona's data at `data/` in the sandbox, where the skill reads
+  it. The scripts resolve `data/` next to the plugin, so in the copy `run.sh` makes (marked
+  by `.eval-copy`) `scaffold.sh` links that `data` to the sandbox's. Your own `data/` is
+  never copied and never read. Cases share that link, so run the triage cases with `-j 1`;
+  skill-choice cases need no data and can run in parallel.
 - `--no-publish` keeps the HTML report local. Reports go to `evals/results/`
   (git-ignored).
 - `--json <file>` saves the full result; `--keep-temp` keeps the transcripts
@@ -42,7 +46,7 @@ set in each `case.yaml`).
 
 ## Data
 
-- `fixtures/persona/` is the single source. `job-triage-data/` and
+- `fixtures/persona/` is the single source. `job-triage-data/` (as `data/`) and
   `auto-applier-data/` are what `scaffold.sh` copies into the sandbox; `inputs/` holds the
   onetap feeds and the pipeline.
 - The onetap mocks under `evals/` are **generated** from `inputs/`. Never edit them by
@@ -67,7 +71,7 @@ set in each `case.yaml`).
 - Keep a case's feed under about 40 KB: a tool response over about 50 KB is saved to a file
   the sandbox cannot read.
 - `env` in `case.yaml` accepts only `EVAL_*`, and the operator's environment does not
-  reach Bash, which is why the data path goes through `.data-dir`.
+  reach Bash, which is why the plugin copy's `data` is a symlink made by `scaffold.sh`.
 - The sandbox cannot read or write outside itself; `scaffold.sh` must live inside the
   case folder.
 - Do not put `: ` inside a YAML `description` without quoting it.
