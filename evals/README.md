@@ -90,7 +90,7 @@ TypeScript engineer in Kraków. Nothing personal of a real candidate belongs her
   cases need a clear value), `CV_Base.html` (invented, with a support job before the
   development career), `resume-config.json` and `vacancies/` (real postings, verbatim, one per
   `resume-blocks-*` case) for the resume cases.
-- `job-triage-data/criteria.md` (copied as `data/`), `auto-applier-data/profile.json` and
+- `job-triage-data/criteria.md` and `auto-applier-data/profile.json` (both copied into `data/`), and
   `inputs/` (the OneTap.Work feeds and the pipeline) for the triage cases.
 - The triage cases' OneTap.Work mocks are **generated** from `inputs/`. Never edit them by
   hand: change the fixture and run `python3 evals/build_mocks.py`; `tests/test_eval_mocks.py`

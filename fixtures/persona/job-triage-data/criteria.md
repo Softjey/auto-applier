@@ -135,7 +135,7 @@ B2B net ≈ (take-home + 2 370) ÷ 0.88, take-home on UoP ≈ 0.72 × gross.
 The candidate's current pay is about 18 000 PLN/month B2B; a move has to beat
 it clearly.
 
-**The numbers live in `auto-applier-data/profile.json` →
+**The numbers live in `data/profile.json` →
 `compensation.strategy`; read them there, never copy them here.**
 
 **Floor = `strategy.floor`**, measured against the **top** of the posted
