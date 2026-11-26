@@ -14,10 +14,10 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           package_json_file: autofill/package.json
+      - name: Install script tests
+        run: pnpm install --frozen-lockfile
       - name: Script tests
-        run: |
-          node .claude/skills/apply-to-jobs/scripts/test-story-themes.mjs
-          node .claude/skills/apply-to-jobs/scripts/test-scripts.mjs
+        run: pnpm test
       - name: Install
         working-directory: autofill
         run: pnpm install --frozen-lockfile
