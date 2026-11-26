@@ -29,11 +29,11 @@ claude plugin eval . --no-publish --trust-plugin --ablation none --scaffold \
 - `--case 'resume-blocks-*'` or `--case 'skill-choice-*'` runs one group. Skill-choice cases are
   cheap (a few turns); a resume-blocks case is a full tailoring run.
 - `--scaffold` is required for the resume-blocks cases. `scaffold.sh` puts the persona's
-  `skills.csv`, `CV_Base.html` and `resume-config.json`, the case's vacancy as `vacancy.md`, and a
+  `skills.csv`, `CV_Base.html` and `resume-config.json` under `data/`, the case's vacancy as `vacancy.md`, and a
   copy of the skill scripts under `.claude/skills/` into the sandbox, so the sandbox looks like the
   repo root the skills expect. The `SKILL.md` files are not copied: the skills come from the plugin.
-- The sandbox cannot read outside itself, including the git-ignored symlinks to your own data at
-  the repo root. Your data never reaches an eval.
+- The sandbox cannot read outside itself, including your own git-ignored `data/` at the repo root.
+  Your data never reaches an eval.
 - `--no-publish` keeps the HTML report local. Reports go to `evals/results/` (git-ignored).
 - `--json <file>` saves the full result; `--keep-temp` keeps the transcripts for reading a failure.
 
