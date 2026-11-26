@@ -12,7 +12,7 @@
 // hit "constraint". A key ending in a space is a whole word ("ai ").
 //
 // Add a key (or a theme) here when a real question fell through, then run
-// `node scripts/test-story-themes.mjs`. stories.mjs `validate` rejects a theme
+// `pnpm test` (tests/story-themes.test.mjs). stories.mjs `validate` rejects a theme
 // that is not listed here. Another language is one more set of keys per theme.
 
 /** Lower-case, strip diacritics (ł has no decomposition, so it is mapped by hand). */

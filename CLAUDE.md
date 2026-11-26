@@ -127,8 +127,8 @@ second agent reads the same files instead of a fork of them.
   - `scripts/stories.mjs` — `find` (question → fixed theme list → stories), `show`,
     `list`, `themes`, `coverage`, `validate` over `stories.json`; the theme vocabulary
     and its question keywords (English plus extra languages, diacritic-blind) are in
-    `scripts/lib/story-themes.mjs`; `scripts/test-story-themes.mjs` is its regression
-    test (run it after touching the keys). There is no importer.
+    `scripts/lib/story-themes.mjs`; `tests/story-themes.test.mjs` is its regression
+    test (`pnpm test` after touching the keys). There is no importer.
   - `scripts/credentials.mjs`, `scripts/lib/credentials-store.mjs` — the portal-account
     store (`credentials.json`, schema 2), shared with the autofill extension's password
     manager. The extension fills sign-ins and creates accounts (generated, never-reused
@@ -138,6 +138,8 @@ second agent reads the same files instead of a fork of them.
   - `scripts/check-server.mjs` — is the autofill plan server up (any HTTP answer = up; it only
     talks to the extension)? Down means no CV list and no "Save password?"; the apply run
     checks it before the first browser step.
+  - `tests/` — vitest over the scripts, run as subprocesses against a temp copy of the
+    fake person in `autofill/fixtures/`. `pnpm test` at the repo root; CI runs it too.
   - `browser/extract-form.js` — read-only field-schema dump run in the page during
     phase 2. Flags anti-autofill honeypots.
   - `ats/<host>.md` — quirks paid for by a failed submit, keyed by exact host then by

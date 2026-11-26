@@ -13,8 +13,7 @@ Thanks for helping. A few rules keep this repo safe to share:
 ## Checks
 
 ```sh
-node .claude/skills/apply-to-jobs/scripts/test-story-themes.mjs
-node .claude/skills/apply-to-jobs/scripts/test-scripts.mjs
+pnpm install && pnpm test                   # skill scripts: .claude/skills/*/tests/
 cd autofill && pnpm install && pnpm check   # typecheck, lint, format, vitest
 ```
 
