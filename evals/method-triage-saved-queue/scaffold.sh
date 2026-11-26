@@ -10,5 +10,4 @@ cp -R "$repo/.claude/skills/apply-method-triage/reference" .claude/skills/apply-
 cp -R "$repo/autofill/packages/extension/src/adapters" autofill/packages/extension/src/adapters
 mkdir -p data/triage
 cp "$repo/fixtures/persona/profile.json" "$repo/fixtures/persona/stories.json" "$repo/fixtures/persona/apply-config.json" data/
-echo "data" > .data-dir
-if [ -f "$repo/.eval-copy" ]; then echo "$PWD/data" > "$repo/.data-dir"; fi
+if [ -f "$repo/.eval-copy" ]; then ln -sfn "$PWD/data" "$repo/data"; fi

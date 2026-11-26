@@ -29,13 +29,13 @@ to `claude plugin eval` (`--case`, `--runs`, `--json <file>`, `--keep-temp`).
 - The OneTap.Work server is mocked per case (`<case>/mocks/onetap/`): fixed responses,
   and `type: agent` responders for tools that answer per vacancy id.
 - The agent often runs the scripts from the plugin's own folder rather than from the
-  sandbox, so the scripts would look for the data repo next to the plugin. `run.sh` marks
-  its copy with `.eval-copy`, and the data cases' `scaffold.sh` then point that copy's
-  `.data-dir` at the sandbox's `data/` (never in a real checkout). Runs of one such case
+  sandbox, so the scripts would look for `data/` next to the plugin. `run.sh` copies the repo
+  without your `data/` and marks the copy with `.eval-copy`; the data cases' `scaffold.sh`
+  then make that copy's `data` a symlink to the sandbox's `data/` (never in a real checkout). Runs of one such case
   share the copy, so give them `-j 1`; different cases run in separate copies.
 - `scaffold.sh` turns the sandbox into a repo root: the `apply-to-jobs` scripts, browser
-  helpers and ATS notes under `.claude/skills/apply-to-jobs/`, the persona as `data/`, and
-  a `.data-dir` pointing at it. `SKILL.md` files are not copied: the skills come from the
+  helpers and ATS notes under `.claude/skills/apply-to-jobs/`, and the persona as `data/`.
+  `SKILL.md` files are not copied: the skills come from the
   plugin.
 - The sandbox cannot read outside itself, so a real data repo never reaches an eval.
 - Keep `--keep-temp` on a baseline: a one-off failure is only useful if its transcript
