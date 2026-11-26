@@ -17,7 +17,7 @@ making a PDF.
 ## The tool
 
 ```bash
-node .claude/skills/resume-pdf/topdf.mjs 'out/Acme-Senior-FE/<resumeFileName>.html'  # → ….pdf
+node .claude/skills/resume-pdf/topdf.mjs 'data/out/Acme-Senior-FE/<resumeFileName>.html'  # → ….pdf
 node .claude/skills/resume-pdf/topdf.mjs cv.html --out=resume.pdf    # explicit path
 node .claude/skills/resume-pdf/topdf.mjs cv.html --width=210 --pad=8 # page width, bottom pad (mm)
 node .claude/skills/resume-pdf/topdf.mjs cv.html --side=14           # left/right margins (mm)

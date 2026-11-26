@@ -15,7 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const DEFAULT_CSV = resolve(HERE, '../../../skills.csv');
+const DEFAULT_CSV = resolve(HERE, '../../../data/skills.csv');
 
 /** Minimum rating for a plain mention in the resume. */
 const MIN_RATING = 3;

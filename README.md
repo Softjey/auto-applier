@@ -10,7 +10,7 @@ The pipeline is four separate skills, each doing one job:
 1. `resume-blocks` — the agent reads the vacancy and writes the Title, Summary and Skills blocks.
 2. `resume-render` — puts the blocks into a copy of `CV_Base.html`.
 3. `resume-pdf` — prints the html to a PDF that is one long page.
-4. `organize-by-status` — sorts the vacancy folders in `out/` by their onetap status.
+4. `organize-by-status` — sorts the vacancy folders in `data/out/` by their onetap status.
 
 Next to them, `skills-rating/` is a small local app for rating the skills in `skills.csv`.
 
@@ -23,18 +23,14 @@ templates/data-repo/   skeleton of the private data repo
 tests/                 unit tests of the skill scripts (vitest)
 evals/                 agent evals (claude plugin eval), see evals/README.md
 fixtures/persona/      a fictional candidate the evals and tests run on
-skills.csv             ┐
-CV_Base.html           │ git-ignored symlinks into the private data repo
-resume-config.json     │
-out/                   ┘
+data/                  the private data repo (git-ignored; a clone or a symlink)
 ```
 
 ## Personal data
 
 Code and data are separate. `skills.csv`, `CV_Base.html`, `resume-config.json` and `out/` live in a
-separate private repository, `../my-career-profile-data`; the root of this repository holds only
-git-ignored symlinks to them, so every path below works as before. How to create your own data
-repository — `templates/data-repo/README.md`.
+separate private repository, reached as `data/` at the root of this one (cloned there or symlinked,
+git-ignored). How to create your own data repository — `templates/data-repo/README.md`.
 
 ## Resume blocks for a vacancy
 
@@ -83,11 +79,11 @@ node .claude/skills/resume-render/render.mjs placeholders              # what th
 `blocks.md` is the `resume-blocks` skill output as is (`Title`, `Summary`, `Skills` sections;
 comments after the skills block are ignored). Overwriting an existing file needs `--force`.
 
-One vacancy — one folder `out/<Company>-<Position>/`, and the file inside always has the same name:
+One vacancy — one folder `data/out/<Company>-<Position>/`, and the file inside always has the same name:
 
 ```text
-out/Acme-Senior-Frontend-Developer/<resumeFileName>.html
-out/Acme-Senior-Frontend-Developer/<resumeFileName>.pdf
+data/out/Acme-Senior-Frontend-Developer/<resumeFileName>.html
+data/out/Acme-Senior-Frontend-Developer/<resumeFileName>.pdf
 ```
 
 The file name comes from `resumeFileName` in `resume-config.json` (without `.pdf`; `CV` without the
@@ -104,7 +100,7 @@ The script only reads `CV_Base.html` — only the user edits the base resume.
 the content height, so the file has exactly one page and no break in the middle of the text.
 
 ```bash
-node .claude/skills/resume-pdf/topdf.mjs 'out/Acme-Senior-FE/<resumeFileName>.html'
+node .claude/skills/resume-pdf/topdf.mjs 'data/out/Acme-Senior-FE/<resumeFileName>.html'
 node .claude/skills/resume-pdf/topdf.mjs cv.html --side=14   # side margins, mm
 node .claude/skills/resume-pdf/topdf.mjs browsers            # which Chromium will be used
 ```
@@ -149,7 +145,7 @@ fictional candidate. They cost real usage and are not run in CI; see
 ## Skills rating app
 
 A local site for rating skills from 0 to 5. The data source and the place it saves to is
-`skills.csv` (the repo-root symlink). No database, no cloud storage: everything is written straight
+`data/skills.csv`. No database, no cloud storage: everything is written straight
 to the file.
 
 ```bash
@@ -178,7 +174,7 @@ npm run dev   # → http://localhost:5173
 - Both layouts are supported: `skill,rating,already_seen` and a variant with a `section` column
   (then a sidebar with sections appears). Columns the app does not know are kept unchanged.
 - An empty `rating` cell means “not rated yet” (“unrated” in the app).
-- Writes are atomic (`skills.csv.tmp` → `rename`, on the real path behind the symlink); a
+- Writes are atomic (`skills.csv.tmp` → `rename`, on the real path behind a symlinked `data`); a
   `skills.csv.bak` is created before the first write.
 - If the file is changed in an editor while the page is open, the app will not overwrite the edits:
   it shows a conflict and offers to reload the file.

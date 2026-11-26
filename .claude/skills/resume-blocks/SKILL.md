@@ -6,6 +6,9 @@ description: Write the Title, Summary and Skills blocks of a resume for one spec
 # Resume blocks: Title + Summary + Skills
 
 You read the vacancy and decide what matters — that judgement is yours, not the script's.
+The user's files live in `data/` at the repo root: `data/skills.csv`, `data/CV_Base.html`,
+`data/resume-config.json`.
+
 `skills.mjs` is only a fact-checker over `skills.csv`: it answers "how strong is this skill,
 and is it in the base at all". Never let it pick skills for you, and never claim a skill
 it does not back.
@@ -123,7 +126,7 @@ Rules:
 ### Years of experience
 
 Never take the number from memory and never hardcode it — read it off the base CV. Open
-`CV_Base.html`, go to its EXPERIENCE section, and take the start year of **the earliest entry that
+`data/CV_Base.html`, go to its EXPERIENCE section, and take the start year of **the earliest entry that
 is commercial software development**; the count is the current year minus that year.
 
 The earliest entry is not automatically the right one. A CV also lists work from before the career

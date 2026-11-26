@@ -12,48 +12,18 @@ holds only what is about one person.
 
 ## Setup
 
-Both repositories sit side by side in one workspace folder:
+The code repository reads this one as `data/` at its root.
 
-```text
-<workspace>/
-├── my-career-profile/        ← code
-└── my-career-profile-data/   ← this repository
-```
-
-1. Copy `templates/data-repo/` from the code repository to `../my-career-profile-data` and run
-   `git init` there.
+1. Copy `templates/data-repo/` from the code repository to `data/` at its root (git-ignored there)
+   and run `git init` in it. Keeping it elsewhere works too: make `data` a symlink to it and add
+   that folder to `permissions.additionalDirectories` in the code repository's
+   `.claude/settings.local.json`, so the agent can read and write through the link.
 2. Rename `skills.example.csv` → `skills.csv`, `CV_Base.example.html` → `CV_Base.html` and
    `resume-config.example.json` → `resume-config.json`, then replace them with your own. The
    examples have different names so that an agent looking a file up by name never picks the
    made-up person instead of the real one.
-3. Create the symlinks in the root of the code repository (they are git-ignored):
 
-```bash
-ln -s ../my-career-profile-data/skills.csv skills.csv
-ln -s ../my-career-profile-data/CV_Base.html CV_Base.html
-ln -s ../my-career-profile-data/resume-config.json resume-config.json
-ln -s ../my-career-profile-data/out out
-```
-
-Open Claude Code in the workspace folder, not in the code repository: the agent then sees both
-repositories and does not ask for permission on every read or write through a symlink. The files
-behind the symlinks live outside the code repository, so a session opened inside it needs explicit
-access — without it a non-interactive run cannot read `CV_Base.html` and leaves the years of
-experience out of the Summary. If you do open the code repository itself, grant access once:
-
-- Claude Code — add the data repository to `permissions.additionalDirectories` in the code
-  repository's `.claude/settings.local.json` (git-ignored; create it if absent), or run
-  `/add-dir ../my-career-profile-data` in the session:
-
-```json
-{
-  "permissions": {
-    "additionalDirectories": ["../my-career-profile-data"]
-  }
-}
-```
-
-- Codex — add the data repository as a writable root in `.codex/config.toml`'s sandbox settings.
+Open Claude Code in the code repository.
 
 ## Rules
 

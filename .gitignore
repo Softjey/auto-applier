@@ -2,21 +2,9 @@ node_modules/
 dist/
 *.tsbuildinfo
 
-# personal data lives in a separate private repo (../my-career-profile-data);
-# only symlinks to it live here — never commit them
-/skills.csv
-/skills.json
-/skills.md
-/CV_Base.html
-/resume-config.json
-/*.pdf
-/out
-/.data-dir
+# the private data repo: a clone or a symlink, never committed
+/data
 /.claude/settings.local.json
-
-# generated resumes
-out/
-!/templates/data-repo/out/
 
 # skills-rating app working files
 skills.csv.bak

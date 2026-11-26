@@ -1,6 +1,6 @@
 ---
 name: organize-by-status
-description: Sort vacancy folders in out/ (or another folder of generated resumes) into per-status subfolders (SAVED, APPLIED, REJECTED, NOT_INTERESTED, ...) based on their onetap application status. Use when the user asks to organize/sort/split vacancy folders by status.
+description: Sort vacancy folders in data/out/ (or another folder of generated resumes) into per-status subfolders (SAVED, APPLIED, REJECTED, NOT_INTERESTED, ...) based on their onetap application status. Use when the user asks to organize/sort/split vacancy folders by status.
 ---
 
 # Organize vacancy folders by status
@@ -29,7 +29,7 @@ A vacancy folder is one of:
 2. **Run the fetch script** — it talks to the onetap API directly (see "How status-fetching
    works" below), no MCP round-trips needed:
    ```bash
-   node .claude/skills/organize-by-status/fetch-statuses.mjs --dir=out --out=/tmp/mapping.json
+   node .claude/skills/organize-by-status/fetch-statuses.mjs --dir=data/out --out=/tmp/mapping.json
    ```
    This resolves every id-bearing folder (`<Company>_<vacancyId>-<Title>`) exactly, in seconds,
    via one direct API call per vacancy id. It also attempts the id-less folders (custom vacancies,
@@ -53,18 +53,18 @@ A vacancy folder is one of:
      "byFolder": { "airSlate-Senior-Fullstack-Engineer-AI": "APPLIED" }
    }
    ```
-   Every folder in `out/` should end up as a key in one of the two maps — if a handful genuinely
+   Every folder in `data/out/` should end up as a key in one of the two maps — if a handful genuinely
    can't be resolved, that's fine, `organize.mjs` reports them and leaves them alone.
 
 5. **Dry-run the mover** and show the plan before touching anything:
    ```bash
-   node .claude/skills/organize-by-status/organize.mjs --map=/path/to/mapping.json --dir=out
+   node .claude/skills/organize-by-status/organize.mjs --map=/path/to/mapping.json --dir=data/out
    ```
    Review the per-status counts, and especially the "unmatched" and "conflicts" sections.
 
 6. **Apply**, only after the dry run looks right (or the user has confirmed it):
    ```bash
-   node .claude/skills/organize-by-status/organize.mjs --map=/path/to/mapping.json --dir=out --apply
+   node .claude/skills/organize-by-status/organize.mjs --map=/path/to/mapping.json --dir=data/out --apply
    ```
 
 7. **Report** what moved where, and call out anything left unmatched (with a suggestion of why —

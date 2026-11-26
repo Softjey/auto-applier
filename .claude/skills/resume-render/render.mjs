@@ -4,7 +4,7 @@
  * by the Title / Summary / Skills blocks. It decides nothing and edits no text —
  * it only inserts what it is given and makes sure no placeholder is left.
  *
- *   node render.mjs blocks.md                     — → out/<Position>/<resumeFileName>.html
+ *   node render.mjs blocks.md                     — → data/out/<Position>/<resumeFileName>.html
  *   node render.mjs blocks.md --company="Acme"    — company in the vacancy folder name
  *   node render.mjs blocks.md --out=cv.html       — custom path (- = stdout)
  *   node render.mjs placeholders                  — which placeholders the base has
@@ -18,8 +18,8 @@ import { dirname, resolve, relative } from 'node:path';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '../../..');
-const DEFAULT_BASE = resolve(ROOT, 'CV_Base.html');
-const DEFAULT_OUT_DIR = resolve(ROOT, 'out');
+const DEFAULT_BASE = resolve(ROOT, 'data/CV_Base.html');
+const DEFAULT_OUT_DIR = resolve(ROOT, 'data/out');
 
 /** Placeholders of the base resume. Key — block section, value — the bracketed text. */
 export const PLACEHOLDERS = {
@@ -203,7 +203,7 @@ export const slug = (s) => s
  * The file always has the same name — it is what a recruiter sees in their downloads.
  * A leading "!" keeps it at the top of a Finder listing.
  */
-const CONFIG_PATH = resolve(ROOT, 'resume-config.json');
+const CONFIG_PATH = resolve(ROOT, 'data/resume-config.json');
 const DEFAULT_CV_NAME = 'CV';
 
 export function readCvName(configPath = CONFIG_PATH) {
@@ -214,7 +214,7 @@ export function readCvName(configPath = CONFIG_PATH) {
 
 const CV_NAME = readCvName();
 
-/** out/<Company>-<Position>/<resumeFileName>.html — the vacancy goes in the folder, not the file name. */
+/** data/out/<Company>-<Position>/<resumeFileName>.html — the vacancy goes in the folder, not the file name. */
 export function outputPath(blocks, flags) {
   if (flags.has('out')) {
     const value = flags.get('out');
@@ -229,7 +229,7 @@ export function outputPath(blocks, flags) {
 
 const USAGE = `Usage:
   node render.mjs blocks.md                    blocks from a file (or "-" / stdin)
-  node render.mjs blocks.md --company="Acme"   → out/Acme-<Position>/${CV_NAME}.html
+  node render.mjs blocks.md --company="Acme"   → data/out/Acme-<Position>/${CV_NAME}.html
   node render.mjs blocks.md --out=cv.html      custom path; --out=- prints the html to stdout
   node render.mjs placeholders                 show the placeholders of the base resume
 Flags: --base=<path> --force

@@ -6,7 +6,7 @@ description: Assemble a ready-to-send resume file — copy CV_Base.html and repl
 # Resume render: base CV + blocks → a file
 
 This skill assembles, it does not write. The blocks come in already finished; your job is to get
-them into a copy of `CV_Base.html` without touching a single word of them or of the base.
+them into a copy of `data/CV_Base.html` without touching a single word of them or of the base.
 
 If the blocks do not exist yet, this is the wrong skill — the `resume-blocks` skill writes them,
 grounded in `skills.csv`. Get them from there (or from the user), then come back here.
@@ -22,8 +22,8 @@ itself are the user's.
 ## The tool
 
 ```bash
-node .claude/skills/resume-render/render.mjs blocks.md                   # → out/<Position>/…
-node .claude/skills/resume-render/render.mjs blocks.md --company="Acme"  # → out/Acme-<Position>/…
+node .claude/skills/resume-render/render.mjs blocks.md                   # → data/out/<Position>/…
+node .claude/skills/resume-render/render.mjs blocks.md --company="Acme"  # → data/out/Acme-<Position>/…
 node .claude/skills/resume-render/render.mjs blocks.md --out=cv.html     # explicit path; "-" = stdout
 node .claude/skills/resume-render/render.mjs placeholders                # what the base declares
 ```
@@ -70,16 +70,16 @@ answer can be saved to the file as is.
 One vacancy — one folder, named `<Company>-<Position>` (position only when no company was given):
 
 ```
-out/Acme-Senior-Frontend-Developer/<resumeFileName>.html
+data/out/Acme-Senior-Frontend-Developer/<resumeFileName>.html
 ```
 
-The file itself is always named after `resumeFileName` in `resume-config.json` (without `.pdf`;
+The file itself is always named after `resumeFileName` in `data/resume-config.json` (without `.pdf`;
 `CV` when it is not set) — that is the name a recruiter sees in their downloads, so it never
 carries the company; a leading `!` keeps it at the top of a Finder listing. Do not rename it per
 vacancy, and do not fold the vacancy into the filename.
 
 The name may start with `!`, so always quote the path in single quotes when passing it on
-(`'out/Acme-…/<resumeFileName>.html'`) — an interactive zsh expands `!` inside double quotes.
+(`'data/out/Acme-…/<resumeFileName>.html'`) — an interactive zsh expands `!` inside double quotes.
 
 Regenerating an existing file needs `--force`.
 
