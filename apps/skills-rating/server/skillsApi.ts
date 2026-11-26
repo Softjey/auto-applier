@@ -155,7 +155,7 @@ export function skillsApi(): Plugin {
       const configured =
         override !== undefined && override !== ''
           ? path.resolve(config.root, override)
-          : path.resolve(config.root, '..', 'data', 'skills.csv');
+          : path.resolve(config.root, '..', '..', 'data', 'skills.csv');
       csvPath = existsSync(configured) ? realpathSync(configured) : configured;
     },
     configureServer(server) {

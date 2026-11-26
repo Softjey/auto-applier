@@ -7,7 +7,7 @@
 //
 // The server answers only the extension (a plain request gets 403), so ANY HTTP answer means
 // it is up; "connection refused" or a timeout means it is down.
-// Exit 0: up. Exit 1: down — start it with `pnpm dev:server` in autofill/ and leave it running.
+// Exit 0: up. Exit 1: down — start it with `pnpm dev:server` in apps/autofill/ and leave it running.
 
 const arg = process.argv.slice(2).find((a) => a.startsWith("--port="));
 const port = Number(arg?.slice("--port=".length) || process.env.AUTOFILL_PORT || 7357);

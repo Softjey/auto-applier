@@ -1,4 +1,4 @@
-// End-to-end checks of the CLI scripts against the fake person in autofill/fixtures/.
+// End-to-end checks of the CLI scripts against the fake person in apps/autofill/fixtures/.
 // Each script runs as a subprocess with $APPLIER_DATA_DIR pointing at a temp copy, so
 // nothing here can touch a real data repo.
 
@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SCRIPTS = resolve(HERE, "../scripts");
-const FIXTURES = resolve(HERE, "../../../../autofill/fixtures");
+const FIXTURES = resolve(HERE, "../../../../apps/autofill/fixtures");
 const data = mkdtempSync(join(tmpdir(), "applier-data-"));
 copyFileSync(join(FIXTURES, "profile.test.json"), join(data, "profile.json"));
 copyFileSync(join(FIXTURES, "apply-config.test.json"), join(data, "apply-config.json"));

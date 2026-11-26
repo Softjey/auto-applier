@@ -5,7 +5,7 @@ import { REPO_ROOT } from '../config';
 /** The dev build the user loaded into Chrome (\`pnpm --filter @applier/extension build\`). */
 const MANIFEST = resolve(
   process.env['AUTOFILL_EXTENSION_DIR'] ??
-    resolve(REPO_ROOT, 'autofill/packages/extension/.output/chrome-mv3'),
+    resolve(REPO_ROOT, 'apps/autofill/packages/extension/.output/chrome-mv3'),
   'manifest.json',
 );
 

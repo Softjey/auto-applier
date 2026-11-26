@@ -12,13 +12,13 @@ The pipeline is four separate skills, each doing one job:
 3. `resume-pdf` — prints the html to a PDF that is one long page.
 4. `organize-by-status` — sorts the vacancy folders in `data/out/` by their onetap status.
 
-Next to them, `skills-rating/` is a small local app for rating the skills in `skills.csv`.
+Next to them, `apps/skills-rating/` is a small local app for rating the skills in `skills.csv`.
 
 ## Repository layout
 
 ```text
 .claude/skills/        the four skills above
-skills-rating/         the rating app (Vite + React)
+apps/skills-rating/         the rating app (Vite + React)
 templates/data-repo/   skeleton of the private data repo
 .claude/skills/*/tests/ unit tests of the skill scripts (vitest)
 evals/                 agent evals (claude plugin eval), see evals/README.md
@@ -149,7 +149,7 @@ A local site for rating skills from 0 to 5. The data source and the place it sav
 to the file.
 
 ```bash
-cd skills-rating
+cd apps/skills-rating
 npm install   # once
 npm run dev   # → http://localhost:5173
 ```
@@ -181,15 +181,15 @@ npm run dev   # → http://localhost:5173
 
 ### Structure
 
-- `skills-rating/server/skillsApi.ts` — a Vite plugin with `GET`/`PUT /api/skills` (reading and
+- `apps/skills-rating/server/skillsApi.ts` — a Vite plugin with `GET`/`PUT /api/skills` (reading and
   writing the CSV).
-- `skills-rating/src/lib/csv.ts` — a CSV parser and serializer that keeps the file format.
-- `skills-rating/src/hooks/useSkills.ts` — state, autosave, conflict handling.
-- `skills-rating/src/components/` — toolbar, section card, skill row, rating control.
+- `apps/skills-rating/src/lib/csv.ts` — a CSV parser and serializer that keeps the file format.
+- `apps/skills-rating/src/hooks/useSkills.ts` — state, autosave, conflict handling.
+- `apps/skills-rating/src/components/` — toolbar, section card, skill row, rating control.
 
 The CSV path can be overridden with the `SKILLS_CSV` variable (handy for experiments on a copy):
 
 ```bash
-cd skills-rating
+cd apps/skills-rating
 SKILLS_CSV=/tmp/test.csv npm run dev
 ```

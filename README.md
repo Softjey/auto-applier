@@ -11,8 +11,8 @@ It is a set of Claude Code skills plus two small tools:
 | --- | --- |
 | `.claude/skills/` | triage: `job-triage`, `applications-check`, `setup-job-triage` ([guide](docs/job-triage.md)); resumes: `resume-blocks`, `resume-render`, `resume-pdf`, `organize-by-status` ([guide](docs/resume.md)); applying: `setup-data-repo`, `profile-interview`, `import-stories`, `apply-method-triage`, `apply-to-jobs` |
 | `.claude/skills/apply-to-jobs/ats/` | per-ATS notes: quirks that cost a failed submit to learn |
-| `autofill/` | a browser extension + loopback server that prefill forms Simplify does not cover ([README](autofill/README.md)) |
-| `my-career-profile/skills-rating/` | a local app for rating your skills |
+| `apps/autofill/` | a browser extension + loopback server that prefill forms Simplify does not cover ([README](apps/autofill/README.md)) |
+| `apps/skills-rating/` | a local app for rating your skills |
 | `templates/data-repo/` | the skeleton of your private data repo |
 
 ## Your data stays out of this repo
@@ -46,7 +46,7 @@ that essay questions are answered from. After that:
   where saved vacancies come from and where each application is recorded.
 - Claude Code with Chrome and the Claude in Chrome extension.
 - Python 3.10+ for triage (stdlib only; `uv` to run its tests).
-- pnpm, for the script tests and the `autofill/` extension.
+- pnpm, for the script tests and the `apps/autofill/` extension.
 - macOS or Linux. On Windows use WSL.
 
 ## Your resume
@@ -64,7 +64,7 @@ that essay questions are answered from. After that:
 - It automates job applications. You are responsible for following the terms of the
   sites you apply on; it never invents an answer and asks you whenever it does not
   know one.
-- Per-site support is uneven: `autofill/` has adapters for a handful of ATSes and
+- Per-site support is uneven: `apps/autofill/` has adapters for a handful of ATSes and
   `.claude/skills/apply-to-jobs/ats/` holds notes for more. Anything else is driven
   step by step by the agent.
 - Salary handling defaults to PLN; set your own currency in `profile.json`

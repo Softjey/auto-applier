@@ -13,7 +13,7 @@ jobs:
           node-version: 22
       - uses: pnpm/action-setup@v4
         with:
-          package_json_file: autofill/package.json
+          package_json_file: apps/autofill/package.json
       - name: Install script tests
         run: pnpm install --frozen-lockfile
       - name: Script tests
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: my-career-profile/skills-rating
+        working-directory: apps/skills-rating
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

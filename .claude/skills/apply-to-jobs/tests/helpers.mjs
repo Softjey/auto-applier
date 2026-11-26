@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const SCRIPTS = resolve(HERE, "../scripts");
-const FIXTURES = resolve(HERE, "../../../../autofill/fixtures");
+const FIXTURES = resolve(HERE, "../../../../apps/autofill/fixtures");
 
 export function makeDataDir() {
   const dir = mkdtempSync(join(tmpdir(), "applier-data-"));
