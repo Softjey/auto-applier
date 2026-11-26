@@ -36,12 +36,12 @@ is indistinguishable from the extension being dead. On 2026-09-06 that cost a
 run several minutes of retries and a wrong diagnosis ("the extension is down")
 before the real cause surfaced.
 
-So: read `config.browser.claudeInChrome.deviceName` from `$DATA/apply-config.json` and
+So: read `config.browser.claudeInChrome.deviceName` from `data/apply-config.json` and
 `select_browser` the deviceId whose **name** matches. Do not store or trust a
 deviceId — they are reassigned when an extension reconnects. If no connected
 browser carries that name, call `switch_browser`: it prompts every installed
 extension and the user clicks Connect in the one they want, naming it in the
-process; write the new name back to `$DATA/apply-config.json`.
+process; write the new name back to `data/apply-config.json`.
 
 Two quirks of this integration that the skill's phases are built around:
 
@@ -114,28 +114,6 @@ Chrome. Its panel is a sidebar on the right; find **Autofill This Page** from a
 0.4-scale screenshot rather than a remembered coordinate — the panel shifts with
 the page width.
 
-## Codex — the bundled `browser` plugin
-
-Tools: the `browser` plugin over the `node_repl` MCP server. Work through
-`agent.browsers` — `list()`, `get(id)`, `user.openTabs()`, `user.claimTab(tab)`
-— and drive the returned tab with `tab.goto()`, `tab.playwright.evaluate()`,
-`tab.playwright.locator()`, `tab.content()` and `tab.screenshot()`. The plugin
-ships its own docs under `docs/` in its cache directory; read
-`file-uploads.md`, `tab-claiming-chrome.md` and `browser-safety.md` before
-Phase 2 rather than guessing the API.
-
-- **Uploads go through the file chooser**, not `setInputFiles`: start
-  `tab.playwright.waitForEvent("filechooser")`, click the `input[type=file]`,
-  then `chooser.setFiles(["<absolute path>"])`. Absolute paths only. There is
-  no directory restriction here, but Phase 1 still copies the PDF into `$DATA/runs/`
-  — that copy is what the run's audit trail is made of.
-- **Claim the user's own Chrome tab** rather than opening a detached one when
-  the user is signed in to a job board; `claimTab` returns a normal
-  controllable tab and leaves it where the user can see it.
-- The tab-group fragility above is a Claude-in-Chrome property, not a Codex
-  one. Everything else in Phase 2 and Phase 4 — read-only first pass, verify
-  writes on hostile forms, the confirmation pause — applies unchanged.
-
 ## Reading the ATS registry
 
 `ats/*.md` was written against Claude in Chrome, so it says `javascript_tool`
@@ -184,16 +162,12 @@ reach. What does work is the recorder:
 4. `gif_creator {action: "export", tabId, download: true, filename:
    "<Company>_<vacancyId>-filled-form.gif", options: {showWatermark: false,
    showProgressBar: false, showClickIndicators: false, quality: 5}}`
-5. `mv ~/Downloads/<filename> $DATA/runs/<run-id>/<Company>_<vacancyId>/filled-form.gif`
+5. `mv ~/Downloads/<filename> data/runs/<run-id>/<Company>_<vacancyId>/filled-form.gif`
 
 The export downloads through the browser, so the file lands in the user's
 Downloads folder and is moved from there. Only about half the screenshots
 become frames (the recorder samples them), so take one per section rather than
 one per form.
-
-Codex's `browser` plugin has `tab.screenshot()`, which returns the image
-directly — write it straight to the run folder as `filled-01.png`, `filled-02.png`
-and skip the GIF entirely.
 
 ## Sign-in and sign-up: the Applier Passwords panel
 

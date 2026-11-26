@@ -87,9 +87,8 @@ BROWSER_GUIDE   = .claude/skills/apply-to-jobs/browser/README.md
 ATS_REGISTRY    = .claude/skills/apply-to-jobs/ats/
 ```
 
-The skill runs under any agent that has the five browser capabilities listed in
-`$BROWSER_GUIDE` — Claude Code with Claude in Chrome, Codex with its bundled
-`browser` plugin. Tool names and their quirks live there, not in the phases
+The skill needs the five browser capabilities listed in `$BROWSER_GUIDE`, which Claude
+Code gets from Claude in Chrome. Tool names and their quirks live there, not in the phases
 below.
 
 ## Preconditions
@@ -98,13 +97,12 @@ below.
   (`count_applications_by_status`). If the tool does not exist or errors with a
   connection/auth failure, stop and tell the user: this skill reads SAVED vacancies from
   OneTap.Work and records every result there, so there is nothing to do without it. Name
-  the fix — Claude Code: add the OneTap.Work connector in its settings; Codex:
-  `codex mcp login onetap` (`.codex/config.toml` already declares it). Never fall back to
+  the fix — add the OneTap.Work connector in Claude Code's settings. Never fall back to
   applying without recording the status.
 - **A resume is configured.** Run `scripts/check-resume.mjs`; exit 1 means stop and
   point the user at `setup-data-repo` (resume step).
 - **The autofill plan server is running.** Run `scripts/check-server.mjs`; exit 1 means start
-  it (`pnpm dev:server` in `autofill/`, left running in the background — you may start it
+  it (`pnpm dev:server` in `apps/autofill/`, left running in the background — you may start it
   yourself) and re-check before the first browser step. Without it the Applier extension has
   no CV list, fills nothing from the profile and **cannot save a password** after a sign-in
   (found 2026-10-06: a Workday login was never offered "Save password?" because the server
@@ -522,7 +520,7 @@ stories in `data/stories.json` — and resume the parked vacancies.
 
 ### Applier MCP fast path — the extension does it, no browser tool
 
-The Applier extension (`autofill/`) can be driven by tool calls instead of by clicking
+The Applier extension (`apps/autofill/`) can be driven by tool calls instead of by clicking
 through Chrome: the plan server exposes MCP tools (`autofill_*`), the extension takes the
 command in the user's own Chrome, runs it in a background tab and hands back a structured
 report. One call replaces the whole navigate → screenshot → click → dump → compare loop,
@@ -530,10 +528,10 @@ and it is the fastest path there is.
 
 **When.** The tools `autofill_status` / `autofill_open_and_fill` exist **and**
 `autofill_status` says `extensionConnected: true` **and** the vacancy's site has an adapter
-(`autofill/packages/extension/src/adapters/` — today justjoin.it also covers its Apply
+(`apps/autofill/packages/extension/src/adapters/` — today justjoin.it also covers its Apply
 button). Any miss → the next path (Simplify, then the full Phases 2–4). It is not an error
 to be without it. One-time setup, per machine: Claude Code `claude mcp add --transport http
-applier-autofill http://127.0.0.1:7357/mcp`; Codex reads `.codex/config.toml`.
+applier-autofill http://127.0.0.1:7357/mcp`.
 
 Phase 1 is unchanged (liveness, band, tailored resume). Then per vacancy:
 
@@ -993,8 +991,7 @@ this browser" for a moment — that is the click. On the Applier MCP path
 Call it as the MCP tool, never through `curl` or a script in a shell: Claude Code's auto
 mode judges each such click on an employer's site on its own and blocks it as often as not.
 The run is unattended only when the user has allowed the tool once —
-`/permissions` → Allow → `mcp__applier-autofill__autofill_captcha` (Codex: approve it for the
-session). Without that rule a refused call is not a `failed`: park the vacancy as for
+`/permissions` → Allow → `mcp__applier-autofill__autofill_captcha`. Without that rule a refused call is not a `failed`: park the vacancy as for
 `challenge` and say in the end-of-run list that the rule is missing. The agent never adds
 the rule itself.
 
@@ -1092,8 +1089,7 @@ expensive way.
 
 ## MCP timeouts
 
-`.claude/settings.json` sets `MCP_TOOL_TIMEOUT=60000`, and `.codex/config.toml`
-sets `tool_timeout_sec = 60` for the same reason: a hung OneTap call used to sit
+`.claude/settings.json` sets `MCP_TOOL_TIMEOUT=60000` for this reason: a hung OneTap call used to sit
 for the full 300 s default and come back with nothing. Five of them in one run
 burned nine minutes of a thirteen-minute phase.
 

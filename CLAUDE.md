@@ -14,7 +14,7 @@ this repo (a clone, or a symlink; git-ignored):
 | In the data repo | What it is |
 | --- | --- |
 | `criteria.md` | what the candidate accepts and rejects, why, and every case already adjudicated |
-| `linkedin/filters.json`, `ledger.json`, `session.json` | the saved LinkedIn search, every LinkedIn job already judged, the cookies for save and dismiss (git-ignored) |
+| `linkedin/filters.json`, `linkedin/ledger.json`, `linkedin/session.json` | the saved LinkedIn search, every LinkedIn job already judged, the cookies for save and dismiss (git-ignored) |
 | `skills.csv` | every skill rated 0–5, the source a resume is written from |
 | `CV_Base.html`, `resume-config.json` | the base resume with its three placeholders, and the file name a recruiter sees |
 | `out/` | generated resumes, one folder per vacancy, sorted by status |
@@ -37,7 +37,7 @@ inside it with an explicit `data/`: `grep -r X .` does not follow the symlink.
 Rules that follow from the split:
 
 - **Never put personal data in this repo** — not in code, skills, ATS notes, tests
-  or fixtures. Tests use the fake person in `autofill/fixtures/`, evals the fictional
+  or fixtures. Tests use the fake person in `apps/autofill/fixtures/`, evals the fictional
   candidate in `fixtures/persona/`. ATS notes use
   placeholders (`123456789`, `<config.resumeFileName>`). The root `.gitignore`
   blocks the data files so they cannot be committed here by accident.
@@ -113,7 +113,7 @@ kept → `apply-method-triage` and `apply-to-jobs` apply. Setup: `setup-data-rep
 - `.claude/skills/resume-pdf/` — the HTML as one continuous PDF page.
 - `.claude/skills/organize-by-status/` — sorts `data/out/` into per-status folders from
   the OneTap.Work status (session cookie in a git-ignored `.env.local`).
-- `my-career-profile/skills-rating/` — a local app for rating `skills.csv`.
+- `apps/skills-rating/` — a local app for rating `skills.csv`.
 
 ### Applying
 
@@ -129,7 +129,7 @@ kept → `apply-method-triage` and `apply-to-jobs` apply. Setup: `setup-data-rep
   salary, scripts), asks about gaps, writes the JSON and runs `stories.mjs validate`.
 - `.claude/skills/apply-method-triage/` — read-only survey of the SAVED queue, sorted
   into five groups by **the method each application demands**: a form the repo's own
-  `autofill/` extension fills (its adapters are read fresh each run, so a new adapter
+  `apps/autofill/` extension fills (its adapters are read fresh each run, so a new adapter
   moves vacancies with no edit to the skill — today Traffit, eRecruiter, justjoin.it),
   Easy Apply inside the board, an external ATS Simplify can prefill, an external form
   typed by hand, and expired postings (archived). Groups are mutually exclusive, first
@@ -181,13 +181,13 @@ kept → `apply-method-triage` and `apply-to-jobs` apply. Setup: `setup-data-rep
     talks to the extension)? Down means no CV list and no "Save password?"; the apply run
     checks it before the first browser step.
   - `tests/` — vitest over the scripts, run as subprocesses against a temp copy of the
-    fake person in `autofill/fixtures/`. `pnpm test` at the repo root; CI runs it too.
+    fake person in `apps/autofill/fixtures/`. `pnpm test` at the repo root; CI runs it too.
   - `browser/extract-form.js` — read-only field-schema dump run in the page during
     phase 2. Flags anti-autofill honeypots.
   - `ats/<host>.md` — quirks paid for by a failed submit, keyed by exact host then by
     registrable domain. Add to it in the same commit as the fix. English, identified
     by DOM handle rather than on-screen labels, and free of one person's answers.
-- `autofill/` — a browser extension plus a loopback plan server that fills the forms
+- `apps/autofill/` — a browser extension plus a loopback plan server that fills the forms
   Simplify does not cover (Traffit, eRecruiter, justjoin.it) from `profile.json`, and
   keeps the user's portal logins (sign-in, sign-up, save-after-login) on every https page.
   TypeScript pnpm workspace; the server imports `resolve-fields.mjs` so the extension
@@ -197,7 +197,7 @@ kept → `apply-method-triage` and `apply-to-jobs` apply. Setup: `setup-data-rep
   browser tool (SKILL.md § Applier MCP fast path). `autofill_captcha` ticks a visible
   "I'm not a robot" box in any tab with a real (debugger-sent) mouse and stops at a
   challenge (SKILL.md § CAPTCHAs, `src/captcha/`).
-  Meant to be published — see `autofill/README.md`.
+  Meant to be published — see `apps/autofill/README.md`.
 
 ### Shared
 
