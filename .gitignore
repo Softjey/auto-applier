@@ -2,9 +2,9 @@ node_modules/
 .DS_Store
 *.tmp
 
-# Private data lives in a separate repo (see setup-data-repo). These can never
-# be committed here, even by accident.
-/.data-dir
+# The private data repo: data/ is a clone or a symlink, never committed. The rest
+# are the files of the layout before data/, so they cannot be committed either.
+/data
 /profile.json
 /stories.json
 /credentials.json

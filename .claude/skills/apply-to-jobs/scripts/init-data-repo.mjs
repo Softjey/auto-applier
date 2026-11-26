@@ -1,24 +1,18 @@
 #!/usr/bin/env node
-// Creates the user's private data repo from templates/data-repo and points this
-// code repo at it. Deterministic on purpose: the setup-data-repo skill calls it
-// and then drives the interview; nothing here asks a question.
+// init-data-repo.mjs [--dir=<path>] [--resume-repo=<path>] [--resume-file=<pdf>] [--no-git] [--no-link]
 //
-//   init-data-repo.mjs [--dir=<path>] [--resume-repo=<path>] [--resume-file=<pdf>] [--no-git]
-//
-//   --dir          where the data repo goes (default: ../auto-applier-data next to this repo)
+//   (default)      creates the data repo as data/ at the root of this repo (git-ignored)
+//   --dir          creates it there instead, links data/ to it and allows the folder in
+//                  .claude/settings.local.json → permissions.additionalDirectories
 //   --resume-repo  the resume-rendering repo; fills apply-config.json's paths
-//   --resume-file  ONE finished resume PDF sent with every application (no tailoring);
-//                  fills paths.baseResume. Use it when there is no resume repo.
+//   --resume-file  ONE finished resume PDF sent with every application; fills paths.baseResume
 //   --no-git       copy the files but do not `git init`
-//   --no-pointer   do not write <repo>/.data-dir (tests)
-//
-// Refuses to touch a directory that already has a profile.json. Writes
-// <repo>/.data-dir (git-ignored) only when --dir is not the default location.
+//   --no-link      with --dir: neither link data/ nor touch settings (tests)
 
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync, copyFileSync } from "node:fs";
+import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, realpathSync, statSync, symlinkSync, writeFileSync, copyFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
-import { join, resolve } from "node:path";
-import { REPO_ROOT, DATA_DIR_POINTER, DEFAULT_DATA_DIR } from "./lib/data-dir.mjs";
+import { dirname, join, resolve } from "node:path";
+import { REPO_ROOT, DEFAULT_DATA_DIR } from "./lib/data-dir.mjs";
 
 const args = process.argv.slice(2);
 const flag = (name) => args.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3);
@@ -31,8 +25,12 @@ const fail = (msg) => {
 const target = resolve(flag("dir") || DEFAULT_DATA_DIR);
 const templates = join(REPO_ROOT, "templates", "data-repo");
 
-if (target === REPO_ROOT || target.startsWith(REPO_ROOT + "/"))
-  fail("the data repo must live outside the code repo — it is the private half.");
+const elsewhere = target !== DEFAULT_DATA_DIR;
+const lexists = (p) => { try { lstatSync(p); return true; } catch { return false; } };
+if (elsewhere && (target === REPO_ROOT || target.startsWith(REPO_ROOT + "/")))
+  fail("inside the code repo only data/ is allowed; pass no --dir, or a folder outside the repo.");
+if (elsewhere && !has("no-link") && lexists(DEFAULT_DATA_DIR) && (!existsSync(target) || realpathSync(DEFAULT_DATA_DIR) !== realpathSync(target)))
+  fail(`${DEFAULT_DATA_DIR} already exists and points elsewhere; not replacing it.`);
 if (existsSync(join(target, "profile.json"))) fail(`${target} already has a profile.json; not overwriting.`);
 if (!existsSync(templates)) fail(`templates missing at ${templates}`);
 
@@ -78,8 +76,17 @@ if (!has("no-git") && !existsSync(join(target, ".git"))) {
   execFileSync("git", ["commit", "-q", "-m", "chore: initialise auto-applier data repo"], { cwd: target });
 }
 
-if (target !== DEFAULT_DATA_DIR && !has("no-pointer")) writeFileSync(DATA_DIR_POINTER, target + "\n");
+const settingsPath = join(REPO_ROOT, ".claude", "settings.local.json");
+if (elsewhere && !has("no-link")) {
+  if (!lexists(DEFAULT_DATA_DIR)) symlinkSync(target, DEFAULT_DATA_DIR);
+  const settings = existsSync(settingsPath) ? JSON.parse(readFileSync(settingsPath, "utf8")) : {};
+  settings.permissions ??= {};
+  settings.permissions.additionalDirectories ??= [];
+  if (!settings.permissions.additionalDirectories.includes(target)) settings.permissions.additionalDirectories.push(target);
+  mkdirSync(dirname(settingsPath), { recursive: true });
+  writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + "\n");
+}
 
 console.log(`Data repo ready at ${target}`);
-console.log(target === DEFAULT_DATA_DIR ? "(default location — no pointer needed)" : `Pointer written to ${DATA_DIR_POINTER}`);
+if (elsewhere && !has("no-link")) console.log(`data/ links to it; the folder is allowed in ${settingsPath}`);
 console.log("Next: run the profile-interview skill to fill profile.json, then import-stories for your STAR stories. Never add a public remote to this repo.");
