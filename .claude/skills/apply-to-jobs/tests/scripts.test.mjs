@@ -1,10 +1,8 @@
-#!/usr/bin/env node
 // End-to-end checks of the CLI scripts against the fake person in autofill/fixtures/.
-//   node .claude/skills/apply-to-jobs/scripts/test-scripts.mjs
 // Each script runs as a subprocess with $APPLIER_DATA_DIR pointing at a temp copy, so
 // nothing here can touch a real data repo.
 
-import test from "node:test";
+import { test } from "vitest";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { copyFileSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
@@ -13,13 +11,14 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+const SCRIPTS = resolve(HERE, "../scripts");
 const FIXTURES = resolve(HERE, "../../../../autofill/fixtures");
 const data = mkdtempSync(join(tmpdir(), "applier-data-"));
 copyFileSync(join(FIXTURES, "profile.test.json"), join(data, "profile.json"));
 copyFileSync(join(FIXTURES, "apply-config.test.json"), join(data, "apply-config.json"));
 
 const run = (script, ...args) =>
-  spawnSync("node", [join(HERE, script), ...args], {
+  spawnSync(process.execPath, [join(SCRIPTS, script), ...args], {
     env: { ...process.env, APPLIER_DATA_DIR: data },
     encoding: "utf8",
   });
