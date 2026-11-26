@@ -1,34 +1,34 @@
 ---
 name: setup-job-triage
-description: Create the user's private data repo for job triage — the separate git repository that holds their criteria.md, the saved LinkedIn search, the ledger of judged jobs and the triage reports — and point this code repo at it. Use on a fresh clone, when any script reports "No data repo found", or when the user says "set me up", "create my data repo", "I just cloned job-triage".
+description: Set up job triage for the user — create the private data repo (data/) if there is none, fill criteria.md with their real decisions and generate the saved LinkedIn search. Use on a fresh clone before the first triage, when a triage script reports "No data repo found", or when the user says "set me up for triage", "fill my criteria", "I just cloned this repo".
 ---
 
-# Set up the data repo
+# Set up job triage
 
 This repo is code and generic knowledge; it holds nothing about any one person.
 Everything personal — `criteria.md`, `linkedin/filters.json`,
-`linkedin/ledger.json`, `linkedin/session.json`, `triage/` — lives in a
-**private data repo**, reached as `data/` at the root of this repo. This skill creates that repo so the triage
-skills have somewhere to read and write. Do it once per user; it is safe to
-re-run, because it refuses to overwrite.
+`linkedin/ledger.json`, `linkedin/session.json`, `triage/` — lives in the user's
+**private data repo**, reached as `data/` at the root of this repo. This skill
+makes sure it exists and fills the triage half of it. It is safe to re-run.
 
 ## 1. Check what exists
 
 ```sh
-ls -la data/criteria.md
+ls -la data/ data/criteria.md
 ```
 
-- It exists → set up. Say so, show where `data` points, and offer to review
-  `criteria.md` with the user. Stop.
-- No such file → continue.
+- `data/criteria.md` exists and has no `<…>` placeholders left → set up. Say so,
+  show where `data` points, and offer to review `criteria.md` with the user. Stop.
+- `data/criteria.md` exists with placeholders → go to § 4.
+- No `data/` → continue.
 
 ## 2. Ask three things, in one message
 
 1. **Where should it live?** Default `data/` inside this repo (git-ignored),
    nothing to configure. If they already have a private data repo, they clone it
-   into `data/` instead and this step ends. Anywhere outside this repo works too:
-   the script then makes `data` a symlink to it and allows that folder once in
-   `.claude/settings.local.json`.
+   into `data/` instead and this skill goes on at § 4. Anywhere outside this repo
+   works too: the script then makes `data` a symlink to it and allows that folder
+   once in `.claude/settings.local.json`.
 2. **Should it have a remote?** Only ever a **private** one, and only if they want
    off-machine backup. Never create or add a public remote: the repo will hold a
    salary floor, company decisions and a record of every job they rejected.
@@ -41,15 +41,15 @@ ls -la data/criteria.md
 ## 3. Create it
 
 ```sh
-python3 .claude/skills/job-triage/init_data_repo.py [--dir=<path>]
+node .claude/skills/apply-to-jobs/scripts/init-data-repo.mjs [--dir=<path>]
 ```
 
-It copies `templates/data-repo/` (a blank `criteria.md`, `linkedin/filters.json`,
-an empty `linkedin/ledger.json`, `README.md`, `.gitignore`, an empty `triage/`),
-runs `git init` with one commit, and, for a `--dir` elsewhere, links `data` to it
-and adds the folder to `permissions.additionalDirectories` in
-`.claude/settings.local.json`. It refuses a directory inside this repo other than
-`data/`, and one that already has a `criteria.md`.
+The same script `setup-data-repo` uses: it copies the whole of
+`templates/data-repo/` (a blank `criteria.md`, `linkedin/filters.json`, an empty
+`linkedin/ledger.json`, and the resume and application skeletons), runs `git init`
+with one commit, and, for a `--dir` elsewhere, links `data` to it and allows the
+folder in `.claude/settings.local.json`. It refuses a directory inside this repo
+other than `data/`, and one that already has a `profile.json`.
 
 If they asked for a remote: `gh repo create <name> --private --source=data --push`
 — after confirming the exact name and that it is private.
