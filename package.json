@@ -1,5 +1,5 @@
 {
-  "name": "auto-applier",
+  "name": "job-search-agent",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@12.4.2",
@@ -10,6 +10,6 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "vitest": "^5.0.2"
+    "vitest": "^5.1.1"
   }
 }

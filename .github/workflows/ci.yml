@@ -4,7 +4,7 @@ on:
     branches: [main]
   pull_request:
 jobs:
-  test:
+  scripts:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,9 +18,32 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Script tests
         run: pnpm test
-      - name: Install
+      - name: Install autofill
         working-directory: autofill
         run: pnpm install --frozen-lockfile
-      - name: Unit tests
+      - name: Autofill unit tests
         working-directory: autofill
         run: pnpm test
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - name: Tests
+        run: uv run --locked pytest
+  skills-rating:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: my-career-profile/skills-rating
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck

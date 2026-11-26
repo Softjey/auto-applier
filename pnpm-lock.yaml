@@ -167,7 +167,7 @@ importers:
   .:
     devDependencies:
       vitest:
-        specifier: ^5.0.2
+        specifier: ^5.1.1
         version: 5.1.1(vite@8.3.8)
 
 packages:
