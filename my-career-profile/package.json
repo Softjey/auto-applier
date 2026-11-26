@@ -1,0 +1,10 @@
+{
+  "name": "career-profile",
+  "private": true,
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^5.1.1"
+  }
+}
