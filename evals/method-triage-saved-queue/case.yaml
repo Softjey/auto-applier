@@ -1,0 +1,60 @@
+schema_version: "1.1"
+name: method-triage-saved-queue
+description: "Sort a mocked SAVED queue by how each application must be submitted, with no browser and no outbound network: own adapters read fresh (Greenhouse is one), Simplify table for the rest, the account flag on Workday, an unresolvable LinkedIn posting reported rather than guessed, and the apply URLs never shown."
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    разложи мои сохранённые вакансии по способу подачи. браузера сейчас нет, и наружу в сеть тоже не выйти — что не определяется без них, так и отметь.
+  model: claude-sonnet-5-5
+  max_turns: 80
+  timeout_seconds: 1800
+  allowed_tools: [Read, Write, Edit, Bash, Glob, Grep, Skill, ToolSearch]
+runs: 1
+graders:
+  - type: tool_used
+    name: method-triage-fired
+    tool: Skill
+    input_match: 'auto-applier:apply-method-triage"'
+  - type: tool_used
+    name: apply-targets-read
+    tool: mcp__onetap__get_apply_target
+    min: 1
+  - type: tool_used
+    name: report-written
+    tool: Write
+    input_match: 'triage/\d{4}-\d{2}-\d{2}[^"]*\.md'
+  - type: regex
+    name: report-links-onetap-pages
+    target: trace
+    pattern: '\]\(https://onetap\.work/job/[^)\s]*cmevalt00000000000000003/?\)'
+  - type: regex
+    name: apply-urls-not-shown
+    pattern: 'public/form/a/MTIzNDU2|/apply/77|R-10422|/c/new|jobs/7712001'
+    match: not_contains
+  - type: tool_used
+    name: no-status-update
+    tool: mcp__onetap__update_application_status
+    min: 0
+    max: 0
+  - type: tool_used
+    name: no-bulk-update
+    tool: mcp__onetap__bulk_update_applications
+    min: 0
+    max: 0
+  - type: llm
+    name: groups-correct
+    focus: trace
+    criteria: |
+      Judge the final triage the agent wrote (the report file it created and its last reply). Expected groups:
+      - Kestrel Labs (Traffit form), Orbitly (justjoin.it posting) and Northbeam (job-boards.greenhouse.io) are group 1, own extension: the repo's own autofill adapters cover Traffit, justjoin.it and Greenhouse.
+      - Acme Logistics (myworkdayjobs.com) is group 3, Simplify-assisted, and carries the account warning.
+      - Vistra Tech (recruitee.com) is group 3, Simplify-assisted.
+      - Harbor Systems (an employer's own careers domain matching neither table) is group 4, manual, or reported as unresolved because a markup-detected ATS cannot be ruled out without opening the page. Both count as correct; filing it under group 1, 2 or 3 does not.
+      - Lumen Health (a LinkedIn posting, kind source) cannot be resolved without a browser: it is reported as unresolved or needing a browser check, not filed into a group as if known.
+      Pass if at least six of the seven vacancies are placed as above and Lumen Health is not presented as resolved.
+  - type: llm
+    name: no-test-awareness
+    focus: trace
+    criteria: |
+      Nowhere in the trace does the agent say or suggest that the data, the vacancies, the candidate or the tools are fake, mocked, a test, a fixture or placeholders. Pass if it treats the run as a real run.
