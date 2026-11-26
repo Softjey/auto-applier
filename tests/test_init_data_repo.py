@@ -1,5 +1,6 @@
 import contextlib
 import io
+import json
 import os
 import subprocess
 import sys
@@ -16,13 +17,15 @@ class InitDataRepoTest(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.target = os.path.join(self.tmp.name, "my-data")
-        self.pointer = os.path.join(self.tmp.name, "pointer")
+        self.link = os.path.join(self.tmp.name, "repo-data")
+        self.settings = os.path.join(self.tmp.name, "settings.local.json")
         identity = {
             "GIT_AUTHOR_NAME": "test", "GIT_AUTHOR_EMAIL": "test@example.com",
             "GIT_COMMITTER_NAME": "test", "GIT_COMMITTER_EMAIL": "test@example.com",
         }
         for patcher in (
-            mock.patch.object(data_dir, "POINTER", self.pointer),
+            mock.patch.object(data_dir, "DEFAULT", self.link),
+            mock.patch.object(init_data_repo, "SETTINGS", self.settings),
             mock.patch.dict(os.environ, identity),
         ):
             patcher.start()
@@ -36,7 +39,7 @@ class InitDataRepoTest(unittest.TestCase):
 
     def test_creates_the_skeleton_and_one_commit(self):
         self.assertEqual(self.run_main("--dir", self.target), self.target)
-        for name in ("criteria.md", "README.md", "CLAUDE.md", ".gitignore",
+        for name in ("criteria.md", "README.md", ".gitignore",
                      os.path.join("linkedin", "filters.json"), os.path.join("linkedin", "ledger.json"),
                      os.path.join("triage", ".gitkeep")):
             self.assertTrue(os.path.exists(os.path.join(self.target, name)), name)
@@ -47,10 +50,22 @@ class InitDataRepoTest(unittest.TestCase):
                                 capture_output=True, text=True, check=True).stdout
         self.assertEqual(status, "")
 
-    def test_writes_the_pointer_when_not_at_the_default(self):
+    def test_default_creates_the_repo_as_data(self):
+        self.assertEqual(self.run_main(), self.link)
+        self.assertTrue(os.path.isdir(os.path.join(self.link, ".git")))
+        self.assertFalse(os.path.islink(self.link))
+        self.assertFalse(os.path.exists(self.settings))
+
+    def test_elsewhere_links_data_and_allows_the_directory(self):
         self.run_main("--dir", self.target)
-        with open(self.pointer) as f:
-            self.assertEqual(f.read().strip(), self.target)
+        self.assertTrue(os.path.islink(self.link))
+        self.assertEqual(os.path.realpath(self.link), os.path.realpath(self.target))
+        with open(self.settings) as f:
+            self.assertIn(self.target, json.load(f)["permissions"]["additionalDirectories"])
+
+    def test_no_claude_md_in_the_data_repo(self):
+        self.run_main("--dir", self.target)
+        self.assertFalse(os.path.exists(os.path.join(self.target, "CLAUDE.md")))
 
     def test_session_cookies_are_git_ignored(self):
         self.run_main("--dir", self.target)
