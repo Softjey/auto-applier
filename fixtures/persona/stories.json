@@ -1,0 +1,70 @@
+{
+  "$schemaVersion": 2,
+  "note": "Daniel Nowak's STAR stories (fictional persona for the evals).",
+  "stories": [
+    {
+      "id": "dashboard-load-time",
+      "title": "Cut the dashboard's first load from 6.1 s to 1.8 s",
+      "themes": [
+        "performance"
+      ],
+      "stack": [
+        "React",
+        "Next.js",
+        "TypeScript"
+      ],
+      "lang": "en",
+      "situation": "At ElevenLabs the customer dashboard took 6.1 seconds to show anything on a typical laptop, and support tickets about it grew every week.",
+      "task": "I owned the frontend of the dashboard and was asked to make the first load fast without a rewrite.",
+      "action": "I measured with Lighthouse and the browser profiler, split the bundle by route, moved the usage charts behind a lazy boundary, and rendered the account summary on the server with Next.js.",
+      "result": "First load dropped from 6.1 s to 1.8 s, the bundle shrank by 58%, and the slow-dashboard tickets stopped within a month.",
+      "short": "Cut a React dashboard's first load from 6.1 s to 1.8 s by route splitting, lazy charts and server rendering.",
+      "shortReviewed": true
+    },
+    {
+      "id": "design-system-adoption",
+      "title": "Got four teams onto one component library",
+      "themes": [
+        "influence",
+        "ownership"
+      ],
+      "stack": [
+        "React",
+        "Storybook"
+      ],
+      "lang": "en",
+      "situation": "Four product teams at ElevenLabs each kept their own buttons, modals and form fields, and the same bug was fixed four times.",
+      "task": "I proposed a shared library and had to win over teams that were happy with their own components.",
+      "action": "I built the first ten components in Storybook with the most-used variants, paired with one engineer from each team to migrate a real screen, and ran a short weekly review where teams could request changes.",
+      "result": "Within two quarters all four teams used the library for new screens and duplicated UI bugs dropped to near zero.",
+      "short": "Led four product teams onto one Storybook component library by pairing on real migrations.",
+      "shortReviewed": true
+    },
+    {
+      "id": "api-contract-disagreement",
+      "title": "Settled a disagreement about pagination in the booking API",
+      "themes": [
+        "conflict"
+      ],
+      "stack": [
+        "NestJS",
+        "PostgreSQL"
+      ],
+      "lang": "en",
+      "situation": "At Blueport Labs a backend colleague and I disagreed on cursor versus offset pagination for the booking API, and the frontend work was blocked.",
+      "task": "I needed an answer both of us could live with before the sprint ended.",
+      "action": "I wrote both versions against a copy of production data, measured them on the slowest query, and brought the numbers to a short meeting instead of arguments.",
+      "result": "Cursor pagination was four times faster on large accounts; my colleague agreed, and we shipped it in the same sprint.",
+      "short": "Ended a pagination dispute by benchmarking both options on real data; cursor won and shipped that sprint.",
+      "shortReviewed": true
+    }
+  ],
+  "about": [
+    {
+      "id": "about-short",
+      "title": "About me (short)",
+      "lang": "en",
+      "text": "Senior frontend-leaning full-stack engineer in Kraków with six years of React and TypeScript, currently building the customer dashboard at ElevenLabs. I like making slow things fast and shared code that several teams can rely on."
+    }
+  ]
+}
