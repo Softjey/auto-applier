@@ -13,10 +13,10 @@ graders:
   - type: tool_used
     name: setup-data-repo-fired
     tool: Skill
-    input_match: 'auto-applier:setup-data-repo"'
+    input_match: 'job-search-agent:setup-data-repo"'
   - type: tool_used
     name: no-apply-to-jobs
     tool: Skill
-    input_match: 'auto-applier:apply-to-jobs"'
+    input_match: 'job-search-agent:apply-to-jobs"'
     min: 0
     max: 0

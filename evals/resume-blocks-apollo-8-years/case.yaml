@@ -15,7 +15,7 @@ graders:
   - type: tool_used
     name: resume-blocks-fired
     tool: Skill
-    input_match: 'career-profile:resume-blocks"'
+    input_match: 'job-search-agent:resume-blocks"'
   - type: regex
     name: no-years-in-summary
     pattern: '\*\*Summary:\*\*(?:(?!\*\*Skills)[\s\S])*?\d+\+?\s*(?:years|yrs)'

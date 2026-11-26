@@ -13,10 +13,10 @@ graders:
   - type: tool_used
     name: profile-interview-fired
     tool: Skill
-    input_match: 'auto-applier:profile-interview"'
+    input_match: 'job-search-agent:profile-interview"'
   - type: tool_used
     name: no-import-stories
     tool: Skill
-    input_match: 'auto-applier:import-stories"'
+    input_match: 'job-search-agent:import-stories"'
     min: 0
     max: 0

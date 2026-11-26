@@ -15,7 +15,7 @@ graders:
   - type: tool_used
     name: resume-blocks-fired
     tool: Skill
-    input_match: 'career-profile:resume-blocks"'
+    input_match: 'job-search-agent:resume-blocks"'
   - type: regex
     name: title-drops-java
     pattern: '\*\*Title:\*\*\s*Senior Full Stack Engineer\s*\n'

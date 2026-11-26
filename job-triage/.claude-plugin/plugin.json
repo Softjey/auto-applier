@@ -1,6 +1,0 @@
-{
-  "name": "job-triage",
-  "version": "0.0.0",
-  "description": "Triage vacancies from onetap.work and LinkedIn against the candidate's criteria.",
-  "skills": "./.claude/skills/"
-}

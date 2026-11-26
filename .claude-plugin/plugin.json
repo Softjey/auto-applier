@@ -1,6 +1,6 @@
 {
-  "name": "auto-applier",
+  "name": "job-search-agent",
   "version": "0.0.0",
-  "description": "Apply to saved OneTap.Work vacancies from the user's own profile, never inventing an answer.",
+  "description": "Triage vacancies against the candidate's criteria, tailor a resume to each, and apply from the user's own profile, never inventing an answer.",
   "skills": "./.claude/skills/"
 }

@@ -13,4 +13,4 @@ graders:
   - type: tool_used
     name: organize-fired
     tool: Skill
-    input_match: 'career-profile:organize-by-status"'
+    input_match: 'job-search-agent:organize-by-status"'

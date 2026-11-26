@@ -13,10 +13,10 @@ graders:
   - type: tool_used
     name: resume-pdf-fired
     tool: Skill
-    input_match: 'career-profile:resume-pdf"'
+    input_match: 'job-search-agent:resume-pdf"'
   - type: tool_used
     name: no-render
     tool: Skill
-    input_match: 'career-profile:resume-render"'
+    input_match: 'job-search-agent:resume-render"'
     min: 0
     max: 0

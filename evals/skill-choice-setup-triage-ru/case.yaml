@@ -13,10 +13,10 @@ graders:
   - type: tool_used
     name: setup-fired
     tool: Skill
-    input_match: 'job-triage:setup-job-triage"'
+    input_match: 'job-search-agent:setup-job-triage"'
   - type: tool_used
     name: no-full-triage
     tool: Skill
-    input_match: 'job-triage:job-triage"'
+    input_match: 'job-search-agent:job-triage"'
     min: 0
     max: 0

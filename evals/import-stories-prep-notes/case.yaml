@@ -15,7 +15,7 @@ graders:
   - type: tool_used
     name: import-stories-fired
     tool: Skill
-    input_match: 'auto-applier:import-stories"'
+    input_match: 'job-search-agent:import-stories"'
   - type: tool_used
     name: validated
     tool: Bash

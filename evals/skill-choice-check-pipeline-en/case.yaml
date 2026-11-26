@@ -13,10 +13,10 @@ graders:
   - type: tool_used
     name: applications-check-fired
     tool: Skill
-    input_match: 'job-triage:applications-check"'
+    input_match: 'job-search-agent:applications-check"'
   - type: tool_used
     name: no-full-triage
     tool: Skill
-    input_match: 'job-triage:job-triage"'
+    input_match: 'job-search-agent:job-triage"'
     min: 0
     max: 0
