@@ -17,15 +17,15 @@ It is a set of agent skills (Claude Code, Codex) plus two small tools:
 ## Your data stays out of this repo
 
 This repo holds code only. Your profile, answers, salary expectations, run history and
-recordings live in a **separate private repo** next to it (`../auto-applier-data`). Never
-give that repo a public remote.
+recordings live in a **separate private repo**, reached as `data/` at the root of this one
+(cloned there or symlinked; git-ignored). Never give that repo a public remote.
 
 ## Getting started
 
 ```sh
-mkdir applier && cd applier            # a workspace for this repo and your data repo
 git clone https://github.com/Softjey/auto-applier.git auto-applier
-claude                                 # or: codex — open it in the workspace
+cd auto-applier
+claude                                 # or: codex
 ```
 
 Then ask: **"set me up"** — the `setup-data-repo` skill creates your private data repo,
@@ -34,7 +34,7 @@ agent whatever you have about your work (interview prep, notes, CV, a pasted cha
 nothing, and it interviews you) and `import-stories` turns it into the STAR stories
 that essay questions are answered from. After that:
 
-- *"triage my saved jobs"* → `triage/<date>.md` in your data repo, grouped by how each
+- *"triage my saved jobs"* → `data/triage/<date>.md`, grouped by how each
   application has to be submitted;
 - *"apply to my saved jobs"* → the four-phase apply run.
 
@@ -75,8 +75,7 @@ that essay questions are answered from. After that:
 
 ## Where things are found
 
-Scripts locate your data repo via `$APPLIER_DATA_DIR`, then the path in `.data-dir`, then
-`../auto-applier-data`. See `CLAUDE.md` for the full map.
+Your data is always `data/` at the root of this repo. See `CLAUDE.md` for the full map.
 
 ## Security
 

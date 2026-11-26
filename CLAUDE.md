@@ -10,7 +10,8 @@ It runs under Claude Code and under Codex; see § Running under either agent.
 ## Two repositories: code (here) and data (private)
 
 **This repo contains no personal data and can be public.** Everything about one
-person lives in a separate, private **data repo** (default: `../auto-applier-data`):
+person lives in a separate, private **data repo**, reached as `data/` at the root of
+this repo (a clone, or a symlink; git-ignored):
 
 | In the data repo | What it is |
 | --- | --- |
@@ -21,14 +22,14 @@ person lives in a separate, private **data repo** (default: `../auto-applier-dat
 | `triage/<date>.md` | one readable report per triage of the SAVED queue |
 | `runs/<date>-<slug>/` | audit trail of each apply run — per vacancy `answers.md`, `salary.json`, the CV sent, screen recordings; plus `summary.md` |
 
-Recommended layout: one workspace folder holding both repos side by side
-(`<workspace>/auto-applier/`, `<workspace>/auto-applier-data/`), with Claude Code
-opened in the workspace — sessions and memory then belong to the workspace, and the
-default `../auto-applier-data` just works. Scripts find the data repo through `scripts/lib/data-dir.mjs`: `$APPLIER_DATA_DIR`,
-then the path in `<repo>/.data-dir`, then `../auto-applier-data`. **No data repo
-yet → run the `setup-data-repo` skill** (it scaffolds one from `templates/data-repo/`
-and hands over to `profile-interview`). Bare paths like `profile.json` or
-`runs/…` in the skills are relative to the data repo.
+Open Claude Code at the root of this repo. Skills name data files by their literal
+path (`data/profile.json`, `data/runs/…`); scripts reach the same place through
+`scripts/lib/data-dir.mjs` (`$APPLIER_DATA_DIR` overrides it, for tests only). A
+symlinked `data` needs its real folder in `.claude/settings.local.json` →
+`permissions.additionalDirectories`, which `init-data-repo.mjs --dir` writes. Search
+inside it with an explicit `data/`: `grep -r X .` does not follow the symlink.
+**No `data/` yet → run the `setup-data-repo` skill** (it scaffolds one from
+`templates/data-repo/` and hands over to `profile-interview`).
 
 Rules that follow from the split:
 
@@ -77,8 +78,8 @@ second agent reads the same files instead of a fork of them.
 
 ## Structure
 
-- `.claude/skills/setup-data-repo/` — creates the user's private data repo from
-  `templates/data-repo/` (`scripts/init-data-repo.mjs`) and points this repo at it.
+- `.claude/skills/setup-data-repo/` — creates the user's private data repo as `data/`
+  from `templates/data-repo/` (`scripts/init-data-repo.mjs`), or links `data/` to one elsewhere.
 - `.claude/skills/profile-interview/` — fills/updates `profile.json` via a structured
   interview. Run before the first real apply run.
 - `.claude/skills/import-stories/` — builds/updates `stories.json` from whatever the
@@ -98,7 +99,7 @@ second agent reads the same files instead of a fork of them.
   (parallel) → read every form (serial, read-only) → resolve, park what needs the user →
   fill and submit (serial). Where the user's Chrome shows the Simplify Copilot panel
   on a form, phases 2–4 collapse into one pass (`SKILL.md` § Simplify fast path).
-  - `scripts/lib/data-dir.mjs` — where the data repo is; every script goes through it.
+  - `scripts/lib/data-dir.mjs` — the path of `data/` for the scripts; every script goes through it.
   - `scripts/lib/qa-match.mjs` — the one matcher every script shares.
   - `scripts/lib/field-labels.mjs` — English form vocabulary, plus the merge of
     `apply-config.json`'s locale packs on top of it.

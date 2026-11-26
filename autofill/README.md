@@ -19,8 +19,7 @@ page ── content script ──▶ background worker ──▶ localhost serve
   extension never answer the same question differently. Also serves the tailored
   CVs from `<resumeRepo>/out/SAVED/`.
 - Your `profile.json` and `apply-config.json` are not in this repo: they live in your
-  private data repo, found through `$APPLIER_DATA_DIR`, the `.data-dir` file at the
-  repo root, or `../auto-applier-data` (see the root `README.md`).
+  private data repo, `data/` at the repo root (see the root `README.md`).
 - `packages/extension` — WXT + React (panel in a Shadow DOM). `src/core` is
   site-agnostic (scan → plan → execute); `src/adapters` holds one file per ATS.
 

@@ -210,9 +210,9 @@ rather than asserting it.
 
 ### 5. Write the output
 
-One file: **`$DATA/triage/<today's date>.md`**, where `$DATA` is the user's private
-data repo (resolve it with `lib/data-dir.mjs`, see `apply-to-jobs` § Configuration).
-Triage is a report, not a run, so it never goes under `runs/`. There is no JSON
+One file: **`data/triage/<today's date>.md`**, in the user's private data repo
+(`data/` at the repo root, see `apply-to-jobs` § Configuration).
+Triage is a report, not a run, so it never goes under `data/runs/`. There is no JSON
 twin: nothing consumes one, and a second copy only drifts. A later run reads the
 report or simply re-derives the group.
 

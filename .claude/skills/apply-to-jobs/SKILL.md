@@ -14,14 +14,14 @@ mode), never leave OneTap.Work's tracking out of sync with what you actually did
 ## The one rule that matters more than any other
 
 **If a form asks something factual or personal and the exact answer is not
-already in `profile.json` or `stories.json` — you do not answer it. Every
+already in `data/profile.json` or `data/stories.json` — you do not answer it. Every
 time. No exceptions, no "it's probably fine", no inferring from context, no
 reusing an answer from a different country because it "should be similar".**
 What you do instead is **park that vacancy and move on** (§ Parking a vacancy),
 and the question goes to the user in the end-of-run action list. You never
 block the whole run on one vacancy's missing fact.
 Being 90% confident is not the same as knowing. The whole point of
-`profile.json`, `qa[]` and `stories.json` is that this agent's answers are
+`data/profile.json`, `qa[]` and `data/stories.json` is that this agent's answers are
 always either verified facts or fresh answers from the user — never guesses.
 See Phase 3 for exactly how matching and escalation work.
 
@@ -41,24 +41,20 @@ no-band baseline lives in `profile.compensation.strategy`. See § Money.
 
 ## Configuration
 
-**This repo holds no personal data.** Everything about the person — `profile.json`,
-`stories.json`, `credentials.json`, `apply-config.json`, and the audit trail in
-`runs/` and `triage/` — lives in their private **data repo**, `$DATA`. The scripts
-find it on their own (`$APPLIER_DATA_DIR`, then the path in `.data-dir`, then
-`../auto-applier-data`); resolve it yourself once with
-`node -e 'import("./.claude/skills/apply-to-jobs/scripts/lib/data-dir.mjs").then(m=>console.log(m.requireDataDir()))'`.
-Every bare path in this skill — `profile.json`, `runs/<run-id>/…`, `stories.json` — is
-relative to `$DATA`. If there is no data repo yet, stop and run the
+**This repo holds no personal data.** Everything about the person — `data/profile.json`,
+`data/stories.json`, `data/credentials.json`, `data/apply-config.json`, and the audit trail in
+`data/runs/` and `data/triage/` — lives in their private **data repo**, reached as
+`data/` at the root of this repo (a clone, or a symlink allowed once in
+`.claude/settings.local.json`). Every path in this skill that starts with `data/` is
+inside it; the scripts read the same place. If `data/` is missing, stop and run the
 **`setup-data-repo`** skill first.
 
-**Session folder.** Claude Code must be opened in the workspace folder that holds both
-repos, not inside the code repo: the browser's `file_upload` only reads files under the
-session's own directories, so from inside the code repo it cannot see `$DATA/runs/…`.
-If the working directory does not contain the data repo, stop and ask the user to
-restart the session from the workspace folder.
+**Session folder.** Open Claude Code at the root of this repo: the browser's
+`file_upload` only reads files under the session's own directories, and `data/runs/…`
+is one of them.
 
 Everything installation-specific — absolute paths, the resume filename, and the
-non-English vocabulary of the local job market — lives in **`$DATA/apply-config.json`**,
+non-English vocabulary of the local job market — lives in **`data/apply-config.json`**,
 never in this skill. Read it at the start of a run.
 
 ```
@@ -74,9 +70,9 @@ do not guess a path and do not hardcode one back into this skill. How the resume
 repo builds, names and stores resumes is its own business and lives only there —
 this skill must not restate it.
 
-Run folders: `$DATA/runs/<date>-<slug>/`, one folder per vacancy inside it named
+Run folders: `data/runs/<date>-<slug>/`, one folder per vacancy inside it named
 `<Company>_<vacancyId>`, plus the run's `summary.md`. Triage reports are not runs —
-they go to `$DATA/triage/<date>.md` (see `apply-method-triage`).
+they go to `data/triage/<date>.md` (see `apply-method-triage`).
 
 Paths inside this repo:
 
@@ -114,7 +110,7 @@ below.
   (found 2026-10-06: a Workday login was never offered "Save password?" because the server
   was down). A small round **!** bottom-left on a page is the same symptom — re-run the check
   if it shows up mid-run.
-- If `profile.json`'s structured sections (`personal`, `links`,
+- If `data/profile.json`'s structured sections (`personal`, `links`,
   `workAuthorization`, `location`, `compensation`, `availability`) are
   mostly `null`, stop and tell the user to run the `profile-interview`
   skill first — don't try to muddle through with an empty profile.
@@ -167,7 +163,7 @@ A run does not stop to ask the user something about one vacancy while other
 vacancies could be worked on. When a vacancy needs something from the user, **park
 it and start the next one immediately**:
 
-- a required fact or answer that is not in `profile.json` / `qa[]` / `stories.json`
+- a required fact or answer that is not in `data/profile.json` / `qa[]` / `data/stories.json`
   (an `unknown` field, a `review` you are not convinced about, a required "why
   this company" box whose reason is the user's pick);
 - an essay draft that needs the user's pick among options (§ Essays and "tell us about"
@@ -191,8 +187,8 @@ never the whole form:
    from `qa-zyefnz` on one form is not "ask" on the next).
 2. The form itself — a dropdown the extension could not match (country, English level,
    currency) is a list *you* read and choose from, not a question for the user.
-3. The facts files — `profile.json`, the base CV (clients, countries,
-   employers — wherever the user's resume setup keeps it) and `stories.json`.
+3. The facts files — `data/profile.json`, the base CV (clients, countries,
+   employers — wherever the user's resume setup keeps it) and `data/stories.json`.
 4. A personal-reason or experience box (why leaving / looking, what you want next) is
    drafted from the facts you have (`availability`, `currentEmploymentStatus`, CV) and
    goes to the user as 2–3 distinct drafts to pick from — not as a blank question and not
@@ -200,13 +196,13 @@ never the whole form:
    ("three sites / tools / products you admire and why") and a pick-one question about
    the user's own approach or preferences (how they handle difficulties, what kind of
    job they want) are the same: offer 2–3 different picks or texts, grounded in the CV and
-   `stories.json` (an e-commerce agency → the checkout and cart work), recommended one
+   `data/stories.json` (an e-commerce agency → the checkout and cart work), recommended one
    first, for the user to choose from.
    A box the form calls optional on first load but rejects as required on submit is
    required — draft it then, do not park the vacancy on it blank.
 
 Parking means: **do not submit**; leave the vacancy `SAVED`; record in its note
-(and in `runs/<run-id>/<Company>_<vacancyId>/pending.md`) exactly what is needed —
+(and in `data/runs/<run-id>/<Company>_<vacancyId>/pending.md`) exactly what is needed —
 the question worded as the form words it, or the action, plus every value already
 prepared so the user finishes in one pass; leave a filled tab open only where the
 form cannot be rebuilt (a CAPTCHA challenge), and say so. Then carry on with the next vacancy.
@@ -243,7 +239,7 @@ it must read.
 4. An optional essay stays empty. A "why do you want to work here" box keeps its own
    rule (Phase 4 step 3): the reason is the user's pick.
 
-### Where an answer from the user is recorded: `qa[]` or `stories.json`
+### Where an answer from the user is recorded: `qa[]` or `data/stories.json`
 
 Whenever the user gives you an answer — to a parked question, in a review, on their own
 initiative — decide where it lives **before** you write it down:
@@ -251,12 +247,12 @@ initiative — decide where it lives **before** you write it down:
 | The answer is… | It goes to |
 | --- | --- |
 | a fact, a standing rule, a yes/no, a number, a short phrase, something about one employer | `qa[]` — `node $PROFILE_QA add …` |
-| **an event**: a project they built, a problem they solved, a conflict, a failure, "what are you proud of", "tell us about a time…" — anything with a situation and what they did about it | **`stories.json`** — follow the `import-stories` skill (S/T/A/R, `themes`, `stack`, a `short` version, `stories.mjs validate`) |
-| a "tell me about yourself" / bio text | `stories.json` → `about[]` |
+| **an event**: a project they built, a problem they solved, a conflict, a failure, "what are you proud of", "tell us about a time…" — anything with a situation and what they did about it | **`data/stories.json`** — follow the `import-stories` skill (S/T/A/R, `themes`, `stack`, a `short` version, `stories.mjs validate`) |
+| a "tell me about yourself" / bio text | `data/stories.json` → `about[]` |
 
 Rules:
 
-- **All stories live in `stories.json`; `qa[]` holds only the simple answers.** A story
+- **All stories live in `data/stories.json`; `qa[]` holds only the simple answers.** A story
   is never stored as a `qa[]` answer, not even a short one — `profile-qa.mjs add`
   refuses a long `narrative` for this reason. If a question has both a yes/no and an
   example ("Do you have AI experience? Describe it"), `qa[]` gets the one-line "Yes,
@@ -296,7 +292,7 @@ A `qa[]` entry speaks in two voices, and the extension must never confuse them:
 When the queue is exhausted, hand the user **one action list, grouped by
 vacancy** (§ End-of-run action list). Whatever the user answers is recorded where
 § "Where an answer from the user is recorded" says (facts with
-`node $PROFILE_QA add ...`, stories in `stories.json`), and the parked vacancies are then resumed — at
+`node $PROFILE_QA add ...`, stories in `data/stories.json`), and the parked vacancies are then resumed — at
 Phase 4 if the form is still open or rebuilt from `form.json`, with the same
 approval mode.
 
@@ -360,7 +356,7 @@ not support.
    | 4 | web: levels.fyi for the company, then Glassdoor / justjoin.it / No Fluff Jobs for the same role, level and city | prefer this company at this level over a market average; keep the URL |
 
    Write the result — including "nothing" — to
-   `runs/<run-id>/<Company>_<vacancyId>/salary.json`, then:
+   `data/runs/<run-id>/<Company>_<vacancyId>/salary.json`, then:
 
    ```bash
    node $SALARY_QUOTE --min=<n> --max=<n> --period=month|hour|year \
@@ -390,10 +386,10 @@ not support.
    `cd` into that repo.
    - Note the resume's folder name in that repo: it identifies the resume later
      (every PDF has the same filename) and goes into the OneTap note in Phase 4.
-   - Copy the PDF to `runs/<run-id>/<Company>_<vacancyId>/<config.resumeFileName>`.
+   - Copy the PDF to `data/runs/<run-id>/<Company>_<vacancyId>/<config.resumeFileName>`.
      **This copy is not optional**: it is the run's audit trail, and under
-     Claude in Chrome it is also where the upload tool reads from, provided the
-     session was opened in the workspace folder (§ Configuration, `$BROWSER_GUIDE`).
+     Claude in Chrome it is also where the upload tool reads from (§ Configuration,
+     `$BROWSER_GUIDE`).
      Every copy has the same filename, so check the path you copied from before
      uploading.
 
@@ -412,7 +408,7 @@ path handles the rest), in one managed tab:
    costs you every other open form, and so does closing a tab (§ Tabs: never close one).
 2. Decline non-essential cookies.
 3. Run `$EXTRACT_FORM` through the run-JS-in-the-page capability and save what
-   it returns to `runs/<run-id>/<Company>_<vacancyId>/form.json`. It returns a
+   it returns to `data/runs/<run-id>/<Company>_<vacancyId>/form.json`. It returns a
    **compact digest**: one entry per real field, honeypots counted rather than
    listed, labels and options clipped. A long form comes back **paged** — each
    chunk ends on a field boundary and carries `next`; call `window.__digest(next)`
@@ -438,7 +434,7 @@ on to Phase 4; vacancies with an `unknown` are **parked** (§ Parking a vacancy)
 and their questions go into the end-of-run action list.
 
 ```bash
-node $RESOLVE_FIELDS $DATA/runs/<run-id>/*/form.json
+node $RESOLVE_FIELDS data/runs/<run-id>/*/form.json
 ```
 
 It sorts every field into `resolved` (structured profile value or an `exact`
@@ -446,7 +442,7 @@ qa[] hit), `narrative`, `runtime`, `skip`, `review` and `unknown`.
 
 Label matching is deliberately split in two: `scripts/lib/field-labels.mjs`
 holds English vocabulary only, and every other language comes from
-`apply-config.json`'s `formVocabulary`, merged on top. When a form escalates a
+`data/apply-config.json`'s `formVocabulary`, merged on top. When a form escalates a
 field you can see is just a known question in another language, the fix is to
 add the phrasing to the config — not to the skill.
 
@@ -520,7 +516,7 @@ answers prepared in advance (§ Parking a vacancy), recommended first.
 
 Once the user answers, record it where
 § "Where an answer from the user is recorded" says — facts with `node $PROFILE_QA add ...`,
-stories in `stories.json` — and resume the parked vacancies.
+stories in `data/stories.json` — and resume the parked vacancies.
 
 ### Applier MCP fast path — the extension does it, no browser tool
 
@@ -542,7 +538,7 @@ Phase 1 is unchanged (liveness, band, tailored resume). Then per vacancy:
 1. `autofill_open_and_fill({url: vacancy.link, cv: "<vacancyId>", band})` — `cv` is part of
    the tailored CV's folder name under `out/SAVED/` (the vacancy id is unique); `band` is the
    published salary band, omitted when there is none. It opens a background tab, presses the
-   offer's Apply (retrying a swallowed click), fills from `profile.json`/`qa[]`, attaches the
+   offer's Apply (retrying a swallowed click), fills from `data/profile.json`/`qa[]`, attaches the
    CV and answers with `filled`, `manual`, `failed`, `choices`, `belowFloor`, `fields`, `token`.
 2. Read the answer, not a screenshot:
    - `formOpen: false` and no `external` → the offer is dead or has no form: close it out
@@ -559,7 +555,7 @@ Phase 1 is unchanged (liveness, band, tailored resume). Then per vacancy:
    - `choices` → a level or date the extension mapped onto the form's own scale; show them
      in the approval pause.
 3. `autofill_read_form({tab})` → every control as the page shows it. Check it against
-   `profile.json` and `qa[]` once; it is also the source of `answers.md` (Source column
+   `data/profile.json` and `qa[]` once; it is also the source of `answers.md` (Source column
    `Applier`).
 4. **Approval pause** (§ Approval mode) exactly as everywhere else: the user sees the filled
    fields, the CV, the `choices` and the salary decision *before* anything is sent.
@@ -575,7 +571,7 @@ Phase 1 is unchanged (liveness, band, tailored resume). Then per vacancy:
    - `signal: "none"` → **do not press again.** Look at the page; it may be slow, or have
      rejected the form. Record nothing until you know.
 6. `autofill_close_tab`. Evidence (`answers.md`, and a screenshot if the run asks for one)
-   goes in `runs/<run-id>/<Company>_<vacancyId>/` as before.
+   goes in `data/runs/<run-id>/<Company>_<vacancyId>/` as before.
 
 Leave `autofill_submit` out of any "always allow" setting: the permission prompt on that one
 tool is the user's own last gate, on top of the approval mode.
@@ -614,7 +610,7 @@ Per vacancy:
    overwritten or doubled (a LinkedIn URL typed into a field it was still
    filling came out twice; a location and a checkbox you set were reset).
 4. **Read the whole form back once** — `$EXTRACT_FORM` or one run-JS dump of
-   every field's name, label and value — and check it against `profile.json`
+   every field's name, label and value — and check it against `data/profile.json`
    and `qa[]`. Simplify fills from **its own profile, not ours**, so every value
    it wrote is a claim to verify, not a fact. What it has actually got wrong:
    - **A factual yes/no answered wrong**: "Are you authorized to work in the
@@ -629,7 +625,7 @@ Per vacancy:
      `mazowieckie`). Replace with the profile/qa answer, or clear an optional
      field that has no true value.
    - **No résumé, ever** — its profile holds none. Upload the tailored PDF from
-     `runs/` yourself, every time.
+     `data/runs/` yourself, every time.
    - **Screening questions left untouched** ("needs review" in the panel):
      salary, sponsorship status, languages, consents, free text. These are
      always yours.
@@ -639,7 +635,7 @@ Per vacancy:
    required free text per the rules in step 3. **Never use Simplify's
    "Generate with AI" / "Tailor Resume" buttons** — its prose is not the user's
    voice and its facts are not ours.
-6. **An answer that is not in `profile.json`/`qa[]` parks this vacancy, not
+6. **An answer that is not in `data/profile.json`/`qa[]` parks this vacancy, not
    the run** (§ Parking a vacancy). Leave the form unsubmitted, set the note on
    `SAVED` naming the exact question(s), move on, and they go into the
    end-of-run action list. Same for a required "why this company" box (the
@@ -661,7 +657,7 @@ fields, not from reading less.
 
 Per vacancy, following its ATS file:
 
-1. Fill from the Phase 3 report. Upload the PDF from `runs/`.
+1. Fill from the Phase 3 report. Upload the PDF from `data/runs/`.
    **Verify writes on hostile forms**: after setting a value, read it back by
    its real `name`. Anti-autofill honeypots accept writes and drop them.
    **Verify what the page shows, not what the DOM holds.** A framework widget
@@ -699,7 +695,7 @@ Per vacancy, following its ATS file:
      wants what they worked on and what they did, not the stack list. Re-read the
      question after drafting.
    - **Relevant = matches the vacancy's stack**, not the biggest or newest job.
-     `profile.json.projects[]` says which project is the example for which
+     `data/profile.json.projects[]` says which project is the example for which
      stack.
    - **Full sentences, first person, natural — like telling a friend what you
      do, at the English level in `profile.languages`.** Plain words, concrete detail (what they did, how long).
@@ -732,7 +728,7 @@ Per vacancy, following its ATS file:
      its selling points ("used to taking a problem from analysis to delivery"),
      its framing ("React is the side I support"), or meta-sentences ("which
      matches this role"). No editorial tail on a factual answer — asked for the
-     stack, list the stack and stop. Draft from `profile.json`, `stories.json`
+     stack, list the stack and stop. Draft from `data/profile.json`, `data/stories.json`
      and the tailored resume, then re-read with the posting closed.
    - **No salary and no links** in a box that did not ask for them; they are in
      the CV.
@@ -741,12 +737,12 @@ Per vacancy, following its ATS file:
      `Note` line is for the OneTap note, never for the form.
 
 4. Draft `narrative` fields — 1–2 sentences, grounded only in the tailored
-   resume, `profile.json` and `stories.json`, no new claims. Flag every drafted
+   resume, `data/profile.json` and `data/stories.json`, no new claims. Flag every drafted
    sentence in the run summary. A question naming what the user *built* is not
-   narrative: search `stories.json` first (`node $STORIES find "<the question>"`),
+   narrative: search `data/stories.json` first (`node $STORIES find "<the question>"`),
    and only ask if nothing there really fits.
 
-   `stories.json` holds the user's own STAR stories (each tagged with `themes`
+   `data/stories.json` holds the user's own STAR stories (each tagged with `themes`
    and `stack`) and `about[]` texts, built by the `import-stories` skill. It is
    what makes "describe the hardest problem you solved" answerable without
    inventing anything: pick the story that genuinely fits, compress it to the
@@ -770,7 +766,7 @@ Per vacancy, following its ATS file:
    **screenshot-recording capability** in `$BROWSER_GUIDE` and land the result at
 
    ```
-   runs/<run-id>/<Company>_<vacancyId>/filled-form.gif
+   data/runs/<run-id>/<Company>_<vacancyId>/filled-form.gif
    ```
 
    Then check nothing required is blank.
@@ -780,7 +776,7 @@ Per vacancy, following its ATS file:
    form with no screenshots is a claim with no evidence — if the capture failed,
    say so in the run summary rather than letting the gap pass silently.
 6. **Write the answer sheet — every question, every answer.** Before submitting,
-   save `runs/<run-id>/<Company>_<vacancyId>/answers.md`: one row per control the
+   save `data/runs/<run-id>/<Company>_<vacancyId>/answers.md`: one row per control the
    form showed, in the order it showed them, with the question exactly as the
    page worded it and the answer exactly as submitted.
 
@@ -813,7 +809,7 @@ Per vacancy, following its ATS file:
 8. Submit. If the form carries a captcha, `autofill_captcha` first, then Submit straight
    away (§ CAPTCHAs). Wait for a real success indicator — the one named in the ATS file,
    not "the button stopped being clickable". Record it the same way, as
-   `runs/<run-id>/<Company>_<vacancyId>/submitted.gif`, so the run holds both
+   `data/runs/<run-id>/<Company>_<vacancyId>/submitted.gif`, so the run holds both
    what was sent and the page that confirmed it.
 9. `update_application_status({vacancyId, status: "APPLIED", notes: …})` —
    **immediately after the success signal, before touching the next vacancy.**
@@ -857,7 +853,7 @@ Per vacancy, following its ATS file:
    user would want to see without opening a file (a hard requirement the profile
    does not meet). Anything longer belongs in the sheet.
 
-   `runs/` is version-controlled in the data repo, so the sheet is as durable as
+   `data/runs/` is version-controlled in the data repo, so the sheet is as durable as
    the note — but the note is the only copy that lives off this laptop, which is
    why the five fields above still stay in it.
 10. **If you cannot actually apply**, never set `APPLIED`, and split the two
@@ -919,7 +915,7 @@ whether or not the link was clicked.
 Workday, Avature and others will not take an application at all without a candidate
 account. A sign-in or a sign-up is a routine step of the run, finished by you through the
 **Applier Passwords** extension — it never waits for the user. The extension is the user's own
-password manager: its logins live in `credentials.json` in the data repo, it fills them on
+password manager: its logins live in `data/credentials.json` in the data repo, it fills them on
 **any** https page (not just the supported ATSes), and it saves a login after a successful
 sign-in. Its panel sits bottom-left of the page (`applier-passwords`, § `browser/README.md`).
 The user asked for this on 2026-10-01; it replaced the older rule that the user sets their own
@@ -1058,7 +1054,7 @@ the tab to the user, with the vacancy left un-APPLIED:
   marketing, newsletters — even when it is pre-ticked by the page. Verify it is
   still unticked immediately before submitting; a mis-aimed click on a
   reflowing page opts the user into something they never asked for.
-- Enter data that is not in `profile.json`, including "obvious" fields like a
+- Enter data that is not in `data/profile.json`, including "obvious" fields like a
   street address or postal code.
 
 ### Tabs: do not leave finished ones behind
@@ -1084,7 +1080,7 @@ it as the only copy of the work: everything prepared goes into `pending.md` and
 Summarize, with reasons: applied; still `SAVED` because something blocks them
 and what the user has to do; and closed as `NOT_INTERESTED` because the posting
 was gone — name those explicitly, they are the ones the user never sees again.
-Say where the per-vacancy record is (`runs/<run-id>/<Company>_<vacancyId>/` —
+Say where the per-vacancy record is (`data/runs/<run-id>/<Company>_<vacancyId>/` —
 `answers.md` and `filled-form.gif`) and name any vacancy whose answer sheet or
 capture is missing or incomplete.
 List the figure quoted for each application and where its band came from, list
@@ -1144,8 +1140,8 @@ OneTap.Work's own `status`/`notes` (via `update_application_status` and
 `get_my_applications`) is the **only** source of truth for "what's been
 applied to." This repo keeps no separate ledger — a second copy of that
 state would just be a second place for it to drift out of sync with the
-first. `$DATA/runs/<run-id>/` holds only an audit trail —
+first. `data/runs/<run-id>/` holds only an audit trail —
 screenshots, the answer sheet, the resume sent, a short summary — useful for
 seeing afterwards what an employer was told. Nothing in this skill's logic ever reads
-`runs/` to decide what's already been applied to; it always asks
+`data/runs/` to decide what's already been applied to; it always asks
 OneTap.Work.

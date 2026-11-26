@@ -5,7 +5,7 @@ description: Build or update the user's stories.json — the STAR stories and ab
 
 # Import stories
 
-`stories.json` (in the data repo) is what lets the apply run answer "describe the
+`data/stories.json` (in the data repo) is what lets the apply run answer "describe the
 hardest problem you solved" without inventing anything. This skill fills it. **The
 input can be anything and in any shape** — the agent does the sorting, there is no
 parser to feed.
@@ -31,8 +31,8 @@ Go through the material and put each piece into exactly one bucket:
 | --- | --- |
 | A real event from the user's work with a problem, what they did and what came of it | **`stories[]`** (step 3) |
 | "Tell me about yourself", an intro, a description of current roles — not tied to one event | **`about[]`** |
-| Years of experience, employers, skills, links, notice period, location | **not here** — `profile.json` / the resume (`profile-interview`) |
-| Salary, expectations, compensation | **not here, never** — `profile.json` compensation only |
+| Years of experience, employers, skills, links, notice period, location | **not here** — `data/profile.json` / the resume (`profile-interview`) |
+| Salary, expectations, compensation | **not here, never** — `data/profile.json` compensation only |
 | "Why <Company>", "my trajectory at <Company>", anything addressed to one employer | **drop** — it is that interview's script; "why us" is the user's pick per form |
 | Questions the user asks the recruiter, farewells, "next steps" | **drop** |
 | Drafts, scripts, translations, prompts to an AI, notes-to-self | **drop** |
@@ -40,9 +40,9 @@ Go through the material and put each piece into exactly one bucket:
 
 Tell the user what you dropped, in a short list, so nothing vanishes silently.
 
-**Also sweep `profile.json` `qa[]`** (`profile-qa.mjs list --grep=` / read the file):
+**Also sweep `data/profile.json` `qa[]`** (`profile-qa.mjs list --grep=` / read the file):
 entries of `kind: narrative`, or any answer that tells what happened, are stories filed
-in the wrong place. Pull the facts out into `stories.json` — including facts only the
+in the wrong place. Pull the facts out into `data/stories.json` — including facts only the
 `qa[]` answer carries (a download count, a team's name) — then `profile-qa.mjs remove <id>`
 the old entry, or, when the question also wants a plain yes/no, rewrite it to the
 one-line answer. `qa[]` ends up with facts, policies and short answers only. Tell the
@@ -113,7 +113,7 @@ proudest of at work?" and follow up.
 
 ## 5. Write, validate, report
 
-- **Updating**: read the existing `stories.json` first. Merge by `id`; never drop or
+- **Updating**: read the existing `data/stories.json` first. Merge by `id`; never drop or
   rewrite a story the user did not ask about. Show a diff-style summary before saving
   when you change an existing entry.
 - Write the file (Edit / Write — it is just JSON), then:
