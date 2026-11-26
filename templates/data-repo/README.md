@@ -17,5 +17,5 @@ notes live in the code repo; nothing in here is ever needed to read them.
 | `triage/<date>.md` | One readable report per triage of the SAVED queue. |
 | `runs/<run-id>/` | The audit trail of each apply run: per vacancy `answers.md`, `salary.json`, the CV that was sent, screen recordings; plus a `summary.md`. |
 
-The code repo finds this directory through `$APPLIER_DATA_DIR`, then the path
-in its `.data-dir` file, then `../auto-applier-data`.
+The code repo reads this directory as `data/` at its root: clone it there, or
+make `data` a symlink to it.
