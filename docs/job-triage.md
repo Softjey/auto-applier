@@ -6,7 +6,7 @@ the copies of one job that several boards serve, has an agent read every full
 description against **your own** written criteria, and writes each verdict back with a
 reason. It never decides from a title.
 
-It is a set of agent skills (Claude Code, Codex) plus a few small Python scripts:
+It is a set of Claude Code skills plus a few small Python scripts:
 
 | | |
 | --- | --- |
@@ -15,7 +15,7 @@ It is a set of agent skills (Claude Code, Codex) plus a few small Python scripts
 | `.claude/skills/applications-check/` | is this job already known: duplicated in the batch, or already in your pipeline |
 | `.claude/skills/setup-job-triage/` | creates your private data repo and walks you through filling it |
 | `templates/data-repo/` | the skeleton of that data repo |
-| `tests/` | pytest via `uv`, no network |
+| `.claude/skills/*/tests/` | pytest via `uv`, no network |
 | `evals/`, `fixtures/persona/` | agent evals: real runs of the skills against a fictional candidate and a mocked onetap |
 
 ## Your data stays out of this repo
@@ -48,9 +48,9 @@ keeper dropped as already known is reported to you, never dropped silently.
 ## Getting started
 
 ```sh
-git clone <this repo's URL> job-triage
-cd job-triage
-claude                                 # or: codex
+git clone https://github.com/Softjey/job-search-agent.git
+cd job-search-agent
+claude
 ```
 
 Then ask: **"set me up"**. The `setup-job-triage` skill creates your private data repo
@@ -64,13 +64,13 @@ LinkedIn search from the OneTap saved search. After that:
 Without an agent, create the data repo yourself and fill `criteria.md` by hand:
 
 ```sh
-python3 .claude/skills/job-triage/init_data_repo.py [--dir PATH]
+node .claude/skills/apply-to-jobs/scripts/init-data-repo.mjs [--dir=PATH]
 ```
 
 ## Requirements
 
 - Python 3. Standard library only, nothing to install.
-- Claude Code or Codex.
+- Claude Code.
 - A [OneTap.Work](https://onetap.work) account with its MCP server connected. It is the
   source of the `onetap` feed, the place keepers are recorded as custom vacancies, and
   what the applications check compares against. Collecting from LinkedIn alone does not

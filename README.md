@@ -1,31 +1,32 @@
-# auto-applier
+# job-search-agent
 
-Applies to the jobs you saved on [OneTap.Work](https://onetap.work) for you: tailors a
-resume to each vacancy, fills the application form in a real browser, and records what
-was sent. It **never invents an answer** — every fact on a form comes from your own
-`profile.json`, and anything it does not know it asks you.
+Your job search, run by an agent: it sorts new vacancies from [OneTap.Work](https://onetap.work)
+and LinkedIn against your own criteria, tailors a resume to each one you keep, and applies
+for you in a real browser, recording what was sent. It **never invents an answer** — every
+fact on a form comes from your own `profile.json`, and anything it does not know it asks you.
 
-It is a set of agent skills (Claude Code, Codex) plus two small tools:
+It is a set of Claude Code skills plus two small tools:
 
 | | |
 | --- | --- |
-| `.claude/skills/` | the skills: `setup-data-repo`, `profile-interview`, `import-stories`, `apply-method-triage`, `apply-to-jobs` |
+| `.claude/skills/` | triage: `job-triage`, `applications-check`, `setup-job-triage` ([guide](docs/job-triage.md)); resumes: `resume-blocks`, `resume-render`, `resume-pdf`, `organize-by-status` ([guide](docs/resume.md)); applying: `setup-data-repo`, `profile-interview`, `import-stories`, `apply-method-triage`, `apply-to-jobs` |
 | `.claude/skills/apply-to-jobs/ats/` | per-ATS notes: quirks that cost a failed submit to learn |
 | `autofill/` | a browser extension + loopback server that prefill forms Simplify does not cover ([README](autofill/README.md)) |
+| `my-career-profile/skills-rating/` | a local app for rating your skills |
 | `templates/data-repo/` | the skeleton of your private data repo |
 
 ## Your data stays out of this repo
 
-This repo holds code only. Your profile, answers, salary expectations, run history and
-recordings live in a **separate private repo**, reached as `data/` at the root of this one
+This repo holds code only. Your criteria, skill ratings, base resume, profile, answers,
+salary expectations, run history and recordings live in a **separate private repo**, reached as `data/` at the root of this one
 (cloned there or symlinked; git-ignored). Never give that repo a public remote.
 
 ## Getting started
 
 ```sh
-git clone https://github.com/Softjey/auto-applier.git auto-applier
-cd auto-applier
-claude                                 # or: codex
+git clone https://github.com/Softjey/job-search-agent.git
+cd job-search-agent
+claude
 ```
 
 Then ask: **"set me up"** — the `setup-data-repo` skill creates your private data repo,
@@ -43,12 +44,10 @@ that essay questions are answered from. After that:
 - Node 22+.
 - A [OneTap.Work](https://onetap.work) account with its MCP server connected: it is
   where saved vacancies come from and where each application is recorded.
-- Claude Code with Chrome and the Claude in Chrome extension, or Codex with its
-  `browser` plugin.
-- pnpm, only for the `autofill/` extension.
-- macOS or Linux. On Windows use WSL, or enable symlinks first
-  (`git config --global core.symlinks true` and Developer Mode): `.agents/skills/` and
-  `.claude/` link into each other.
+- Claude Code with Chrome and the Claude in Chrome extension.
+- Python 3.10+ for triage (stdlib only; `uv` to run its tests).
+- pnpm, for the script tests and the `autofill/` extension.
+- macOS or Linux. On Windows use WSL.
 
 ## Your resume
 
@@ -56,9 +55,9 @@ that essay questions are answered from. After that:
 
 - **One resume for everything** — point it at a finished PDF; it is sent with every
   application (`paths.baseResume`).
-- **A resume repo that tailors one per vacancy** — give it the path; the agent reads
-  that repo's README and skills, wires it up, and tells you what a run will do with
-  it. Finished PDFs are expected in `out/SAVED/<Company>_<vacancyId>-<Title>/`.
+- **A resume tailored per vacancy** — by this repo's own resume skills, from your
+  `skills.csv` and `CV_Base.html` in `data/` ([guide](docs/resume.md)). Finished PDFs land
+  in `data/out/SAVED/<Company>_<vacancyId>-<Title>/`.
 
 ## Limits worth knowing
 

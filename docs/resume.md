@@ -20,7 +20,7 @@ Next to them, `skills-rating/` is a small local app for rating the skills in `sk
 .claude/skills/        the four skills above
 skills-rating/         the rating app (Vite + React)
 templates/data-repo/   skeleton of the private data repo
-tests/                 unit tests of the skill scripts (vitest)
+.claude/skills/*/tests/ unit tests of the skill scripts (vitest)
 evals/                 agent evals (claude plugin eval), see evals/README.md
 fixtures/persona/      a fictional candidate the evals and tests run on
 data/                  the private data repo (git-ignored; a clone or a symlink)
@@ -121,21 +121,21 @@ there is more than one.
 ## Tests
 
 ```bash
-npm install
-npm test   # vitest run
+pnpm install
+pnpm test   # vitest run, at the repo root
 ```
 
 Unit tests of the skill scripts on vitest, a dev dependency only: the scripts themselves still need
 nothing installed. They use made-up people only, never the data repo.
 
-- `tests/render.test.mjs` — `render.mjs`: parsing the blocks, finding the placeholders (any letter
+- `resume-render/tests/render.test.mjs` — `render.mjs`: parsing the blocks, finding the placeholders (any letter
   case, split by formatting, missing), the skills line as a paragraph or a list item and the cases it
   refuses, escaping, the structure check, and that nothing outside the skills line changes.
-- `tests/skills.test.mjs` — `skills.mjs` on a small csv: every verdict, spelling variants, `search`,
+- `resume-blocks/tests/skills.test.mjs` — `skills.mjs` on a small csv: every verdict, spelling variants, `search`,
   `list` filters, and `check` (missing, optional, forbidden, misplaced and unasked rating-2 items).
-- `tests/organize.test.mjs` — `organize.mjs` and folder discovery in a temp `out/`: dry run, moves
+- `organize-by-status/tests/organize.test.mjs` — `organize.mjs` and folder discovery in a temp `out/`: dry run, moves
   by id and by folder name, re-sorting, conflicts, unmatched folders.
-- `tests/topdf.test.mjs` — `topdf.mjs` argument handling; the real print to a one-page PDF runs only
+- `resume-pdf/tests/topdf.test.mjs` — `topdf.mjs` argument handling; the real print to a one-page PDF runs only
   when a Chromium is found.
 
 The agent itself is checked by the evals in `evals/` — real Claude runs of the skills against a
