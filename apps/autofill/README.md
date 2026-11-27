@@ -26,7 +26,7 @@ page ── content script ──▶ background worker ──▶ localhost serve
 ## Use
 
 ```sh
-cd autofill && pnpm install
+cd apps/autofill && pnpm install
 pnpm dev:server                 # leave running (check: node ../.claude/skills/apply-to-jobs/scripts/check-server.mjs)
 pnpm --filter @applier/extension build
 ```

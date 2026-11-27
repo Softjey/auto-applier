@@ -14,7 +14,7 @@ Thanks for helping. A few rules keep this repo safe to share:
 
 ```sh
 pnpm install && pnpm test                   # skill scripts: .claude/skills/*/tests/
-cd autofill && pnpm install && pnpm check   # typecheck, lint, format, vitest
+cd apps/autofill && pnpm install && pnpm check   # typecheck, lint, format, vitest
 ```
 
 `pnpm --filter @applier/e2e test` runs the Playwright suite and needs a browser.

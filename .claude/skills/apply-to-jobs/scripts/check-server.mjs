@@ -18,7 +18,7 @@ try {
   console.log(`autofill server: up on 127.0.0.1:${port} (HTTP ${res.status} to a non-extension caller is expected)`);
 } catch {
   console.log(`autofill server: NOT running on 127.0.0.1:${port}`);
-  console.log("  start it:  cd autofill && pnpm dev:server   (leave it running)");
+  console.log("  start it:  cd apps/autofill && pnpm dev:server   (leave it running)");
   console.log("  without it the extension cannot offer CVs, fill from the profile or save a password.");
   process.exit(1);
 }
