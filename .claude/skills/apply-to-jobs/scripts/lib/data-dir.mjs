@@ -24,7 +24,7 @@ export function requireDataDir() {
   if (dir) return dir;
   throw new Error(
     `No data repo found at ${dataLocation()}.\n` +
-      "Create one with the setup-data-repo skill " +
+      "Create one with the setup skill " +
       "(or: node .claude/skills/apply-to-jobs/scripts/init-data-repo.mjs): " +
       "data/ at the repo root is a clone of your private data repo or a symlink to it.",
   );

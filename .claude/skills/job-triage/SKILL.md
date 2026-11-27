@@ -12,7 +12,7 @@ Read `gates.md` in this skill directory and the candidate's `data/criteria.md`
 before making any verdict. `gates.md` is how a vacancy is judged;
 `criteria.md` holds the candidate's rules, the precedents, and the reasoning
 behind both. `data/` at the repo root is the candidate's private data repo (a
-clone or a symlink); when it is missing, run the `setup-job-triage` skill. This
+clone or a symlink); when it is missing, run the `setup` skill. This
 file is the procedure.
 
 **One judgement, many sources.** `criteria.md` decides regardless of where a

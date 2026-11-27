@@ -44,7 +44,7 @@ class FindDataDirTest(unittest.TestCase):
             data_dir.require_data_dir()
         message = str(ctx.exception)
         self.assertIn(self.default_dir, message)
-        self.assertIn("setup-job-triage", message)
+        self.assertIn("setup skill", message)
 
     def test_data_path_joins_inside_data(self):
         os.makedirs(self.default_dir)

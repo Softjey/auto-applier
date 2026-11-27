@@ -47,7 +47,7 @@ no-band baseline lives in `profile.compensation.strategy`. See § Money.
 `data/` at the root of this repo (a clone, or a symlink allowed once in
 `.claude/settings.local.json`). Every path in this skill that starts with `data/` is
 inside it; the scripts read the same place. If `data/` is missing, stop and run the
-**`setup-data-repo`** skill first.
+**`setup`** skill first.
 
 **Session folder.** Open Claude Code at the root of this repo: the browser's
 `file_upload` only reads files under the session's own directories, and `data/runs/…`
@@ -100,7 +100,7 @@ below.
   the fix — add the OneTap.Work connector in Claude Code's settings. Never fall back to
   applying without recording the status.
 - **A resume is configured.** Run `scripts/check-resume.mjs`; exit 1 means stop and
-  point the user at `setup-data-repo` (resume step).
+  point the user at `setup` (resume step).
 - **The autofill plan server is running.** Run `scripts/check-server.mjs`; exit 1 means start
   it (`pnpm dev:server` in `apps/autofill/`, left running in the background — you may start it
   yourself) and re-check before the first browser step. Without it the Applier extension has

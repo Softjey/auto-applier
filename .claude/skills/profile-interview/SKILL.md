@@ -12,7 +12,7 @@ once, but it does not need to be perfect: this skill is idempotent and safe
 to re-run any time a gap surfaces.
 
 `data/profile.json` lives in the user's private **data repo**, reached as `data/`
-at the repo root and never committed here. If `data/` is missing, run the `setup-data-repo`
+at the repo root and never committed here. If `data/` is missing, run the `setup`
 skill first — it creates one with a skeleton `data/profile.json` (every field `null`)
 and then hands back to this interview.
 

@@ -23,7 +23,7 @@ def require_data_dir():
         return found
     raise SystemExit(
         f"No data repo found at {location()}.\n"
-        "Create one with the setup-data-repo or setup-job-triage skill: data/ at the repo root is a clone of "
+        "Create one with the setup skill: data/ at the repo root is a clone of "
         "your private data repo or a symlink to it."
     )
 
