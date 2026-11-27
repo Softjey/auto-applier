@@ -7,7 +7,7 @@
 //
 // The server answers only the extension (a plain request gets 403), so ANY HTTP answer means
 // it is up; "connection refused" or a timeout means it is down.
-// Exit 0: up. Exit 1: down — start it with `pnpm dev:server` in autofill/ and leave it running.
+// Exit 0: up. Exit 1: down — start it with `pnpm dev:server` in apps/autofill/ and leave it running.
 
 const arg = process.argv.slice(2).find((a) => a.startsWith("--port="));
 const port = Number(arg?.slice("--port=".length) || process.env.AUTOFILL_PORT || 7357);
@@ -18,7 +18,7 @@ try {
   console.log(`autofill server: up on 127.0.0.1:${port} (HTTP ${res.status} to a non-extension caller is expected)`);
 } catch {
   console.log(`autofill server: NOT running on 127.0.0.1:${port}`);
-  console.log("  start it:  cd autofill && pnpm dev:server   (leave it running)");
+  console.log("  start it:  cd apps/autofill && pnpm dev:server   (leave it running)");
   console.log("  without it the extension cannot offer CVs, fill from the profile or save a password.");
   process.exit(1);
 }

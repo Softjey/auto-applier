@@ -16,5 +16,4 @@ cfg = json.load(open(sys.argv[1]))
 cfg["paths"]["baseResume"] = sys.argv[2]
 print(json.dumps(cfg, indent=2))
 PY
-echo "data" > .data-dir
-if [ -f "$repo/.eval-copy" ]; then echo "$PWD/data" > "$repo/.data-dir"; fi
+if [ -f "$repo/.eval-copy" ]; then ln -sfn "$PWD/data" "$repo/data"; fi

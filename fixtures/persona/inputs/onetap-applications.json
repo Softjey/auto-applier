@@ -1,0 +1,551 @@
+{
+ "total": 26,
+ "applications": [
+  {
+   "id": "cmszqy82f7j5r2144qhkwnjvv",
+   "status": "APPLIED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmoxmpe8msu3vabglpl2o7qrk",
+   "notes": "Applied 2026-11-12 via LinkedIn job 4487566644 (Easy Apply), asked 25 000 B2B.",
+   "createdAt": "2026-11-12T10:00:00.000Z",
+   "updatedAt": "2026-11-12T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmoxmpe8msu3vabglpl2o7qrk",
+    "companyName": "Sigma IT Poland",
+    "title": "Senior Front-end Engineer with React",
+    "salary": null,
+    "link": "https://onetap.work/job/senior-front-end-engineer-with-react-cmoxmpe8msu3vabglpl2o7qrk/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cm5cki1gi5cntcvesa08zq2vt",
+   "status": "REJECTED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmvcb38xi8g4485l5j0bn4d66",
+   "notes": "Applied 2026-10-28; rejected after the technical interview on 2026-11-09.",
+   "createdAt": "2026-10-28T10:00:00.000Z",
+   "updatedAt": "2026-10-28T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmvcb38xi8g4485l5j0bn4d66",
+    "companyName": "Drillin",
+    "title": "Software Developer",
+    "salary": null,
+    "link": "https://onetap.work/job/software-developer-cmvcb38xi8g4485l5j0bn4d66/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmtqzxoz4wvrccyvfgefwin75",
+   "status": "SAVED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cm209r32k963hama0acw6nmue",
+   "notes": "Saved from the onetap feed; hybrid Kraków.",
+   "createdAt": "2026-11-18T10:00:00.000Z",
+   "updatedAt": "2026-11-18T10:00:00.000Z",
+   "vacancy": {
+    "id": "cm209r32k963hama0acw6nmue",
+    "companyName": "Jacobs",
+    "title": "AI Developer",
+    "salary": null,
+    "link": "https://onetap.work/job/ai-developer-cm209r32k963hama0acw6nmue/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmte3dfpvdr8t8lq3pr5zt4x8",
+   "status": "APPLIED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmxi69a3cu8xd89nmi42k82up",
+   "notes": "Applied 2026-11-03 through the careers page.",
+   "createdAt": "2026-11-03T10:00:00.000Z",
+   "updatedAt": "2026-11-03T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmxi69a3cu8xd89nmi42k82up",
+    "companyName": "Asana",
+    "title": "Frontend Engineer, Web Platform",
+    "salary": null,
+    "link": "https://onetap.work/job/frontend-engineer-web-platform-cmxi69a3cu8xd89nmi42k82up/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmnvt6hz33k0xg7n0c54ziu0a",
+   "status": "INTERVIEW",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cma7ihakse1n62tkh66c36egc",
+   "notes": "First interview 2026-11-21 with the hiring manager.",
+   "createdAt": "2026-11-05T10:00:00.000Z",
+   "updatedAt": "2026-11-05T10:00:00.000Z",
+   "vacancy": {
+    "id": "cma7ihakse1n62tkh66c36egc",
+    "companyName": "Ink Foundation",
+    "title": "Senior Software Engineer - Backend",
+    "salary": null,
+    "link": "https://onetap.work/job/senior-software-engineer-backend-cma7ihakse1n62tkh66c36egc/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmyt54ogqluhihngnpllf9aw4",
+   "status": "APPLIED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmux65rj9ihi2fz9u9dkj3k58",
+   "notes": "Applied 2026-11-01.",
+   "createdAt": "2026-10-10T10:00:00.000Z",
+   "updatedAt": "2026-10-10T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmux65rj9ihi2fz9u9dkj3k58",
+    "companyName": "Software Mind",
+    "title": "DevOps Engineer (Cloud)",
+    "salary": null,
+    "link": "https://onetap.work/job/devops-engineer-cloud-cmux65rj9ihi2fz9u9dkj3k58/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmsebrmldbnp2bq47zvb8uu3d",
+   "status": "APPLIED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmx8j0w78yi4plt7rv8znrwuh",
+   "notes": "Applied 2026-11-04.",
+   "createdAt": "2026-10-11T10:00:00.000Z",
+   "updatedAt": "2026-10-11T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmx8j0w78yi4plt7rv8znrwuh",
+    "companyName": "Deloitte",
+    "title": "Senior Application Developer",
+    "salary": null,
+    "link": "https://onetap.work/job/senior-application-developer-cmx8j0w78yi4plt7rv8znrwuh/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmoncs2wbh49gopdu5neg7jrm",
+   "status": "APPLIED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmfvdbwki1160q7rikv6djm3y",
+   "notes": "Applied 2026-11-07.",
+   "createdAt": "2026-10-12T10:00:00.000Z",
+   "updatedAt": "2026-10-12T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmfvdbwki1160q7rikv6djm3y",
+    "companyName": "ScaleJet | eCommerce Recruitment agency",
+    "title": "Senior Video Editor (Long-form YouTube & Performance Ads)",
+    "salary": null,
+    "link": "https://onetap.work/job/senior-video-editor-long-form-youtube-performance-ads-cmfvdbwki1160q7rikv6djm3y/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmxgp7z32k3fzhp5iwc0c43h9",
+   "status": "APPLIED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cm39xyllgq6jqr7pkclyxzns3",
+   "notes": "Applied 2026-11-10.",
+   "createdAt": "2026-10-13T10:00:00.000Z",
+   "updatedAt": "2026-10-13T10:00:00.000Z",
+   "vacancy": {
+    "id": "cm39xyllgq6jqr7pkclyxzns3",
+    "companyName": "Adtran",
+    "title": "Senior Software Engineer (Python/AWS)",
+    "salary": null,
+    "link": "https://onetap.work/job/senior-software-engineer-python-aws-cm39xyllgq6jqr7pkclyxzns3/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmf4uwil14uphrb6mcno4o3c5",
+   "status": "APPLIED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmhpr4gxzo9lm4k18me3u4otr",
+   "notes": "Applied 2026-11-13.",
+   "createdAt": "2026-10-14T10:00:00.000Z",
+   "updatedAt": "2026-10-14T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmhpr4gxzo9lm4k18me3u4otr",
+    "companyName": "Deloitte",
+    "title": "AI IT IP Lawyer",
+    "salary": null,
+    "link": "https://onetap.work/job/ai-it-ip-lawyer-cmhpr4gxzo9lm4k18me3u4otr/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cm0zo49ajm4wjx724gssxhuvp",
+   "status": "APPLIED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmrbkkplj98g31c1tzenxw8po",
+   "notes": "Applied 2026-11-16.",
+   "createdAt": "2026-10-15T10:00:00.000Z",
+   "updatedAt": "2026-10-15T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmrbkkplj98g31c1tzenxw8po",
+    "companyName": "Us3 Consulting",
+    "title": "AI / Machine Learning Developer",
+    "salary": null,
+    "link": "https://onetap.work/job/ai-machine-learning-developer-cmrbkkplj98g31c1tzenxw8po/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmd657t6t1f5krp4gb8gzx6cp",
+   "status": "APPLIED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmw3rblj9jo2sxzjaqkf48oyp",
+   "notes": "Applied 2026-11-19.",
+   "createdAt": "2026-10-16T10:00:00.000Z",
+   "updatedAt": "2026-10-16T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmw3rblj9jo2sxzjaqkf48oyp",
+    "companyName": "Euroclear",
+    "title": "Automation Development Lead",
+    "salary": null,
+    "link": "https://onetap.work/job/automation-development-lead-cmw3rblj9jo2sxzjaqkf48oyp/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cm4umrx45qh7ayda2nowa6381",
+   "status": "APPLIED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cm4kp4s327top2xkmyrf7ims6",
+   "notes": "Applied 2026-11-02.",
+   "createdAt": "2026-10-17T10:00:00.000Z",
+   "updatedAt": "2026-10-17T10:00:00.000Z",
+   "vacancy": {
+    "id": "cm4kp4s327top2xkmyrf7ims6",
+    "companyName": "OPENCHIP & SOFTWARE TECHNOLOGIES",
+    "title": "Senior DevOps Engineer",
+    "salary": null,
+    "link": "https://onetap.work/job/senior-devops-engineer-cm4kp4s327top2xkmyrf7ims6/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmm6e0uwwxu33endfs8e4auat",
+   "status": "APPLIED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmairbn20v6zr3s48hx3z1i58",
+   "notes": "Applied 2026-11-05.",
+   "createdAt": "2026-10-18T10:00:00.000Z",
+   "updatedAt": "2026-10-18T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmairbn20v6zr3s48hx3z1i58",
+    "companyName": "Grand Parade",
+    "title": "Software Developer",
+    "salary": null,
+    "link": "https://onetap.work/job/software-developer-cmairbn20v6zr3s48hx3z1i58/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmcuod3hj69im6z0qitierwj1",
+   "status": "REJECTED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmp8wl8wtdsm3y9r7ue4dsvbr",
+   "notes": "Rejection e-mail 2026-11-08.",
+   "createdAt": "2026-10-19T10:00:00.000Z",
+   "updatedAt": "2026-10-19T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmp8wl8wtdsm3y9r7ue4dsvbr",
+    "companyName": "Jeppesen ForeFlight",
+    "title": "Senior Manager, Engineering",
+    "salary": null,
+    "link": "https://onetap.work/job/senior-manager-engineering-cmp8wl8wtdsm3y9r7ue4dsvbr/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmw0543q24dt3w85b4pw2swhq",
+   "status": "REJECTED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cm187df0d6l2jb15dzgq5ls1e",
+   "notes": "Rejection e-mail 2026-11-11.",
+   "createdAt": "2026-10-20T10:00:00.000Z",
+   "updatedAt": "2026-10-20T10:00:00.000Z",
+   "vacancy": {
+    "id": "cm187df0d6l2jb15dzgq5ls1e",
+    "companyName": "Silky Coders",
+    "title": "Administrator Systemów Monitoringu",
+    "salary": null,
+    "link": "https://onetap.work/job/administrator-system-w-monitoringu-cm187df0d6l2jb15dzgq5ls1e/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmcqjvd1wx4mcksxcdo32xotx",
+   "status": "REJECTED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmx5bsvi6zd8qfo6yghcwzndg",
+   "notes": "Rejection e-mail 2026-11-14.",
+   "createdAt": "2026-10-21T10:00:00.000Z",
+   "updatedAt": "2026-10-21T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmx5bsvi6zd8qfo6yghcwzndg",
+    "companyName": "PharmaLex",
+    "title": "Software Engineer 3",
+    "salary": null,
+    "link": "https://onetap.work/job/software-engineer-3-cmx5bsvi6zd8qfo6yghcwzndg/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmktaa6tfprd7fvzmeee91k8b",
+   "status": "REJECTED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cm73usyfk0ug7a925mnsd4c8t",
+   "notes": "Rejection e-mail 2026-11-17.",
+   "createdAt": "2026-10-22T10:00:00.000Z",
+   "updatedAt": "2026-10-22T10:00:00.000Z",
+   "vacancy": {
+    "id": "cm73usyfk0ug7a925mnsd4c8t",
+    "companyName": "T-Mobile Polska",
+    "title": "Senior konsultant/-ka ds. wsparcia środowisk testowych",
+    "salary": null,
+    "link": "https://onetap.work/job/senior-konsultant-ka-ds-wsparcia-rodowisk-testowych-cm73usyfk0ug7a925mnsd4c8t/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmhv5lkigzy6o4hs23syboahm",
+   "status": "NOT_INTERESTED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmd6k2gae0le81w0n1yasfn93",
+   "notes": "Gate 1 — stack does not match.",
+   "createdAt": "2026-10-23T10:00:00.000Z",
+   "updatedAt": "2026-10-23T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmd6k2gae0le81w0n1yasfn93",
+    "companyName": "Sii Poland",
+    "title": "AI Architect – GenAI & Cloud (f/m/x)",
+    "salary": null,
+    "link": "https://onetap.work/job/ai-architect-genai-cloud-f-m-x-cmd6k2gae0le81w0n1yasfn93/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cm2x4wv7g1aru39ij6ot4yc9z",
+   "status": "NOT_INTERESTED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cm9m7i7ddijkysfmc2kgpmgqo",
+   "notes": "Gate 1 — stack does not match.",
+   "createdAt": "2026-10-24T10:00:00.000Z",
+   "updatedAt": "2026-10-24T10:00:00.000Z",
+   "vacancy": {
+    "id": "cm9m7i7ddijkysfmc2kgpmgqo",
+    "companyName": "Fluxon",
+    "title": "Senior Technical Project Manager",
+    "salary": null,
+    "link": "https://onetap.work/job/senior-technical-project-manager-cm9m7i7ddijkysfmc2kgpmgqo/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmqlq9hnnl0qk4k42fmo8yvip",
+   "status": "NOT_INTERESTED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmr4kdpriosyah4ia2yk7nqnb",
+   "notes": "Gate 1 — stack does not match.",
+   "createdAt": "2026-10-25T10:00:00.000Z",
+   "updatedAt": "2026-10-25T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmr4kdpriosyah4ia2yk7nqnb",
+    "companyName": "Infor",
+    "title": "DevOps Platform Engineer",
+    "salary": null,
+    "link": "https://onetap.work/job/devops-platform-engineer-cmr4kdpriosyah4ia2yk7nqnb/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmfpxu99gmbbug5vs970aicab",
+   "status": "NOT_INTERESTED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmcvk6afoq46qkr58fngyokgb",
+   "notes": "Gate 1 — stack does not match.",
+   "createdAt": "2026-10-26T10:00:00.000Z",
+   "updatedAt": "2026-10-26T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmcvk6afoq46qkr58fngyokgb",
+    "companyName": "Lufthansa Systems",
+    "title": "Scrum Master (all genders)",
+    "salary": null,
+    "link": "https://onetap.work/job/scrum-master-all-genders-cmcvk6afoq46qkr58fngyokgb/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmuyqfftiaft17v2yebkhbpi0",
+   "status": "NOT_INTERESTED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmqf27val4vehtealkkp8fy6g",
+   "notes": "Gate 1 — stack does not match.",
+   "createdAt": "2026-10-27T10:00:00.000Z",
+   "updatedAt": "2026-10-27T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmqf27val4vehtealkkp8fy6g",
+    "companyName": "Samba",
+    "title": "Senior Engineering Manager - Data Delivery",
+    "salary": null,
+    "link": "https://onetap.work/job/senior-engineering-manager-data-delivery-cmqf27val4vehtealkkp8fy6g/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmk4q6iloxhijdd8l8126op5d",
+   "status": "NOT_INTERESTED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmqda0dcbtx32yin51lb5tgge",
+   "notes": "Gate 1 — stack does not match.",
+   "createdAt": "2026-10-28T10:00:00.000Z",
+   "updatedAt": "2026-10-28T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmqda0dcbtx32yin51lb5tgge",
+    "companyName": "BEC Financial Technologies",
+    "title": "Frontend platform engineer",
+    "salary": null,
+    "link": "https://onetap.work/job/frontend-platform-engineer-cmqda0dcbtx32yin51lb5tgge/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmylk7gc4gaz40pkybj8kzdgp",
+   "status": "ARCHIVED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cm389jhorb9ktbwa493kz777c",
+   "notes": "Posting expired before applying.",
+   "createdAt": "2026-10-29T10:00:00.000Z",
+   "updatedAt": "2026-10-29T10:00:00.000Z",
+   "vacancy": {
+    "id": "cm389jhorb9ktbwa493kz777c",
+    "companyName": "TransferGo",
+    "title": "Senior Product Manager, Pricing",
+    "salary": null,
+    "link": "https://onetap.work/job/senior-product-manager-pricing-cm389jhorb9ktbwa493kz777c/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  },
+  {
+   "id": "cmlsepbnfo1w69zymq7buv379",
+   "status": "ARCHIVED",
+   "userId": "cmih2ybg55t2j51qdo07mvc6g",
+   "vacancyId": "cmk56d6hzy2dywwyciiig48om",
+   "notes": "Posting expired before applying.",
+   "createdAt": "2026-10-30T10:00:00.000Z",
+   "updatedAt": "2026-10-30T10:00:00.000Z",
+   "vacancy": {
+    "id": "cmk56d6hzy2dywwyciiig48om",
+    "companyName": "Flix",
+    "title": "DevOps / Cloud Infrastructure Engineer",
+    "salary": null,
+    "link": "https://onetap.work/job/devops-cloud-infrastructure-engineer-cmk56d6hzy2dywwyciiig48om/",
+    "expiresAt": "2026-12-20T00:00:00.000Z",
+    "source": {
+     "kind": "SITEMAP_JOB_POSTING_INDEXING"
+    }
+   },
+   "lastAutoApplyAttemptStatus": null
+  }
+ ]
+}

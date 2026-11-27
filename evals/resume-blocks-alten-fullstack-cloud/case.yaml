@@ -1,0 +1,62 @@
+schema_version: "1.1"
+name: resume-blocks-alten-fullstack-cloud
+description: "Full-stack role asking for Java, Azure and Kubernetes: Java is dropped, the cloud and orchestration categories are covered by what the base has, and the years count skips the support job."
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    адаптируй резюме под эту вакансию, текст в vacancy.md
+  model: claude-sonnet-5-5
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Write, Edit, Bash, Glob, Grep, Skill, ToolSearch]
+runs: 1
+graders:
+  - type: tool_used
+    name: resume-blocks-fired
+    tool: Skill
+    input_match: 'job-search-agent:resume-blocks"'
+  - type: regex
+    name: title-drops-java
+    pattern: '\*\*Title:\*\*\s*Senior Full Stack Engineer\s*\n'
+  - type: regex
+    name: summary-leads-with-6-years
+    pattern: '\*\*Summary:\*\*(?:(?!\*\*Skills)[\s\S])*?6\+ years'
+  - type: regex
+    name: support-job-not-counted
+    pattern: '\*\*Summary:\*\*(?:(?!\*\*Skills)[\s\S])*?\b(?:7|8)\+? years'
+    match: not_contains
+  - type: regex
+    name: summary-40-75-words
+    pattern: '\*\*Summary:\*\*\s+(?:\S+\s+){40,75}\*\*Skills:\*\*'
+  - type: regex
+    name: summary-no-first-person
+    pattern: '\*\*Summary:\*\*(?:(?!\*\*Skills)[\s\S])*?\b(?:I|my|me)\b'
+    match: not_contains
+  - type: regex
+    name: azure-not-in-skills
+    pattern: '\*\*Skills:\*\*(?:(?!\n\s*\n)[\s\S])*?\bAzure\b'
+    match: not_contains
+  - type: regex
+    name: kubernetes-not-in-skills
+    pattern: '\*\*Skills:\*\*(?:(?!\n\s*\n)[\s\S])*?\bKubernetes\b'
+    match: not_contains
+  - type: regex
+    name: java-not-in-skills
+    pattern: '\*\*Skills:\*\*(?:(?!\n\s*\n)[\s\S])*?\bJava\b(?!Script)'
+    match: not_contains
+  - type: regex
+    name: gcp-in-skills
+    pattern: '\*\*Skills:\*\*(?:(?!\n\s*\n)[\s\S])*?\bGCP\b'
+  - type: regex
+    name: docker-in-skills
+    pattern: '\*\*Skills:\*\*(?:(?!\n\s*\n)[\s\S])*?\bDocker\b'
+  - type: regex
+    name: nodejs-in-skills
+    pattern: '\*\*Skills:\*\*(?:(?!\n\s*\n)[\s\S])*?Node\.js'
+  - type: llm
+    name: summary-portable
+    focus: last_message
+    criteria: |
+      Look only at the Summary block. Pass if every sentence would still be true and natural if the same engineer applied to a different company for the same role: it describes the engineer's skills and the class of product in neutral words.
+      Fail if the Summary names this employer, its product, its internal systems or business processes, claims experience in the employer's industry, or borrows the posting's intensity adjectives (heavy, massive, mission-critical, hyper-scale).

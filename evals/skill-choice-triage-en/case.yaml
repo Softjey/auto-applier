@@ -1,0 +1,16 @@
+schema_version: "1.1"
+name: skill-choice-triage-en
+description: "An English request to filter the onetap feed starts job-triage."
+execution:
+  prompt: |
+    go through the new onetap postings and sort out the ones worth applying to
+  model: claude-sonnet-5-5
+  max_turns: 4
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Skill, ToolSearch]
+runs: 1
+graders:
+  - type: tool_used
+    name: job-triage-fired
+    tool: Skill
+    input_match: 'job-search-agent:job-triage"'

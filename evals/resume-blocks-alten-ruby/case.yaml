@@ -1,0 +1,28 @@
+schema_version: "1.1"
+name: resume-blocks-alten-ruby
+description: "A Ruby on Rails backend role: the stack is not in the base, so Ruby is never claimed and the mismatch is reported."
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    адаптируй резюме под эту вакансию, текст в vacancy.md
+  model: claude-sonnet-5-5
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Write, Edit, Bash, Glob, Grep, Skill, ToolSearch]
+runs: 1
+graders:
+  - type: tool_used
+    name: resume-blocks-fired
+    tool: Skill
+    input_match: 'job-search-agent:resume-blocks"'
+  - type: regex
+    name: ruby-not-claimed-in-blocks
+    pattern: '\*\*(?:Title|Summary|Skills):\*\*(?:(?!\n\s*\n(?!\*\*(?:Summary|Skills):))[\s\S])*?\bRuby\b'
+    match: not_contains
+  - type: llm
+    name: mismatch-explained
+    focus: last_message
+    criteria: |
+      The reply tells the candidate plainly that the role's core stack (Ruby / Ruby on Rails) is not in their skills, so the application is a weak match, whether or not it also offers resume blocks.
+      Fail if Ruby or Rails is claimed anywhere as the candidate's skill, or if the mismatch is not mentioned.

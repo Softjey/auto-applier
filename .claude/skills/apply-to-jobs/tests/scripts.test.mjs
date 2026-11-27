@@ -1,4 +1,4 @@
-// End-to-end checks of the CLI scripts against the fake person in autofill/fixtures/.
+// End-to-end checks of the CLI scripts against the fake person in apps/autofill/fixtures/.
 // Each script runs as a subprocess with $APPLIER_DATA_DIR pointing at a temp copy, so
 // nothing here can touch a real data repo.
 
@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SCRIPTS = resolve(HERE, "../scripts");
-const FIXTURES = resolve(HERE, "../../../../autofill/fixtures");
+const FIXTURES = resolve(HERE, "../../../../apps/autofill/fixtures");
 const data = mkdtempSync(join(tmpdir(), "applier-data-"));
 copyFileSync(join(FIXTURES, "profile.test.json"), join(data, "profile.json"));
 copyFileSync(join(FIXTURES, "apply-config.test.json"), join(data, "apply-config.json"));
@@ -83,12 +83,12 @@ test("check-server: reports a stopped server and says how to start it", () => {
 
 test("init-data-repo: --resume-file fills paths.baseResume and refuses a non-pdf", () => {
   const target = join(mkdtempSync(join(tmpdir(), "applier-init-")), "data");
-  const bad = run("init-data-repo.mjs", `--dir=${target}`, "--no-git", "--no-pointer", `--resume-file=${join(data, "form.json")}`);
+  const bad = run("init-data-repo.mjs", `--dir=${target}`, "--no-git", "--no-link", `--resume-file=${join(data, "form.json")}`);
   assert.equal(bad.status, 1);
 
   const pdf = join(data, "me.pdf");
   writeFileSync(pdf, "%PDF-1.4");
-  const ok = run("init-data-repo.mjs", `--dir=${target}`, "--no-git", "--no-pointer", `--resume-file=${pdf}`);
+  const ok = run("init-data-repo.mjs", `--dir=${target}`, "--no-git", "--no-link", `--resume-file=${pdf}`);
   assert.equal(ok.status, 0, ok.stderr);
   const cfg = JSON.parse(readFileSync(join(target, "apply-config.json"), "utf8"));
   assert.equal(cfg.paths.baseResume, pdf);

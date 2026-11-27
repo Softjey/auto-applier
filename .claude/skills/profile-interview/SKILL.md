@@ -11,23 +11,23 @@ stop and ask about mid-application later — so it's worth getting this right
 once, but it does not need to be perfect: this skill is idempotent and safe
 to re-run any time a gap surfaces.
 
-`profile.json` lives in the user's private **data repo**, not in this repo
-(`lib/data-dir.mjs` finds it: `$APPLIER_DATA_DIR`, then `.data-dir`, then
-`../auto-applier-data`). If there is no data repo yet, run the `setup-data-repo`
-skill first — it creates one with a skeleton `profile.json` (every field `null`)
+`data/profile.json` lives in the user's private **data repo**, reached as `data/`
+at the repo root and never committed here. If `data/` is missing, run the `setup-data-repo`
+skill first — it creates one with a skeleton `data/profile.json` (every field `null`)
 and then hands back to this interview.
 
 ## Procedure
 
-1. **Read `profile.json`.** Note which structured fields are already filled;
+1. **Read `data/profile.json`.** Note which structured fields are already filled;
    you'll skip those unless the user is explicitly correcting one.
 2. **Pre-fill from the CV, don't ask from scratch.** Read the base CV (the resume
-   repo's base file — `paths.resumeRepo` in `apply-config.json`, its README says which — or
+   repo's base file — `data/CV_Base.html` when `paths.resumeRepo` in `data/apply-config.json`
+   is `data/` itself, otherwise that repo's README says which — or
    the PDF at `paths.baseResume`) and pull
    `personal.email`, `personal.phone`, `personal.currentCity`,
    `personal.currentCountry`, `links.linkedin`, `links.github` from its
    contact section. Present these to the user as "I found X — confirm or
-   correct?" rather than asking blind. If `apply-config.json` does not exist
+   correct?" rather than asking blind. If `data/apply-config.json` does not exist
    yet, ask the user where their resume repo lives and write
    the file — that config is what keeps every absolute path out of these
    skills.
@@ -35,8 +35,8 @@ and then hands back to this interview.
    not ask the user for a number, do not hardcode one. Open the same base CV,
    find the EXPERIENCE section, and take the start year of the *earliest entry
    that is genuinely commercial software development*. Pre-career and
-   adjacent-field roles do not count; the resume repo's own skills
-   document where that line falls, so read them rather than deciding
+   adjacent-field roles do not count; the `resume-blocks` skill (or the
+   resume repo's own skills) documents where that line falls, so read them rather than deciding
    independently — the two skills disagreeing about the number is
    worse than either answer. `experience.yearsOfCommercialExperience` = current
    year minus that start year; record `experience.yearsAsOf` as today's date so
@@ -71,7 +71,7 @@ and then hands back to this interview.
    - **Languages** — level per language (native / fluent / professional /
      conversational / basic — ask the user's own words, don't invent a
      framework).
-5. **Write structured answers directly into `profile.json`** with Edit —
+5. **Write structured answers directly into `data/profile.json`** with Edit —
    this is low-volume, one-time data, safe to hand-edit (unlike `qa[]`,
    which is machine-managed — never hand-edit that array).
 6. **Seed `qa[]` with the most common ATS phrasings**, scoped to the user's
@@ -105,7 +105,7 @@ and then hands back to this interview.
    written in a language other than English. `apply-to-jobs` matches field
    labels against English phrasings built into
    `.claude/skills/apply-to-jobs/scripts/lib/field-labels.mjs`, plus whatever
-   `apply-config.json`'s `formVocabulary` adds on top. Ask which language(s)
+   `data/apply-config.json`'s `formVocabulary` adds on top. Ask which language(s)
    the user's applications are usually in and write the field, topic and
    language-alias phrasings for those into the config. Skipping this only
    costs escalations — a label the resolver cannot read becomes a question for
@@ -116,7 +116,7 @@ and then hands back to this interview.
    These are exactly the fields that must never be wrong on a real
    application.
 
-## `profile.json` schema
+## `data/profile.json` schema
 
 ```jsonc
 {

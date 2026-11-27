@@ -281,5 +281,5 @@ function main() {
   console.log(`\n${blocking} required field(s) still need a human answer across ${report.length} form(s).`);
 }
 
-// Only run as a CLI: autofill/server.mjs imports classify() from here.
+// Only run as a CLI: apps/autofill/server.mjs imports classify() from here.
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();

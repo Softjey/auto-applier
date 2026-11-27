@@ -1,0 +1,31 @@
+schema_version: "1.1"
+name: skill-choice-render-ru
+description: "Blocks already written plus a request for the full CV starts resume-render, not resume-blocks."
+execution:
+  prompt: |
+    блоки готовы, собери из них полное резюме:
+
+    **Title:** Senior Frontend Engineer
+
+    **Summary:** Senior Frontend Engineer with 6+ years of experience specializing in React, Next.js and TypeScript, building scalable web applications for global products. Experienced in frontend architecture, design systems, component libraries and accessibility, with hands-on backend experience in Node.js and PostgreSQL. Brings technical leadership, mentoring and a strong product mindset.
+
+    **Skills:**
+    Frontend: React, Next.js, TypeScript, JavaScript, Redux, Zustand, Tailwind CSS, Storybook
+    Backend & Data: Node.js (NestJS), REST API, GraphQL, PostgreSQL, Redis, Prisma ORM
+    Engineering Practices: Code Reviews, Mentoring, Technical Leadership, CI/CD, Jest, Cypress
+  model: claude-sonnet-5-5
+  max_turns: 6
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Skill, ToolSearch]
+runs: 1
+graders:
+  - type: tool_used
+    name: resume-render-fired
+    tool: Skill
+    input_match: 'job-search-agent:resume-render"'
+  - type: tool_used
+    name: no-blocks
+    tool: Skill
+    input_match: 'job-search-agent:resume-blocks"'
+    min: 0
+    max: 0

@@ -13,10 +13,10 @@ graders:
   - type: tool_used
     name: apply-to-jobs-fired
     tool: Skill
-    input_match: 'auto-applier:apply-to-jobs"'
+    input_match: 'job-search-agent:apply-to-jobs"'
   - type: tool_used
     name: no-apply-method-triage
     tool: Skill
-    input_match: 'auto-applier:apply-method-triage"'
+    input_match: 'job-search-agent:apply-method-triage"'
     min: 0
     max: 0

@@ -7,4 +7,4 @@ for part in scripts browser ats; do
   cp -R "$repo/.claude/skills/apply-to-jobs/$part" ".claude/skills/apply-to-jobs/$part"
 done
 cp -R "$repo/fixtures/persona" ./data
-echo "data" > .data-dir
+if [ -f "$repo/.eval-copy" ]; then ln -sfn "$PWD/data" "$repo/data"; fi

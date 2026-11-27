@@ -1,0 +1,28 @@
+schema_version: "1.1"
+name: resume-blocks-sigma-frontend-react
+description: "A React frontend role that fits the persona's core stack."
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    адаптируй резюме под эту вакансию, текст в vacancy.md
+  model: claude-sonnet-5-5
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Write, Edit, Bash, Glob, Grep, Skill, ToolSearch]
+runs: 1
+graders:
+  - type: tool_used
+    name: resume-blocks-fired
+    tool: Skill
+    input_match: 'job-search-agent:resume-blocks"'
+  - type: regex
+    name: title-mirrors-vacancy
+    pattern: '\*\*Title:\*\*\s*Senior Front-end Engineer'
+  - type: regex
+    name: summary-40-75-words
+    pattern: '\*\*Summary:\*\*\s+(?:\S+\s+){40,75}\*\*Skills:\*\*'
+  - type: regex
+    name: summary-no-first-person
+    pattern: '\*\*Summary:\*\*(?:(?!\*\*Skills)[\s\S])*?\b(?:I|my|me)\b'
+    match: not_contains

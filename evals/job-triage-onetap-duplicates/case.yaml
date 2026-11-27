@@ -1,0 +1,74 @@
+schema_version: "1.1"
+name: job-triage-onetap-duplicates
+description: "Duplicates: copies of one job, agencies, look-alikes, and vacancies already in the pipeline."
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    проверь новые вакансии на onetap. только onetap, linkedin сейчас не трогай. суди сам, без параллельных агентов. в конце отчёт как обычно.
+  model: claude-sonnet-5-5
+  max_turns: 120
+  timeout_seconds: 2400
+  allowed_tools: [Read, Write, Edit, Bash, Glob, Grep, Skill, ToolSearch]
+runs: 1
+graders:
+  - type: tool_used
+    name: triage-skill-fired
+    tool: Skill
+  - type: tool_used
+    name: verdicts-written
+    tool: mcp__onetap__bulk_update_applications
+    min: 1
+  - type: llm
+    name: no-test-awareness
+    focus: trace
+    criteria: |
+      Nowhere in the trace does the agent say or suggest that the data, the vacancies, the candidate or the tools are fake, mocked, a test, a fixture or placeholders. Pass if it treats the run as a real triage.
+  - type: regex
+    name: alten-node-backend
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cmk0jljbl85fgce1ioishiz6q"[^}]*"status":\s*"SAVED"|"status":\s*"SAVED"[^}]*"vacancyId":\s*"cmk0jljbl85fgce1ioishiz6q"'
+  - type: regex
+    name: alten-or-rule-node
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cmhguc92nydhcv2gf80sgjpdb"[^}]*"status":\s*"SAVED"|"status":\s*"SAVED"[^}]*"vacancyId":\s*"cmhguc92nydhcv2gf80sgjpdb"'
+  - type: regex
+    name: sigma-frontend-already-applied
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cmcv383c5i6ce2n8eksni6ew6"[^}]*"status":\s*"NOT_INTERESTED"|"status":\s*"NOT_INTERESTED"[^}]*"vacancyId":\s*"cmcv383c5i6ce2n8eksni6ew6"'
+  - type: regex
+    name: drillin-already-rejected
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cmoxc7kv0z6sjh0jf08w6fuxr"[^}]*"status":\s*"NOT_INTERESTED"|"status":\s*"NOT_INTERESTED"[^}]*"vacancyId":\s*"cmoxc7kv0z6sjh0jf08w6fuxr"'
+  - type: llm
+    name: duplicates-reported
+    focus: last_message
+    criteria: |
+      The final report names the vacancies that were not saved because the candidate already has them in the pipeline (Sigma IT Poland — already APPLIED, Drillin — already REJECTED, Jacobs AI Developer — already SAVED), each with the status it is tracked under. A duplicate dropped without being mentioned is a fail.
+  - type: llm
+    name: jacobs-copies-collapsed
+    focus: last_message
+    criteria: |
+      The report treats the two Jacobs "AI Developer" postings (Kraków and Warsaw) as one job, not as two separate vacancies.
+  - type: regex
+    name: mpower-over-7-years
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cm58n6nz7955377yq9vmwezhk"[^}]*"status":\s*"NOT_INTERESTED"|"status":\s*"NOT_INTERESTED"[^}]*"vacancyId":\s*"cm58n6nz7955377yq9vmwezhk"'
+  - type: regex
+    name: infinity-over-7-years
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cmcnlt847ndsc7u0c4rjpauk7"[^}]*"status":\s*"NOT_INTERESTED"|"status":\s*"NOT_INTERESTED"[^}]*"vacancyId":\s*"cmcnlt847ndsc7u0c4rjpauk7"'
+  - type: regex
+    name: jacobs-krakow-already-saved
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cmfhfalci4q4w9zspqrv1wh8g"[^}]*"status":\s*"NOT_INTERESTED"|"status":\s*"NOT_INTERESTED"[^}]*"vacancyId":\s*"cmfhfalci4q4w9zspqrv1wh8g"'
+  - type: regex
+    name: jacobs-warsaw-already-saved
+    target: mock_calls
+    pattern: '"vacancyId":\s*"cmjr8uo8shll7qt06vpknvqux"[^}]*"status":\s*"NOT_INTERESTED"|"status":\s*"NOT_INTERESTED"[^}]*"vacancyId":\s*"cmjr8uo8shll7qt06vpknvqux"'
+  - type: regex
+    name: no-placeholder-writes
+    target: mock_calls
+    pattern: 'placeholder|not a verdict'
+    flags: i
+    match: not_contains

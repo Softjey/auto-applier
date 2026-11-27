@@ -12,7 +12,7 @@ status — except archiving postings that are already dead (step 6).
 
 The axis is the method, not any one tool. Two autofill extensions exist and they are
 told apart by the **group**, never by anything else: the repo's **own** extension
-(`autofill/`) is group 1, and Simplify's table only separates group 3 from group 4.
+(`apps/autofill/`) is group 1, and Simplify's table only separates group 3 from group 4.
 
 ## The five groups
 
@@ -21,7 +21,7 @@ wins:
 
 | # | Group | Definition |
 |---|---|---|
-| 1 | **Own extension** | The application is a form **the repo's own autofill extension** (`autofill/`) fills: the apply destination matches one of its adapters (today Traffit, eRecruiter, justjoin.it — read the adapters, see step 1). It applies to an in-page board form (the justjoin.it modal) exactly as to an external ATS (Traffit, eRecruiter): once the extension drives the form, *where the form lives* no longer decides how the run goes. |
+| 1 | **Own extension** | The application is a form **the repo's own autofill extension** (`apps/autofill/`) fills: the apply destination matches one of its adapters (today Traffit, eRecruiter, justjoin.it — read the adapters, see step 1). It applies to an in-page board form (the justjoin.it modal) exactly as to an external ATS (Traffit, eRecruiter): once the extension drives the form, *where the form lives* no longer decides how the run goes. |
 | 2 | **Easy Apply** | The application is completed **inside the job board itself** and no own adapter covers it — no hop to an employer site. LinkedIn Easy Apply, Indeed Apply, and anything else where the apply control opens a form in place instead of leaving for another host. |
 | 3 | **Simplify-assisted** | The application is an **external ATS form** whose host is in the Simplify support table (`reference/simplify-supported-ats.md`). Still a real form on a real ATS — the extension only prefills part of it. |
 | 4 | **Manual** | An **external form that neither extension supports**. Everything gets typed. |
@@ -42,7 +42,7 @@ Never file the same vacancy in two groups. Group 5 is orthogonal to the rest and
 decided first in practice — a dead posting has no application to categorise.
 
 **Adding an adapter moves vacancies.** When a new adapter lands in
-`autofill/packages/extension/src/adapters/`, hosts that were group 2/3/4 become group 1 on
+`apps/autofill/packages/extension/src/adapters/`, hosts that were group 2/3/4 become group 1 on
 the next triage with no edit to this skill — that is why step 1 reads the adapters
 instead of a list kept here.
 
@@ -71,7 +71,7 @@ feature.
 there is deliberately no copy of them here:
 
 ```sh
-grep -h "matchPatterns" <code repo>/autofill/packages/extension/src/adapters/*.ts
+grep -h "matchPatterns" <code repo>/apps/autofill/packages/extension/src/adapters/*.ts
 ```
 
 Each adapter lists the URL patterns it is injected on (`matchPatterns`) and a
@@ -210,9 +210,9 @@ rather than asserting it.
 
 ### 5. Write the output
 
-One file: **`$DATA/triage/<today's date>.md`**, where `$DATA` is the user's private
-data repo (resolve it with `lib/data-dir.mjs`, see `apply-to-jobs` § Configuration).
-Triage is a report, not a run, so it never goes under `runs/`. There is no JSON
+One file: **`data/triage/<today's date>.md`**, in the user's private data repo
+(`data/` at the repo root, see `apply-to-jobs` § Configuration).
+Triage is a report, not a run, so it never goes under `data/runs/`. There is no JSON
 twin: nothing consumes one, and a second copy only drifts. A later run reads the
 report or simply re-derives the group.
 

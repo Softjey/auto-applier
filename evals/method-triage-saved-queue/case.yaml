@@ -15,7 +15,7 @@ graders:
   - type: tool_used
     name: method-triage-fired
     tool: Skill
-    input_match: 'auto-applier:apply-method-triage"'
+    input_match: 'job-search-agent:apply-method-triage"'
   - type: tool_used
     name: apply-targets-read
     tool: mcp__onetap__get_apply_target
