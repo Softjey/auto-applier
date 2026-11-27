@@ -19,10 +19,10 @@ jobs:
       - name: Script tests
         run: pnpm test
       - name: Install autofill
-        working-directory: autofill
+        working-directory: apps/autofill
         run: pnpm install --frozen-lockfile
       - name: Autofill unit tests
-        working-directory: autofill
+        working-directory: apps/autofill
         run: pnpm test
   python:
     runs-on: ubuntu-latest
