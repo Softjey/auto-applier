@@ -53,10 +53,14 @@ and the e-signature Full Name are actually required.
 The form ends with employer compliance questions (prior employment with the
 company, restrictive covenants/non-competes, relationships with employees,
 government-official and politically-exposed-person status) and then an
-**e-signature field**. None of these are derivable from `profile.json`, and the
-signature makes them a signed declaration. Ask the user every one of them, every
-time; do not reason from absence of evidence. Record the answers in `qa[]` so
-the next Oracle-hosted application only needs the employer-specific one.
+**e-signature field**. None of these are derivable from the structured fields
+of `profile.json`, and the signature makes them a signed declaration; do not
+reason from absence of evidence. Answer only from what the user stated in
+`qa[]`: a general answer (relationships with employees, a clean record) counts
+unless this employer has its own `employer-specific` entry, and anything not on
+file is asked. Before the e-signature, show the user every declaration answer in
+one question, whatever the approval mode. Record new answers in `qa[]` so the
+next Oracle-hosted application only needs the employer-specific one.
 
 **The submit button gives a two-stage progress dialog** ("Creating candidate
 info", then "Saving job application info") before redirecting. Do not re-click
