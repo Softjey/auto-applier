@@ -1,6 +1,6 @@
 schema_version: "1.1"
 name: skill-choice-setup-ru
-description: "A fresh clone starts setup-data-repo."
+description: "A fresh clone of auto-applier starts setup."
 execution:
   prompt: |
     только что склонировал auto-applier, настрой меня
@@ -11,9 +11,9 @@ execution:
 runs: 1
 graders:
   - type: tool_used
-    name: setup-data-repo-fired
+    name: setup-fired
     tool: Skill
-    input_match: 'job-search-agent:setup-data-repo"'
+    input_match: 'job-search-agent:setup"'
   - type: tool_used
     name: no-apply-to-jobs
     tool: Skill

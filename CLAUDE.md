@@ -31,7 +31,7 @@ path (`data/profile.json`, `data/runs/…`); scripts reach the same place throug
 symlinked `data` needs its real folder in `.claude/settings.local.json` →
 `permissions.additionalDirectories`, which `init-data-repo.mjs --dir` writes. Search
 inside it with an explicit `data/`: `grep -r X .` does not follow the symlink.
-**No `data/` yet → run the `setup-data-repo` skill** (it scaffolds one from
+**No `data/` yet → run the `setup` skill** (it scaffolds one from
 `templates/data-repo/` and hands over to `profile-interview`).
 
 Rules that follow from the split:
@@ -70,8 +70,8 @@ names tools: a browser-specific detail belongs there, never in the phases.
 
 The skills run in one pipeline: `job-triage` (with `applications-check`) keeps or rejects
 vacancies → `resume-blocks` → `resume-render` → `resume-pdf` tailor a resume for each one
-kept → `apply-method-triage` and `apply-to-jobs` apply. Setup: `setup-data-repo` and
-`setup-job-triage`, `profile-interview`, `import-stories`.
+kept → `apply-method-triage` and `apply-to-jobs` apply. Setup: `setup`, which hands over to
+`profile-interview` and `import-stories`.
 
 ### Triage
 
@@ -85,8 +85,6 @@ kept → `apply-method-triage` and `apply-to-jobs` apply. Setup: `setup-data-rep
 - `.claude/skills/job-triage/triage.py` — normalises every source into one
   batch to judge, and routes the verdicts back to the right call.
 - `.claude/skills/job-triage/data_dir.py` — the path of `data/` for the Python scripts.
-- `.claude/skills/setup-job-triage/SKILL.md` — the guided triage setup: create `data/`
-  if missing, fill `criteria.md`, generate the LinkedIn search.
 - `.claude/skills/applications-check/SKILL.md` — whether a job is already
   known, in three senses: duplicated inside the batch (it clusters those before
   judging, keeping the copy with the most information), already in the onetap
@@ -118,9 +116,10 @@ kept → `apply-method-triage` and `apply-to-jobs` apply. Setup: `setup-data-rep
 ### Applying
 
 
-- `.claude/skills/setup-data-repo/` — creates the user's private data repo as `data/`
-  from `templates/data-repo/` (`scripts/init-data-repo.mjs`, the one script that creates
-  it for every skill), or links `data/` to one elsewhere.
+- `.claude/skills/setup/` — the one setup: creates the user's private data repo as `data/`
+  from `templates/data-repo/` (`apply-to-jobs/scripts/init-data-repo.mjs`), or links `data/`
+  to one elsewhere, then fills the parts the user will use: `criteria.md` and the LinkedIn
+  search, the resume files, and hands over to `profile-interview` and `import-stories`.
 - `.claude/skills/profile-interview/` — fills/updates `profile.json` via a structured
   interview. Run before the first real apply run.
 - `.claude/skills/import-stories/` — builds/updates `stories.json` from whatever the

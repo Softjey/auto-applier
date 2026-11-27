@@ -41,9 +41,8 @@ blocks) and, where a rule cannot be written as a pattern, by an LLM judge.
 
 ### Skill choice
 
-`skill-choice-*`: which skill a phrase starts, across all thirteen skills — triage in Russian
-and English, `applications-check` for one job and for the pipeline, `setup-job-triage` and
-`setup-data-repo` on a fresh clone, `resume-blocks` vs `resume-render`, `resume-pdf`,
+`skill-choice-*`: which skill a phrase starts, across all eleven skills — triage in Russian
+and English, `applications-check` for one job and for the pipeline, `setup` on a fresh clone (in Russian, twice), `resume-blocks` vs `resume-render`, `resume-pdf`,
 `organize-by-status`, `apply-to-jobs` vs `apply-method-triage`, `import-stories` vs
 `profile-interview`, and a count question that starts nothing.
 

@@ -1,6 +1,6 @@
 schema_version: "1.1"
-name: skill-choice-setup-ru
-description: "A fresh-clone request starts setup-job-triage."
+name: skill-choice-setup-triage-ru
+description: "A fresh-clone request starts setup."
 execution:
   prompt: |
     только что склонировал репо, настрой меня
@@ -13,7 +13,7 @@ graders:
   - type: tool_used
     name: setup-fired
     tool: Skill
-    input_match: 'job-search-agent:setup-job-triage"'
+    input_match: 'job-search-agent:setup"'
   - type: tool_used
     name: no-full-triage
     tool: Skill

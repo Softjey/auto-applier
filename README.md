@@ -9,7 +9,7 @@ It is a set of Claude Code skills plus two small tools:
 
 | | |
 | --- | --- |
-| `.claude/skills/` | triage: `job-triage`, `applications-check`, `setup-job-triage` ([guide](docs/job-triage.md)); resumes: `resume-blocks`, `resume-render`, `resume-pdf`, `organize-by-status` ([guide](docs/resume.md)); applying: `setup-data-repo`, `profile-interview`, `import-stories`, `apply-method-triage`, `apply-to-jobs` |
+| `.claude/skills/` | setup: `setup`; triage: `job-triage`, `applications-check` ([guide](docs/job-triage.md)); resumes: `resume-blocks`, `resume-render`, `resume-pdf`, `organize-by-status` ([guide](docs/resume.md)); applying: `profile-interview`, `import-stories`, `apply-method-triage`, `apply-to-jobs` |
 | `.claude/skills/apply-to-jobs/ats/` | per-ATS notes: quirks that cost a failed submit to learn |
 | `apps/autofill/` | a browser extension + loopback server that prefill forms Simplify does not cover ([README](apps/autofill/README.md)) |
 | `apps/skills-rating/` | a local app for rating your skills |
@@ -29,8 +29,9 @@ cd job-search-agent
 claude
 ```
 
-Then ask: **"set me up"** — the `setup-data-repo` skill creates your private data repo,
-and `profile-interview` fills in your facts. Then **"import my stories"** — hand the
+Then ask: **"set me up"** — the `setup` skill creates your private data repo, asks which
+parts you will use, fills your triage criteria and LinkedIn search, and hands over to
+`profile-interview` for your facts. Then **"import my stories"** — hand the
 agent whatever you have about your work (interview prep, notes, CV, a pasted chat; or
 nothing, and it interviews you) and `import-stories` turns it into the STAR stories
 that essay questions are answered from. After that:
@@ -51,7 +52,7 @@ that essay questions are answered from. After that:
 
 ## Your resume
 
-`setup-data-repo` asks how you send a resume, and either answer works:
+`setup` asks how you send a resume, and either answer works:
 
 - **One resume for everything** — point it at a finished PDF; it is sent with every
   application (`paths.baseResume`).
