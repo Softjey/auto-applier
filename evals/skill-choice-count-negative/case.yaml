@@ -19,6 +19,6 @@ graders:
   - type: tool_used
     name: no-setup
     tool: Skill
-    input_match: 'job-search-agent:setup-job-triage"'
+    input_match: 'job-search-agent:setup"'
     min: 0
     max: 0

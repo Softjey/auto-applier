@@ -33,7 +33,7 @@ describe("data-dir", () => {
   it("names the place and the setup skill when data is missing", () => {
     process.env.APPLIER_DATA_DIR = join(tmpdir(), "no-such-data-dir-xyz");
     assert.equal(findDataDir(), null);
-    assert.throws(() => requireDataDir(), /no-such-data-dir-xyz[\s\S]*setup-data-repo/);
+    assert.throws(() => requireDataDir(), /no-such-data-dir-xyz[\s\S]*setup skill/);
   });
 
   it("is git-ignored", () => {
